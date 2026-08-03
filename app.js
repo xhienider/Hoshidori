@@ -7,6 +7,9 @@ import {
   estimatePassivePower,
   computeScoreSupport,
   simulateActiveTimeline,
+  computeBoardBonuses,
+  applyBoardBonuses,
+  mergeScoreSupport,
 } from './js/unitEngine.js';
 
 const ATTR_LABELS = {
@@ -73,17 +76,19 @@ function activationChanceColor(chance) {
 const DATA = {};
 
 async function loadData() {
-  const [members, cardPotentials, characterGroupings, songs] = await Promise.all([
+  const [members, cardPotentials, characterGroupings, songs, boardCategories] = await Promise.all([
     fetch('data/members.json').then((r) => r.json()),
     fetch('data/card_potentials.json').then((r) => r.json()),
     fetch('data/character_groupings.json').then((r) => r.json()),
     fetch('data/music.json').then((r) => r.json()),
+    fetch('data/board_categories.json').then((r) => r.json()),
   ]);
   DATA.members = members;
   DATA.byId = Object.fromEntries(members.map((m) => [m.cardId, m]));
   DATA.cardPotentials = cardPotentials;
   DATA.characterGroupings = characterGroupings;
   DATA.songs = songs.filter((s) => s.feverSeconds && s.feverSeconds.length === 5);
+  DATA.boardCategories = boardCategories;
 }
 
 // ---------------------------------------------------------------------------
@@ -100,6 +105,7 @@ const state = {
     { cardId: null, level: 80, bloom: 0 },
   ],
   songId: null,
+  boardSelections: {}, // characterId -> { "EFFECT_TYPE|target": countUnlocked }
 };
 
 function maxLevelFor(card) {
@@ -200,6 +206,19 @@ function renderSlot(key, slotState, isLeader) {
     };
     row.appendChild(bloomInput);
 
+    const boardBtn = document.createElement('button');
+    boardBtn.className = 'board-btn';
+    boardBtn.type = 'button';
+    const hasBoard = !!DATA.boardCategories?.[card.characterId];
+    const spent = boardPointsSpent(card.characterId);
+    boardBtn.textContent = hasBoard ? `Board${spent ? ` (${spent})` : ''}` : 'Board \u2014';
+    boardBtn.disabled = !hasBoard;
+    boardBtn.onclick = (e) => {
+      e.stopPropagation();
+      openBoardEditor(card);
+    };
+    row.appendChild(boardBtn);
+
     info.appendChild(row);
   }
 
@@ -213,6 +232,138 @@ function renderSlot(key, slotState, isLeader) {
 function clamp(v, lo, hi) {
   if (Number.isNaN(v)) return lo;
   return Math.max(lo, Math.min(hi, v));
+}
+
+function boardPointsSpent(characterId) {
+  const sel = state.boardSelections[characterId];
+  const charData = DATA.boardCategories?.[characterId];
+  if (!sel || !charData) return 0;
+  let total = 0;
+  for (const [key, count] of Object.entries(sel)) {
+    if (!count) continue;
+    const nodes = charData.categories[key];
+    if (!nodes) continue;
+    total += nodes.slice(0, count).reduce((s, n) => s + n.cost, 0);
+  }
+  return total;
+}
+
+const BOARD_CATEGORY_LABELS = {
+  ALL_PARAMETER_UP: 'All Parameters',
+  PERFORMANCE_UP: 'Performance',
+  TECHNIQUE_UP: 'Technique',
+  SENSE_UP: 'Sense',
+  ALL_PARAMETER_UP_PERMIL_UP: 'All Parameters %',
+  PERFORMANCE_UP_PERMIL_UP: 'Performance %',
+  TECHNIQUE_UP_PERMIL_UP: 'Technique %',
+  SENSE_UP_PERMIL_UP: 'Sense %',
+  LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP: 'Active Skill Activation Rate',
+  LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP: 'Active Skill Cooldown Shorten',
+  LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP: 'Score Support',
+};
+
+function openBoardEditor(card) {
+  const characterId = card.characterId;
+  const charData = DATA.boardCategories[characterId];
+  if (!charData) return;
+  if (!state.boardSelections[characterId]) state.boardSelections[characterId] = {};
+  const sel = state.boardSelections[characterId];
+
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+
+  const box = document.createElement('div');
+  box.className = 'picker-box board-editor-box';
+
+  const header = document.createElement('div');
+  header.className = 'picker-search';
+  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div>`;
+  box.appendChild(header);
+
+  const list = document.createElement('div');
+  list.className = 'picker-list board-editor-list';
+
+  const selfNodes = [];
+  const allNodes = [];
+  for (const key of Object.keys(charData.categories)) {
+    const [type, target] = key.split('|');
+    (target === 'all' ? allNodes : selfNodes).push([key, type]);
+  }
+
+  const renderGroup = (title, hint, entries) => {
+    if (!entries.length) return;
+    const groupLabel = document.createElement('div');
+    groupLabel.className = 'board-group-label';
+    groupLabel.innerHTML = `${title} <span class="board-group-hint">${hint}</span>`;
+    list.appendChild(groupLabel);
+
+    for (const [key, type] of entries) {
+      const nodes = charData.categories[key];
+      const count = sel[key] || 0;
+      const max = nodes.length;
+      const chosen = nodes.slice(0, count);
+      const spent = chosen.reduce((s, n) => s + n.cost, 0);
+      const value = chosen.reduce((s, n) => s + n.value, 0);
+      const isPermil = type.includes('PERMIL');
+      const unit = isPermil ? '%' : ' pts';
+
+      const row = document.createElement('div');
+      row.className = 'board-row';
+      row.innerHTML = `
+        <div class="board-row-label">${BOARD_CATEGORY_LABELS[type] || type}</div>
+        <div class="board-row-value">${value ? '+' + (isPermil ? (value / 10).toFixed(1) : value) + unit : '\u2014'}</div>
+        <div class="board-stepper">
+          <button type="button" class="stepper-btn" data-action="dec">\u2212</button>
+          <span class="stepper-count">${count}/${max}</span>
+          <button type="button" class="stepper-btn" data-action="inc">+</button>
+        </div>
+        <div class="board-row-cost">${spent} pt${spent === 1 ? '' : 's'}</div>
+      `;
+
+      const decBtn = row.querySelector('[data-action="dec"]');
+      const incBtn = row.querySelector('[data-action="inc"]');
+      decBtn.disabled = count <= 0;
+      incBtn.disabled = count >= max;
+      decBtn.onclick = () => {
+        sel[key] = Math.max(0, count - 1);
+        refreshEditor();
+      };
+      incBtn.onclick = () => {
+        sel[key] = Math.min(max, count + 1);
+        refreshEditor();
+      };
+
+      list.appendChild(row);
+    }
+  };
+
+  const totalEl = document.createElement('div');
+  totalEl.className = 'board-total';
+
+  function refreshEditor() {
+    list.innerHTML = '';
+    renderGroup('Self', '\u2014 applies to this character only', selfNodes);
+    renderGroup('Team', '\u2014 applies to the whole unit', allNodes);
+    totalEl.textContent = `${boardPointsSpent(characterId)} points allocated`;
+    recompute();
+    renderRoster();
+  }
+
+  refreshEditor();
+  box.appendChild(list);
+  box.appendChild(totalEl);
+
+  const close = document.createElement('div');
+  close.className = 'picker-close';
+  close.textContent = 'DONE';
+  close.onclick = () => overlay.remove();
+  box.appendChild(close);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
 }
 
 // ---------------------------------------------------------------------------
@@ -442,10 +593,25 @@ function recompute() {
     data
   );
 
-  renderResults(result, leaderCard, unit);
+  // Holomem Board bonuses: leader only contributes stat-wise if she's also
+  // placed in the unit (matches how leader stats never count on their own).
+  // If she IS also a unit member, don't add a duplicate slot entry for her -
+  // her unit-member slot already covers her board selections once.
+  const unitCharacterIds = new Set(unit.map((u) => u.card.characterId));
+  const leaderAlsoInUnit = unitCharacterIds.has(leaderCard.characterId);
+  const slots = [
+    ...(leaderAlsoInUnit ? [] : [{ characterId: leaderCard.characterId, cardId: leaderCard.cardId, isUnitMember: false }]),
+    ...unit.map((u) => ({ characterId: u.card.characterId, cardId: u.card.cardId, isUnitMember: true })),
+  ];
+  const boardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, slots);
+  applyBoardBonuses(result, boardBonuses);
+
+  const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), boardBonuses.scoreSupportPermil);
+
+  renderResults(result, leaderCard, unit, scoreSupport);
 }
 
-function renderResults(result, leaderCard, unit) {
+function renderResults(result, leaderCard, unit, scoreSupport) {
   resultsEl.innerHTML = '';
 
   resultsEl.appendChild(renderStatsPanel(result));
@@ -456,10 +622,10 @@ function renderResults(result, leaderCard, unit) {
   twoCol.appendChild(renderPassivesPanel(result, unit));
   resultsEl.appendChild(twoCol);
 
-  resultsEl.appendChild(renderActivesPanel(result, unit));
+  resultsEl.appendChild(renderActivesPanel(result, unit, scoreSupport));
   resultsEl.appendChild(renderTimelinePanel(result, unit));
-  resultsEl.appendChild(renderCoveragePanel(result, unit));
-  resultsEl.appendChild(renderPowerPanel(result, leaderCard));
+  resultsEl.appendChild(renderCoveragePanel(result, unit, scoreSupport));
+  resultsEl.appendChild(renderPowerPanel(result, leaderCard, scoreSupport));
 }
 
 function renderStatsPanel(result) {
@@ -586,15 +752,13 @@ function renderPassivesPanel(result, unit) {
   return panel;
 }
 
-function renderActivesPanel(result, unit) {
+function renderActivesPanel(result, unit, scoreSupport) {
   const panel = document.createElement('div');
   panel.className = 'panel';
   const label = document.createElement('div');
   label.className = 'panel-label';
   label.textContent = 'Active Skills';
   panel.appendChild(label);
-
-  const scoreSupport = computeScoreSupport(result.passives);
 
   const table = document.createElement('table');
   table.className = 'stat-table';
@@ -691,7 +855,7 @@ function renderTimelinePanel(result, unit) {
   return panel;
 }
 
-function renderCoveragePanel(result, unit) {
+function renderCoveragePanel(result, unit, scoreSupport) {
   const panel = document.createElement('div');
   panel.className = 'panel';
   const label = document.createElement('div');
@@ -709,7 +873,6 @@ function renderCoveragePanel(result, unit) {
   }
 
   const unitCards = unit.map((u) => u.card);
-  const scoreSupport = computeScoreSupport(result.passives);
   const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
 
   const timeline = simulateActiveTimeline({
@@ -780,7 +943,7 @@ function renderCoveragePanel(result, unit) {
         const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
         const borderColor = activationChanceColor(m.activationChance);
         const title = `${m.effectiveBonus.toFixed(1)}% score bonus @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
-        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.effectiveBonus.toFixed(1)}%</td>`;
+        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.effectiveBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
       } else {
         rowHtml += '<td>\u2014</td>';
       }
@@ -802,7 +965,7 @@ function renderCoveragePanel(result, unit) {
   return panel;
 }
 
-function renderPowerPanel(result, leaderCard) {
+function renderPowerPanel(result, leaderCard, scoreSupport) {
   const panel = document.createElement('div');
   panel.className = 'panel';
   const label = document.createElement('div');

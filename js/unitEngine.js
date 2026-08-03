@@ -146,6 +146,165 @@ export function mapSpecialSkillsToSong(specialResults, feverSeconds) {
 // anywhere it's shown in the UI.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// HOLOMEM BOARD — Phase 1 (performance-relevant effects only: stat ups,
+// active skill activation/cooldown, and Score Support). Board data is
+// pre-grouped into categories (see board_categories.json), each a list of
+// nodes sorted cheapest-first (ties broken by higher value = optimal path).
+// A "count" per category means "the N cheapest/best nodes in that category
+// are unlocked" — not individual node-by-node selection.
+//
+// NOT YET COVERED (flagged, not guessed at): Connect Effect area multipliers,
+// generation-conditional nodes, leader active-skill-addition/level-up nodes,
+// Life Up, and song/singer-specific score bonuses.
+// ---------------------------------------------------------------------------
+
+/**
+ * @param {Record<string, Record<string, number>>} boardSelections - characterId -> { "EFFECT_TYPE|target": countUnlocked }
+ * @param {Record<string, {characterName:string, categories:Record<string,{cost:number,value:number}[]>}>} boardCategoriesData
+ * @param {{characterId:string, cardId:string, isUnitMember:boolean}[]} slots - leader + 5 unit members;
+ *        isUnitMember marks which slots actually contribute performance stats (leader only if
+ *        she's also placed in the unit)
+ */
+export function computeBoardBonuses(boardSelections, boardCategoriesData, slots) {
+  const unitCardIds = slots.filter((s) => s.isUnitMember).map((s) => s.cardId);
+
+  const statFlat = {};
+  const statPermil = {};
+  const activationProbabilityPermil = {};
+  const cooldownShortenPermil = {};
+  const scoreSupportPermil = {};
+  const pointsSpent = {};
+
+  const ensureStat = (map, cardId) => {
+    if (!map[cardId]) map[cardId] = { performance: 0, technique: 0, sense: 0 };
+    return map[cardId];
+  };
+
+  for (const slot of slots) {
+    const sel = boardSelections[slot.characterId];
+    const charData = boardCategoriesData[slot.characterId];
+    if (!sel || !charData) continue;
+
+    let spent = 0;
+    for (const [key, count] of Object.entries(sel)) {
+      if (!count) continue;
+      const nodes = charData.categories[key];
+      if (!nodes) continue;
+      const chosen = nodes.slice(0, count);
+      spent += chosen.reduce((s, n) => s + n.cost, 0);
+      const sum = chosen.reduce((s, n) => s + n.value, 0);
+      const [type, target] = key.split('|');
+      const recipients = target === 'all' ? unitCardIds : slot.isUnitMember ? [slot.cardId] : [];
+
+      for (const cardId of recipients) {
+        switch (type) {
+          case 'ALL_PARAMETER_UP': {
+            const st = ensureStat(statFlat, cardId);
+            st.performance += sum;
+            st.technique += sum;
+            st.sense += sum;
+            break;
+          }
+          case 'PERFORMANCE_UP':
+            ensureStat(statFlat, cardId).performance += sum;
+            break;
+          case 'TECHNIQUE_UP':
+            ensureStat(statFlat, cardId).technique += sum;
+            break;
+          case 'SENSE_UP':
+            ensureStat(statFlat, cardId).sense += sum;
+            break;
+          case 'ALL_PARAMETER_UP_PERMIL_UP': {
+            const st = ensureStat(statPermil, cardId);
+            st.performance += sum;
+            st.technique += sum;
+            st.sense += sum;
+            break;
+          }
+          case 'PERFORMANCE_UP_PERMIL_UP':
+            ensureStat(statPermil, cardId).performance += sum;
+            break;
+          case 'TECHNIQUE_UP_PERMIL_UP':
+            ensureStat(statPermil, cardId).technique += sum;
+            break;
+          case 'SENSE_UP_PERMIL_UP':
+            ensureStat(statPermil, cardId).sense += sum;
+            break;
+          case 'LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP':
+            activationProbabilityPermil[cardId] = (activationProbabilityPermil[cardId] || 0) + sum;
+            break;
+          case 'LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP':
+            cooldownShortenPermil[cardId] = (cooldownShortenPermil[cardId] || 0) + sum;
+            break;
+          case 'LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP':
+            scoreSupportPermil[cardId] = (scoreSupportPermil[cardId] || 0) + sum;
+            break;
+        }
+      }
+    }
+    pointsSpent[slot.characterId] = spent;
+  }
+
+  return { statFlat, statPermil, activationProbabilityPermil, cooldownShortenPermil, scoreSupportPermil, pointsSpent };
+}
+
+/**
+ * Mutates a computeUnit() result in place, folding in board bonuses so every
+ * existing panel (stats, actives, coverage, power) picks them up automatically.
+ * Stat order of operations: card's own permil bonuses are already baked into
+ * memberStats; board permil bonuses scale that same total again, then board
+ * flat bonuses are added on top.
+ */
+export function applyBoardBonuses(result, boardBonuses) {
+  for (const m of result.memberStats) {
+    const permil = boardBonuses.statPermil[m.cardId];
+    if (permil) {
+      m.stats.performance = Math.round(m.stats.performance * (1 + permil.performance / 1000));
+      m.stats.technique = Math.round(m.stats.technique * (1 + permil.technique / 1000));
+      m.stats.sense = Math.round(m.stats.sense * (1 + permil.sense / 1000));
+    }
+    const flat = boardBonuses.statFlat[m.cardId];
+    if (flat) {
+      m.stats.performance += flat.performance;
+      m.stats.technique += flat.technique;
+      m.stats.sense += flat.sense;
+    }
+  }
+
+  result.statTotals = result.memberStats.reduce(
+    (acc, m) => ({
+      performance: acc.performance + m.stats.performance,
+      technique: acc.technique + m.stats.technique,
+      sense: acc.sense + m.stats.sense,
+    }),
+    { performance: 0, technique: 0, sense: 0 }
+  );
+
+  result.actives.forEach((a, i) => {
+    const cardId = result.memberStats[i].cardId;
+    const actUp = boardBonuses.activationProbabilityPermil[cardId];
+    if (actUp && a.activationProbabilityPercent != null) {
+      a.activationProbabilityPercent += actUp / 10;
+    }
+    const cdShorten = boardBonuses.cooldownShortenPermil[cardId];
+    if (cdShorten && a.coolTimeSeconds != null) {
+      a.coolTimeSeconds = a.coolTimeSeconds * (1 - cdShorten / 1000);
+    }
+  });
+
+  return result;
+}
+
+/** Merges board-sourced Score Support (percent) into the passive-derived Score Support map. */
+export function mergeScoreSupport(passiveScoreSupport, boardScoreSupportPermil) {
+  const merged = { ...passiveScoreSupport };
+  for (const [cardId, permil] of Object.entries(boardScoreSupportPermil)) {
+    merged[cardId] = (merged[cardId] || 0) + permil / 10;
+  }
+  return merged;
+}
+
 const STAT_EFFECT_TYPES = {
   LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP: 'performance',
   LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP: 'technique',
