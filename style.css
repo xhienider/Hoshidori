@@ -16,6 +16,9 @@
 
   --red: #e1544b;
 
+  --red-node: #ff5c6c;
+  --blue-node: #4fa8e8;
+
   --perf: var(--blue-bright);
   --tech: var(--blue-mid);
   --sense: var(--blue-pale);
@@ -314,6 +317,50 @@ header.masthead {
   min-width: 34px;
   text-align: center;
 }
+
+.board-diagram {
+  display: block;
+  margin: 8px 0 4px;
+}
+
+.board-diagram-center {
+  fill: var(--panel-raised);
+  stroke: var(--text-faint);
+  stroke-width: 1;
+}
+
+.board-diagram-node {
+  fill: var(--panel-raised);
+  stroke: var(--node-color, var(--text-faint));
+  stroke-width: 1.5;
+  cursor: pointer;
+  transition: fill 0.1s ease, r 0.1s ease;
+}
+.board-diagram-node:hover {
+  stroke-width: 2.5;
+}
+.board-diagram-node.unlocked {
+  fill: var(--node-color, var(--blue-mid));
+  filter: drop-shadow(0 0 3px var(--node-color, var(--blue-mid)));
+}
+
+.board-diagram-legend {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.pattern-icon-wrap {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+.pattern-icon-wrap.inline { margin-left: 6px; }
+.pattern-cell-bg { fill: var(--bg); stroke: var(--line); stroke-width: 0.5; }
+.pattern-cell-fill { fill: var(--node-color, var(--orange)); }
+.pattern-cell-anchor { fill: none; stroke: var(--text); stroke-width: 0.8; }
 
 .board-total {
   text-align: center;

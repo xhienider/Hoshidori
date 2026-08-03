@@ -36,6 +36,42 @@ const EFFECT_LABELS = {
 
 const AREA_ICON = { leader: '\ud83d\udd34', member: '\ud83d\udd35', center: '\ud83c\udfaf' };
 
+/** Builds a small SVG grid icon previewing a connect effect's relative node pattern,
+ *  mimicking the in-game "N Node Effect" preview graphic. */
+function buildPatternIcon(pattern, colorVar) {
+  if (!pattern?.length) return '';
+  const norm = pattern.map((p) => ({ x: p.x || 0, y: p.y || 0 }));
+  const xs = norm.map((p) => p.x).concat(0);
+  const ys = norm.map((p) => p.y).concat(0);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minY = Math.min(...ys);
+  const maxY = Math.max(...ys);
+  const cell = 7;
+  const gap = 1;
+  const cols = maxX - minX + 1;
+  const rows = maxY - minY + 1;
+  const size = cell + gap;
+  const width = cols * size + gap;
+  const height = rows * size + gap;
+  const cellX = (x) => gap + (x - minX) * size;
+  // grid Y increases downward on screen; board "up" (+Y) should render toward the top
+  const cellY = (y) => gap + (maxY - y) * size;
+
+  let svg = `<svg viewBox="0 0 ${width} ${height}" width="${width}" height="${height}" class="pattern-icon">`;
+  for (let gx = minX; gx <= maxX; gx++) {
+    for (let gy = minY; gy <= maxY; gy++) {
+      svg += `<rect x="${cellX(gx)}" y="${cellY(gy)}" width="${cell}" height="${cell}" rx="1" class="pattern-cell-bg"/>`;
+    }
+  }
+  for (const p of norm) {
+    svg += `<rect x="${cellX(p.x)}" y="${cellY(p.y)}" width="${cell}" height="${cell}" rx="1" class="pattern-cell-fill" style="--node-color:var(${colorVar})"/>`;
+  }
+  svg += `<rect x="${cellX(0)}" y="${cellY(0)}" width="${cell}" height="${cell}" rx="1" class="pattern-cell-anchor"/>`;
+  svg += '</svg>';
+  return svg;
+}
+
 const CONDITION_LABELS = {
   LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE: (c) =>
     `${c.threshold}+ ${attrLabel(c.cardAttributeType)} members`,
@@ -298,51 +334,89 @@ function openBoardEditor(card) {
     (area === 'leader' ? leaderNodes : memberNodes).push([key, type]);
   }
 
-  const renderGroup = (title, hint, entries) => {
+  /** Flattens all nodes across the given category entries into one positioned list. */
+  const buildFlatNodes = (entries) => {
+    const flat = [];
+    for (const [key, type] of entries) {
+      const nodes = charData.categories[key];
+      nodes.forEach((n, index) => {
+        flat.push({ key, type, index, x: n.x || 0, y: n.y || 0, cost: n.cost, value: n.value, grade: n.grade });
+      });
+    }
+    return flat;
+  };
+
+  /** Renders one area (leader or member) as a spatial diagram matching its real board layout. */
+  const renderDiagram = (title, hint, entries, colorVar) => {
     if (!entries.length) return;
     const groupLabel = document.createElement('div');
     groupLabel.className = 'board-group-label';
     groupLabel.innerHTML = `${title} <span class="board-group-hint">${hint}</span>`;
     list.appendChild(groupLabel);
 
-    for (const [key, type] of entries) {
-      const nodes = charData.categories[key];
-      const count = sel[key] || 0;
-      const max = nodes.length;
-      const chosen = nodes.slice(0, count);
-      const spent = chosen.reduce((s, n) => s + n.cost, 0);
-      const value = chosen.reduce((s, n) => s + n.value, 0);
-      const isPermil = type.includes('PERMIL');
-      const unit = isPermil ? '%' : ' pts';
+    const flat = buildFlatNodes(entries);
+    const xs = flat.map((n) => n.x);
+    const ys = flat.map((n) => n.y);
+    const minX = Math.min(0, ...xs);
+    const maxX = Math.max(0, ...xs);
+    const minY = Math.min(0, ...ys);
+    const maxY = Math.max(0, ...ys);
+    const spacing = 26;
+    const pad = 20;
+    const width = (maxX - minX) * spacing + pad * 2;
+    const height = (maxY - minY) * spacing + pad * 2;
+    // Screen Y increases downward, but board Y increases "up" (toward the
+    // leader path) - flip so positive Y renders upward, matching the game.
+    const toScreenX = (x) => pad + (x - minX) * spacing;
+    const toScreenY = (y) => pad + (maxY - y) * spacing;
 
-      const row = document.createElement('div');
-      row.className = 'board-row';
-      row.innerHTML = `
-        <div class="board-row-label">${BOARD_CATEGORY_LABELS[type] || type}</div>
-        <div class="board-row-value">${value ? '+' + (isPermil ? (value / 10).toFixed(1) : value) + unit : '\u2014'}</div>
-        <div class="board-stepper">
-          <button type="button" class="stepper-btn" data-action="dec">\u2212</button>
-          <span class="stepper-count">${count}/${max}</span>
-          <button type="button" class="stepper-btn" data-action="inc">+</button>
-        </div>
-        <div class="board-row-cost">${spent} pt${spent === 1 ? '' : 's'}</div>
-      `;
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.setAttribute('width', '100%');
+    svg.classList.add('board-diagram');
+    svg.style.maxHeight = Math.min(height, 220) + 'px';
 
-      const decBtn = row.querySelector('[data-action="dec"]');
-      const incBtn = row.querySelector('[data-action="inc"]');
-      decBtn.disabled = count <= 0;
-      incBtn.disabled = count >= max;
-      decBtn.onclick = () => {
-        sel[key] = Math.max(0, count - 1);
+    // Center marker
+    const centerCircle = document.createElementNS(svgNS, 'circle');
+    centerCircle.setAttribute('cx', toScreenX(0));
+    centerCircle.setAttribute('cy', toScreenY(0));
+    centerCircle.setAttribute('r', 5);
+    centerCircle.setAttribute('class', 'board-diagram-center');
+    svg.appendChild(centerCircle);
+
+    for (const n of flat) {
+      const count = sel[n.key] || 0;
+      const unlocked = n.index < count;
+      const circle = document.createElementNS(svgNS, 'circle');
+      circle.setAttribute('cx', toScreenX(n.x));
+      circle.setAttribute('cy', toScreenY(n.y));
+      circle.setAttribute('r', n.grade >= 2 ? 8 : 6);
+      circle.setAttribute('class', 'board-diagram-node' + (unlocked ? ' unlocked' : ''));
+      circle.style.setProperty('--node-color', `var(${colorVar})`);
+      const isPermil = n.type.includes('PERMIL');
+      const valLabel = isPermil ? `+${(n.value / 10).toFixed(1)}%` : `+${n.value} pts`;
+      const title = document.createElementNS(svgNS, 'title');
+      title.textContent = `${BOARD_CATEGORY_LABELS[n.type] || n.type} \u00b7 ${valLabel} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}`;
+      circle.appendChild(title);
+      circle.addEventListener('click', () => {
+        const current = sel[n.key] || 0;
+        // Clicking an unlocked node re-locks it and everything past it in that
+        // category; clicking a locked node unlocks up through it - same
+        // sequential-by-cost model as the stepper, just interacted with spatially.
+        sel[n.key] = n.index < current ? n.index : n.index + 1;
         refreshEditor();
-      };
-      incBtn.onclick = () => {
-        sel[key] = Math.min(max, count + 1);
-        refreshEditor();
-      };
-
-      list.appendChild(row);
+      });
+      svg.appendChild(circle);
     }
+
+    list.appendChild(svg);
+
+    const totalSpent = flat.reduce((s, n) => s + ((sel[n.key] || 0) > n.index ? n.cost : 0), 0);
+    const legend = document.createElement('div');
+    legend.className = 'board-diagram-legend';
+    legend.textContent = `${totalSpent} pts spent in this area \u00b7 click a node to unlock/lock it`;
+    list.appendChild(legend);
   };
 
   const connectSection = document.createElement('div');
@@ -353,8 +427,8 @@ function openBoardEditor(card) {
 
   function refreshEditor() {
     list.innerHTML = '';
-    renderGroup('\ud83d\udd34 Leader Area', '\u2014 applies to the whole unit', leaderNodes);
-    renderGroup('\ud83d\udd35 Member Area', '\u2014 applies to this character only', memberNodes);
+    renderDiagram('\ud83d\udd34 Leader Area', '\u2014 applies to the whole unit', leaderNodes, '--red-node');
+    renderDiagram('\ud83d\udd35 Member Area', '\u2014 applies to this character only', memberNodes, '--blue-node');
     totalEl.textContent = `${boardPointsSpent(characterId)} points allocated`;
     renderConnectSection();
     list.appendChild(connectSection);
@@ -366,16 +440,16 @@ function openBoardEditor(card) {
     connectSection.innerHTML = '';
     const heading = document.createElement('div');
     heading.className = 'board-group-label';
-    heading.innerHTML = 'Connect Effects <span class="board-group-hint">\u2014 assign a connector character to boost specific unlocked nodes</span>';
+    heading.innerHTML = 'Connect Effects <span class="board-group-hint">\u2014 assign a connector character; her boost applies automatically to your highest-value unlocked nodes in the matching area</span>';
     connectSection.appendChild(heading);
 
     if (!state.connectSelections[characterId]) state.connectSelections[characterId] = {};
     const config = state.connectSelections[characterId];
 
     const SLOT_META = {
-      center: { label: '\ud83c\udfaf Center', hint: 'any connector \u2014 what she boosts depends on her own type' },
-      leader: { label: '\ud83d\udd34 Leader', hint: 'any connector \u2014 what she boosts depends on her own type' },
-      member: { label: '\ud83d\udd35 Member', hint: 'any connector \u2014 what she boosts depends on her own type' },
+      center: { label: '\ud83c\udfaf Center' },
+      leader: { label: '\ud83d\udd34 Leader' },
+      member: { label: '\ud83d\udd35 Member' },
     };
 
     for (const slotType of ['center', 'leader', 'member']) {
@@ -396,6 +470,19 @@ function openBoardEditor(card) {
       connectorBtn.textContent = connectorCard ? connectorCard.characterName : 'Choose connector';
       connectorBtn.onclick = () => openConnectorPicker(slotType, characterId);
       head.appendChild(connectorBtn);
+
+      if (connectorCard) {
+        const connInfo = DATA.cardConnectInfo[connectorCard.cardId];
+        if (connInfo?.pattern) {
+          const patternWrap = document.createElement('span');
+          patternWrap.className = 'pattern-icon-wrap inline';
+          patternWrap.innerHTML = buildPatternIcon(
+            connInfo.pattern,
+            connInfo.area === 'leader' ? '--red-node' : connInfo.area === 'member' ? '--blue-node' : '--orange'
+          );
+          head.appendChild(patternWrap);
+        }
+      }
 
       if (connectorCard) {
         const clearBtn = document.createElement('button');
@@ -431,66 +518,28 @@ function openBoardEditor(card) {
         if (info) {
           const infoSpan = document.createElement('span');
           infoSpan.className = 'connect-info';
-          infoSpan.textContent = `${info.nodeCount} node budget \u00b7 +${(info.boostPermil / 10).toFixed(0)}% boost (Lv${info.level})`;
+          infoSpan.textContent = `${info.nodeCount} node effect \u00b7 +${(info.boostPermil / 10).toFixed(0)}% (Lv${info.level})`;
           bloomRow.appendChild(infoSpan);
         }
         row.appendChild(bloomRow);
 
         if (info) {
-          if (!setup.allocations) setup.allocations = {};
-          const usedBudget = Object.values(setup.allocations).reduce((s, v) => s + (v || 0), 0);
-          const eligibleKeys =
-            slotType === 'center'
-              ? [...leaderNodes, ...memberNodes].map(([k]) => k)
-              : slotType === 'leader'
-              ? leaderNodes.map(([k]) => k)
-              : memberNodes.map(([k]) => k);
+          const relevantAreas = slotType === 'center' ? ['leader', 'member'] : [slotType];
+          const unlockedInArea = Object.entries(sel).filter(([key, count]) => {
+            if (!count) return false;
+            const [area] = key.split('|');
+            return relevantAreas.includes(area);
+          });
+          const totalUnlocked = unlockedInArea.reduce((s, [, c]) => s + c, 0);
+          const appliedCount = Math.min(totalUnlocked, info.nodeCount);
 
-          const allocList = document.createElement('div');
-          allocList.className = 'connect-alloc-list';
-          for (const key of eligibleKeys) {
-            const unlockedCount = sel[key] || 0;
-            if (!unlockedCount) continue; // can't boost nodes that aren't unlocked
-            const [, type] = key.split('|');
-            const boostCount = setup.allocations[key] || 0;
-            const maxForRow = Math.min(unlockedCount, boostCount + (info.nodeCount - usedBudget));
-
-            const allocRow = document.createElement('div');
-            allocRow.className = 'connect-alloc-row';
-            allocRow.innerHTML = `
-              <div class="board-row-label">${BOARD_CATEGORY_LABELS[type] || type}</div>
-              <div class="board-stepper">
-                <button type="button" class="stepper-btn" data-action="dec">\u2212</button>
-                <span class="stepper-count">${boostCount}/${unlockedCount}</span>
-                <button type="button" class="stepper-btn" data-action="inc">+</button>
-              </div>
-            `;
-            const decBtn = allocRow.querySelector('[data-action="dec"]');
-            const incBtn = allocRow.querySelector('[data-action="inc"]');
-            decBtn.disabled = boostCount <= 0;
-            incBtn.disabled = boostCount >= maxForRow;
-            decBtn.onclick = () => {
-              setup.allocations[key] = Math.max(0, boostCount - 1);
-              refreshEditor();
-            };
-            incBtn.onclick = () => {
-              setup.allocations[key] = Math.min(maxForRow, boostCount + 1);
-              refreshEditor();
-            };
-            allocList.appendChild(allocRow);
-          }
-          if (!allocList.children.length) {
-            const empty = document.createElement('div');
-            empty.className = 'connect-alloc-empty';
-            empty.textContent = 'Unlock some nodes in the matching area first to allocate this connector\u2019s boost.';
-            allocList.appendChild(empty);
-          }
-          row.appendChild(allocList);
-
-          const budgetLine = document.createElement('div');
-          budgetLine.className = 'connect-budget-line';
-          budgetLine.textContent = `${usedBudget}/${info.nodeCount} boost slots used`;
-          row.appendChild(budgetLine);
+          const applyLine = document.createElement('div');
+          applyLine.className = 'connect-budget-line';
+          applyLine.textContent =
+            appliedCount > 0
+              ? `Auto-applied to your ${appliedCount} highest-value unlocked node${appliedCount === 1 ? '' : 's'} in the matching area`
+              : 'Unlock some nodes in the matching area first \u2014 nothing to boost yet';
+          row.appendChild(applyLine);
         }
       }
 
@@ -550,12 +599,15 @@ function openBoardEditor(card) {
         const infoDiv = document.createElement('div');
         infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${AREA_ICON[info.area] || ''} boosts ${info.area} nodes \u00b7 ${info.nodeCount} nodes \u00b7 +${(info.boostPermilLevel1/10).toFixed(0)}\u2013${(info.boostPermilLevel2/10).toFixed(0)}%</div>`;
         item.appendChild(infoDiv);
+        const patternWrap = document.createElement('div');
+        patternWrap.className = 'pattern-icon-wrap';
+        patternWrap.innerHTML = buildPatternIcon(info.pattern, info.area === 'leader' ? '--red-node' : info.area === 'member' ? '--blue-node' : '--orange');
+        item.appendChild(patternWrap);
         item.onclick = () => {
           if (!state.connectSelections[receivingCharacterId]) state.connectSelections[receivingCharacterId] = {};
           state.connectSelections[receivingCharacterId][slotType] = {
             connectorCardId: m.cardId,
             connectorBloom: 0,
-            allocations: {},
           };
           pOverlay.remove();
           refreshEditor();

@@ -396,7 +396,8 @@ export function getConnectorInfo(connectorCard, connectorBloom, cardConnectInfo,
 
 /**
  * @param {Record<string, {center?:object, leader?:object, member?:object}>} connectSelections
- *        - receivingCharacterId -> per-slot { connectorCardId, connectorBloom, allocations: {categoryKey: count} }
+ *        - receivingCharacterId -> per-slot { connectorCardId, connectorBloom }
+ *          (no manual node allocation - matches the real game's auto-apply-on-confirm flow)
  * @param {Record<string, object>} boardCategoriesData - board_categories.json
  * @param {Record<string, Record<string, number>>} boardSelections - the base board unlocks (state.boardSelections)
  * @param {Record<string, object>} cardConnectInfo - card_connect_info.json
@@ -479,8 +480,7 @@ export function computeConnectBonuses(
       if (!setup?.connectorCardId) continue;
       if (slotType === 'leader' && !slot.isLeaderSlot) continue;
       if (slotType === 'member' && !slot.isUnitMember) continue;
-      // 'center' has no gating - it's the shared hub, applies to whichever
-      // categories the user allocates it to regardless of leader/member role.
+      // 'center' has no gating - shared hub, applies regardless of leader/member role.
 
       const connectorCard = cardsById[setup.connectorCardId];
       if (!connectorCard) continue;
@@ -488,27 +488,31 @@ export function computeConnectBonuses(
       if (!connectorInfo || !connectorInfo.boostPermil) continue;
 
       const unlocked = boardSelections[slot.characterId] || {};
+      const relevantAreas = slotType === 'center' ? ['leader', 'member'] : [slotType];
 
-      let remainingBudget = connectorInfo.nodeCount;
-      for (const [categoryKey, boostCount] of Object.entries(setup.allocations || {})) {
-        if (!boostCount || remainingBudget <= 0) continue;
-        const nodes = charData.categories[categoryKey];
-        const unlockedCount = unlocked[categoryKey] || 0;
-        if (!nodes || !unlockedCount) continue;
+      // Pool every already-unlocked node across the matching area(s), take the
+      // top nodeCount by value (best-effort approximation of the game's exact
+      // fixed position pattern, which we can preview but not fully replicate).
+      const pool = [];
+      for (const [key, count] of Object.entries(unlocked)) {
+        if (!count) continue;
+        const [area, type] = key.split('|');
+        if (!relevantAreas.includes(area)) continue;
+        const nodes = charData.categories[key];
+        if (!nodes) continue;
+        for (const n of nodes.slice(0, count)) pool.push({ area, type, value: n.value });
+      }
+      pool.sort((a, b) => b.value - a.value);
+      const boosted = pool.slice(0, connectorInfo.nodeCount);
 
-        const actualBoostCount = Math.min(boostCount, unlockedCount, remainingBudget);
-        if (actualBoostCount <= 0) continue;
-        remainingBudget -= actualBoostCount;
-
-        // Boost the top-value already-unlocked nodes in this category.
-        const unlockedNodes = nodes.slice(0, unlockedCount);
-        const topBoosted = [...unlockedNodes].sort((a, b) => b.value - a.value).slice(0, actualBoostCount);
-        const extraValue = topBoosted.reduce((s, n) => s + n.value, 0) * (connectorInfo.boostPermil / 1000);
-
-        const [area, type] = categoryKey.split('|');
-        const recipients = area === 'leader' ? slots.filter((s) => s.isUnitMember).map((s) => s.cardId) : [slot.cardId];
-        for (const cardId of recipients) {
-          applyValue(cardId, type, extraValue);
+      const recipients = {
+        leader: slots.filter((s) => s.isUnitMember).map((s) => s.cardId),
+        member: [slot.cardId],
+      };
+      for (const node of boosted) {
+        const extraValue = node.value * (connectorInfo.boostPermil / 1000);
+        for (const cardId of recipients[node.area]) {
+          applyValue(cardId, node.type, extraValue);
         }
       }
     }
