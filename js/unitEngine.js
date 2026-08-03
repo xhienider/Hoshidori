@@ -235,7 +235,7 @@ export function computeScoreSupport(passiveResults) {
  * @param {Record<string,number>} scoreSupport - output of computeScoreSupport(...)
  * @param {number[]} feverSeconds - the song's 5 fever timestamps (special skill activation times)
  * @param {number} durationSeconds - song length
- * @returns {{t:number, perMember:{cardId:string,active:boolean,effectiveBonus:number,activationChance:number|null}[], maxBonus:number, inSpecialWindow:boolean, noBonusDuringSpecial:boolean}[]}
+ * @returns {{t:number, perMember:{cardId:string,active:boolean,effectiveBonus:number,activationChance:number|null,activationStart:number|null,unitIndex:number}[], maxBonus:number, winnerCardId:string|null, inSpecialWindow:boolean, noBonusDuringSpecial:boolean}[]}
  */
 export function simulateActiveTimeline({
   activeResults,
@@ -282,20 +282,50 @@ export function simulateActiveTimeline({
         ? Math.round((a.activationProbabilityPercent || 0) * (1 + specialActivationUp / 100) * 100) / 100
         : null;
 
-      return { cardId, active, effectiveBonus, activationChance };
+      // When this member's current activation window began (the start of this
+      // specific cooldown cycle) - used to break ties: earlier activation wins.
+      const activationStart = active ? t - (t % cooldown) : null;
+
+      return { cardId, active, effectiveBonus, activationChance, activationStart, unitIndex: i };
     });
 
     const maxBonus = Math.max(0, ...perMember.map((m) => m.effectiveBonus));
+    const winnerCardId = resolveWinner(perMember);
     points.push({
       t,
       perMember,
       maxBonus,
+      winnerCardId,
       inSpecialWindow,
       noBonusDuringSpecial: inSpecialWindow && maxBonus === 0,
     });
   }
 
   return points;
+}
+
+/**
+ * Resolves which member's active-skill bonus actually applies this second when
+ * multiple are active at once: highest effective bonus wins; on a tie, whichever
+ * activation started earlier wins; if both started in the same second, earlier
+ * performance/unit order (leader-adjacent first) wins. Confirmed rule, not a guess.
+ */
+export function resolveWinner(perMember) {
+  const candidates = perMember.filter((m) => m.active && m.effectiveBonus > 0);
+  if (!candidates.length) return null;
+  let winner = candidates[0];
+  for (const m of candidates.slice(1)) {
+    if (
+      m.effectiveBonus > winner.effectiveBonus ||
+      (m.effectiveBonus === winner.effectiveBonus && m.activationStart < winner.activationStart) ||
+      (m.effectiveBonus === winner.effectiveBonus &&
+        m.activationStart === winner.activationStart &&
+        m.unitIndex < winner.unitIndex)
+    ) {
+      winner = m;
+    }
+  }
+  return winner.cardId;
 }
 
 /**

@@ -47,6 +47,24 @@ function attrClass(type) {
 function effectLabel(type) {
   return EFFECT_LABELS[type] ?? type?.split('_TYPE_')[1]?.replaceAll('_', ' ') ?? 'Effect';
 }
+function rarityNumber(rarity) {
+  const m = rarity?.match(/RARITY_(\d)$/);
+  return m ? Number(m[1]) : null;
+}
+function rarityLabel(rarity) {
+  const n = rarityNumber(rarity);
+  return n ? `${n}\u2605` : '';
+}
+
+// Maps an activation-chance percent (0-100) to a border color, blue (low
+// confidence) through to orange (high confidence), reusing the app's own palette.
+function activationChanceColor(chance) {
+  const t = Math.max(0, Math.min(100, chance ?? 0)) / 100;
+  const low = [154, 214, 236]; // --blue-pale
+  const high = [225, 90, 36]; // --orange
+  const rgb = low.map((v, i) => Math.round(v + (high[i] - v) * t));
+  return `rgb(${rgb.join(',')})`;
+}
 
 // ---------------------------------------------------------------------------
 // Data loading
@@ -94,7 +112,7 @@ function maxLevelFor(card) {
 // ---------------------------------------------------------------------------
 
 const rosterEl = document.getElementById('roster');
-const songSelectEl = document.getElementById('song-select');
+const songSlotEl = document.getElementById('song-slot');
 const resultsEl = document.getElementById('results');
 
 function renderRoster() {
@@ -129,7 +147,11 @@ function renderSlot(key, slotState, isLeader) {
 
   const name = document.createElement('div');
   name.className = 'slot-name';
-  name.textContent = card ? card.characterName : (isLeader ? 'Choose leader' : 'Choose member');
+  if (card) {
+    name.innerHTML = `${card.characterName} <span class="rarity-badge">${rarityLabel(card.rarity)}</span>`;
+  } else {
+    name.textContent = isLeader ? 'Choose leader' : 'Choose member';
+  }
   info.appendChild(name);
 
   const sub = document.createElement('div');
@@ -253,7 +275,7 @@ function openPicker(slotState, isLeader) {
       const info = document.createElement('div');
       const name = document.createElement('div');
       name.className = 'picker-item-name';
-      name.textContent = m.characterName;
+      name.innerHTML = `${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span>`;
       info.appendChild(name);
       const sub = document.createElement('div');
       sub.className = 'picker-item-sub';
@@ -287,18 +309,116 @@ function openPicker(slotState, isLeader) {
 // Song select
 // ---------------------------------------------------------------------------
 
-function renderSongSelect() {
-  songSelectEl.innerHTML = '<option value="">Select a song\u2026</option>';
-  for (const s of DATA.songs) {
-    const opt = document.createElement('option');
-    opt.value = s.id;
-    opt.textContent = s.title;
-    songSelectEl.appendChild(opt);
+function renderSongSlot() {
+  songSlotEl.innerHTML = '';
+  const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
+
+  const slot = document.createElement('div');
+  slot.className = 'slot' + (song ? '' : ' empty');
+
+  const badge = document.createElement('div');
+  badge.className = 'slot-badge attr-empty';
+  badge.textContent = '\u266a';
+  slot.appendChild(badge);
+
+  const info = document.createElement('div');
+  info.className = 'slot-info';
+  const name = document.createElement('div');
+  name.className = 'slot-name';
+  name.textContent = song ? song.title : 'Choose a song';
+  info.appendChild(name);
+  const sub = document.createElement('div');
+  sub.className = 'slot-sub';
+  sub.textContent = song
+    ? `${Math.floor((song.playingSeconds || 0) / 60)}:${String((song.playingSeconds || 0) % 60).padStart(2, '0')} \u00b7 5 fever points`
+    : 'Click to search from song list';
+  info.appendChild(sub);
+  slot.appendChild(info);
+
+  slot.addEventListener('click', openSongPicker);
+  songSlotEl.appendChild(slot);
+}
+
+function openSongPicker() {
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+
+  const box = document.createElement('div');
+  box.className = 'picker-box';
+
+  const searchWrap = document.createElement('div');
+  searchWrap.className = 'picker-search';
+  const input = document.createElement('input');
+  input.placeholder = 'Search for a song\u2026';
+  searchWrap.appendChild(input);
+  box.appendChild(searchWrap);
+
+  const list = document.createElement('div');
+  list.className = 'picker-list';
+  box.appendChild(list);
+
+  const close = document.createElement('div');
+  close.className = 'picker-close';
+  close.textContent = 'CLOSE';
+  close.onclick = () => overlay.remove();
+  box.appendChild(close);
+
+  function renderList(query) {
+    list.innerHTML = '';
+    const q = query.trim().toLowerCase();
+    const matches = DATA.songs.filter((s) => !q || s.title?.toLowerCase().includes(q)).slice(0, 80);
+
+    if (!matches.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = 'No matches';
+      list.appendChild(empty);
+      return;
+    }
+
+    for (const s of matches) {
+      const item = document.createElement('div');
+      item.className = 'picker-item';
+
+      const badge = document.createElement('div');
+      badge.className = 'slot-badge attr-empty';
+      badge.style.width = '26px';
+      badge.style.height = '26px';
+      badge.style.fontSize = '11px';
+      badge.textContent = '\u266a';
+      item.appendChild(badge);
+
+      const info = document.createElement('div');
+      const name = document.createElement('div');
+      name.className = 'picker-item-name';
+      name.textContent = s.title;
+      info.appendChild(name);
+      const sub = document.createElement('div');
+      sub.className = 'picker-item-sub';
+      const secs = s.playingSeconds || 0;
+      sub.textContent = `${Math.floor(secs / 60)}:${String(secs % 60).padStart(2, '0')}`;
+      info.appendChild(sub);
+      item.appendChild(info);
+
+      item.onclick = () => {
+        state.songId = s.id;
+        overlay.remove();
+        renderSongSlot();
+        recompute();
+      };
+      list.appendChild(item);
+    }
   }
-  songSelectEl.onchange = () => {
-    state.songId = songSelectEl.value || null;
-    recompute();
-  };
+
+  input.addEventListener('input', () => renderList(input.value));
+  renderList('');
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+  input.focus();
 }
 
 // ---------------------------------------------------------------------------
@@ -616,7 +736,13 @@ function renderCoveragePanel(result, unit) {
   `;
   panel.appendChild(summary);
 
+  // Full special-skill windows (not just the activation instant), so the highlight
+  // can span the whole duration each member's special skill is active for.
+  const specialWindows = song.feverSeconds
+    .map((start, i) => ({ start, end: start + (result.specials[i]?.effectDurationSeconds || 0) }))
+    .filter((w) => w.end > w.start);
   const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
+  const inAnySpecialWindow = (t) => specialWindows.some((w) => t >= w.start && t < w.end);
 
   const wrap = document.createElement('div');
   wrap.className = 'coverage-table-wrap';
@@ -636,17 +762,25 @@ function renderCoveragePanel(result, unit) {
   const tbody = document.createElement('tbody');
   for (const point of timeline) {
     const tr = document.createElement('tr');
-    const isFever = feverSecondsRounded.has(point.t);
-    if (isFever) tr.classList.add('fever-row');
+    const isFeverStart = feverSecondsRounded.has(point.t);
+    if (isFeverStart) tr.classList.add('fever-row');
+    else if (inAnySpecialWindow(point.t)) tr.classList.add('fever-window');
     if (point.t > 20 && point.maxBonus === 0) tr.classList.add('no-bonus-row');
 
     const mm = Math.floor(point.t / 60);
     const ss = String(point.t % 60).padStart(2, '0');
-    let rowHtml = `<td>${mm}:${ss}${isFever ? ' \u2605' : ''}</td>`;
+    let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
 
+    // The highest effective bonus this second suppresses the others (only the
+    // strongest score bonus applies when multiple members are active at once).
+    // Ties: earlier activation wins; same-second ties: earlier unit order wins.
     for (const m of point.perMember) {
       if (m.active) {
-        rowHtml += `<td class="cell-active" title="${m.effectiveBonus.toFixed(1)}% score bonus @ ${m.activationChance}% activation chance">${m.effectiveBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
+        const isWinner = m.cardId === point.winnerCardId;
+        const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
+        const borderColor = activationChanceColor(m.activationChance);
+        const title = `${m.effectiveBonus.toFixed(1)}% score bonus @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
+        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.effectiveBonus.toFixed(1)}%</td>`;
       } else {
         rowHtml += '<td>\u2014</td>';
       }
@@ -711,7 +845,7 @@ function renderPowerPanel(result, leaderCard) {
 async function main() {
   await loadData();
   renderRoster();
-  renderSongSelect();
+  renderSongSlot();
   recompute();
 }
 
