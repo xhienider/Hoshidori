@@ -281,8 +281,36 @@ export function computeBoardBonuses(boardSelections, boardCategoriesData, slots)
   return { statFlat, statPermil, activationProbabilityPermil, cooldownShortenPermil, scoreSupportPermil, pointsSpent };
 }
 
-/**
- * Mutates a computeUnit() result in place, folding in board bonuses so every
+/** Merges two board-bonus-shaped objects (e.g. base board + connect bonuses) into one. */
+export function mergeBoardBonuses(a, b) {
+  const mergeStatMap = (m1, m2) => {
+    const out = { ...m1 };
+    for (const [cardId, stats] of Object.entries(m2)) {
+      const existing = out[cardId] || { performance: 0, technique: 0, sense: 0 };
+      out[cardId] = {
+        performance: existing.performance + stats.performance,
+        technique: existing.technique + stats.technique,
+        sense: existing.sense + stats.sense,
+      };
+    }
+    return out;
+  };
+  const mergeNumMap = (m1, m2) => {
+    const out = { ...m1 };
+    for (const [cardId, v] of Object.entries(m2)) out[cardId] = (out[cardId] || 0) + v;
+    return out;
+  };
+  return {
+    statFlat: mergeStatMap(a.statFlat, b.statFlat),
+    statPermil: mergeStatMap(a.statPermil, b.statPermil),
+    activationProbabilityPermil: mergeNumMap(a.activationProbabilityPermil, b.activationProbabilityPermil),
+    cooldownShortenPermil: mergeNumMap(a.cooldownShortenPermil, b.cooldownShortenPermil),
+    scoreSupportPermil: mergeNumMap(a.scoreSupportPermil, b.scoreSupportPermil),
+    pointsSpent: { ...(a.pointsSpent || {}), ...(b.pointsSpent || {}) },
+  };
+}
+
+/** Mutates a computeUnit() result in place, folding in board bonuses so every
  * existing panel (stats, actives, coverage, power) picks them up automatically.
  * Stat order of operations: card's own permil bonuses are already baked into
  * memberStats; board permil bonuses scale that same total again, then board
@@ -335,6 +363,158 @@ export function mergeScoreSupport(passiveScoreSupport, boardScoreSupportPermil) 
     merged[cardId] = (merged[cardId] || 0) + permil / 10;
   }
   return merged;
+}
+
+// ---------------------------------------------------------------------------
+// HOLOMEM BOARD - CONNECT EFFECTS ("manually bounded" approach)
+// Each card that has a skillTreeConnectEffectId can be placed as a connector
+// in one of 3 slots on another character's board (center/leader/member),
+// determined by its own area type. The connector's bloom level decides which
+// boost tier applies (bloom 5 -> level 2, matching the real
+// SKILL_TREE_CONNECT_EFFECT_LEVEL_UP potential unlock; below that -> level 1).
+// The connector's nodeCount is a budget: the user allocates that many
+// "boosted node" slots across the RECEIVING character's own board categories
+// (within the matching area), and the top N already-unlocked nodes (by value)
+// in each chosen category receive the % boost. Node identity/position
+// matching is not attempted - this is the "manually bounded" tier.
+// ---------------------------------------------------------------------------
+
+/**
+ * @param {object} connectorCard - the connecting character's card (member record)
+ * @param {number} connectorBloom
+ * @param {Record<string, object>} cardConnectInfo - card_connect_info.json
+ * @param {object} cardPotentials - card_potentials.json, needed to resolve the real
+ *        bloom-5 threshold (rarity-dependent) for the level-1 vs level-2 boost tier
+ */
+export function getConnectorInfo(connectorCard, connectorBloom, cardConnectInfo, cardPotentials) {
+  const info = cardConnectInfo[connectorCard.cardId];
+  if (!info) return null;
+  const level = getSkillLevel(connectorCard, connectorBloom, cardPotentials, SKILL_LEVEL_TYPES.TREE_CONNECT) === 2 ? 2 : 1;
+  const boostPermil = level === 2 ? info.boostPermilLevel2 : info.boostPermilLevel1;
+  return { area: info.area, nodeCount: info.nodeCount, level, boostPermil };
+}
+
+/**
+ * @param {Record<string, {center?:object, leader?:object, member?:object}>} connectSelections
+ *        - receivingCharacterId -> per-slot { connectorCardId, connectorBloom, allocations: {categoryKey: count} }
+ * @param {Record<string, object>} boardCategoriesData - board_categories.json
+ * @param {Record<string, Record<string, number>>} boardSelections - the base board unlocks (state.boardSelections)
+ * @param {Record<string, object>} cardConnectInfo - card_connect_info.json
+ * @param {Record<string, object>} cardsById - members.json indexed by cardId
+ * @param {object} cardPotentials - card_potentials.json (for bloom-level resolution)
+ * @param {{characterId:string, cardId:string, isLeaderSlot:boolean, isUnitMember:boolean}[]} slots
+ */
+export function computeConnectBonuses(
+  connectSelections,
+  boardCategoriesData,
+  boardSelections,
+  cardConnectInfo,
+  cardsById,
+  cardPotentials,
+  slots
+) {
+  const statFlat = {};
+  const statPermil = {};
+  const activationProbabilityPermil = {};
+  const cooldownShortenPermil = {};
+  const scoreSupportPermil = {};
+
+  const ensureStat = (map, cardId) => {
+    if (!map[cardId]) map[cardId] = { performance: 0, technique: 0, sense: 0 };
+    return map[cardId];
+  };
+
+  const applyValue = (cardId, type, value) => {
+    switch (type) {
+      case 'ALL_PARAMETER_UP': {
+        const st = ensureStat(statFlat, cardId);
+        st.performance += value;
+        st.technique += value;
+        st.sense += value;
+        break;
+      }
+      case 'PERFORMANCE_UP':
+        ensureStat(statFlat, cardId).performance += value;
+        break;
+      case 'TECHNIQUE_UP':
+        ensureStat(statFlat, cardId).technique += value;
+        break;
+      case 'SENSE_UP':
+        ensureStat(statFlat, cardId).sense += value;
+        break;
+      case 'ALL_PARAMETER_UP_PERMIL_UP': {
+        const st = ensureStat(statPermil, cardId);
+        st.performance += value;
+        st.technique += value;
+        st.sense += value;
+        break;
+      }
+      case 'PERFORMANCE_UP_PERMIL_UP':
+        ensureStat(statPermil, cardId).performance += value;
+        break;
+      case 'TECHNIQUE_UP_PERMIL_UP':
+        ensureStat(statPermil, cardId).technique += value;
+        break;
+      case 'SENSE_UP_PERMIL_UP':
+        ensureStat(statPermil, cardId).sense += value;
+        break;
+      case 'LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP':
+        activationProbabilityPermil[cardId] = (activationProbabilityPermil[cardId] || 0) + value;
+        break;
+      case 'LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP':
+        cooldownShortenPermil[cardId] = (cooldownShortenPermil[cardId] || 0) + value;
+        break;
+      case 'LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP':
+        scoreSupportPermil[cardId] = (scoreSupportPermil[cardId] || 0) + value;
+        break;
+    }
+  };
+
+  for (const slot of slots) {
+    const config = connectSelections[slot.characterId];
+    const charData = boardCategoriesData[slot.characterId];
+    if (!config || !charData) continue;
+
+    for (const [slotType, setup] of Object.entries(config)) {
+      if (!setup?.connectorCardId) continue;
+      if (slotType === 'leader' && !slot.isLeaderSlot) continue;
+      if (slotType === 'member' && !slot.isUnitMember) continue;
+      // 'center' has no gating - it's the shared hub, applies to whichever
+      // categories the user allocates it to regardless of leader/member role.
+
+      const connectorCard = cardsById[setup.connectorCardId];
+      if (!connectorCard) continue;
+      const connectorInfo = getConnectorInfo(connectorCard, setup.connectorBloom || 0, cardConnectInfo, cardPotentials);
+      if (!connectorInfo || !connectorInfo.boostPermil) continue;
+
+      const unlocked = boardSelections[slot.characterId] || {};
+
+      let remainingBudget = connectorInfo.nodeCount;
+      for (const [categoryKey, boostCount] of Object.entries(setup.allocations || {})) {
+        if (!boostCount || remainingBudget <= 0) continue;
+        const nodes = charData.categories[categoryKey];
+        const unlockedCount = unlocked[categoryKey] || 0;
+        if (!nodes || !unlockedCount) continue;
+
+        const actualBoostCount = Math.min(boostCount, unlockedCount, remainingBudget);
+        if (actualBoostCount <= 0) continue;
+        remainingBudget -= actualBoostCount;
+
+        // Boost the top-value already-unlocked nodes in this category.
+        const unlockedNodes = nodes.slice(0, unlockedCount);
+        const topBoosted = [...unlockedNodes].sort((a, b) => b.value - a.value).slice(0, actualBoostCount);
+        const extraValue = topBoosted.reduce((s, n) => s + n.value, 0) * (connectorInfo.boostPermil / 1000);
+
+        const [area, type] = categoryKey.split('|');
+        const recipients = area === 'leader' ? slots.filter((s) => s.isUnitMember).map((s) => s.cardId) : [slot.cardId];
+        for (const cardId of recipients) {
+          applyValue(cardId, type, extraValue);
+        }
+      }
+    }
+  }
+
+  return { statFlat, statPermil, activationProbabilityPermil, cooldownShortenPermil, scoreSupportPermil };
 }
 
 const STAT_EFFECT_TYPES = {

@@ -324,6 +324,70 @@ header.masthead {
   border-top: 1px solid var(--line);
 }
 
+.connect-section {
+  padding: 4px 14px 14px;
+  border-top: 1px solid var(--line);
+}
+
+.connect-slot-row {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+  margin-bottom: 8px;
+}
+
+.connect-slot-head {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.connect-slot-label {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+  flex: 1;
+}
+
+.connect-bloom-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 8px;
+}
+.connect-info {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--orange);
+  margin-left: auto;
+}
+
+.connect-alloc-list { margin-top: 8px; }
+.connect-alloc-row {
+  display: grid;
+  grid-template-columns: 1fr 84px;
+  align-items: center;
+  gap: 8px;
+  padding: 4px 0;
+  font-size: 11.5px;
+}
+.connect-alloc-empty {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-style: italic;
+  padding: 6px 0;
+}
+
+.connect-budget-line {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  color: var(--text-faint);
+  text-align: right;
+  margin-top: 6px;
+  padding-top: 6px;
+  border-top: 1px solid rgba(255,255,255,0.05);
+}
+
 /* ---------- Picker overlay ---------- */
 
 .picker-overlay {

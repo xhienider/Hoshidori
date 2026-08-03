@@ -10,6 +10,9 @@ import {
   computeBoardBonuses,
   applyBoardBonuses,
   mergeScoreSupport,
+  computeConnectBonuses,
+  getConnectorInfo,
+  mergeBoardBonuses,
 } from './js/unitEngine.js';
 
 const ATTR_LABELS = {
@@ -30,6 +33,8 @@ const EFFECT_LABELS = {
   LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIFE_RECOVERY: 'Life Recovery',
   LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_JUDGEMENT_ENHANCE: 'Judgement Enhance',
 };
+
+const AREA_ICON = { leader: '\ud83d\udd34', member: '\ud83d\udd35', center: '\ud83c\udfaf' };
 
 const CONDITION_LABELS = {
   LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE: (c) =>
@@ -76,12 +81,13 @@ function activationChanceColor(chance) {
 const DATA = {};
 
 async function loadData() {
-  const [members, cardPotentials, characterGroupings, songs, boardCategories] = await Promise.all([
+  const [members, cardPotentials, characterGroupings, songs, boardCategories, cardConnectInfo] = await Promise.all([
     fetch('data/members.json').then((r) => r.json()),
     fetch('data/card_potentials.json').then((r) => r.json()),
     fetch('data/character_groupings.json').then((r) => r.json()),
     fetch('data/music.json').then((r) => r.json()),
     fetch('data/board_categories.json').then((r) => r.json()),
+    fetch('data/card_connect_info.json').then((r) => r.json()),
   ]);
   DATA.members = members;
   DATA.byId = Object.fromEntries(members.map((m) => [m.cardId, m]));
@@ -89,6 +95,7 @@ async function loadData() {
   DATA.characterGroupings = characterGroupings;
   DATA.songs = songs.filter((s) => s.feverSeconds && s.feverSeconds.length === 5);
   DATA.boardCategories = boardCategories;
+  DATA.cardConnectInfo = cardConnectInfo;
 }
 
 // ---------------------------------------------------------------------------
@@ -105,7 +112,8 @@ const state = {
     { cardId: null, level: 80, bloom: 0 },
   ],
   songId: null,
-  boardSelections: {}, // characterId -> { "EFFECT_TYPE|target": countUnlocked }
+  boardSelections: {}, // characterId -> { "leader|EFFECT_TYPE" | "member|EFFECT_TYPE": countUnlocked }
+  connectSelections: {}, // characterId -> { center?, leader?, member?: { connectorCardId, connectorBloom, allocations } }
 };
 
 function maxLevelFor(card) {
@@ -337,6 +345,9 @@ function openBoardEditor(card) {
     }
   };
 
+  const connectSection = document.createElement('div');
+  connectSection.className = 'connect-section';
+
   const totalEl = document.createElement('div');
   totalEl.className = 'board-total';
 
@@ -345,12 +356,223 @@ function openBoardEditor(card) {
     renderGroup('\ud83d\udd34 Leader Area', '\u2014 applies to the whole unit', leaderNodes);
     renderGroup('\ud83d\udd35 Member Area', '\u2014 applies to this character only', memberNodes);
     totalEl.textContent = `${boardPointsSpent(characterId)} points allocated`;
+    renderConnectSection();
     recompute();
     renderRoster();
   }
 
+  function renderConnectSection() {
+    connectSection.innerHTML = '';
+    const heading = document.createElement('div');
+    heading.className = 'board-group-label';
+    heading.innerHTML = 'Connect Effects <span class="board-group-hint">\u2014 assign a connector character to boost specific unlocked nodes</span>';
+    connectSection.appendChild(heading);
+
+    if (!state.connectSelections[characterId]) state.connectSelections[characterId] = {};
+    const config = state.connectSelections[characterId];
+
+    const SLOT_META = {
+      center: { label: '\ud83c\udfaf Center', hint: 'any connector \u2014 what she boosts depends on her own type' },
+      leader: { label: '\ud83d\udd34 Leader', hint: 'any connector \u2014 what she boosts depends on her own type' },
+      member: { label: '\ud83d\udd35 Member', hint: 'any connector \u2014 what she boosts depends on her own type' },
+    };
+
+    for (const slotType of ['center', 'leader', 'member']) {
+      const setup = config[slotType];
+      const meta = SLOT_META[slotType];
+
+      const row = document.createElement('div');
+      row.className = 'connect-slot-row';
+
+      const head = document.createElement('div');
+      head.className = 'connect-slot-head';
+      const connectorCard = setup?.connectorCardId ? DATA.byId[setup.connectorCardId] : null;
+      head.innerHTML = `<span class="connect-slot-label">${meta.label}</span>`;
+
+      const connectorBtn = document.createElement('button');
+      connectorBtn.type = 'button';
+      connectorBtn.className = 'board-btn';
+      connectorBtn.textContent = connectorCard ? connectorCard.characterName : 'Choose connector';
+      connectorBtn.onclick = () => openConnectorPicker(slotType, characterId);
+      head.appendChild(connectorBtn);
+
+      if (connectorCard) {
+        const clearBtn = document.createElement('button');
+        clearBtn.type = 'button';
+        clearBtn.className = 'board-btn';
+        clearBtn.textContent = '\u2715';
+        clearBtn.onclick = () => {
+          delete config[slotType];
+          refreshEditor();
+        };
+        head.appendChild(clearBtn);
+      }
+      row.appendChild(head);
+
+      if (connectorCard) {
+        const bloomRow = document.createElement('div');
+        bloomRow.className = 'connect-bloom-row';
+        bloomRow.innerHTML = `<span class="slot-sub">Connector Bloom</span>`;
+        const bloomInput = document.createElement('input');
+        bloomInput.className = 'mini-input';
+        bloomInput.type = 'number';
+        bloomInput.min = 0;
+        bloomInput.max = 5;
+        bloomInput.value = setup.connectorBloom || 0;
+        bloomInput.onchange = () => {
+          setup.connectorBloom = clamp(Number(bloomInput.value), 0, 5);
+          bloomInput.value = setup.connectorBloom;
+          refreshEditor();
+        };
+        bloomRow.appendChild(bloomInput);
+
+        const info = getConnectorInfo(connectorCard, setup.connectorBloom || 0, DATA.cardConnectInfo, DATA.cardPotentials);
+        if (info) {
+          const infoSpan = document.createElement('span');
+          infoSpan.className = 'connect-info';
+          infoSpan.textContent = `${info.nodeCount} node budget \u00b7 +${(info.boostPermil / 10).toFixed(0)}% boost (Lv${info.level})`;
+          bloomRow.appendChild(infoSpan);
+        }
+        row.appendChild(bloomRow);
+
+        if (info) {
+          if (!setup.allocations) setup.allocations = {};
+          const usedBudget = Object.values(setup.allocations).reduce((s, v) => s + (v || 0), 0);
+          const eligibleKeys =
+            slotType === 'center'
+              ? [...leaderNodes, ...memberNodes].map(([k]) => k)
+              : slotType === 'leader'
+              ? leaderNodes.map(([k]) => k)
+              : memberNodes.map(([k]) => k);
+
+          const allocList = document.createElement('div');
+          allocList.className = 'connect-alloc-list';
+          for (const key of eligibleKeys) {
+            const unlockedCount = sel[key] || 0;
+            if (!unlockedCount) continue; // can't boost nodes that aren't unlocked
+            const [, type] = key.split('|');
+            const boostCount = setup.allocations[key] || 0;
+            const maxForRow = Math.min(unlockedCount, boostCount + (info.nodeCount - usedBudget));
+
+            const allocRow = document.createElement('div');
+            allocRow.className = 'connect-alloc-row';
+            allocRow.innerHTML = `
+              <div class="board-row-label">${BOARD_CATEGORY_LABELS[type] || type}</div>
+              <div class="board-stepper">
+                <button type="button" class="stepper-btn" data-action="dec">\u2212</button>
+                <span class="stepper-count">${boostCount}/${unlockedCount}</span>
+                <button type="button" class="stepper-btn" data-action="inc">+</button>
+              </div>
+            `;
+            const decBtn = allocRow.querySelector('[data-action="dec"]');
+            const incBtn = allocRow.querySelector('[data-action="inc"]');
+            decBtn.disabled = boostCount <= 0;
+            incBtn.disabled = boostCount >= maxForRow;
+            decBtn.onclick = () => {
+              setup.allocations[key] = Math.max(0, boostCount - 1);
+              refreshEditor();
+            };
+            incBtn.onclick = () => {
+              setup.allocations[key] = Math.min(maxForRow, boostCount + 1);
+              refreshEditor();
+            };
+            allocList.appendChild(allocRow);
+          }
+          if (!allocList.children.length) {
+            const empty = document.createElement('div');
+            empty.className = 'connect-alloc-empty';
+            empty.textContent = 'Unlock some nodes in the matching area first to allocate this connector\u2019s boost.';
+            allocList.appendChild(empty);
+          }
+          row.appendChild(allocList);
+
+          const budgetLine = document.createElement('div');
+          budgetLine.className = 'connect-budget-line';
+          budgetLine.textContent = `${usedBudget}/${info.nodeCount} boost slots used`;
+          row.appendChild(budgetLine);
+        }
+      }
+
+      connectSection.appendChild(row);
+    }
+  }
+
+  function openConnectorPicker(slotType, receivingCharacterId) {
+    const pOverlay = document.createElement('div');
+    pOverlay.className = 'picker-overlay';
+    const pBox = document.createElement('div');
+    pBox.className = 'picker-box';
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'picker-search';
+    const input = document.createElement('input');
+    input.placeholder = 'Search for a connector\u2026';
+    searchWrap.appendChild(input);
+    pBox.appendChild(searchWrap);
+    const pList = document.createElement('div');
+    pList.className = 'picker-list';
+    pBox.appendChild(pList);
+    const pClose = document.createElement('div');
+    pClose.className = 'picker-close';
+    pClose.textContent = 'CLOSE';
+    pClose.onclick = () => pOverlay.remove();
+    pBox.appendChild(pClose);
+
+    const eligibleArea = slotType; // used only for the info hint below, not as a filter
+    function renderPList(query) {
+      pList.innerHTML = '';
+      const q = query.trim().toLowerCase();
+      const matches = DATA.members.filter((m) => {
+        const info = DATA.cardConnectInfo[m.cardId];
+        if (!info) return false; // must have some connect pattern, but any area is fine here
+        if (q && !m.characterName?.toLowerCase().includes(q) && !m.cardSubtitle?.toLowerCase().includes(q)) return false;
+        return true;
+      }).slice(0, 60);
+
+      if (!matches.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = 'No connect-eligible characters found.';
+        pList.appendChild(empty);
+        return;
+      }
+      for (const m of matches) {
+        const info = DATA.cardConnectInfo[m.cardId];
+        const item = document.createElement('div');
+        item.className = 'picker-item';
+        const badge = document.createElement('div');
+        badge.className = 'slot-badge ' + attrClass(m.attributeType);
+        badge.style.width = '26px';
+        badge.style.height = '26px';
+        badge.style.fontSize = '11px';
+        badge.textContent = attrLabel(m.attributeType)[0];
+        item.appendChild(badge);
+        const infoDiv = document.createElement('div');
+        infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${AREA_ICON[info.area] || ''} boosts ${info.area} nodes \u00b7 ${info.nodeCount} nodes \u00b7 +${(info.boostPermilLevel1/10).toFixed(0)}\u2013${(info.boostPermilLevel2/10).toFixed(0)}%</div>`;
+        item.appendChild(infoDiv);
+        item.onclick = () => {
+          if (!state.connectSelections[receivingCharacterId]) state.connectSelections[receivingCharacterId] = {};
+          state.connectSelections[receivingCharacterId][slotType] = {
+            connectorCardId: m.cardId,
+            connectorBloom: 0,
+            allocations: {},
+          };
+          pOverlay.remove();
+          refreshEditor();
+        };
+        pList.appendChild(item);
+      }
+    }
+    input.addEventListener('input', () => renderPList(input.value));
+    renderPList('');
+    pOverlay.appendChild(pBox);
+    pOverlay.addEventListener('click', (e) => { if (e.target === pOverlay) pOverlay.remove(); });
+    document.body.appendChild(pOverlay);
+    input.focus();
+  }
+
   refreshEditor();
   box.appendChild(list);
+  box.appendChild(connectSection);
   box.appendChild(totalEl);
 
   const close = document.createElement('div');
@@ -609,9 +831,19 @@ function recompute() {
     slots.push({ characterId: leaderCard.characterId, cardId: leaderCard.cardId, isUnitMember: false, isLeaderSlot: true });
   }
   const boardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, slots);
-  applyBoardBonuses(result, boardBonuses);
+  const connectBonuses = computeConnectBonuses(
+    state.connectSelections,
+    DATA.boardCategories,
+    state.boardSelections,
+    DATA.cardConnectInfo,
+    DATA.byId,
+    DATA.cardPotentials,
+    slots
+  );
+  const combinedBonuses = mergeBoardBonuses(boardBonuses, connectBonuses);
+  applyBoardBonuses(result, combinedBonuses);
 
-  const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), boardBonuses.scoreSupportPermil);
+  const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil);
 
   renderResults(result, leaderCard, unit, scoreSupport);
 }

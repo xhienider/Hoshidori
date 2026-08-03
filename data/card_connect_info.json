@@ -1,0 +1,527 @@
+{
+ "card-00012-5-uniq-0062-00": {
+  "characterId": "chr-00012",
+  "area": "leader",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-00021-5-uniq-0064-00": {
+  "characterId": "chr-00021",
+  "area": "member",
+  "nodeCount": 6,
+  "boostPermilLevel1": 1100,
+  "boostPermilLevel2": 1600
+ },
+ "card-00022-5-uniq-0063-00": {
+  "characterId": "chr-00022",
+  "area": "member",
+  "nodeCount": 8,
+  "boostPermilLevel1": 850,
+  "boostPermilLevel2": 1350
+ },
+ "card-00026-5-uniq-0065-00": {
+  "characterId": "chr-00026",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-00002-5-uniq-0001-00": {
+  "characterId": "chr-00002",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-00004-4-cmmn-0000-00": {
+  "characterId": "chr-00004",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-00004-5-uniq-0005-00": {
+  "characterId": "chr-00004",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 2200,
+  "boostPermilLevel2": 2700
+ },
+ "card-00005-4-cmmn-0000-00": {
+  "characterId": "chr-00005",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-00005-5-uniq-0006-00": {
+  "characterId": "chr-00005",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 2200,
+  "boostPermilLevel2": 2700
+ },
+ "card-00006-5-uniq-0007-00": {
+  "characterId": "chr-00006",
+  "area": "leader",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-00007-4-cmmn-0000-00": {
+  "characterId": "chr-00007",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-00007-5-uniq-0008-00": {
+  "characterId": "chr-00007",
+  "area": "leader",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-00010-5-uniq-0010-00": {
+  "characterId": "chr-00010",
+  "area": "leader",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-00011-5-uniq-0011-00": {
+  "characterId": "chr-00011",
+  "area": "member",
+  "nodeCount": 6,
+  "boostPermilLevel1": 1100,
+  "boostPermilLevel2": 1600
+ },
+ "card-00012-4-cmmn-0000-00": {
+  "characterId": "chr-00012",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-00012-5-uniq-0012-00": {
+  "characterId": "chr-00012",
+  "area": "member",
+  "nodeCount": 6,
+  "boostPermilLevel1": 1100,
+  "boostPermilLevel2": 1600
+ },
+ "card-00013-4-cmmn-0000-00": {
+  "characterId": "chr-00013",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-00013-5-uniq-0002-00": {
+  "characterId": "chr-00013",
+  "area": "member",
+  "nodeCount": 8,
+  "boostPermilLevel1": 850,
+  "boostPermilLevel2": 1350
+ },
+ "card-00014-5-uniq-0013-00": {
+  "characterId": "chr-00014",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-00015-4-cmmn-0000-00": {
+  "characterId": "chr-00015",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-00015-5-uniq-0003-00": {
+  "characterId": "chr-00015",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-00016-4-cmmn-0000-00": {
+  "characterId": "chr-00016",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-00017-4-cmmn-0000-00": {
+  "characterId": "chr-00017",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-00017-5-uniq-0015-00": {
+  "characterId": "chr-00017",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-00018-4-cmmn-0000-00": {
+  "characterId": "chr-00018",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-00018-5-uniq-0004-00": {
+  "characterId": "chr-00018",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-00019-4-cmmn-0000-00": {
+  "characterId": "chr-00019",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-00021-4-cmmn-0000-00": {
+  "characterId": "chr-00021",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-00022-4-cmmn-0000-00": {
+  "characterId": "chr-00022",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-00023-5-uniq-0019-00": {
+  "characterId": "chr-00023",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-00026-5-uniq-0021-00": {
+  "characterId": "chr-00026",
+  "area": "leader",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-00027-5-uniq-0022-00": {
+  "characterId": "chr-00027",
+  "area": "member",
+  "nodeCount": 6,
+  "boostPermilLevel1": 1100,
+  "boostPermilLevel2": 1600
+ },
+ "card-00028-5-uniq-0023-00": {
+  "characterId": "chr-00028",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 2200,
+  "boostPermilLevel2": 2700
+ },
+ "card-00030-4-cmmn-0000-00": {
+  "characterId": "chr-00030",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-00030-5-uniq-0024-00": {
+  "characterId": "chr-00030",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 2100,
+  "boostPermilLevel2": 2600
+ },
+ "card-00035-5-uniq-0028-00": {
+  "characterId": "chr-00035",
+  "area": "leader",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-00036-4-cmmn-0000-00": {
+  "characterId": "chr-00036",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-00036-5-uniq-0029-00": {
+  "characterId": "chr-00036",
+  "area": "member",
+  "nodeCount": 8,
+  "boostPermilLevel1": 850,
+  "boostPermilLevel2": 1350
+ },
+ "card-00037-4-cmmn-0000-00": {
+  "characterId": "chr-00037",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-00037-5-uniq-0030-00": {
+  "characterId": "chr-00037",
+  "area": "member",
+  "nodeCount": 8,
+  "boostPermilLevel1": 850,
+  "boostPermilLevel2": 1350
+ },
+ "card-00039-4-cmmn-0000-00": {
+  "characterId": "chr-00039",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-00039-5-uniq-0032-00": {
+  "characterId": "chr-00039",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 2100,
+  "boostPermilLevel2": 2600
+ },
+ "card-03001-4-cmmn-0000-00": {
+  "characterId": "chr-03001",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-03001-5-uniq-0033-00": {
+  "characterId": "chr-03001",
+  "area": "member",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-03002-4-cmmn-0000-00": {
+  "characterId": "chr-03002",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-03003-5-uniq-0035-00": {
+  "characterId": "chr-03003",
+  "area": "member",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-03004-4-cmmn-0000-00": {
+  "characterId": "chr-03004",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-03004-5-uniq-0036-00": {
+  "characterId": "chr-03004",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-03005-5-uniq-0037-00": {
+  "characterId": "chr-03005",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-03008-4-cmmn-0000-00": {
+  "characterId": "chr-03008",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-03008-5-uniq-0040-00": {
+  "characterId": "chr-03008",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-03009-4-cmmn-0000-00": {
+  "characterId": "chr-03009",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-04001-4-cmmn-0000-00": {
+  "characterId": "chr-04001",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-04001-5-uniq-0042-00": {
+  "characterId": "chr-04001",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-04002-5-uniq-0043-00": {
+  "characterId": "chr-04002",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-04003-4-cmmn-0000-00": {
+  "characterId": "chr-04003",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-04003-5-uniq-0044-00": {
+  "characterId": "chr-04003",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-04010-4-cmmn-0000-00": {
+  "characterId": "chr-04010",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-04010-5-uniq-0049-00": {
+  "characterId": "chr-04010",
+  "area": "member",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-04012-4-cmmn-0000-00": {
+  "characterId": "chr-04012",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-04013-5-uniq-0052-00": {
+  "characterId": "chr-04013",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 2100,
+  "boostPermilLevel2": 2600
+ },
+ "card-04014-5-uniq-0053-00": {
+  "characterId": "chr-04014",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-04016-4-cmmn-0000-00": {
+  "characterId": "chr-04016",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-04016-5-uniq-0055-00": {
+  "characterId": "chr-04016",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-04017-5-uniq-0056-00": {
+  "characterId": "chr-04017",
+  "area": "member",
+  "nodeCount": 6,
+  "boostPermilLevel1": 1100,
+  "boostPermilLevel2": 1600
+ },
+ "card-06002-4-cmmn-0000-00": {
+  "characterId": "chr-06002",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-06004-4-cmmn-0000-00": {
+  "characterId": "chr-06004",
+  "area": "member",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1600,
+  "boostPermilLevel2": 2100
+ },
+ "card-06004-5-uniq-0060-00": {
+  "characterId": "chr-06004",
+  "area": "member",
+  "nodeCount": 8,
+  "boostPermilLevel1": 850,
+  "boostPermilLevel2": 1350
+ },
+ "card-06005-4-cmmn-0000-00": {
+  "characterId": "chr-06005",
+  "area": "leader",
+  "nodeCount": 3,
+  "boostPermilLevel1": 1650,
+  "boostPermilLevel2": 2150
+ },
+ "card-06005-5-uniq-0061-00": {
+  "characterId": "chr-06005",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-00016-5-uniq-0014-00": {
+  "characterId": "chr-00016",
+  "area": "leader",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-03007-5-uniq-0039-00": {
+  "characterId": "chr-03007",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-06002-5-uniq-0058-00": {
+  "characterId": "chr-06002",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ },
+ "card-06003-4-cmmn-0000-00": {
+  "characterId": "chr-06003",
+  "area": "center",
+  "nodeCount": 4,
+  "boostPermilLevel1": 1150,
+  "boostPermilLevel2": 1650
+ },
+ "card-06003-5-uniq-0059-00": {
+  "characterId": "chr-06003",
+  "area": "center",
+  "nodeCount": 5,
+  "boostPermilLevel1": 1400,
+  "boostPermilLevel2": 1900
+ }
+}
