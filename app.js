@@ -601,7 +601,6 @@ function renderCoveragePanel(result, unit) {
     durationSeconds: duration,
   });
 
-  // Summary stats, mirroring the sheet's BONUS SCORE SUMMARY section
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
   const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
   const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
@@ -617,92 +616,55 @@ function renderCoveragePanel(result, unit) {
   `;
   panel.appendChild(summary);
 
-  const rows = document.createElement('div');
-  rows.className = 'coverage-rows';
+  const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
 
-  unitCards.forEach((card, i) => {
-    const row = document.createElement('div');
-    row.className = 'coverage-row';
+  const wrap = document.createElement('div');
+  wrap.className = 'coverage-table-wrap';
 
-    const name = document.createElement('div');
-    name.className = 'coverage-row-name';
-    name.textContent = card.characterName;
-    row.appendChild(name);
+  const table = document.createElement('table');
+  table.className = 'coverage-table';
 
-    const track = document.createElement('div');
-    track.className = 'coverage-row-track';
+  const thead = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  headRow.innerHTML =
+    '<th>Time</th>' +
+    unitCards.map((c) => `<th>${c.characterName.split(' ')[0]}</th>`).join('') +
+    '<th>Max</th>';
+  thead.appendChild(headRow);
+  table.appendChild(thead);
 
-    // Merge consecutive seconds into segments, splitting whenever the bonus or
-    // activation chance changes (e.g. entering/leaving a special skill overlap
-    // window mid-activation), so each segment's tooltip stays accurate.
-    let segStart = null;
-    let segBonus = null;
-    let segActivation = null;
+  const tbody = document.createElement('tbody');
+  for (const point of timeline) {
+    const tr = document.createElement('tr');
+    const isFever = feverSecondsRounded.has(point.t);
+    if (isFever) tr.classList.add('fever-row');
+    if (point.t > 20 && point.maxBonus === 0) tr.classList.add('no-bonus-row');
 
-    const flushSegment = (endT) => {
-      const seg = document.createElement('div');
-      seg.className = 'coverage-segment';
-      const widthPct = Math.max(((endT - segStart) / duration) * 100, 0.4);
-      seg.style.left = (segStart / duration) * 100 + '%';
-      seg.style.width = widthPct + '%';
-      const label = `${segBonus.toFixed(1)}% @ ${segActivation}%`;
-      seg.title = `${segBonus.toFixed(1)}% score bonus @ ${segActivation}% activation chance`;
-      if (widthPct > 7) {
-        seg.textContent = label;
-      }
-      track.appendChild(seg);
-    };
+    const mm = Math.floor(point.t / 60);
+    const ss = String(point.t % 60).padStart(2, '0');
+    let rowHtml = `<td>${mm}:${ss}${isFever ? ' \u2605' : ''}</td>`;
 
-    for (let t = 0; t <= timeline.length; t++) {
-      const point = t < timeline.length ? timeline[t].perMember[i] : null;
-      const isActive = !!point?.active;
-
-      if (isActive && segStart === null) {
-        segStart = t;
-        segBonus = point.effectiveBonus;
-        segActivation = point.activationChance;
-      } else if (isActive && (point.effectiveBonus !== segBonus || point.activationChance !== segActivation)) {
-        flushSegment(t);
-        segStart = t;
-        segBonus = point.effectiveBonus;
-        segActivation = point.activationChance;
-      } else if (!isActive && segStart !== null) {
-        flushSegment(t);
-        segStart = null;
+    for (const m of point.perMember) {
+      if (m.active) {
+        rowHtml += `<td class="cell-active" title="${m.effectiveBonus.toFixed(1)}% score bonus @ ${m.activationChance}% activation chance">${m.effectiveBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
+      } else {
+        rowHtml += '<td>\u2014</td>';
       }
     }
-
-    for (const fs of song.feverSeconds) {
-      const line = document.createElement('div');
-      line.className = 'coverage-fever-line';
-      line.style.left = (fs / duration) * 100 + '%';
-      track.appendChild(line);
-    }
-
-    row.appendChild(track);
-    rows.appendChild(row);
-  });
-
-  panel.appendChild(rows);
-
-  const axis = document.createElement('div');
-  axis.className = 'coverage-axis';
-  const axisSpacer = document.createElement('div');
-  axis.appendChild(axisSpacer);
-  const axisTrack = document.createElement('div');
-  axisTrack.className = 'coverage-axis-track';
-  const markCount = 6;
-  for (let m = 0; m <= markCount; m++) {
-    const t = Math.round((duration / markCount) * m);
-    const mark = document.createElement('div');
-    mark.className = 'coverage-axis-mark';
-    mark.style.left = (t / duration) * 100 + '%';
-    mark.textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
-    axisTrack.appendChild(mark);
+    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
+    tr.innerHTML = rowHtml;
+    tbody.appendChild(tr);
   }
-  axis.appendChild(axisTrack);
-  panel.appendChild(axis);
+  table.appendChild(tbody);
+  wrap.appendChild(table);
 
+  // Reserve a layout slot for a future side-by-side song map (piano roll / waveform)
+  // synced to this same per-second timeline.
+  const layout = document.createElement('div');
+  layout.className = 'coverage-layout';
+  layout.appendChild(wrap);
+
+  panel.appendChild(layout);
   return panel;
 }
 
