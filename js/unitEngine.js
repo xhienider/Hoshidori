@@ -174,17 +174,97 @@ export function mapSpecialSkillsToSong(specialResults, feverSeconds) {
 // ---------------------------------------------------------------------------
 
 /**
- * @param {Record<string, Record<string, number>>} boardSelections - characterId -> { "leader|EFFECT_TYPE" | "member|EFFECT_TYPE": countUnlocked }
- * @param {Record<string, {characterName:string, categories:Record<string,{cost:number,value:number,grade:number}[]>}>} boardCategoriesData
+ * HOLOMEM BOARD - node unlocking follows the physical path: a node can only
+ * be unlocked if it's directly adjacent (one grid step, no diagonals) to the
+ * center or to another already-unlocked node, forming an unbroken chain back
+ * to (0,0). This includes CONNECTION-type junction nodes (no stat effect of
+ * their own, but real point cost) which bridge gaps between effect nodes -
+ * e.g. the connect-effect anchor points themselves sit on the path this way.
+ * Unlocked state is tracked as a single set of "x,y" position keys per
+ * character (leader + member + connectors share one walkable graph, joined
+ * at the center).
+ */
+
+/** Builds a position ("x,y") -> node-info lookup for a character's full board
+ *  (effect nodes from both areas, plus structural connector nodes). */
+export function buildBoardIndex(charData) {
+  const index = new Map();
+  for (const [key, nodes] of Object.entries(charData.categories)) {
+    const [area, type] = key.split('|');
+    nodes.forEach((n, i) => {
+      const x = n.x || 0;
+      const y = n.y || 0;
+      index.set(`${x},${y}`, { kind: 'effect', key, area, type, index: i, cost: n.cost, value: n.value, grade: n.grade });
+    });
+  }
+  for (const c of charData.connectors || []) {
+    const posKey = `${c.x},${c.y}`;
+    if (!index.has(posKey)) {
+      index.set(posKey, { kind: 'connector', cost: c.cost });
+    }
+  }
+  return index;
+}
+
+const NEIGHBOR_OFFSETS = [
+  [1, 0],
+  [-1, 0],
+  [0, 1],
+  [0, -1],
+];
+
+/** Whether the node at (x,y) can be unlocked given the current unlocked set
+ *  (must be adjacent to the center or to an already-unlocked neighbor). */
+export function canUnlock(unlockedSet, x, y) {
+  for (const [dx, dy] of NEIGHBOR_OFFSETS) {
+    const nx = x + dx;
+    const ny = y + dy;
+    if (nx === 0 && ny === 0) return true; // adjacent to center - always unlockable
+    if (unlockedSet.has(`${nx},${ny}`)) return true;
+  }
+  return false;
+}
+
+/** Re-computes which nodes in `unlockedSet` are still reachable from the
+ *  center via other unlocked nodes, and returns a trimmed set with any now-
+ *  disconnected nodes removed (cascading lock after removing a node). */
+export function pruneDisconnected(unlockedSet) {
+  const reachable = new Set();
+  const queue = ['0,0'];
+  while (queue.length) {
+    const posKey = queue.shift();
+    if (reachable.has(posKey)) continue;
+    reachable.add(posKey);
+    const [x, y] = posKey.split(',').map(Number);
+    for (const [dx, dy] of NEIGHBOR_OFFSETS) {
+      const nKey = `${x + dx},${y + dy}`;
+      if (unlockedSet.has(nKey) && !reachable.has(nKey)) queue.push(nKey);
+    }
+  }
+  reachable.delete('0,0');
+  return new Set([...unlockedSet].filter((p) => reachable.has(p)));
+}
+
+/** Total points spent across a character's unlocked set (effect nodes + connectors). */
+export function boardPointsSpentFromSet(boardIndex, unlockedSet) {
+  let total = 0;
+  for (const posKey of unlockedSet) {
+    const node = boardIndex.get(posKey);
+    if (node) total += node.cost;
+  }
+  return total;
+}
+
+/**
+ * @param {Record<string, Set<string>>} unlockedPositions - characterId -> Set of "x,y" unlocked position keys
+ * @param {Record<string, object>} boardCategoriesData - board_categories.json
  * @param {{characterId:string, cardId:string, isLeaderSlot:boolean, isUnitMember:boolean}[]} slots
  *        - isLeaderSlot: true only for the slot actually chosen as leader this run.
- *          Leader-area (red) bonuses ONLY apply from this slot's selections - a
- *          character's stored leader-node picks do nothing when she's placed as a
- *          plain unit member instead, even though the selections persist per-character.
+ *          Leader-area (red) bonuses ONLY apply from this slot's selections.
  *        - isUnitMember: true for the 5 performing slots. Member-area (blue) bonuses
  *          only apply from a slot with this set (and only benefit that slot's own card).
  */
-export function computeBoardBonuses(boardSelections, boardCategoriesData, slots) {
+export function computeBoardBonuses(unlockedPositions, boardCategoriesData, slots) {
   const unitCardIds = slots.filter((s) => s.isUnitMember).map((s) => s.cardId);
 
   const statFlat = {};
@@ -200,38 +280,25 @@ export function computeBoardBonuses(boardSelections, boardCategoriesData, slots)
   };
 
   for (const slot of slots) {
-    const sel = boardSelections[slot.characterId];
+    const unlockedSet = unlockedPositions[slot.characterId];
     const charData = boardCategoriesData[slot.characterId];
-    if (!sel || !charData) continue;
+    if (!unlockedSet || !charData) continue;
 
-    // Points spent reflects everything invested on this character's board,
-    // regardless of whether it's actively contributing in this configuration.
-    let spent = 0;
-    for (const [key, count] of Object.entries(sel)) {
-      if (!count) continue;
-      const nodes = charData.categories[key];
-      if (!nodes) continue;
-      spent += nodes.slice(0, count).reduce((s, n) => s + n.cost, 0);
-    }
-    pointsSpent[slot.characterId] = (pointsSpent[slot.characterId] || 0) + spent;
+    const boardIndex = buildBoardIndex(charData);
+    pointsSpent[slot.characterId] = (pointsSpent[slot.characterId] || 0) + boardPointsSpentFromSet(boardIndex, unlockedSet);
 
-    for (const [key, count] of Object.entries(sel)) {
-      if (!count) continue;
-      const nodes = charData.categories[key];
-      if (!nodes) continue;
-      const [area, type] = key.split('|');
+    for (const posKey of unlockedSet) {
+      const node = boardIndex.get(posKey);
+      if (!node || node.kind !== 'effect') continue;
 
-      // Leader-area bonuses only apply from the actual leader slot; member-area
-      // bonuses only apply from a slot that's actually performing.
-      if (area === 'leader' && !slot.isLeaderSlot) continue;
-      if (area === 'member' && !slot.isUnitMember) continue;
+      if (node.area === 'leader' && !slot.isLeaderSlot) continue;
+      if (node.area === 'member' && !slot.isUnitMember) continue;
 
-      const chosen = nodes.slice(0, count);
-      const sum = chosen.reduce((s, n) => s + n.value, 0);
-      const recipients = area === 'leader' ? unitCardIds : [slot.cardId];
+      const recipients = node.area === 'leader' ? unitCardIds : [slot.cardId];
+      const sum = node.value;
 
       for (const cardId of recipients) {
-        switch (type) {
+        switch (node.type) {
           case 'ALL_PARAMETER_UP': {
             const st = ensureStat(statFlat, cardId);
             st.performance += sum;
@@ -399,7 +466,7 @@ export function getConnectorInfo(connectorCard, connectorBloom, cardConnectInfo,
  *        - receivingCharacterId -> per-slot { connectorCardId, connectorBloom }
  * @param {Record<string, object>} boardCategoriesData - board_categories.json (now includes `anchors`
  *        per character: {center:{x,y}, leader:{x,y}, member:{x,y}} - real connect-point positions)
- * @param {Record<string, Record<string, number>>} boardSelections - the base board unlocks
+ * @param {Record<string, Set<string>>} boardSelections - characterId -> Set of "x,y" unlocked position keys
  * @param {Record<string, object>} cardConnectInfo - card_connect_info.json (now includes `pattern`:
  *        relative offsets from the connector's own anchor)
  * @param {Record<string, object>} cardsById - members.json indexed by cardId
@@ -503,7 +570,7 @@ export function computeConnectBonuses(
       const anchor = charData.anchors?.[slotType];
       if (!anchor || anchor.x == null) continue; // e.g. no member path resolvable
 
-      const unlocked = boardSelections[slot.characterId] || {};
+      const unlockedSet = boardSelections[slot.characterId];
       const recipients = {
         leader: slots.filter((s) => s.isUnitMember).map((s) => s.cardId),
         member: [slot.cardId],
@@ -512,10 +579,10 @@ export function computeConnectBonuses(
       for (const offset of connectorInfo.pattern) {
         const px = anchor.x + (offset.x || 0);
         const py = anchor.y + (offset.y || 0);
-        const node = byPosition.get(`${px},${py}`);
+        const posKey = `${px},${py}`;
+        const node = byPosition.get(posKey);
         if (!node) continue; // pattern cell lands on empty space - no node there
-        const unlockedCount = unlocked[node.key] || 0;
-        if (node.index >= unlockedCount) continue; // node exists but isn't unlocked - nothing to boost
+        if (!unlockedSet?.has(posKey)) continue; // node exists but isn't unlocked - nothing to boost
 
         const extraValue = node.value * (connectorInfo.boostPermil / 1000);
         for (const cardId of recipients[node.area]) {

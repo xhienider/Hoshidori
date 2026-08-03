@@ -13,6 +13,10 @@ import {
   computeConnectBonuses,
   getConnectorInfo,
   mergeBoardBonuses,
+  buildBoardIndex,
+  boardPointsSpentFromSet,
+  canUnlock,
+  pruneDisconnected,
 } from './js/unitEngine.js';
 
 const ATTR_LABELS = {
@@ -279,17 +283,11 @@ function clamp(v, lo, hi) {
 }
 
 function boardPointsSpent(characterId) {
-  const sel = state.boardSelections[characterId];
+  const unlockedSet = state.boardSelections[characterId];
   const charData = DATA.boardCategories?.[characterId];
-  if (!sel || !charData) return 0;
-  let total = 0;
-  for (const [key, count] of Object.entries(sel)) {
-    if (!count) continue;
-    const nodes = charData.categories[key];
-    if (!nodes) continue;
-    total += nodes.slice(0, count).reduce((s, n) => s + n.cost, 0);
-  }
-  return total;
+  if (!unlockedSet || !charData) return 0;
+  const index = buildBoardIndex(charData);
+  return boardPointsSpentFromSet(index, unlockedSet);
 }
 
 const BOARD_CATEGORY_LABELS = {
@@ -310,8 +308,9 @@ function openBoardEditor(card) {
   const characterId = card.characterId;
   const charData = DATA.boardCategories[characterId];
   if (!charData) return;
-  if (!state.boardSelections[characterId]) state.boardSelections[characterId] = {};
+  if (!state.boardSelections[characterId]) state.boardSelections[characterId] = new Set();
   const sel = state.boardSelections[characterId];
+  const boardIndex = buildBoardIndex(charData);
 
   const overlay = document.createElement('div');
   overlay.className = 'picker-overlay';
@@ -321,101 +320,99 @@ function openBoardEditor(card) {
 
   const header = document.createElement('div');
   header.className = 'picker-search';
-  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">Leader (red) and Member (blue) areas only \u2014 node sizes vary, already reflected in the cost/value shown. All Member (green) and Content (yellow) areas aren't modeled yet; enter those as a manual bonus for now.</div>`;
+  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">Leader (red) and Member (blue) areas only \u2014 node sizes vary, already reflected in the cost/value shown. Nodes unlock along the physical path: click a node adjacent to the center or another unlocked node to unlock it; locking a node also locks anything past it that becomes disconnected. All Member (green) and Content (yellow) areas aren't modeled yet; enter those as a manual bonus for now.</div>`;
   box.appendChild(header);
 
   const list = document.createElement('div');
   list.className = 'picker-list board-editor-list';
 
-  const leaderNodes = [];
-  const memberNodes = [];
-  for (const key of Object.keys(charData.categories)) {
-    const [area, type] = key.split('|');
-    (area === 'leader' ? leaderNodes : memberNodes).push([key, type]);
-  }
-
-  /** Flattens all nodes across the given category entries into one positioned list. */
-  const buildFlatNodes = (entries) => {
-    const flat = [];
-    for (const [key, type] of entries) {
-      const nodes = charData.categories[key];
-      nodes.forEach((n, index) => {
-        flat.push({ key, type, index, x: n.x || 0, y: n.y || 0, cost: n.cost, value: n.value, grade: n.grade });
-      });
+  /** Renders the whole board (leader + member + connectors) as one connected spatial diagram. */
+  const renderCombinedDiagram = () => {
+    const allNodes = [];
+    for (const [posKey, node] of boardIndex.entries()) {
+      if (posKey === '0,0') continue; // already shown as the dedicated center marker
+      const [x, y] = posKey.split(',').map(Number);
+      allNodes.push({ posKey, x, y, ...node });
     }
-    return flat;
-  };
 
-  /** Renders one area (leader or member) as a spatial diagram matching its real board layout. */
-  const renderDiagram = (title, hint, entries, colorVar) => {
-    if (!entries.length) return;
-    const groupLabel = document.createElement('div');
-    groupLabel.className = 'board-group-label';
-    groupLabel.innerHTML = `${title} <span class="board-group-hint">${hint}</span>`;
-    list.appendChild(groupLabel);
-
-    const flat = buildFlatNodes(entries);
-    const xs = flat.map((n) => n.x);
-    const ys = flat.map((n) => n.y);
-    const minX = Math.min(0, ...xs);
-    const maxX = Math.max(0, ...xs);
-    const minY = Math.min(0, ...ys);
-    const maxY = Math.max(0, ...ys);
-    const spacing = 26;
+    const xs = allNodes.map((n) => n.x).concat(0);
+    const ys = allNodes.map((n) => n.y).concat(0);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const spacing = 22;
     const pad = 20;
     const width = (maxX - minX) * spacing + pad * 2;
     const height = (maxY - minY) * spacing + pad * 2;
-    // Screen Y increases downward, but board Y increases "up" (toward the
-    // leader path) - flip so positive Y renders upward, matching the game.
     const toScreenX = (x) => pad + (x - minX) * spacing;
-    const toScreenY = (y) => pad + (maxY - y) * spacing;
+    const toScreenY = (y) => pad + (maxY - y) * spacing; // +Y renders upward (toward leader path)
 
     const svgNS = 'http://www.w3.org/2000/svg';
     const svg = document.createElementNS(svgNS, 'svg');
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
     svg.setAttribute('width', '100%');
     svg.classList.add('board-diagram');
-    svg.style.maxHeight = Math.min(height, 220) + 'px';
+    svg.style.maxHeight = Math.min(height, 340) + 'px';
 
-    // Center marker
     const centerCircle = document.createElementNS(svgNS, 'circle');
     centerCircle.setAttribute('cx', toScreenX(0));
     centerCircle.setAttribute('cy', toScreenY(0));
-    centerCircle.setAttribute('r', 5);
+    centerCircle.setAttribute('r', 6);
     centerCircle.setAttribute('class', 'board-diagram-center');
     svg.appendChild(centerCircle);
 
-    for (const n of flat) {
-      const count = sel[n.key] || 0;
-      const unlocked = n.index < count;
-      const circle = document.createElementNS(svgNS, 'circle');
-      circle.setAttribute('cx', toScreenX(n.x));
-      circle.setAttribute('cy', toScreenY(n.y));
-      circle.setAttribute('r', n.grade >= 2 ? 8 : 6);
-      circle.setAttribute('class', 'board-diagram-node' + (unlocked ? ' unlocked' : ''));
-      circle.style.setProperty('--node-color', `var(${colorVar})`);
-      const isPermil = n.type.includes('PERMIL');
-      const valLabel = isPermil ? `+${(n.value / 10).toFixed(1)}%` : `+${n.value} pts`;
+    for (const n of allNodes) {
+      const unlocked = sel.has(n.posKey);
+      const el = document.createElementNS(svgNS, n.kind === 'connector' ? 'rect' : 'circle');
+      const colorVar = n.kind === 'connector' ? '--text-faint' : n.area === 'leader' ? '--red-node' : '--blue-node';
+
+      if (n.kind === 'connector') {
+        const size = 8;
+        el.setAttribute('x', toScreenX(n.x) - size / 2);
+        el.setAttribute('y', toScreenY(n.y) - size / 2);
+        el.setAttribute('width', size);
+        el.setAttribute('height', size);
+        el.setAttribute('rx', 1.5);
+      } else {
+        el.setAttribute('cx', toScreenX(n.x));
+        el.setAttribute('cy', toScreenY(n.y));
+        el.setAttribute('r', n.grade >= 2 ? 7 : 5.5);
+      }
+      el.setAttribute('class', 'board-diagram-node' + (unlocked ? ' unlocked' : ''));
+      el.style.setProperty('--node-color', `var(${colorVar})`);
+
       const title = document.createElementNS(svgNS, 'title');
-      title.textContent = `${BOARD_CATEGORY_LABELS[n.type] || n.type} \u00b7 ${valLabel} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}`;
-      circle.appendChild(title);
-      circle.addEventListener('click', () => {
-        const current = sel[n.key] || 0;
-        // Clicking an unlocked node re-locks it and everything past it in that
-        // category; clicking a locked node unlocks up through it - same
-        // sequential-by-cost model as the stepper, just interacted with spatially.
-        sel[n.key] = n.index < current ? n.index : n.index + 1;
+      if (n.kind === 'connector') {
+        title.textContent = `Connector node \u00b7 ${n.cost}pt \u00b7 no direct effect${unlocked ? ' (unlocked)' : ''}`;
+      } else {
+        const isPermil = n.type.includes('PERMIL');
+        const valLabel = isPermil ? `+${(n.value / 10).toFixed(1)}%` : `+${n.value} pts`;
+        title.textContent = `${BOARD_CATEGORY_LABELS[n.type] || n.type} \u00b7 ${valLabel} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}`;
+      }
+      el.appendChild(title);
+
+      el.addEventListener('click', () => {
+        if (unlocked) {
+          sel.delete(n.posKey);
+          const pruned = pruneDisconnected(sel);
+          sel.clear();
+          for (const p of pruned) sel.add(p);
+        } else if (canUnlock(sel, n.x, n.y)) {
+          sel.add(n.posKey);
+        } else {
+          return; // path blocked - clicking does nothing
+        }
         refreshEditor();
       });
-      svg.appendChild(circle);
+      svg.appendChild(el);
     }
 
     list.appendChild(svg);
 
-    const totalSpent = flat.reduce((s, n) => s + ((sel[n.key] || 0) > n.index ? n.cost : 0), 0);
     const legend = document.createElement('div');
     legend.className = 'board-diagram-legend';
-    legend.textContent = `${totalSpent} pts spent in this area \u00b7 click a node to unlock/lock it`;
+    legend.textContent = `${boardPointsSpentFromSet(boardIndex, sel)} pts spent \u00b7 squares are path connectors (no direct effect) \u00b7 click a node to unlock/lock it`;
     list.appendChild(legend);
   };
 
@@ -427,8 +424,7 @@ function openBoardEditor(card) {
 
   function refreshEditor() {
     list.innerHTML = '';
-    renderDiagram('\ud83d\udd34 Leader Area', '\u2014 applies to the whole unit', leaderNodes, '--red-node');
-    renderDiagram('\ud83d\udd35 Member Area', '\u2014 applies to this character only', memberNodes, '--blue-node');
+    renderCombinedDiagram();
     totalEl.textContent = `${boardPointsSpent(characterId)} points allocated`;
     renderConnectSection();
     list.appendChild(connectSection);
@@ -530,15 +526,12 @@ function openBoardEditor(card) {
           let hitCount = 0;
           let totalCells = info.pattern?.length || 0;
           if (anchor && anchor.x != null && info.pattern) {
-            const byPosition = new Map();
-            for (const [key, nodes] of Object.entries(charData.categories)) {
-              nodes.forEach((n, index) => byPosition.set(`${n.x || 0},${n.y || 0}`, { key, index }));
-            }
             for (const offset of info.pattern) {
               const px = anchor.x + (offset.x || 0);
               const py = anchor.y + (offset.y || 0);
-              const node = byPosition.get(`${px},${py}`);
-              if (node && node.index < (sel[node.key] || 0)) hitCount++;
+              const posKey = `${px},${py}`;
+              const node = boardIndex.get(posKey);
+              if (node && node.kind === 'effect' && sel.has(posKey)) hitCount++;
             }
           }
 
