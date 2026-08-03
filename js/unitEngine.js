@@ -146,6 +146,158 @@ export function mapSpecialSkillsToSong(specialResults, feverSeconds) {
 // anywhere it's shown in the UI.
 // ---------------------------------------------------------------------------
 
+const STAT_EFFECT_TYPES = {
+  LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP: 'performance',
+  LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP: 'technique',
+  LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP: 'sense',
+};
+const ALL_PARAMETER_TYPE =
+  'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_ALL_PARAMETER_UP_PERMIL_UP';
+export const SCORE_SUPPORT_TYPE =
+  'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP';
+
+/**
+ * Real, recipient-driven Passive Skill contribution to the Overall Power estimate.
+ * Mirrors the original sheet's fitted-formula shape (LARGE() of qualifying members'
+ * stats, minus a flat per-member offset, times the effect %) but uses ACTUAL passive
+ * targeting (resolveEffectRecipients) instead of manually-entered Type/Stat/Bonus
+ * columns. Score-Support-type effects are excluded here — per the sheet's own model,
+ * they don't contribute to Overall Power (see computeScoreSupport instead).
+ *
+ * Same caveat as estimateOverallPower: the per-member offsets (2137/5, 5139/5) are
+ * the original author's fitted constants, not datamined truth.
+ */
+export function estimatePassivePower(passiveResults, memberStats) {
+  const statsByCardId = Object.fromEntries(memberStats.map((m) => [m.cardId, m.stats]));
+  let total = 0;
+
+  for (const p of passiveResults) {
+    for (const effect of p.effects) {
+      if (!effect.applies) continue;
+      if (effect.type === SCORE_SUPPORT_TYPE) continue; // doesn't contribute to Power
+
+      const statKey = STAT_EFFECT_TYPES[effect.type];
+      const isAllParam = effect.type === ALL_PARAMETER_TYPE;
+      if (!statKey && !isAllParam) continue;
+
+      const perMemberOffset = isAllParam ? 5139 / 5 : 2137 / 5;
+      for (const recipientId of effect.recipients) {
+        const stats = statsByCardId[recipientId];
+        if (!stats) continue;
+        const rawValue = isAllParam ? stats.performance + stats.technique + stats.sense : stats[statKey];
+        const contribution = (rawValue - perMemberOffset) * (effect.valuePermil / 1000);
+        total += contribution;
+      }
+    }
+  }
+  return Math.round(total);
+}
+
+/**
+ * Real Score Support: total % boost to Active Skill score-effect that each unit
+ * member receives from teammates' (or their own SELF-target) Score-Support-type
+ * passives. This is a genuine gameplay mechanic (amplifies active skill Score Up %
+ * when it fires), not a Power-estimate component — matches the sheet's separate
+ * "Score Support" table, but computed from real targeting instead of manual entry.
+ *
+ * NOTE: does not yet include the leader's board-specific "Score Support UP" stat
+ * (sheet's D16) — that requires the Holomem Board "which nodes are unlocked" UI,
+ * not yet built.
+ * @returns {Record<string, number>} cardId -> total Score Support percent received
+ */
+export function computeScoreSupport(passiveResults) {
+  const support = {};
+  for (const p of passiveResults) {
+    for (const effect of p.effects) {
+      if (!effect.applies || effect.type !== SCORE_SUPPORT_TYPE) continue;
+      for (const recipientId of effect.recipients) {
+        support[recipientId] = (support[recipientId] || 0) + effect.valuePermil / 10;
+      }
+    }
+  }
+  return support;
+}
+
+/**
+ * Second-by-second simulation of Active Skill coverage across a song, mirroring
+ * the original sheet's model (rows 60-241): each member's active skill is assumed
+ * to fire deterministically every `coolTimeSeconds`, staying active for
+ * `effectDurationSeconds` each time (a best-case coverage envelope, not a dice-roll
+ * simulation of the real activation %). Score Support and Special Skill overlap
+ * combine MULTIPLICATIVELY with the base bonus, per the sheet's own formula:
+ *   finalBonus = baseBonus * (1 + (scoreSupport + specialOverlapBonus) / 100)
+ * This stacking behavior is the original author's assumption, not confirmed
+ * against real game mechanics.
+ *
+ * @param {object[]} activeResults - unitEngine.computeUnit(...).actives, in unit order
+ * @param {object[]} specialResults - unitEngine.computeUnit(...).specials, in unit order
+ * @param {object[]} unitCards - the 5 unit member cards, same order as above
+ * @param {Record<string,number>} scoreSupport - output of computeScoreSupport(...)
+ * @param {number[]} feverSeconds - the song's 5 fever timestamps (special skill activation times)
+ * @param {number} durationSeconds - song length
+ * @returns {{t:number, perMember:{cardId:string,active:boolean,effectiveBonus:number,activationChance:number|null}[], maxBonus:number, inSpecialWindow:boolean, noBonusDuringSpecial:boolean}[]}
+ */
+export function simulateActiveTimeline({
+  activeResults,
+  specialResults,
+  unitCards,
+  scoreSupport,
+  feverSeconds,
+  durationSeconds,
+}) {
+  const points = [];
+
+  for (let t = 0; t <= Math.round(durationSeconds); t++) {
+    // Which (if any) member's special skill window covers this second, and its
+    // support-bonus contribution (first match wins, mirroring the sheet's IF-chain;
+    // fever windows rarely overlap in practice).
+    let specialBonus = 0;
+    let inSpecialWindow = false;
+    let specialWindowIndex = -1;
+    for (let j = 0; j < specialResults.length; j++) {
+      const start = feverSeconds[j];
+      const dur = specialResults[j]?.effectDurationSeconds;
+      if (start != null && dur != null && t >= start && t < start + dur) {
+        specialBonus = specialResults[j].supportBonusPercent || 0;
+        inSpecialWindow = true;
+        specialWindowIndex = j;
+        break;
+      }
+    }
+
+    const perMember = activeResults.map((a, i) => {
+      const cardId = unitCards[i].cardId;
+      const cooldown = a.coolTimeSeconds;
+      const dur = a.effectDurationSeconds;
+      const scoreEffect = a.effects?.find((e) => e.type.endsWith('_TYPE_SCORE_UP_PERMIL_UP'));
+      const baseBonus = scoreEffect ? scoreEffect.valuePercent : 0;
+      const active = cooldown && dur ? t >= cooldown && t % cooldown < dur : false;
+      const support = scoreSupport[cardId] || 0;
+      const effectiveBonus = active ? baseBonus * (1 + (support + specialBonus) / 100) : 0;
+
+      const specialActivationUp = inSpecialWindow
+        ? specialResults[specialWindowIndex]?.activationRateUpPercent || 0
+        : 0;
+      const activationChance = active
+        ? Math.round((a.activationProbabilityPercent || 0) * (1 + specialActivationUp / 100) * 100) / 100
+        : null;
+
+      return { cardId, active, effectiveBonus, activationChance };
+    });
+
+    const maxBonus = Math.max(0, ...perMember.map((m) => m.effectiveBonus));
+    points.push({
+      t,
+      perMember,
+      maxBonus,
+      inSpecialWindow,
+      noBonusDuringSpecial: inSpecialWindow && maxBonus === 0,
+    });
+  }
+
+  return points;
+}
+
 /**
  * @param {object} statTotals - {performance, technique, sense} summed across the unit
  * @param {{buffStat:string, buffScorePercent:number, conditionMet:boolean}} leaderBuff

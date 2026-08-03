@@ -1,6 +1,13 @@
 import { resolveMemberStats, getStatRoles, getSkillLevel, SKILL_LEVEL_TYPES } from './js/statEngine.js';
 import { evaluateLeaderCondition, resolveEffectRecipients } from './js/skillEngine.js';
-import { computeUnit, mapSpecialSkillsToSong, estimateOverallPower } from './js/unitEngine.js';
+import {
+  computeUnit,
+  mapSpecialSkillsToSong,
+  estimateOverallPower,
+  estimatePassivePower,
+  computeScoreSupport,
+  simulateActiveTimeline,
+} from './js/unitEngine.js';
 
 const ATTR_LABELS = {
   CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1: { label: 'Cute', cls: 'attr-cute' },
@@ -13,7 +20,7 @@ const EFFECT_LABELS = {
   LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP: 'Performance Up',
   LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP: 'Technique Up',
   LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP: 'Sense Up',
-  LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP: 'Active Skill Effect Up',
+  LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP: 'Score Support',
   LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP: 'Score Up',
   LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP: 'Score Effect Up',
   LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP: 'Activation Rate Up',
@@ -331,6 +338,7 @@ function renderResults(result, leaderCard, unit) {
 
   resultsEl.appendChild(renderActivesPanel(result, unit));
   resultsEl.appendChild(renderTimelinePanel(result, unit));
+  resultsEl.appendChild(renderCoveragePanel(result, unit));
   resultsEl.appendChild(renderPowerPanel(result, leaderCard));
 }
 
@@ -466,14 +474,25 @@ function renderActivesPanel(result, unit) {
   label.textContent = 'Active Skills';
   panel.appendChild(label);
 
+  const scoreSupport = computeScoreSupport(result.passives);
+
   const table = document.createElement('table');
   table.className = 'stat-table';
-  table.innerHTML = `<thead><tr><th>Member</th><th>Lv</th><th>Activation</th><th>Cooldown</th><th>Duration</th><th>Effect</th></tr></thead>`;
+  table.innerHTML = `<thead><tr><th>Member</th><th>Lv</th><th>Activation</th><th>Cooldown</th><th>Duration</th><th>Effect</th><th>Score Support</th></tr></thead>`;
   const tbody = document.createElement('tbody');
 
   result.actives.forEach((a, i) => {
     const card = DATA.byId[unit[i].card.cardId];
-    const effectText = a.effects?.map((e) => `${effectLabel(e.type)} +${e.valuePercent.toFixed(0)}%`).join(', ') ?? '\u2014';
+    const support = scoreSupport[card.cardId] || 0;
+    const effectText = a.effects
+      ?.map((e) => {
+        const isPlainScoreUp = e.type.endsWith('_TYPE_SCORE_UP_PERMIL_UP');
+        if (isPlainScoreUp && support) {
+          return `${effectLabel(e.type)} +${e.valuePercent.toFixed(0)}% <span style="color:var(--orange)">+ ${support.toFixed(0)}%</span>`;
+        }
+        return `${effectLabel(e.type)} +${e.valuePercent.toFixed(0)}%`;
+      })
+      .join(', ') ?? '\u2014';
     const tr = document.createElement('tr');
     tr.innerHTML = `
       <td>${card.characterName}</td>
@@ -482,6 +501,7 @@ function renderActivesPanel(result, unit) {
       <td class="num">${a.coolTimeSeconds != null ? a.coolTimeSeconds.toFixed(0) + 's' : '\u2014'}</td>
       <td class="num">${a.effectDurationSeconds != null ? a.effectDurationSeconds.toFixed(0) + 's' : '\u2014'}</td>
       <td>${effectText}</td>
+      <td class="num">${support ? '+' + support.toFixed(0) + '%' : '\u2014'}</td>
     `;
     tbody.appendChild(tr);
   });
@@ -551,6 +571,141 @@ function renderTimelinePanel(result, unit) {
   return panel;
 }
 
+function renderCoveragePanel(result, unit) {
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+  const label = document.createElement('div');
+  label.className = 'panel-label';
+  label.textContent = 'Bonus Coverage \u00b7 Second-by-Second';
+  panel.appendChild(label);
+
+  const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
+  if (!song) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'Select a song above to simulate active skill uptime across the track.';
+    panel.appendChild(empty);
+    return panel;
+  }
+
+  const unitCards = unit.map((u) => u.card);
+  const scoreSupport = computeScoreSupport(result.passives);
+  const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
+
+  const timeline = simulateActiveTimeline({
+    activeResults: result.actives,
+    specialResults: result.specials,
+    unitCards,
+    scoreSupport,
+    feverSeconds: song.feverSeconds,
+    durationSeconds: duration,
+  });
+
+  // Summary stats, mirroring the sheet's BONUS SCORE SUMMARY section
+  const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
+  const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
+  const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
+  const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
+
+  const summary = document.createElement('div');
+  summary.className = 'coverage-summary';
+  summary.innerHTML = `
+    <div class="coverage-stat"><div class="stat-num">${noBonusSeconds}</div><div class="stat-label">Seconds with no bonus (>20s in)</div></div>
+    <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial}</div><div class="stat-label">Special skill secs w/ no bonus</div></div>
+    <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
+    <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
+  `;
+  panel.appendChild(summary);
+
+  const rows = document.createElement('div');
+  rows.className = 'coverage-rows';
+
+  unitCards.forEach((card, i) => {
+    const row = document.createElement('div');
+    row.className = 'coverage-row';
+
+    const name = document.createElement('div');
+    name.className = 'coverage-row-name';
+    name.textContent = card.characterName;
+    row.appendChild(name);
+
+    const track = document.createElement('div');
+    track.className = 'coverage-row-track';
+
+    // Merge consecutive seconds into segments, splitting whenever the bonus or
+    // activation chance changes (e.g. entering/leaving a special skill overlap
+    // window mid-activation), so each segment's tooltip stays accurate.
+    let segStart = null;
+    let segBonus = null;
+    let segActivation = null;
+
+    const flushSegment = (endT) => {
+      const seg = document.createElement('div');
+      seg.className = 'coverage-segment';
+      const widthPct = Math.max(((endT - segStart) / duration) * 100, 0.4);
+      seg.style.left = (segStart / duration) * 100 + '%';
+      seg.style.width = widthPct + '%';
+      const label = `${segBonus.toFixed(1)}% @ ${segActivation}%`;
+      seg.title = `${segBonus.toFixed(1)}% score bonus @ ${segActivation}% activation chance`;
+      if (widthPct > 7) {
+        seg.textContent = label;
+      }
+      track.appendChild(seg);
+    };
+
+    for (let t = 0; t <= timeline.length; t++) {
+      const point = t < timeline.length ? timeline[t].perMember[i] : null;
+      const isActive = !!point?.active;
+
+      if (isActive && segStart === null) {
+        segStart = t;
+        segBonus = point.effectiveBonus;
+        segActivation = point.activationChance;
+      } else if (isActive && (point.effectiveBonus !== segBonus || point.activationChance !== segActivation)) {
+        flushSegment(t);
+        segStart = t;
+        segBonus = point.effectiveBonus;
+        segActivation = point.activationChance;
+      } else if (!isActive && segStart !== null) {
+        flushSegment(t);
+        segStart = null;
+      }
+    }
+
+    for (const fs of song.feverSeconds) {
+      const line = document.createElement('div');
+      line.className = 'coverage-fever-line';
+      line.style.left = (fs / duration) * 100 + '%';
+      track.appendChild(line);
+    }
+
+    row.appendChild(track);
+    rows.appendChild(row);
+  });
+
+  panel.appendChild(rows);
+
+  const axis = document.createElement('div');
+  axis.className = 'coverage-axis';
+  const axisSpacer = document.createElement('div');
+  axis.appendChild(axisSpacer);
+  const axisTrack = document.createElement('div');
+  axisTrack.className = 'coverage-axis-track';
+  const markCount = 6;
+  for (let m = 0; m <= markCount; m++) {
+    const t = Math.round((duration / markCount) * m);
+    const mark = document.createElement('div');
+    mark.className = 'coverage-axis-mark';
+    mark.style.left = (t / duration) * 100 + '%';
+    mark.textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+    axisTrack.appendChild(mark);
+  }
+  axis.appendChild(axisTrack);
+  panel.appendChild(axis);
+
+  return panel;
+}
+
 function renderPowerPanel(result, leaderCard) {
   const panel = document.createElement('div');
   panel.className = 'panel';
@@ -570,7 +725,7 @@ function renderPowerPanel(result, leaderCard) {
     leaderBuff: leaderEffect
       ? { buffStat, buffScorePercent: Number(leaderEffect.value) / 10, conditionMet: result.leader.conditionMet === true }
       : null,
-    passivePowerEstimate: 0,
+    passivePowerEstimate: estimatePassivePower(result.passives, result.memberStats),
   });
 
   panel.innerHTML = `
@@ -582,7 +737,7 @@ function renderPowerPanel(result, leaderCard) {
       <span>Holomem Board Bonus</span><span class="num">${estimate.boardBonus.toLocaleString()}</span>
       <span>Memory Bonus</span><span class="num">${estimate.memoryBonus.toLocaleString()}</span>
     </div>
-    <div class="estimate-note">${estimate._note} Passive Skill and board/memory bonuses are not yet fully wired in \u2014 currently shown as 0.</div>
+    <div class="estimate-note">${estimate._note} Holomem Board and Memory bonuses still require manual input \u2014 currently shown as 0.</div>
   `;
   return panel;
 }

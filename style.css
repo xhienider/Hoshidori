@@ -20,6 +20,10 @@
   --tech: var(--blue-mid);
   --sense: var(--blue-pale);
 
+  --attr-pure: #6fe3d9;
+  --attr-happy: #ffb84d;
+  --attr-cute: #ff6f91;
+
   --font-display: 'Oswald', 'Arial Narrow', sans-serif;
   --font-body: 'Inter', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;
@@ -159,9 +163,9 @@ header.masthead {
   color: #0a0b0f;
 }
 
-.slot-badge.attr-pure { background: var(--tech); }
-.slot-badge.attr-happy { background: var(--sense); }
-.slot-badge.attr-cute { background: var(--perf); }
+.slot-badge.attr-pure { background: var(--attr-pure); }
+.slot-badge.attr-happy { background: var(--attr-happy); }
+.slot-badge.attr-cute { background: var(--attr-cute); }
 .slot-badge.attr-empty { background: var(--line); color: var(--text-faint); }
 
 .slot-info { flex: 1; min-width: 0; }
@@ -429,6 +433,106 @@ header.masthead {
   margin-top: 12px;
   padding-top: 10px;
   line-height: 1.5;
+}
+
+/* ---------- Bonus coverage (second-by-second simulation) ---------- */
+
+.coverage-summary {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 10px;
+  margin-bottom: 16px;
+}
+
+.coverage-stat {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.coverage-stat .stat-num {
+  font-family: var(--font-mono);
+  font-size: 20px;
+  color: var(--orange);
+  font-weight: 500;
+}
+.coverage-stat .stat-label {
+  font-size: 10.5px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.coverage-rows { position: relative; }
+
+.coverage-row {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 6px;
+}
+
+.coverage-row-name {
+  font-size: 11.5px;
+  color: var(--text-dim);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.coverage-row-track {
+  position: relative;
+  height: 24px;
+  background: var(--bg);
+  border-radius: 4px;
+  overflow: hidden;
+  border: 1px solid var(--line);
+}
+
+.coverage-segment {
+  position: absolute;
+  top: 0;
+  height: 100%;
+  background: var(--blue-mid);
+  opacity: 0.85;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text);
+  font-weight: 600;
+  white-space: nowrap;
+  cursor: default;
+}
+
+.coverage-fever-line {
+  position: absolute;
+  top: -4px;
+  bottom: -4px;
+  width: 2px;
+  background: var(--orange);
+  opacity: 0.6;
+}
+
+.coverage-axis {
+  display: grid;
+  grid-template-columns: 110px 1fr;
+  gap: 10px;
+  margin-top: 4px;
+}
+.coverage-axis-track {
+  position: relative;
+  height: 14px;
+}
+.coverage-axis-mark {
+  position: absolute;
+  top: 0;
+  transform: translateX(-50%);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-faint);
 }
 
 /* ---------- Song select ---------- */
