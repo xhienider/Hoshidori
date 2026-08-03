@@ -231,6 +231,13 @@ header.masthead {
 .board-btn:hover:not(:disabled) { border-color: var(--orange-dim); color: var(--orange); }
 .board-btn:disabled { opacity: 0.35; cursor: default; }
 
+.connect-slot-head .board-btn {
+  max-width: 220px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
 .board-editor-box { max-width: 640px; }
 .board-editor-title {
   font-family: var(--font-display);

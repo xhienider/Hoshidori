@@ -440,7 +440,7 @@ function openBoardEditor(card) {
     connectSection.innerHTML = '';
     const heading = document.createElement('div');
     heading.className = 'board-group-label';
-    heading.innerHTML = 'Connect Effects <span class="board-group-hint">\u2014 assign a connector character; her boost applies automatically to your highest-value unlocked nodes in the matching area</span>';
+    heading.innerHTML = 'Connect Effects <span class="board-group-hint">\u2014 assign a connector character; her boost applies automatically to whichever of your unlocked nodes fall in her exact pattern</span>';
     connectSection.appendChild(heading);
 
     if (!state.connectSelections[characterId]) state.connectSelections[characterId] = {};
@@ -467,7 +467,9 @@ function openBoardEditor(card) {
       const connectorBtn = document.createElement('button');
       connectorBtn.type = 'button';
       connectorBtn.className = 'board-btn';
-      connectorBtn.textContent = connectorCard ? connectorCard.characterName : 'Choose connector';
+      connectorBtn.textContent = connectorCard
+        ? `${connectorCard.characterName}${connectorCard.cardSubtitle ? ' \u00b7 ' + connectorCard.cardSubtitle : ''}`
+        : 'Choose connector';
       connectorBtn.onclick = () => openConnectorPicker(slotType, characterId);
       head.appendChild(connectorBtn);
 
@@ -524,21 +526,30 @@ function openBoardEditor(card) {
         row.appendChild(bloomRow);
 
         if (info) {
-          const relevantAreas = slotType === 'center' ? ['leader', 'member'] : [slotType];
-          const unlockedInArea = Object.entries(sel).filter(([key, count]) => {
-            if (!count) return false;
-            const [area] = key.split('|');
-            return relevantAreas.includes(area);
-          });
-          const totalUnlocked = unlockedInArea.reduce((s, [, c]) => s + c, 0);
-          const appliedCount = Math.min(totalUnlocked, info.nodeCount);
+          const anchor = charData.anchors?.[slotType];
+          let hitCount = 0;
+          let totalCells = info.pattern?.length || 0;
+          if (anchor && anchor.x != null && info.pattern) {
+            const byPosition = new Map();
+            for (const [key, nodes] of Object.entries(charData.categories)) {
+              nodes.forEach((n, index) => byPosition.set(`${n.x || 0},${n.y || 0}`, { key, index }));
+            }
+            for (const offset of info.pattern) {
+              const px = anchor.x + (offset.x || 0);
+              const py = anchor.y + (offset.y || 0);
+              const node = byPosition.get(`${px},${py}`);
+              if (node && node.index < (sel[node.key] || 0)) hitCount++;
+            }
+          }
 
           const applyLine = document.createElement('div');
           applyLine.className = 'connect-budget-line';
           applyLine.textContent =
-            appliedCount > 0
-              ? `Auto-applied to your ${appliedCount} highest-value unlocked node${appliedCount === 1 ? '' : 's'} in the matching area`
-              : 'Unlock some nodes in the matching area first \u2014 nothing to boost yet';
+            hitCount > 0
+              ? `Boosts ${hitCount} of your unlocked node${hitCount === 1 ? '' : 's'} that fall in her pattern (${totalCells} total cells, some may land on empty space)`
+              : anchor?.x == null
+              ? 'No connect point resolvable in this area for this character'
+              : 'None of her pattern cells hit an unlocked node yet';
           row.appendChild(applyLine);
         }
       }
@@ -597,7 +608,7 @@ function openBoardEditor(card) {
         badge.textContent = attrLabel(m.attributeType)[0];
         item.appendChild(badge);
         const infoDiv = document.createElement('div');
-        infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${AREA_ICON[info.area] || ''} boosts ${info.area} nodes \u00b7 ${info.nodeCount} nodes \u00b7 +${(info.boostPermilLevel1/10).toFixed(0)}\u2013${(info.boostPermilLevel2/10).toFixed(0)}%</div>`;
+        infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${m.cardSubtitle || ''}</div><div class="picker-item-sub">${AREA_ICON[info.area] || ''} boosts ${info.area} nodes \u00b7 ${info.nodeCount} nodes \u00b7 +${(info.boostPermilLevel1/10).toFixed(0)}\u2013${(info.boostPermilLevel2/10).toFixed(0)}%</div>`;
         item.appendChild(infoDiv);
         const patternWrap = document.createElement('div');
         patternWrap.className = 'pattern-icon-wrap';

@@ -391,16 +391,17 @@ export function getConnectorInfo(connectorCard, connectorBloom, cardConnectInfo,
   if (!info) return null;
   const level = getSkillLevel(connectorCard, connectorBloom, cardPotentials, SKILL_LEVEL_TYPES.TREE_CONNECT) === 2 ? 2 : 1;
   const boostPermil = level === 2 ? info.boostPermilLevel2 : info.boostPermilLevel1;
-  return { area: info.area, nodeCount: info.nodeCount, level, boostPermil };
+  return { area: info.area, nodeCount: info.nodeCount, level, boostPermil, pattern: info.pattern };
 }
 
 /**
  * @param {Record<string, {center?:object, leader?:object, member?:object}>} connectSelections
  *        - receivingCharacterId -> per-slot { connectorCardId, connectorBloom }
- *          (no manual node allocation - matches the real game's auto-apply-on-confirm flow)
- * @param {Record<string, object>} boardCategoriesData - board_categories.json
- * @param {Record<string, Record<string, number>>} boardSelections - the base board unlocks (state.boardSelections)
- * @param {Record<string, object>} cardConnectInfo - card_connect_info.json
+ * @param {Record<string, object>} boardCategoriesData - board_categories.json (now includes `anchors`
+ *        per character: {center:{x,y}, leader:{x,y}, member:{x,y}} - real connect-point positions)
+ * @param {Record<string, Record<string, number>>} boardSelections - the base board unlocks
+ * @param {Record<string, object>} cardConnectInfo - card_connect_info.json (now includes `pattern`:
+ *        relative offsets from the connector's own anchor)
  * @param {Record<string, object>} cardsById - members.json indexed by cardId
  * @param {object} cardPotentials - card_potentials.json (for bloom-level resolution)
  * @param {{characterId:string, cardId:string, isLeaderSlot:boolean, isUnitMember:boolean}[]} slots
@@ -476,40 +477,46 @@ export function computeConnectBonuses(
     const charData = boardCategoriesData[slot.characterId];
     if (!config || !charData) continue;
 
+    // Build a position -> node lookup once per receiving character (across
+    // both leader and member areas - a pattern isn't restricted to "its own"
+    // area, per the real game's behavior).
+    const byPosition = new Map();
+    for (const [key, nodes] of Object.entries(charData.categories)) {
+      const [area, type] = key.split('|');
+      nodes.forEach((n, index) => {
+        const x = n.x || 0;
+        const y = n.y || 0;
+        byPosition.set(`${x},${y}`, { key, area, type, index, value: n.value });
+      });
+    }
+
     for (const [slotType, setup] of Object.entries(config)) {
       if (!setup?.connectorCardId) continue;
       if (slotType === 'leader' && !slot.isLeaderSlot) continue;
       if (slotType === 'member' && !slot.isUnitMember) continue;
-      // 'center' has no gating - shared hub, applies regardless of leader/member role.
 
       const connectorCard = cardsById[setup.connectorCardId];
       if (!connectorCard) continue;
       const connectorInfo = getConnectorInfo(connectorCard, setup.connectorBloom || 0, cardConnectInfo, cardPotentials);
-      if (!connectorInfo || !connectorInfo.boostPermil) continue;
+      if (!connectorInfo?.boostPermil || !connectorInfo.pattern) continue;
+
+      const anchor = charData.anchors?.[slotType];
+      if (!anchor || anchor.x == null) continue; // e.g. no member path resolvable
 
       const unlocked = boardSelections[slot.characterId] || {};
-      const relevantAreas = slotType === 'center' ? ['leader', 'member'] : [slotType];
-
-      // Pool every already-unlocked node across the matching area(s), take the
-      // top nodeCount by value (best-effort approximation of the game's exact
-      // fixed position pattern, which we can preview but not fully replicate).
-      const pool = [];
-      for (const [key, count] of Object.entries(unlocked)) {
-        if (!count) continue;
-        const [area, type] = key.split('|');
-        if (!relevantAreas.includes(area)) continue;
-        const nodes = charData.categories[key];
-        if (!nodes) continue;
-        for (const n of nodes.slice(0, count)) pool.push({ area, type, value: n.value });
-      }
-      pool.sort((a, b) => b.value - a.value);
-      const boosted = pool.slice(0, connectorInfo.nodeCount);
-
       const recipients = {
         leader: slots.filter((s) => s.isUnitMember).map((s) => s.cardId),
         member: [slot.cardId],
       };
-      for (const node of boosted) {
+
+      for (const offset of connectorInfo.pattern) {
+        const px = anchor.x + (offset.x || 0);
+        const py = anchor.y + (offset.y || 0);
+        const node = byPosition.get(`${px},${py}`);
+        if (!node) continue; // pattern cell lands on empty space - no node there
+        const unlockedCount = unlocked[node.key] || 0;
+        if (node.index >= unlockedCount) continue; // node exists but isn't unlocked - nothing to boost
+
         const extraValue = node.value * (connectorInfo.boostPermil / 1000);
         for (const cardId of recipients[node.area]) {
           applyValue(cardId, node.type, extraValue);
