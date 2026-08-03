@@ -159,12 +159,30 @@ export function mapSpecialSkillsToSong(specialResults, feverSeconds) {
 // Life Up, and song/singer-specific score bonuses.
 // ---------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------
+// HOLOMEM BOARD — Phase 1 covers the two node areas that matter for live
+// performance and are unambiguous to model from the datamine:
+//   - RED "Leader" area  (nodeType LEADER) - always targets the whole unit,
+//     regardless of whether this character is actually leading
+//   - BLUE "Member" area (nodeType CARD)   - always targets this character
+//     alone, only relevant if she's placed in the performing unit
+// GREEN "All Member" (nodeType ALL_MEMBER, generation-conditional) and
+// YELLOW "Content" (nodeType CONTENT, song/reward-specific) areas are
+// deliberately excluded for now - manual entry recommended for those.
+// Category keys are "leader|EFFECT_TYPE" or "member|EFFECT_TYPE"; each a list
+// of nodes sorted cheapest-first (ties broken by higher value).
+// ---------------------------------------------------------------------------
+
 /**
- * @param {Record<string, Record<string, number>>} boardSelections - characterId -> { "EFFECT_TYPE|target": countUnlocked }
- * @param {Record<string, {characterName:string, categories:Record<string,{cost:number,value:number}[]>}>} boardCategoriesData
- * @param {{characterId:string, cardId:string, isUnitMember:boolean}[]} slots - leader + 5 unit members;
- *        isUnitMember marks which slots actually contribute performance stats (leader only if
- *        she's also placed in the unit)
+ * @param {Record<string, Record<string, number>>} boardSelections - characterId -> { "leader|EFFECT_TYPE" | "member|EFFECT_TYPE": countUnlocked }
+ * @param {Record<string, {characterName:string, categories:Record<string,{cost:number,value:number,grade:number}[]>}>} boardCategoriesData
+ * @param {{characterId:string, cardId:string, isLeaderSlot:boolean, isUnitMember:boolean}[]} slots
+ *        - isLeaderSlot: true only for the slot actually chosen as leader this run.
+ *          Leader-area (red) bonuses ONLY apply from this slot's selections - a
+ *          character's stored leader-node picks do nothing when she's placed as a
+ *          plain unit member instead, even though the selections persist per-character.
+ *        - isUnitMember: true for the 5 performing slots. Member-area (blue) bonuses
+ *          only apply from a slot with this set (and only benefit that slot's own card).
  */
 export function computeBoardBonuses(boardSelections, boardCategoriesData, slots) {
   const unitCardIds = slots.filter((s) => s.isUnitMember).map((s) => s.cardId);
@@ -186,16 +204,31 @@ export function computeBoardBonuses(boardSelections, boardCategoriesData, slots)
     const charData = boardCategoriesData[slot.characterId];
     if (!sel || !charData) continue;
 
+    // Points spent reflects everything invested on this character's board,
+    // regardless of whether it's actively contributing in this configuration.
     let spent = 0;
     for (const [key, count] of Object.entries(sel)) {
       if (!count) continue;
       const nodes = charData.categories[key];
       if (!nodes) continue;
+      spent += nodes.slice(0, count).reduce((s, n) => s + n.cost, 0);
+    }
+    pointsSpent[slot.characterId] = (pointsSpent[slot.characterId] || 0) + spent;
+
+    for (const [key, count] of Object.entries(sel)) {
+      if (!count) continue;
+      const nodes = charData.categories[key];
+      if (!nodes) continue;
+      const [area, type] = key.split('|');
+
+      // Leader-area bonuses only apply from the actual leader slot; member-area
+      // bonuses only apply from a slot that's actually performing.
+      if (area === 'leader' && !slot.isLeaderSlot) continue;
+      if (area === 'member' && !slot.isUnitMember) continue;
+
       const chosen = nodes.slice(0, count);
-      spent += chosen.reduce((s, n) => s + n.cost, 0);
       const sum = chosen.reduce((s, n) => s + n.value, 0);
-      const [type, target] = key.split('|');
-      const recipients = target === 'all' ? unitCardIds : slot.isUnitMember ? [slot.cardId] : [];
+      const recipients = area === 'leader' ? unitCardIds : [slot.cardId];
 
       for (const cardId of recipients) {
         switch (type) {
@@ -243,7 +276,6 @@ export function computeBoardBonuses(boardSelections, boardCategoriesData, slots)
         }
       }
     }
-    pointsSpent[slot.characterId] = spent;
   }
 
   return { statFlat, statPermil, activationProbabilityPermil, cooldownShortenPermil, scoreSupportPermil, pointsSpent };

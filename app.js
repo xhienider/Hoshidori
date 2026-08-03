@@ -277,17 +277,17 @@ function openBoardEditor(card) {
 
   const header = document.createElement('div');
   header.className = 'picker-search';
-  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div>`;
+  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">Leader (red) and Member (blue) areas only \u2014 node sizes vary, already reflected in the cost/value shown. All Member (green) and Content (yellow) areas aren't modeled yet; enter those as a manual bonus for now.</div>`;
   box.appendChild(header);
 
   const list = document.createElement('div');
   list.className = 'picker-list board-editor-list';
 
-  const selfNodes = [];
-  const allNodes = [];
+  const leaderNodes = [];
+  const memberNodes = [];
   for (const key of Object.keys(charData.categories)) {
-    const [type, target] = key.split('|');
-    (target === 'all' ? allNodes : selfNodes).push([key, type]);
+    const [area, type] = key.split('|');
+    (area === 'leader' ? leaderNodes : memberNodes).push([key, type]);
   }
 
   const renderGroup = (title, hint, entries) => {
@@ -342,8 +342,8 @@ function openBoardEditor(card) {
 
   function refreshEditor() {
     list.innerHTML = '';
-    renderGroup('Self', '\u2014 applies to this character only', selfNodes);
-    renderGroup('Team', '\u2014 applies to the whole unit', allNodes);
+    renderGroup('\ud83d\udd34 Leader Area', '\u2014 applies to the whole unit', leaderNodes);
+    renderGroup('\ud83d\udd35 Member Area', '\u2014 applies to this character only', memberNodes);
     totalEl.textContent = `${boardPointsSpent(characterId)} points allocated`;
     recompute();
     renderRoster();
@@ -593,16 +593,21 @@ function recompute() {
     data
   );
 
-  // Holomem Board bonuses: leader only contributes stat-wise if she's also
-  // placed in the unit (matches how leader stats never count on their own).
-  // If she IS also a unit member, don't add a duplicate slot entry for her -
-  // her unit-member slot already covers her board selections once.
-  const unitCharacterIds = new Set(unit.map((u) => u.card.characterId));
-  const leaderAlsoInUnit = unitCharacterIds.has(leaderCard.characterId);
-  const slots = [
-    ...(leaderAlsoInUnit ? [] : [{ characterId: leaderCard.characterId, cardId: leaderCard.cardId, isUnitMember: false }]),
-    ...unit.map((u) => ({ characterId: u.card.characterId, cardId: u.card.cardId, isUnitMember: true })),
-  ];
+  // Holomem Board bonuses. Leader-area (red) nodes only apply from whichever
+  // slot is actually the chosen leader this run - a character's stored
+  // leader-node picks do nothing when she's placed as a plain unit member
+  // instead, even under the same characterId. Member-area (blue) nodes only
+  // apply from a slot that's actually performing.
+  const slots = unit.map((u) => ({
+    characterId: u.card.characterId,
+    cardId: u.card.cardId,
+    isUnitMember: true,
+    isLeaderSlot: u.card.characterId === leaderCard.characterId,
+  }));
+  const leaderAlsoInUnit = slots.some((s) => s.isLeaderSlot);
+  if (!leaderAlsoInUnit) {
+    slots.push({ characterId: leaderCard.characterId, cardId: leaderCard.cardId, isUnitMember: false, isLeaderSlot: true });
+  }
   const boardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, slots);
   applyBoardBonuses(result, boardBonuses);
 
