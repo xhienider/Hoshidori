@@ -357,6 +357,7 @@ function openBoardEditor(card) {
     renderGroup('\ud83d\udd35 Member Area', '\u2014 applies to this character only', memberNodes);
     totalEl.textContent = `${boardPointsSpent(characterId)} points allocated`;
     renderConnectSection();
+    list.appendChild(connectSection);
     recompute();
     renderRoster();
   }
@@ -572,7 +573,6 @@ function openBoardEditor(card) {
 
   refreshEditor();
   box.appendChild(list);
-  box.appendChild(connectSection);
   box.appendChild(totalEl);
 
   const close = document.createElement('div');
