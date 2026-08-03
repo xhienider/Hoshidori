@@ -1,0 +1,83 @@
+{
+  "card_potential_grp-rarity_3": [
+    {
+      "upgradeCount": 1,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_ACTIVE_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 2,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_ALL_PARAMETER_UP_PERMIL_UP",
+      "value": "50"
+    },
+    {
+      "upgradeCount": 3,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_SPECIAL_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 4,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_PASSIVE_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 5,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_ALL_PARAMETER_UP_PERMIL_UP",
+      "value": "100"
+    }
+  ],
+  "card_potential_grp-rarity_4": [
+    {
+      "upgradeCount": 1,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_ACTIVE_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 2,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_ALL_PARAMETER_UP_PERMIL_UP",
+      "value": "100"
+    },
+    {
+      "upgradeCount": 3,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_SPECIAL_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 4,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_PASSIVE_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 5,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_SKILL_TREE_CONNECT_EFFECT_LEVEL_UP",
+      "value": "2"
+    }
+  ],
+  "card_potential_grp-rarity_5": [
+    {
+      "upgradeCount": 1,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_ACTIVE_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 2,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_ALL_PARAMETER_UP_PERMIL_UP",
+      "value": "100"
+    },
+    {
+      "upgradeCount": 3,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_SPECIAL_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 4,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_PASSIVE_SKILL_LEVEL_UP",
+      "value": "2"
+    },
+    {
+      "upgradeCount": 5,
+      "effectType": "CardPotentialEffectType_CARD_POTENTIAL_EFFECT_TYPE_SKILL_TREE_CONNECT_EFFECT_LEVEL_UP",
+      "value": "2"
+    }
+  ]
+}

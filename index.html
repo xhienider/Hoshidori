@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hoshidori &mdash; Hololive Dreams Unit Simulator</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="masthead">
+      <div>
+        <h1 class="masthead-title">Hoshi<span class="spark">dori</span></h1>
+      </div>
+      <div class="masthead-sub">HOLOLIVE DREAMS &middot; UNIT SIMULATOR &middot; UNOFFICIAL</div>
+    </header>
+
+    <div class="main-grid">
+      <div>
+        <div class="panel">
+          <div class="panel-label">Roster</div>
+          <div id="roster"></div>
+        </div>
+
+        <div class="panel">
+          <div class="panel-label">Song</div>
+          <div class="song-select-row">
+            <select id="song-select"><option value="">Loading songs\u2026</option></select>
+          </div>
+        </div>
+      </div>
+
+      <div id="results">
+        <div class="empty-state">Loading roster data\u2026</div>
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="app.js"></script>
+</body>
+</html>
