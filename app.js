@@ -131,6 +131,28 @@ function createInfoIcon(text, extraClass) {
   return wrap;
 }
 
+const GENERATION_LABELS = {
+  'DEV_IS ReGLOSS': 'ReGLOSS',
+  'hololive 0th Generation': 'Gen 0',
+  'hololive 1st Generation': 'Gen 1',
+  'hololive 1st Generation / Gamers': 'Gen 1',
+  'hololive 2nd Generation': 'Gen 2',
+  'hololive 3rd Generation': 'Gen 3',
+  'hololive 4th Generation': 'Gen 4',
+  'hololive 5th Generation': 'Gen 5',
+  'hololive EN Advent': 'EN Advent',
+  'hololive EN Myth': 'EN Myth',
+  'hololive EN Promise': 'EN Promise',
+  'hololive Gamers': 'Gamers',
+  'hololive ID 1st Generation': 'ID Gen 1',
+  'hololive ID 2nd Generation': 'ID Gen 2',
+  'hololive ID 3rd Generation': 'ID Gen 3',
+  'hololive holoX': 'holoX',
+};
+function genLabel(generation) {
+  return GENERATION_LABELS[generation] || generation || null;
+}
+
 function attrLabel(type) {
   return ATTR_LABELS[type]?.label ?? '?';
 }
@@ -279,11 +301,24 @@ function renderSlot(key, slotState, isLeader) {
   statsBlock.className = 'slot-stats-block';
   statsBlock.onclick = (e) => e.stopPropagation();
 
+  const chipRow = document.createElement('div');
+  chipRow.className = 'slot-chip-row';
+  chipRow.style.marginTop = '0';
+
   const chip = document.createElement('div');
   chip.className = 'attr-chip ' + attrClass(card.attributeType);
   chip.textContent = attrLabel(card.attributeType);
-  chip.style.marginTop = '0';
-  statsBlock.appendChild(chip);
+  chipRow.appendChild(chip);
+
+  const gen = genLabel(card.generation);
+  if (gen) {
+    const genChip = document.createElement('div');
+    genChip.className = 'gen-chip';
+    genChip.textContent = gen;
+    chipRow.appendChild(genChip);
+  }
+
+  statsBlock.appendChild(chipRow);
 
   const lvlRow = document.createElement('div');
   lvlRow.className = 'slot-attr-row';
