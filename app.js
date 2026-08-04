@@ -195,25 +195,8 @@ function renderSlot(key, slotState, isLeader) {
   const wrap = document.createElement('div');
   const card = slotState.cardId ? DATA.byId[slotState.cardId] : null;
 
-  wrap.className = 'slot' + (isLeader ? ' leader-slot' : '') + (card ? '' : ' empty');
+  wrap.className = 'slot' + (isLeader ? ' leader-slot' : '') + (card ? ' filled' : ' empty');
   wrap.innerHTML = '';
-
-  if (!card) {
-    const badge = document.createElement('div');
-    badge.className = 'slot-badge attr-empty';
-    badge.textContent = isLeader ? 'L' : '+';
-    wrap.appendChild(badge);
-  } else {
-    const portrait = document.createElement('img');
-    portrait.className = 'slot-portrait';
-    portrait.src = `images/cards/${card.cardId}.webp`;
-    portrait.alt = card.characterName;
-    portrait.loading = 'lazy';
-    wrap.appendChild(portrait);
-  }
-
-  const info = document.createElement('div');
-  info.className = 'slot-info';
 
   const name = document.createElement('div');
   name.className = 'slot-name';
@@ -222,84 +205,98 @@ function renderSlot(key, slotState, isLeader) {
   } else {
     name.textContent = isLeader ? 'Choose leader' : 'Choose member';
   }
-  info.appendChild(name);
+  wrap.appendChild(name);
 
   const sub = document.createElement('div');
   sub.className = 'slot-sub';
   sub.textContent = card ? card.cardSubtitle || '' : 'Click to select from roster';
-  info.appendChild(sub);
+  wrap.appendChild(sub);
 
-  if (card) {
-    const chip = document.createElement('div');
-    chip.className = 'attr-chip ' + attrClass(card.attributeType);
-    chip.textContent = attrLabel(card.attributeType);
-    info.appendChild(chip);
+  if (!card) {
+    const badge = document.createElement('div');
+    badge.className = 'slot-badge attr-empty';
+    badge.textContent = isLeader ? 'L' : '+';
+    wrap.appendChild(badge);
+    wrap.addEventListener('click', () => openPicker(slotState, isLeader));
+    return wrap;
   }
 
-  if (card) {
-    const statsBlock = document.createElement('div');
-    statsBlock.className = 'slot-stats-block';
-    statsBlock.onclick = (e) => e.stopPropagation();
+  const bottomRow = document.createElement('div');
+  bottomRow.className = 'slot-bottom-row';
 
-    const lvlRow = document.createElement('div');
-    lvlRow.className = 'slot-attr-row';
-    const lvlLabel = document.createElement('span');
-    lvlLabel.className = 'slot-sub';
-    lvlLabel.textContent = 'Lv';
-    lvlRow.appendChild(lvlLabel);
-    const lvlInput = document.createElement('input');
-    lvlInput.className = 'mini-input';
-    lvlInput.type = 'number';
-    lvlInput.min = 1;
-    lvlInput.max = maxLevelFor(card);
+  const statsBlock = document.createElement('div');
+  statsBlock.className = 'slot-stats-block';
+  statsBlock.onclick = (e) => e.stopPropagation();
+
+  const chip = document.createElement('div');
+  chip.className = 'attr-chip ' + attrClass(card.attributeType);
+  chip.textContent = attrLabel(card.attributeType);
+  chip.style.marginTop = '0';
+  statsBlock.appendChild(chip);
+
+  const lvlRow = document.createElement('div');
+  lvlRow.className = 'slot-attr-row';
+  const lvlLabel = document.createElement('span');
+  lvlLabel.className = 'slot-sub';
+  lvlLabel.textContent = 'Lv';
+  lvlRow.appendChild(lvlLabel);
+  const lvlInput = document.createElement('input');
+  lvlInput.className = 'mini-input';
+  lvlInput.type = 'number';
+  lvlInput.min = 1;
+  lvlInput.max = maxLevelFor(card);
+  lvlInput.value = slotState.level;
+  lvlInput.onchange = () => {
+    slotState.level = clamp(Number(lvlInput.value), 1, maxLevelFor(card));
     lvlInput.value = slotState.level;
-    lvlInput.onchange = () => {
-      slotState.level = clamp(Number(lvlInput.value), 1, maxLevelFor(card));
-      lvlInput.value = slotState.level;
-      recompute();
-    };
-    lvlRow.appendChild(lvlInput);
-    statsBlock.appendChild(lvlRow);
+    recompute();
+  };
+  lvlRow.appendChild(lvlInput);
+  statsBlock.appendChild(lvlRow);
 
-    const bloomRow = document.createElement('div');
-    bloomRow.className = 'slot-attr-row';
-    const bloomLabel = document.createElement('span');
-    bloomLabel.className = 'slot-sub';
-    bloomLabel.textContent = 'Bloom';
-    bloomRow.appendChild(bloomLabel);
-    const bloomInput = document.createElement('input');
-    bloomInput.className = 'mini-input';
-    bloomInput.type = 'number';
-    bloomInput.min = 0;
-    bloomInput.max = 5;
+  const bloomRow = document.createElement('div');
+  bloomRow.className = 'slot-attr-row';
+  const bloomLabel = document.createElement('span');
+  bloomLabel.className = 'slot-sub';
+  bloomLabel.textContent = 'Bloom';
+  bloomRow.appendChild(bloomLabel);
+  const bloomInput = document.createElement('input');
+  bloomInput.className = 'mini-input';
+  bloomInput.type = 'number';
+  bloomInput.min = 0;
+  bloomInput.max = 5;
+  bloomInput.value = slotState.bloom;
+  bloomInput.onchange = () => {
+    slotState.bloom = clamp(Number(bloomInput.value), 0, 5);
     bloomInput.value = slotState.bloom;
-    bloomInput.onchange = () => {
-      slotState.bloom = clamp(Number(bloomInput.value), 0, 5);
-      bloomInput.value = slotState.bloom;
-      recompute();
-    };
-    bloomRow.appendChild(bloomInput);
-    statsBlock.appendChild(bloomRow);
+    recompute();
+  };
+  bloomRow.appendChild(bloomInput);
+  statsBlock.appendChild(bloomRow);
 
-    info.appendChild(statsBlock);
-  }
+  bottomRow.appendChild(statsBlock);
 
-  wrap.appendChild(info);
+  const portrait = document.createElement('img');
+  portrait.className = 'slot-portrait';
+  portrait.src = `images/cards/${card.cardId}.webp`;
+  portrait.alt = card.characterName;
+  portrait.loading = 'lazy';
+  bottomRow.appendChild(portrait);
 
-  if (card) {
-    const boardBtn = document.createElement('button');
-    boardBtn.className = 'board-btn slot-board-btn';
-    boardBtn.type = 'button';
-    const hasBoard = !!DATA.boardCategories?.[card.characterId];
-    const spent = boardPointsSpent(card.characterId);
-    boardBtn.textContent = hasBoard ? `Board${spent ? ` (${spent})` : ''}` : 'Board \u2014';
-    boardBtn.disabled = !hasBoard;
-    boardBtn.onclick = (e) => {
-      e.stopPropagation();
-      openBoardEditor(card);
-    };
-    wrap.appendChild(boardBtn);
-  }
+  wrap.appendChild(bottomRow);
+
+  const boardBtn = document.createElement('button');
+  boardBtn.className = 'board-btn slot-board-btn';
+  boardBtn.type = 'button';
+  const hasBoard = !!DATA.boardCategories?.[card.characterId];
+  const spent = boardPointsSpent(card.characterId);
+  boardBtn.textContent = hasBoard ? `Board${spent ? ` (${spent})` : ''}` : 'Board \u2014';
+  boardBtn.disabled = !hasBoard;
+  boardBtn.onclick = (e) => {
+    e.stopPropagation();
+    openBoardEditor(card);
+  };
+  wrap.appendChild(boardBtn);
 
   wrap.addEventListener('click', () => openPicker(slotState, isLeader));
 

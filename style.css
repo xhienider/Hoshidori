@@ -190,8 +190,8 @@ header.masthead {
 
 .slot {
   display: flex;
-  align-items: center;
-  gap: 12px;
+  flex-direction: column;
+  gap: 3px;
   padding: 10px 12px;
   border-radius: 8px;
   border: 1px solid var(--line);
@@ -294,11 +294,18 @@ header.masthead {
   flex-shrink: 0;
 }
 
+.slot-bottom-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  gap: 10px;
+  margin-top: 6px;
+}
+
 .slot-stats-block {
   display: flex;
   flex-direction: column;
   gap: 5px;
-  margin-top: 6px;
 }
 
 .slot-attr-row {
