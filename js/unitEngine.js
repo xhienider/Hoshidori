@@ -92,13 +92,32 @@ export function computeUnit(input, data) {
     const activeLevel = getSkillLevel(card, bloom, cardPotentials, SKILL_LEVEL_TYPES.ACTIVE);
     const levelData = card.activeSkill?.[String(activeLevel)];
     if (!levelData) return { cardId: card.cardId, level: activeLevel };
+
+    // Some active skills replace their base effect with a stronger one under a
+    // condition (e.g. "Score UP 45%, or 90% with 40+ combo"). Static team-
+    // composition conditions (attribute/grouping) are evaluated for real;
+    // dynamic in-song state (combo/life/judgement/song) can't be pre-evaluated,
+    // so - per instruction - the enhanced value is assumed for simulation
+    // purposes, flagged as 'assumed' rather than silently treated as certain.
+    let conditionMet = null;
+    let effectiveEffects = levelData.effects;
+    if (levelData.enhancedCondition) {
+      const evalResult = evaluateLeaderCondition(levelData.enhancedCondition, leaderCard, unitCards, characterGroupings);
+      conditionMet = evalResult === 'situational' ? 'assumed' : evalResult;
+      effectiveEffects = conditionMet === true || conditionMet === 'assumed' ? levelData.enhancedEffects : levelData.effects;
+    }
+
     return {
       cardId: card.cardId,
       level: activeLevel,
       activationProbabilityPercent: levelData.activationProbabilityPermil / 10,
       coolTimeSeconds: levelData.coolTimeMs / 1000,
       effectDurationSeconds: levelData.effectDurationMs / 1000,
-      effects: levelData.effects.map((e) => ({
+      enhancedCondition: levelData.enhancedCondition,
+      enhancedConditionMet: conditionMet,
+      baseEffects: levelData.effects.map((e) => ({ type: e.type, valuePercent: Number(e.value) / 10 })),
+      enhancedEffects: levelData.enhancedEffects?.map((e) => ({ type: e.type, valuePercent: Number(e.value) / 10 })) ?? [],
+      effects: effectiveEffects.map((e) => ({
         type: e.type,
         valuePercent: Number(e.value) / 10,
       })),

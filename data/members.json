@@ -384,6 +384,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -394,6 +408,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1050",
             "target": null
           }
         ]
@@ -849,6 +877,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1050",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -859,6 +901,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1250",
             "target": null
           }
         ]
@@ -1326,7 +1382,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 21000,
@@ -1338,7 +1396,9 @@
             "value": "1200",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -1815,6 +1875,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -1825,6 +1899,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -2246,6 +2334,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -2256,6 +2358,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
             "target": null
           }
         ]
@@ -2711,7 +2827,9 @@
             "value": "850",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 24000,
@@ -2723,7 +2841,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -3142,6 +3262,20 @@
             "value": "250",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -3152,6 +3286,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -3631,7 +3779,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 18000,
@@ -3643,7 +3793,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -4062,6 +4214,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -4072,6 +4238,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -4533,6 +4713,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -4543,6 +4737,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1150",
             "target": null
           }
         ]
@@ -4970,7 +5178,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 24000,
@@ -4982,7 +5192,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -5441,6 +5653,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -5451,6 +5677,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -5860,6 +6100,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -5870,6 +6124,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -6349,7 +6617,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -6361,7 +6631,9 @@
             "value": "1100",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -6780,6 +7052,20 @@
             "value": "250",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -6790,6 +7076,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -7251,6 +7551,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -7261,6 +7575,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -7615,7 +7943,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -7627,7 +7957,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -8040,7 +8372,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 29000,
@@ -8052,7 +8386,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -8511,6 +8847,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -8521,6 +8871,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -8875,7 +9239,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -8887,7 +9253,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -9306,6 +9674,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -9316,6 +9698,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
             "target": null
           }
         ]
@@ -9771,7 +10167,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 20000,
@@ -9783,7 +10181,9 @@
             "value": "1200",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -10135,7 +10535,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -10147,7 +10549,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -10578,6 +10982,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -10588,6 +11006,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
             "target": null
           }
         ]
@@ -11043,7 +11475,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 34000,
@@ -11055,7 +11489,9 @@
             "value": "1150",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -11492,7 +11928,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 16000,
@@ -11504,7 +11942,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -11963,6 +12403,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -11973,6 +12427,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -12339,7 +12807,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -12351,7 +12821,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -12782,6 +13254,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "650",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -12792,6 +13278,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "850",
             "target": null
           }
         ]
@@ -13259,7 +13759,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 27000,
@@ -13271,7 +13773,9 @@
             "value": "1200",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -13690,6 +14194,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -13700,6 +14218,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -14161,6 +14693,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -14171,6 +14717,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1100",
             "target": null
           }
         ]
@@ -14537,7 +15097,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 22000,
@@ -14549,7 +15111,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -14968,6 +15532,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+          "threshold": "2",
+          "cardAttributeType": null,
+          "characterGroupingId": "grp-gamers",
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -14978,6 +15556,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+          "threshold": "2",
+          "cardAttributeType": null,
+          "characterGroupingId": "grp-gamers",
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
             "target": null
           }
         ]
@@ -15356,7 +15948,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 26000,
@@ -15368,7 +15962,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -15805,7 +16401,9 @@
             "value": "600",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 18000,
@@ -15817,7 +16415,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -16282,7 +16882,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -16294,7 +16896,9 @@
             "value": "1200",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -16713,6 +17317,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -16723,6 +17341,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
             "target": null
           }
         ]
@@ -17196,6 +17828,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -17206,6 +17852,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -17572,7 +18232,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 22000,
@@ -17584,7 +18246,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -18015,6 +18679,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "600",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -18025,6 +18703,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
             "target": null
           }
         ]
@@ -18403,7 +19095,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 33000,
@@ -18415,7 +19109,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -18828,7 +19524,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 20000,
@@ -18840,7 +19538,9 @@
             "value": "850",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -19299,6 +19999,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -19309,6 +20023,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -19675,7 +20403,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -19687,7 +20417,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -20124,7 +20856,9 @@
             "value": "600",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 29000,
@@ -20136,7 +20870,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -20595,6 +21331,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -20605,6 +21355,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -20971,7 +21735,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -20983,7 +21749,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -21402,6 +22170,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -21412,6 +22194,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
             "target": null
           }
         ]
@@ -21867,7 +22663,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 23000,
@@ -21879,7 +22677,9 @@
             "value": "1150",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -22255,7 +23055,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -22267,7 +23069,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -22698,6 +23502,20 @@
             "value": "400",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -22708,6 +23526,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "850",
             "target": null
           }
         ]
@@ -23169,6 +24001,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -23179,6 +24025,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1100",
             "target": null
           }
         ]
@@ -23533,7 +24393,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 28000,
@@ -23545,7 +24407,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -23976,6 +24840,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "650",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -23986,6 +24864,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
             "target": null
           }
         ]
@@ -24453,7 +25345,9 @@
             "value": "800",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 19000,
@@ -24465,7 +25359,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -24841,7 +25737,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 33000,
@@ -24853,7 +25751,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -25266,7 +26166,9 @@
             "value": "600",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 18000,
@@ -25278,7 +26180,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -25737,6 +26641,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -25747,6 +26665,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -26101,7 +27033,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 28000,
@@ -26113,7 +27047,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -26532,6 +27468,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "650",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -26542,6 +27492,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
             "target": null
           }
         ]
@@ -26997,7 +27961,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 23000,
@@ -27009,7 +27975,9 @@
             "value": "1150",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -27385,7 +28353,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -27397,7 +28367,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -27822,7 +28794,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 27000,
@@ -27834,7 +28808,9 @@
             "value": "850",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -28293,6 +29269,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -28303,6 +29293,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -28657,7 +29661,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -28669,7 +29675,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -29100,6 +30108,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "650",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -29110,6 +30132,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "850",
             "target": null
           }
         ]
@@ -29571,6 +30607,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1050",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -29581,6 +30631,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1250",
             "target": null
           }
         ]
@@ -29947,7 +31011,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "1": {
         "coolTimeMs": 17000,
@@ -29959,7 +31025,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -30366,6 +31434,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "600",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -30376,6 +31458,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
             "target": null
           }
         ]
@@ -30837,6 +31933,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -30847,6 +31957,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1150",
             "target": null
           }
         ]
@@ -31213,7 +32337,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 22000,
@@ -31225,7 +32351,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -31644,6 +32772,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "650",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -31654,6 +32796,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "850",
             "target": null
           }
         ]
@@ -32109,7 +33265,9 @@
             "value": "1050",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 18000,
@@ -32121,7 +33279,9 @@
             "value": "1250",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -32485,7 +33645,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 28000,
@@ -32497,7 +33659,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -32916,6 +34080,20 @@
             "value": "400",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -32926,6 +34104,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "500",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
             "target": null
           }
         ]
@@ -33387,6 +34579,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -33397,6 +34603,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1150",
             "target": null
           }
         ]
@@ -33763,7 +34983,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 33000,
@@ -33775,7 +34997,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -34206,6 +35430,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "600",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -34216,6 +35454,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
             "target": null
           }
         ]
@@ -34683,7 +35935,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 23000,
@@ -34695,7 +35949,9 @@
             "value": "1150",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -35071,7 +36327,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -35083,7 +36341,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -35508,7 +36768,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 29000,
@@ -35520,7 +36782,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -35985,7 +37249,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -35997,7 +37263,9 @@
             "value": "1100",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -36361,7 +37629,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -36373,7 +37643,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -36804,6 +38076,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -36814,6 +38100,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -37293,7 +38593,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 34000,
@@ -37305,7 +38607,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -37669,7 +38973,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 28000,
@@ -37681,7 +38987,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -38100,6 +39408,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -38110,6 +39432,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
             "target": null
           }
         ]
@@ -38565,7 +39901,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -38577,7 +39915,9 @@
             "value": "1100",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -38953,7 +40293,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -38965,7 +40307,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -39402,7 +40746,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 22000,
@@ -39414,7 +40760,9 @@
             "value": "800",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -39879,7 +41227,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -39891,7 +41241,9 @@
             "value": "1200",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -40255,7 +41607,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -40267,7 +41621,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -40686,6 +42042,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "600",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -40696,6 +42066,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
             "target": null
           }
         ]
@@ -41145,6 +42529,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -41155,6 +42553,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1100",
             "target": null
           }
         ]
@@ -41509,7 +42921,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -41521,7 +42935,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -41928,6 +43344,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -41938,6 +43368,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
             "target": null
           }
         ]
@@ -42417,7 +43861,9 @@
             "value": "850",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 24000,
@@ -42429,7 +43875,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -42793,7 +44241,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -42805,7 +44255,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -43242,7 +44694,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 28000,
@@ -43254,7 +44708,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -43713,6 +45169,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -43723,6 +45193,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -44077,7 +45561,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -44089,7 +45575,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -44508,6 +45996,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -44518,6 +46020,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -44872,7 +46388,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 33000,
@@ -44884,7 +46402,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -45321,7 +46841,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 23000,
@@ -45333,7 +46855,9 @@
             "value": "850",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -45792,6 +47316,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -45802,6 +47340,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -46156,7 +47708,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -46168,7 +47722,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -46587,6 +48143,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -46597,6 +48167,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -47046,6 +48630,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -47056,6 +48654,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1100",
             "target": null
           }
         ]
@@ -47422,7 +49034,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -47434,7 +49048,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -47865,6 +49481,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "650",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -47875,6 +49505,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
             "target": null
           }
         ]
@@ -48330,7 +49974,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 33000,
@@ -48342,7 +49988,9 @@
             "value": "1200",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -48718,7 +50366,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -48730,7 +50380,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -49167,7 +50819,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 27000,
@@ -49179,7 +50833,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -49644,7 +51300,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 23000,
@@ -49656,7 +51314,9 @@
             "value": "1150",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -50020,7 +51680,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 33000,
@@ -50032,7 +51694,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -50463,6 +52127,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -50473,6 +52151,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -50946,6 +52638,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "850",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -50956,6 +52662,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
             "target": null
           }
         ]
@@ -51322,7 +53042,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -51334,7 +53056,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -51753,6 +53477,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -51763,6 +53501,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
             "target": null
           }
         ]
@@ -52230,7 +53982,9 @@
             "value": "800",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -52242,7 +53996,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -52606,7 +54362,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 33000,
@@ -52618,7 +54376,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -53043,7 +54803,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -53055,7 +54817,9 @@
             "value": "850",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -53502,6 +55266,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -53512,6 +55290,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1150",
             "target": null
           }
         ]
@@ -53866,7 +55658,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -53878,7 +55672,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -54309,6 +56105,20 @@
             "value": "400",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "750",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -54319,6 +56129,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "500",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
             "target": null
           }
         ]
@@ -54774,7 +56598,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -54786,7 +56612,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -55138,7 +56966,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -55150,7 +56980,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -55587,7 +57419,9 @@
             "value": "700",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 29000,
@@ -55599,7 +57433,9 @@
             "value": "800",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -56058,6 +57894,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -56068,6 +57918,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -56434,7 +58298,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 15000,
@@ -56446,7 +58312,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -56883,7 +58751,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -56895,7 +58765,9 @@
             "value": "850",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -57354,6 +59226,20 @@
             "value": "550",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1100",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -57364,6 +59250,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "650",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1300",
             "target": null
           }
         ]
@@ -57730,7 +59630,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 28000,
@@ -57742,7 +59644,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -58161,6 +60065,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -58171,6 +60089,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
             "target": null
           }
         ]
@@ -58650,7 +60582,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 15000,
@@ -58662,7 +60596,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -59026,7 +60962,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -59038,7 +60976,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -59469,6 +61409,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -59479,6 +61433,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
             "target": null
           }
         ]
@@ -59928,6 +61896,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -59938,6 +61920,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1100",
             "target": null
           }
         ]
@@ -60304,7 +62300,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -60316,7 +62314,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -60735,6 +62735,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -60745,6 +62759,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "450",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
             "target": null
           }
         ]
@@ -61224,7 +63252,9 @@
             "value": "1050",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -61236,7 +63266,9 @@
             "value": "1250",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -61600,7 +63632,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 15000,
@@ -61612,7 +63646,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -62037,7 +64073,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -62049,7 +64087,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -62413,7 +64453,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -62425,7 +64467,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -62850,7 +64894,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 16000,
@@ -62862,7 +64908,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -63321,6 +65369,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "950",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -63331,6 +65393,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1150",
             "target": null
           }
         ]
@@ -63697,7 +65773,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -63709,7 +65787,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -64128,6 +66208,20 @@
             "value": "300",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "550",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -64138,6 +66232,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "350",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
             "target": null
           }
         ]
@@ -64599,6 +66707,20 @@
             "value": "500",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1000",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -64609,6 +66731,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "600",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+          "threshold": "40",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1200",
             "target": null
           }
         ]
@@ -65076,7 +67212,9 @@
             "value": "1000",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 23000,
@@ -65088,7 +67226,9 @@
             "value": "1200",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -65452,7 +67592,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 27000,
@@ -65464,7 +67606,9 @@
             "value": "450",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -65840,7 +67984,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 20000,
@@ -65852,7 +67998,9 @@
             "value": "500",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -66311,6 +68459,20 @@
             "value": "450",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "900",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -66321,6 +68483,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "550",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+          "threshold": "600",
+          "cardAttributeType": null,
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "1100",
             "target": null
           }
         ]
@@ -66776,7 +68952,9 @@
             "value": "950",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -66788,7 +68966,9 @@
             "value": "1050",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -67253,7 +69433,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 25000,
@@ -67265,7 +69447,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -67629,7 +69813,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -67641,7 +69827,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -68017,7 +70205,9 @@
             "value": "250",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 20000,
@@ -68029,7 +70219,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -68381,7 +70573,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -68393,7 +70587,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -68769,7 +70965,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -68781,7 +70979,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -69157,7 +71357,9 @@
             "value": "350",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -69169,7 +71371,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -69545,7 +71749,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 17000,
@@ -69557,7 +71763,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -69921,7 +72129,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 23000,
@@ -69933,7 +72143,9 @@
             "value": "650",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -70386,7 +72598,9 @@
             "value": "750",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 27000,
@@ -70398,7 +72612,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -70762,7 +72978,9 @@
             "value": "400",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 28000,
@@ -70774,7 +72992,9 @@
             "value": "550",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {
@@ -71193,6 +73413,20 @@
             "value": "350",
             "target": null
           }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "700",
+            "target": null
+          }
         ]
       },
       "2": {
@@ -71203,6 +73437,20 @@
           {
             "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
             "value": "400",
+            "target": null
+          }
+        ],
+        "enhancedCondition": {
+          "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+          "threshold": "2",
+          "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+          "characterGroupingId": null,
+          "characterIds": null
+        },
+        "enhancedEffects": [
+          {
+            "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+            "value": "800",
             "target": null
           }
         ]
@@ -71658,7 +73906,9 @@
             "value": "900",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       },
       "2": {
         "coolTimeMs": 30000,
@@ -71670,7 +73920,9 @@
             "value": "1100",
             "target": null
           }
-        ]
+        ],
+        "enhancedCondition": null,
+        "enhancedEffects": []
       }
     },
     "passiveSkill": {

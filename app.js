@@ -84,6 +84,11 @@ const CONDITION_LABELS = {
   LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_LEADER_CHARACTER: () => 'Specific leader required',
   LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_LEADER_CHARACTER_GROUPING: (c) =>
     `Leader from ${c.characterGroupingId}`,
+  LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE: (c) => `${c.threshold}+ combo`,
+  LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE: (c) => `${c.threshold}+ life`,
+  LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_LTE: (c) => `${c.threshold} or less life`,
+  LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_JUDGEMENT_TYPE_GTE: () => 'judgement-based',
+  LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_MUSIC_CHARACTER: () => 'song-specific',
 };
 
 function attrLabel(type) {
@@ -1077,11 +1082,15 @@ function recompute() {
     slots
   );
   const combinedBonuses = mergeBoardBonuses(boardBonuses, connectBonuses);
+  // Snapshot the real per-card base stats (level + bloom only, matching the
+  // in-game card screen) before board/connect bonuses mutate result.memberStats
+  // in place - the Parameters panel should show these, not the buffed totals.
+  const baseStats = result.memberStats.map((m) => ({ cardId: m.cardId, stats: { ...m.stats } }));
   applyBoardBonuses(result, combinedBonuses);
 
   const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil);
 
-  renderInfoRow(result, leaderCard, unit, scoreSupport);
+  renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats);
   renderCoverageRow(result, unit, scoreSupport);
   renderPowerRow(result, leaderCard, scoreSupport);
 }
@@ -1143,24 +1152,24 @@ function renderInfoRowIncomplete(leaderCard) {
   }
 }
 
-function renderInfoRow(result, leaderCard, unit, scoreSupport) {
+function renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats) {
   infoRowEl.innerHTML = '';
 
   if (isMobileViewport()) {
     infoRowEl.className = 'info-accordion';
-    renderInfoRowMobile(result, leaderCard, unit, scoreSupport);
+    renderInfoRowMobile(result, leaderCard, unit, scoreSupport, baseStats);
     return;
   }
 
   infoRowEl.className = ''; // no longer a single grid - holds 3 aligned sub-grid rows instead
 
-  const maxStat = Math.max(...result.memberStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
+  const maxStat = Math.max(...baseStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
 
   // Row A: Leader Skill + Parameters, stretched to equal height across the row.
   const rowA = document.createElement('div');
   rowA.className = 'member-grid info-subrow row-stretch';
   rowA.appendChild(renderLeaderSkillCard(result, leaderCard));
-  unit.forEach((u, i) => rowA.appendChild(renderMemberStatsCard(result.memberStats[i], maxStat)));
+  unit.forEach((u, i) => rowA.appendChild(renderMemberStatsCard(baseStats[i], maxStat)));
   infoRowEl.appendChild(rowA);
 
   // Row B: Song + Passive Skill, top-aligned (heights can differ).
@@ -1190,9 +1199,9 @@ function renderInfoRow(result, leaderCard, unit, scoreSupport) {
  *  passive, active (or Leader Skill + Song for the leader). Grouping by
  *  member instead of by card-type avoids the disconnected-sections problem
  *  that plain grid-reflow causes at narrow widths. */
-function renderInfoRowMobile(result, leaderCard, unit, scoreSupport) {
+function renderInfoRowMobile(result, leaderCard, unit, scoreSupport, baseStats) {
   infoRowEl.innerHTML = '';
-  const maxStat = Math.max(...result.memberStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
+  const maxStat = Math.max(...baseStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
 
   const makeAccordionItem = (key, portraitCard, titleText, subtitleText, bodyBuilder) => {
     const item = document.createElement('div');
@@ -1212,7 +1221,7 @@ function renderInfoRowMobile(result, leaderCard, unit, scoreSupport) {
     `;
     header.onclick = () => {
       expanded ? state.mobileAccordionExpanded.delete(key) : state.mobileAccordionExpanded.add(key);
-      renderInfoRowMobile(result, leaderCard, unit, scoreSupport);
+      renderInfoRowMobile(result, leaderCard, unit, scoreSupport, baseStats);
     };
     item.appendChild(header);
 
@@ -1243,7 +1252,7 @@ function renderInfoRowMobile(result, leaderCard, unit, scoreSupport) {
   unit.forEach((u, i) => {
     infoRowEl.appendChild(
       makeAccordionItem(`unit-${i}`, u.card, u.card.characterName, u.card.cardSubtitle || '', (body) => {
-        body.appendChild(renderMemberStatsCard(result.memberStats[i], maxStat));
+        body.appendChild(renderMemberStatsCard(baseStats[i], maxStat));
         body.appendChild(renderMemberPassiveCard(result.passives[i], u.card));
         body.appendChild(renderMemberActiveCard(result.actives[i], u.card, scoreSupport));
       })
@@ -1376,7 +1385,22 @@ function renderMemberActiveCard(activeResult, card, scoreSupport) {
 
   const div = document.createElement('div');
   div.className = 'effect-card';
+  let conditionLine = '';
+  if (activeResult.enhancedCondition) {
+    const condText = CONDITION_LABELS[activeResult.enhancedCondition.type]?.(activeResult.enhancedCondition) ?? 'Conditional';
+    const met = activeResult.enhancedConditionMet;
+    const pillClass = met === true ? 'met' : met === 'assumed' ? 'situational' : 'unmet';
+    const pillText = met === true ? 'MET' : met === 'assumed' ? 'ASSUMED MET' : 'NOT MET';
+    const valueNote =
+      met === true
+        ? 'boosted value shown'
+        : met === 'assumed'
+        ? 'boosted value assumed for simulation'
+        : 'base value shown \u2014 would be higher if met';
+    conditionLine = `<div class="effect-detail" style="margin-bottom:6px;"><span class="pill ${pillClass}">${pillText}</span> ${condText} \u2014 ${valueNote}</div>`;
+  }
   div.innerHTML = `
+    ${conditionLine}
     <div class="active-skill-grid">
       <span>Lv</span><span class="num">${activeResult.level ?? '\u2014'}</span>
       <span>Activation</span><span class="num">${activeResult.activationProbabilityPercent != null ? activeResult.activationProbabilityPercent.toFixed(0) + '%' : '\u2014'}</span>
