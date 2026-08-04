@@ -154,6 +154,11 @@ const state = {
   songId: null,
   boardSelections: {}, // characterId -> { "leader|EFFECT_TYPE" | "member|EFFECT_TYPE": countUnlocked }
   connectSelections: {}, // characterId -> { center?, leader?, member?: { connectorCardId, connectorBloom, allocations } }
+  pickerFilters: {
+    types: new Set(), // attributeType values; empty = no filter
+    rarities: new Set(), // rarity numbers (3,4,5); empty = no filter
+    generations: new Set(), // generation strings; empty = no filter
+  },
 };
 
 function maxLevelFor(card) {
@@ -685,6 +690,8 @@ function openPicker(slotState, isLeader) {
   searchWrap.appendChild(input);
   box.appendChild(searchWrap);
 
+  box.appendChild(renderFilterBar(() => renderList(input.value)));
+
   const list = document.createElement('div');
   list.className = 'picker-list';
   box.appendChild(list);
@@ -698,10 +705,14 @@ function openPicker(slotState, isLeader) {
   function renderList(query) {
     list.innerHTML = '';
     const q = query.trim().toLowerCase();
+    const f = state.pickerFilters;
     let pool = DATA.members;
     if (isLeader) pool = pool.filter((m) => m.leaderSkill);
     const matches = pool
       .filter((m) => !q || m.characterName?.toLowerCase().includes(q) || m.cardSubtitle?.toLowerCase().includes(q))
+      .filter((m) => !f.types.size || f.types.has(m.attributeType))
+      .filter((m) => !f.rarities.size || f.rarities.has(rarityNumber(m.rarity)))
+      .filter((m) => !f.generations.size || f.generations.has(m.generation))
       .slice(0, 60);
 
     if (!matches.length) {
@@ -754,6 +765,123 @@ function openPicker(slotState, isLeader) {
   });
   document.body.appendChild(overlay);
   input.focus();
+}
+
+/** Builds the persistent Type/Rarity/Generation filter bar shared by the
+ *  leader/member picker. Reads and writes directly to state.pickerFilters,
+ *  and calls onChange whenever a filter is toggled. */
+function renderFilterBar(onChange) {
+  const bar = document.createElement('div');
+  bar.className = 'filter-bar';
+
+  const f = state.pickerFilters;
+
+  const typeGroup = document.createElement('div');
+  typeGroup.className = 'filter-group';
+  typeGroup.innerHTML = '<span class="filter-group-label">Type</span>';
+  for (const type of [
+    'CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2', // Pure
+    'CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3', // Happy
+    'CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1', // Cute
+  ]) {
+    const chipLabel = attrLabel(type);
+    const chipClass = attrClass(type);
+    const chip = document.createElement('label');
+    chip.className = `filter-checkbox ${chipClass}`;
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = f.types.has(type);
+    cb.onchange = () => {
+      cb.checked ? f.types.add(type) : f.types.delete(type);
+      onChange();
+    };
+    chip.appendChild(cb);
+    chip.appendChild(document.createTextNode(chipLabel));
+    typeGroup.appendChild(chip);
+  }
+  bar.appendChild(typeGroup);
+
+  const rarityGroup = document.createElement('div');
+  rarityGroup.className = 'filter-group';
+  rarityGroup.innerHTML = '<span class="filter-group-label">Rarity</span>';
+  for (const r of [5, 4, 3]) {
+    const chip = document.createElement('label');
+    chip.className = 'filter-checkbox';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = f.rarities.has(r);
+    cb.onchange = () => {
+      cb.checked ? f.rarities.add(r) : f.rarities.delete(r);
+      onChange();
+    };
+    chip.appendChild(cb);
+    chip.appendChild(document.createTextNode(`${r}\u2605`));
+    rarityGroup.appendChild(chip);
+  }
+  bar.appendChild(rarityGroup);
+
+  const allGenerations = [...new Set(DATA.members.map((m) => m.generation).filter(Boolean))];
+  const genGroup = document.createElement('div');
+  genGroup.className = 'filter-group filter-group-dropdown';
+  const genLabel = document.createElement('span');
+  genLabel.className = 'filter-group-label';
+  genLabel.textContent = 'Generation';
+  genGroup.appendChild(genLabel);
+
+  const genBtn = document.createElement('button');
+  genBtn.type = 'button';
+  genBtn.className = 'filter-dropdown-btn';
+  const updateGenBtnLabel = () => {
+    genBtn.textContent = f.generations.size ? `${f.generations.size} selected` : 'All generations';
+  };
+  updateGenBtnLabel();
+  genGroup.appendChild(genBtn);
+
+  const genPanel = document.createElement('div');
+  genPanel.className = 'filter-dropdown-panel';
+  genPanel.style.display = 'none';
+  for (const gen of allGenerations) {
+    const opt = document.createElement('label');
+    opt.className = 'filter-dropdown-option';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = f.generations.has(gen);
+    cb.onchange = () => {
+      cb.checked ? f.generations.add(gen) : f.generations.delete(gen);
+      updateGenBtnLabel();
+      onChange();
+    };
+    opt.appendChild(cb);
+    opt.appendChild(document.createTextNode(gen));
+    genPanel.appendChild(opt);
+  }
+  genGroup.appendChild(genPanel);
+
+  genBtn.onclick = (e) => {
+    e.stopPropagation();
+    genPanel.style.display = genPanel.style.display === 'none' ? 'block' : 'none';
+  };
+  document.addEventListener('click', (e) => {
+    if (!genGroup.contains(e.target)) genPanel.style.display = 'none';
+  });
+
+  bar.appendChild(genGroup);
+
+  const clearBtn = document.createElement('button');
+  clearBtn.type = 'button';
+  clearBtn.className = 'filter-clear-btn';
+  clearBtn.textContent = 'Clear filters';
+  clearBtn.onclick = () => {
+    f.types.clear();
+    f.rarities.clear();
+    f.generations.clear();
+    onChange();
+    // Re-render the bar itself so checkboxes visually reset too.
+    bar.replaceWith(renderFilterBar(onChange));
+  };
+  bar.appendChild(clearBtn);
+
+  return bar;
 }
 
 // ---------------------------------------------------------------------------

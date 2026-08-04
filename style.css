@@ -588,6 +588,96 @@ header.masthead {
   border-bottom: 1px solid var(--line);
 }
 
+.filter-bar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  padding: 10px 14px;
+  border-bottom: 1px solid var(--line);
+  background: var(--panel-raised);
+}
+
+.filter-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.filter-group-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+
+.filter-checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.filter-checkbox input { accent-color: var(--orange); cursor: pointer; }
+.filter-checkbox.attr-pure { color: var(--attr-pure); }
+.filter-checkbox.attr-happy { color: var(--attr-happy); }
+.filter-checkbox.attr-cute { color: var(--attr-cute); }
+
+.filter-group-dropdown { position: relative; }
+.filter-dropdown-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.filter-dropdown-btn:hover { border-color: var(--orange-dim); color: var(--orange); }
+
+.filter-dropdown-panel {
+  position: absolute;
+  top: calc(100% + 6px);
+  left: 0;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 8px;
+  min-width: 220px;
+  max-height: 280px;
+  overflow-y: auto;
+  z-index: 20;
+  box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+}
+.filter-dropdown-option {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  color: var(--text-dim);
+  padding: 5px 6px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.filter-dropdown-option:hover { background: var(--panel-raised); }
+.filter-dropdown-option input { accent-color: var(--orange); cursor: pointer; }
+
+.filter-clear-btn {
+  margin-left: auto;
+  background: none;
+  border: none;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-decoration: underline;
+  cursor: pointer;
+  padding: 0;
+}
+.filter-clear-btn:hover { color: var(--orange); }
+
 .picker-search input {
   width: 100%;
   background: var(--bg);
