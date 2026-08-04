@@ -165,22 +165,24 @@ function maxLevelFor(card) {
 // Roster slot rendering
 // ---------------------------------------------------------------------------
 
-const rosterEl = document.getElementById('roster');
-const songSlotEl = document.getElementById('song-slot');
-const resultsEl = document.getElementById('results');
+const selectionRowEl = document.getElementById('selection-row');
+const infoRowEl = document.getElementById('info-row');
+const coverageRowEl = document.getElementById('coverage-row');
+const powerRowEl = document.getElementById('power-row');
 
-function renderRoster() {
-  rosterEl.innerHTML = '';
+function renderSelectionRow() {
+  selectionRowEl.innerHTML = '';
 
-  rosterEl.appendChild(renderSlot('leader', state.leader, true));
-  const divider = document.createElement('div');
-  divider.className = 'panel-label';
-  divider.style.marginTop = '14px';
-  divider.textContent = 'Unit';
-  rosterEl.appendChild(divider);
+  const leaderCol = document.createElement('div');
+  leaderCol.className = 'member-col leader-col';
+  leaderCol.appendChild(renderSlot('leader', state.leader, true));
+  selectionRowEl.appendChild(leaderCol);
 
   state.unit.forEach((slot, i) => {
-    rosterEl.appendChild(renderSlot(i, slot, false));
+    const col = document.createElement('div');
+    col.className = 'member-col';
+    col.appendChild(renderSlot(i, slot, false));
+    selectionRowEl.appendChild(col);
   });
 }
 
@@ -429,7 +431,7 @@ function openBoardEditor(card) {
     renderConnectSection();
     list.appendChild(connectSection);
     recompute();
-    renderRoster();
+    renderSelectionRow();
   }
 
   function renderConnectSection() {
@@ -716,7 +718,7 @@ function openPicker(slotState, isLeader) {
         slotState.cardId = m.cardId;
         slotState.level = Math.min(slotState.level, maxLevelFor(m));
         overlay.remove();
-        renderRoster();
+        renderSelectionRow();
         recompute();
       };
       list.appendChild(item);
@@ -739,7 +741,6 @@ function openPicker(slotState, isLeader) {
 // ---------------------------------------------------------------------------
 
 function renderSongSlot() {
-  songSlotEl.innerHTML = '';
   const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
 
   const slot = document.createElement('div');
@@ -765,7 +766,7 @@ function renderSongSlot() {
   slot.appendChild(info);
 
   slot.addEventListener('click', openSongPicker);
-  songSlotEl.appendChild(slot);
+  return slot;
 }
 
 function openSongPicker() {
@@ -832,7 +833,6 @@ function openSongPicker() {
       item.onclick = () => {
         state.songId = s.id;
         overlay.remove();
-        renderSongSlot();
         recompute();
       };
       list.appendChild(item);
@@ -859,7 +859,9 @@ function recompute() {
   const unitFilled = state.unit.every((u) => u.cardId);
 
   if (!leaderCard || !unitFilled) {
-    resultsEl.innerHTML = '<div class="empty-state">Select a leader and all 5 unit members to see results.</div>';
+    renderInfoRowIncomplete(leaderCard);
+    coverageRowEl.innerHTML = '<div class="empty-state">Select a leader and all 5 unit members to see results.</div>';
+    powerRowEl.innerHTML = '';
     return;
   }
 
@@ -901,78 +903,132 @@ function recompute() {
 
   const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil);
 
-  renderResults(result, leaderCard, unit, scoreSupport);
+  renderInfoRow(result, leaderCard, unit, scoreSupport);
+  renderCoverageRow(result, unit, scoreSupport);
+  renderPowerRow(result, leaderCard, scoreSupport);
 }
 
-function renderResults(result, leaderCard, unit, scoreSupport) {
-  resultsEl.innerHTML = '';
+/** Leader column content when the team isn't complete yet - song picking and a
+ *  basic leader-skill description (without condition-met status, which needs
+ *  the full unit) should still work while the rest of the columns wait. */
+function renderInfoRowIncomplete(leaderCard) {
+  infoRowEl.innerHTML = '';
 
-  resultsEl.appendChild(renderStatsPanel(result));
+  const leaderCol = document.createElement('div');
+  leaderCol.className = 'member-col leader-col';
 
-  const twoCol = document.createElement('div');
-  twoCol.className = 'two-col';
-  twoCol.appendChild(renderLeaderPanel(result, leaderCard));
-  twoCol.appendChild(renderPassivesPanel(result, unit));
-  resultsEl.appendChild(twoCol);
+  const skillPanel = document.createElement('div');
+  skillPanel.className = 'panel-sm';
+  const skillLabel = document.createElement('div');
+  skillLabel.className = 'panel-label';
+  skillLabel.textContent = 'Leader Skill';
+  skillPanel.appendChild(skillLabel);
+  if (leaderCard?.leaderSkill) {
+    const condText = leaderCard.leaderSkill.condition
+      ? CONDITION_LABELS[leaderCard.leaderSkill.condition.type]?.(leaderCard.leaderSkill.condition) ?? 'Conditional'
+      : 'Always active';
+    const effectsHtml = leaderCard.leaderSkill.effects
+      .map((e) => `<div class="effect-head"><span class="effect-name">${effectLabel(e.type)}</span><span class="effect-value">+${(Number(e.value) / 10).toFixed(0)}%</span></div>`)
+      .join('');
+    const card = document.createElement('div');
+    card.className = 'effect-card';
+    card.innerHTML = `<span class="pill situational">COMPLETE UNIT TO CHECK</span><div class="effect-detail" style="margin-top:6px;">${condText}</div><div style="margin-top:8px;">${effectsHtml}</div>`;
+    skillPanel.appendChild(card);
+  } else {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = leaderCard ? 'No leader skill on this card.' : 'Choose a leader to see her skill.';
+    skillPanel.appendChild(empty);
+  }
+  leaderCol.appendChild(skillPanel);
 
-  resultsEl.appendChild(renderActivesPanel(result, unit, scoreSupport));
-  resultsEl.appendChild(renderTimelinePanel(result, unit));
-  resultsEl.appendChild(renderCoveragePanel(result, unit, scoreSupport));
-  resultsEl.appendChild(renderPowerPanel(result, leaderCard, scoreSupport));
+  const songPanel = document.createElement('div');
+  songPanel.className = 'panel-sm';
+  const songLabel = document.createElement('div');
+  songLabel.className = 'panel-label';
+  songLabel.textContent = 'Song';
+  songPanel.appendChild(songLabel);
+  songPanel.appendChild(renderSongSlot());
+  leaderCol.appendChild(songPanel);
+
+  infoRowEl.appendChild(leaderCol);
+
+  for (let i = 0; i < 5; i++) {
+    const col = document.createElement('div');
+    col.className = 'member-col';
+    const panel = document.createElement('div');
+    panel.className = 'panel-sm';
+    panel.innerHTML = '<div class="empty-state">Select this member to see her stats.</div>';
+    col.appendChild(panel);
+    infoRowEl.appendChild(col);
+  }
 }
 
-function renderStatsPanel(result) {
-  const panel = document.createElement('div');
-  panel.className = 'panel';
-  const label = document.createElement('div');
-  label.className = 'panel-label';
-  label.textContent = 'Member Stats';
-  panel.appendChild(label);
+function renderInfoRow(result, leaderCard, unit, scoreSupport) {
+  infoRowEl.innerHTML = '';
 
+  // --- Column 0: Leader Skill + Song + (summary stats filled in by renderCoverageRow) ---
+  const leaderCol = document.createElement('div');
+  leaderCol.className = 'member-col leader-col';
+  leaderCol.appendChild(renderLeaderSkillCard(result, leaderCard));
+
+  const songPanel = document.createElement('div');
+  songPanel.className = 'panel-sm';
+  const songLabel = document.createElement('div');
+  songLabel.className = 'panel-label';
+  songLabel.textContent = 'Song';
+  songPanel.appendChild(songLabel);
+  songPanel.appendChild(renderSongSlot());
+  leaderCol.appendChild(songPanel);
+
+  const summaryPanel = document.createElement('div');
+  summaryPanel.className = 'panel-sm';
+  summaryPanel.id = 'coverage-summary-slot';
+  summaryPanel.innerHTML = '<div class="empty-state">Select a song to see coverage summary.</div>';
+  leaderCol.appendChild(summaryPanel);
+
+  infoRowEl.appendChild(leaderCol);
+
+  // --- Columns 1-5: per-member stats + passive + active ---
   const maxStat = Math.max(...result.memberStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
 
-  const table = document.createElement('table');
-  table.className = 'stat-table';
-  table.innerHTML = `<thead><tr><th>Member</th><th>Performance</th><th></th><th>Technique</th><th></th><th>Sense</th><th></th></tr></thead>`;
-  const tbody = document.createElement('tbody');
+  unit.forEach((u, i) => {
+    const col = document.createElement('div');
+    col.className = 'member-col';
+    col.appendChild(renderMemberStatsCard(result.memberStats[i], maxStat));
+    col.appendChild(renderMemberPassiveCard(result.passives[i], u.card));
+    col.appendChild(renderMemberActiveCard(result.actives[i], u.card, scoreSupport));
+    infoRowEl.appendChild(col);
+  });
+}
 
-  for (const m of result.memberStats) {
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${m.name}<div class="slot-sub">Lv${m.level}${m.bloom ? ` \u00b7 Bloom ${m.bloom}` : ''}</div></td>
-      <td class="num">${m.stats.performance}</td>
-      <td>${meterCell('perf', m.stats.performance, maxStat)}</td>
-      <td class="num">${m.stats.technique}</td>
-      <td>${meterCell('tech', m.stats.technique, maxStat)}</td>
-      <td class="num">${m.stats.sense}</td>
-      <td>${meterCell('sense', m.stats.sense, maxStat)}</td>
-    `;
-    tbody.appendChild(tr);
-  }
-
-  const totalTr = document.createElement('tr');
-  totalTr.className = 'totals-row';
-  totalTr.innerHTML = `
-    <td>Total</td>
-    <td class="num">${result.statTotals.performance}</td><td></td>
-    <td class="num">${result.statTotals.technique}</td><td></td>
-    <td class="num">${result.statTotals.sense}</td><td></td>
+function renderMemberStatsCard(memberStat, maxStat) {
+  const panel = document.createElement('div');
+  panel.className = 'panel-sm';
+  panel.innerHTML = `
+    <div class="panel-label">${memberStat.name} <span class="slot-sub">Lv${memberStat.level}${memberStat.bloom ? ` \u00b7 Bloom ${memberStat.bloom}` : ''}</span></div>
+    <div class="member-stat-row">
+      <span class="member-stat-label">PERF</span>
+      <div class="meter perf"><span style="width:${maxStat ? Math.round((memberStat.stats.performance / maxStat) * 100) : 0}%"></span></div>
+      <span class="member-stat-num">${memberStat.stats.performance}</span>
+    </div>
+    <div class="member-stat-row">
+      <span class="member-stat-label">TECH</span>
+      <div class="meter tech"><span style="width:${maxStat ? Math.round((memberStat.stats.technique / maxStat) * 100) : 0}%"></span></div>
+      <span class="member-stat-num">${memberStat.stats.technique}</span>
+    </div>
+    <div class="member-stat-row">
+      <span class="member-stat-label">SENSE</span>
+      <div class="meter sense"><span style="width:${maxStat ? Math.round((memberStat.stats.sense / maxStat) * 100) : 0}%"></span></div>
+      <span class="member-stat-num">${memberStat.stats.sense}</span>
+    </div>
   `;
-  tbody.appendChild(totalTr);
-
-  table.appendChild(tbody);
-  panel.appendChild(table);
   return panel;
 }
 
-function meterCell(kind, value, max) {
-  const pct = max ? Math.round((value / max) * 100) : 0;
-  return `<div class="meter ${kind}"><span style="width:${pct}%"></span></div>`;
-}
-
-function renderLeaderPanel(result, leaderCard) {
+function renderLeaderSkillCard(result, leaderCard) {
   const panel = document.createElement('div');
-  panel.className = 'panel';
+  panel.className = 'panel-sm';
   const label = document.createElement('div');
   label.className = 'panel-label';
   label.textContent = 'Leader Skill';
@@ -1011,158 +1067,89 @@ function renderLeaderPanel(result, leaderCard) {
   return panel;
 }
 
-function renderPassivesPanel(result, unit) {
+function renderMemberPassiveCard(passiveResult, card) {
   const panel = document.createElement('div');
-  panel.className = 'panel';
+  panel.className = 'panel-sm';
   const label = document.createElement('div');
   label.className = 'panel-label';
-  label.textContent = 'Passive Skills';
+  label.textContent = 'Passive Skill';
   panel.appendChild(label);
 
-  result.passives.forEach((p, i) => {
-    const card = DATA.byId[unit[i].card.cardId];
-    const anyApplies = p.effects.some((e) => e.applies);
-    const div = document.createElement('div');
-    div.className = 'effect-card' + (p.effects.length && !anyApplies ? ' inactive' : '');
+  const anyApplies = passiveResult.effects.some((e) => e.applies);
+  const div = document.createElement('div');
+  div.className = 'effect-card' + (passiveResult.effects.length && !anyApplies ? ' inactive' : '');
 
-    let inner = `<div class="effect-head"><span class="effect-name">${card.characterName}</span></div>`;
-    if (!p.effects.length) {
-      inner += '<div class="effect-detail">No passive skill</div>';
-    }
-    for (const e of p.effects) {
-      const recipientNames = e.recipients.map((id) => DATA.byId[id]?.characterName?.split(' ')[0]).join(', ');
-      inner += `
-        <div class="effect-detail" style="margin-top:6px;">
-          <span class="pill ${e.applies ? 'met' : 'unmet'}">${e.applies ? 'ACTIVE' : 'NO ELIGIBLE TARGET'}</span>
-          ${effectLabel(e.type)} <span class="effect-value">+${(e.valuePermil / 10).toFixed(0)}%</span>
-          ${e.applies ? `\u2192 ${recipientNames}` : ''}
-        </div>`;
-    }
-    div.innerHTML = inner;
-    panel.appendChild(div);
-  });
-
-  return panel;
-}
-
-function renderActivesPanel(result, unit, scoreSupport) {
-  const panel = document.createElement('div');
-  panel.className = 'panel';
-  const label = document.createElement('div');
-  label.className = 'panel-label';
-  label.textContent = 'Active Skills';
-  panel.appendChild(label);
-
-  const table = document.createElement('table');
-  table.className = 'stat-table';
-  table.innerHTML = `<thead><tr><th>Member</th><th>Lv</th><th>Activation</th><th>Cooldown</th><th>Duration</th><th>Effect</th><th>Score Support</th></tr></thead>`;
-  const tbody = document.createElement('tbody');
-
-  result.actives.forEach((a, i) => {
-    const card = DATA.byId[unit[i].card.cardId];
-    const support = scoreSupport[card.cardId] || 0;
-    const effectText = a.effects
-      ?.map((e) => {
-        const isPlainScoreUp = e.type.endsWith('_TYPE_SCORE_UP_PERMIL_UP');
-        if (isPlainScoreUp && support) {
-          return `${effectLabel(e.type)} +${e.valuePercent.toFixed(0)}% <span style="color:var(--orange)">+ ${support.toFixed(0)}%</span>`;
-        }
-        return `${effectLabel(e.type)} +${e.valuePercent.toFixed(0)}%`;
-      })
-      .join(', ') ?? '\u2014';
-    const tr = document.createElement('tr');
-    tr.innerHTML = `
-      <td>${card.characterName}</td>
-      <td class="num">${a.level ?? '\u2014'}</td>
-      <td class="num">${a.activationProbabilityPercent != null ? a.activationProbabilityPercent.toFixed(0) + '%' : '\u2014'}</td>
-      <td class="num">${a.coolTimeSeconds != null ? a.coolTimeSeconds.toFixed(0) + 's' : '\u2014'}</td>
-      <td class="num">${a.effectDurationSeconds != null ? a.effectDurationSeconds.toFixed(0) + 's' : '\u2014'}</td>
-      <td>${effectText}</td>
-      <td class="num">${support ? '+' + support.toFixed(0) + '%' : '\u2014'}</td>
-    `;
-    tbody.appendChild(tr);
-  });
-
-  table.appendChild(tbody);
-  panel.appendChild(table);
-  return panel;
-}
-
-function renderTimelinePanel(result, unit) {
-  const panel = document.createElement('div');
-  panel.className = 'panel';
-  const label = document.createElement('div');
-  label.className = 'panel-label';
-  label.textContent = 'Setlist Timeline \u00b7 Special Skills';
-  panel.appendChild(label);
-
-  const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
-
-  if (!song) {
-    const empty = document.createElement('div');
-    empty.className = 'empty-state';
-    empty.textContent = 'Select a song above to map special skill activations to its fever points.';
-    panel.appendChild(empty);
-    return panel;
+  let inner = '';
+  if (!passiveResult.effects.length) {
+    inner = '<div class="effect-detail">No passive skill</div>';
   }
-
-  const specials = mapSpecialSkillsToSong(result.specials, song.feverSeconds);
-  const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
-
-  const wrap = document.createElement('div');
-  wrap.className = 'timeline-wrap';
-
-  const track = document.createElement('div');
-  track.className = 'timeline-track';
-
-  specials.forEach((s, i) => {
-    const card = DATA.byId[unit[i].card.cardId];
-    const pct = (s.activationTimeSeconds / duration) * 100;
-
-    const mark = document.createElement('div');
-    mark.className = 'fever-mark';
-    mark.style.left = pct + '%';
-    track.appendChild(mark);
-
-    const feverLabel = document.createElement('div');
-    feverLabel.className = 'fever-label';
-    feverLabel.style.left = pct + '%';
-    feverLabel.textContent = `${s.activationTimeSeconds.toFixed(1)}s`;
-    track.appendChild(feverLabel);
-
-    const memberLabel = document.createElement('div');
-    memberLabel.className = 'fever-member';
-    memberLabel.style.left = pct + '%';
-    memberLabel.innerHTML = `${card.characterName.split(' ')[0]}<br><span style="color:var(--amber)">+${s.supportBonusPercent ?? '\u2014'}%</span> spt \u00b7 <span style="color:var(--cyan)">+${s.activationRateUpPercent ?? '\u2014'}%</span> act`;
-    track.appendChild(memberLabel);
-  });
-
-  wrap.appendChild(track);
-
-  const ends = document.createElement('div');
-  ends.className = 'timeline-ends';
-  ends.innerHTML = `<span>0:00</span><span>${song.title} \u00b7 ${Math.floor(duration / 60)}:${String(Math.round(duration % 60)).padStart(2, '0')}</span>`;
-  wrap.appendChild(ends);
-
-  panel.appendChild(wrap);
+  for (const e of passiveResult.effects) {
+    const recipientNames = e.recipients.map((id) => DATA.byId[id]?.characterName?.split(' ')[0]).join(', ');
+    inner += `
+      <div class="effect-detail" style="margin-top:2px;">
+        <span class="pill ${e.applies ? 'met' : 'unmet'}">${e.applies ? 'ACTIVE' : 'NO TARGET'}</span>
+        ${effectLabel(e.type)} <span class="effect-value">+${(e.valuePermil / 10).toFixed(0)}%</span>
+        ${e.applies ? `\u2192 ${recipientNames}` : ''}
+      </div>`;
+  }
+  div.innerHTML = inner;
+  panel.appendChild(div);
   return panel;
 }
 
-function renderCoveragePanel(result, unit, scoreSupport) {
+function renderMemberActiveCard(activeResult, card, scoreSupport) {
   const panel = document.createElement('div');
-  panel.className = 'panel';
+  panel.className = 'panel-sm';
   const label = document.createElement('div');
   label.className = 'panel-label';
-  label.textContent = 'Bonus Coverage \u00b7 Second-by-Second';
+  label.textContent = 'Active Skill';
   panel.appendChild(label);
 
+  const support = scoreSupport[card.cardId] || 0;
+  const effectText = activeResult.effects
+    ?.map((e) => {
+      const isPlainScoreUp = e.type.endsWith('_TYPE_SCORE_UP_PERMIL_UP');
+      if (isPlainScoreUp && support) {
+        return `${effectLabel(e.type)} +${e.valuePercent.toFixed(0)}% <span style="color:var(--orange)">+ ${support.toFixed(0)}%</span>`;
+      }
+      return `${effectLabel(e.type)} +${e.valuePercent.toFixed(0)}%`;
+    })
+    .join(', ') ?? '\u2014';
+
+  const div = document.createElement('div');
+  div.className = 'effect-card';
+  div.innerHTML = `
+    <div class="active-skill-grid">
+      <span>Lv</span><span class="num">${activeResult.level ?? '\u2014'}</span>
+      <span>Activation</span><span class="num">${activeResult.activationProbabilityPercent != null ? activeResult.activationProbabilityPercent.toFixed(0) + '%' : '\u2014'}</span>
+      <span>Cooldown</span><span class="num">${activeResult.coolTimeSeconds != null ? activeResult.coolTimeSeconds.toFixed(0) + 's' : '\u2014'}</span>
+      <span>Duration</span><span class="num">${activeResult.effectDurationSeconds != null ? activeResult.effectDurationSeconds.toFixed(0) + 's' : '\u2014'}</span>
+    </div>
+    <div class="effect-detail" style="margin-top:6px;">${effectText}</div>
+  `;
+  panel.appendChild(div);
+  return panel;
+}
+
+function renderCoverageRow(result, unit, scoreSupport) {
+  coverageRowEl.innerHTML = '';
+  coverageRowEl.className = 'panel';
+
+  const label = document.createElement('div');
+  label.className = 'panel-label';
+  label.textContent = 'Bonus Coverage \u00b7 Special Skills \u00b7 Second-by-Second';
+  coverageRowEl.appendChild(label);
+
   const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
+  const summarySlot = document.getElementById('coverage-summary-slot');
+
   if (!song) {
     const empty = document.createElement('div');
     empty.className = 'empty-state';
     empty.textContent = 'Select a song above to simulate active skill uptime across the track.';
-    panel.appendChild(empty);
-    return panel;
+    coverageRowEl.appendChild(empty);
+    if (summarySlot) summarySlot.innerHTML = '<div class="empty-state">Select a song to see coverage summary.</div>';
+    return;
   }
 
   const unitCards = unit.map((u) => u.card);
@@ -1177,88 +1164,122 @@ function renderCoveragePanel(result, unit, scoreSupport) {
     durationSeconds: duration,
   });
 
+  const specials = mapSpecialSkillsToSong(result.specials, song.feverSeconds);
+
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
   const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
   const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
   const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
 
-  const summary = document.createElement('div');
-  summary.className = 'coverage-summary';
-  summary.innerHTML = `
-    <div class="coverage-stat"><div class="stat-num">${noBonusSeconds}</div><div class="stat-label">Seconds with no bonus (>20s in)</div></div>
-    <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial}</div><div class="stat-label">Special skill secs w/ no bonus</div></div>
-    <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
-    <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
-  `;
-  panel.appendChild(summary);
-
-  // Full special-skill windows (not just the activation instant), so the highlight
-  // can span the whole duration each member's special skill is active for.
-  const specialWindows = song.feverSeconds
-    .map((start, i) => ({ start, end: start + (result.specials[i]?.effectDurationSeconds || 0) }))
-    .filter((w) => w.end > w.start);
-  const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
-  const inAnySpecialWindow = (t) => specialWindows.some((w) => t >= w.start && t < w.end);
-
-  const wrap = document.createElement('div');
-  wrap.className = 'coverage-table-wrap';
-
-  const table = document.createElement('table');
-  table.className = 'coverage-table';
-
-  const thead = document.createElement('thead');
-  const headRow = document.createElement('tr');
-  headRow.innerHTML =
-    '<th>Time</th>' +
-    unitCards.map((c) => `<th>${c.characterName.split(' ')[0]}</th>`).join('') +
-    '<th>Max</th>';
-  thead.appendChild(headRow);
-  table.appendChild(thead);
-
-  const tbody = document.createElement('tbody');
-  for (const point of timeline) {
-    const tr = document.createElement('tr');
-    const isFeverStart = feverSecondsRounded.has(point.t);
-    if (isFeverStart) tr.classList.add('fever-row');
-    else if (inAnySpecialWindow(point.t)) tr.classList.add('fever-window');
-    if (point.t > 20 && point.maxBonus === 0) tr.classList.add('no-bonus-row');
-
-    const mm = Math.floor(point.t / 60);
-    const ss = String(point.t % 60).padStart(2, '0');
-    let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
-
-    // The highest effective bonus this second suppresses the others (only the
-    // strongest score bonus applies when multiple members are active at once).
-    // Ties: earlier activation wins; same-second ties: earlier unit order wins.
-    for (const m of point.perMember) {
-      if (m.active) {
-        const isWinner = m.cardId === point.winnerCardId;
-        const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
-        const borderColor = activationChanceColor(m.activationChance);
-        const title = `${m.effectiveBonus.toFixed(1)}% score bonus @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
-        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.effectiveBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
-      } else {
-        rowHtml += '<td>\u2014</td>';
-      }
-    }
-    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
-    tr.innerHTML = rowHtml;
-    tbody.appendChild(tr);
+  if (summarySlot) {
+    summarySlot.innerHTML = `
+      <div class="panel-label">Coverage Summary</div>
+      <div class="coverage-summary-stack">
+        <div class="coverage-stat"><div class="stat-num">${noBonusSeconds}</div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
+        <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial}</div><div class="stat-label">Special skill secs w/ no bonus</div></div>
+        <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
+        <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
+      </div>
+    `;
   }
-  table.appendChild(tbody);
-  wrap.appendChild(table);
 
-  // Reserve a layout slot for a future side-by-side song map (piano roll / waveform)
-  // synced to this same per-second timeline.
-  const layout = document.createElement('div');
-  layout.className = 'coverage-layout';
-  layout.appendChild(wrap);
+  const grid = document.createElement('div');
+  grid.className = 'member-grid coverage-grid';
 
-  panel.appendChild(layout);
-  return panel;
+  // Column 0: axis/legend, aligned under the leader column above.
+  const axisCol = document.createElement('div');
+  axisCol.className = 'member-col';
+  axisCol.innerHTML = `
+    <div class="coverage-axis-legend">
+      <div><span class="legend-swatch fever"></span> Special skill window</div>
+      <div><span class="legend-swatch active"></span> Active skill uptime</div>
+      <div class="slot-sub" style="margin-top:8px;">${song.title}<br>0:00 \u2013 ${Math.floor(duration / 60)}:${String(Math.round(duration % 60)).padStart(2, '0')}</div>
+    </div>
+  `;
+  grid.appendChild(axisCol);
+
+  unitCards.forEach((card, i) => {
+    const col = document.createElement('div');
+    col.className = 'member-col';
+    col.appendChild(renderMemberCoverageBar(card, i, timeline, specials[i], duration, song));
+    grid.appendChild(col);
+  });
+
+  coverageRowEl.appendChild(grid);
 }
 
-function renderPowerPanel(result, leaderCard, scoreSupport) {
+/** One member's own Gantt-style coverage bar: active-skill uptime segments plus
+ *  her special skill's fever window, scaled to the song's full duration. */
+function renderMemberCoverageBar(card, memberIndex, timeline, special, duration, song) {
+  const wrap = document.createElement('div');
+  wrap.className = 'member-coverage-wrap';
+
+  const track = document.createElement('div');
+  track.className = 'member-coverage-track';
+
+  if (special?.activationTimeSeconds != null && special.effectDurationSeconds) {
+    const startPct = (special.activationTimeSeconds / duration) * 100;
+    const widthPct = (special.effectDurationSeconds / duration) * 100;
+    const feverBlock = document.createElement('div');
+    feverBlock.className = 'coverage-fever-block';
+    feverBlock.style.left = startPct + '%';
+    feverBlock.style.width = Math.max(widthPct, 0.6) + '%';
+    feverBlock.title = `Special skill \u00b7 ${special.activationTimeSeconds.toFixed(1)}s \u00b7 +${special.supportBonusPercent ?? '\u2014'}% support \u00b7 +${special.activationRateUpPercent ?? '\u2014'}% activation`;
+    track.appendChild(feverBlock);
+  }
+
+  // Merge consecutive active seconds into segments, splitting on value changes
+  // (including winner/suppressed status, since only the strongest bonus each
+  // second actually applies - see simulateActiveTimeline's tie-break rule).
+  let segStart = null;
+  let segBonus = null;
+  let segActivation = null;
+  let segIsWinner = null;
+  const flushSegment = (endT) => {
+    const seg = document.createElement('div');
+    seg.className = 'coverage-segment' + (segIsWinner ? ' winner' : ' suppressed');
+    const widthPct = Math.max(((endT - segStart) / duration) * 100, 0.5);
+    seg.style.left = (segStart / duration) * 100 + '%';
+    seg.style.width = widthPct + '%';
+    seg.style.borderColor = activationChanceColor(segActivation);
+    seg.title = `${segBonus.toFixed(1)}% score bonus @ ${segActivation}% activation chance${segIsWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus'}`;
+    track.appendChild(seg);
+  };
+  for (let t = 0; t <= timeline.length; t++) {
+    const point = t < timeline.length ? timeline[t].perMember[memberIndex] : null;
+    const isActive = !!point?.active;
+    const isWinner = isActive && timeline[t].winnerCardId === card.cardId;
+    if (isActive && segStart === null) {
+      segStart = t;
+      segBonus = point.effectiveBonus;
+      segActivation = point.activationChance;
+      segIsWinner = isWinner;
+    } else if (isActive && (point.effectiveBonus !== segBonus || point.activationChance !== segActivation || isWinner !== segIsWinner)) {
+      flushSegment(t);
+      segStart = t;
+      segBonus = point.effectiveBonus;
+      segActivation = point.activationChance;
+      segIsWinner = isWinner;
+    } else if (!isActive && segStart !== null) {
+      flushSegment(t);
+      segStart = null;
+    }
+  }
+
+  wrap.appendChild(track);
+
+  const feverInfo = document.createElement('div');
+  feverInfo.className = 'member-coverage-fever-info';
+  if (special?.activationTimeSeconds != null) {
+    feverInfo.innerHTML = `${special.activationTimeSeconds.toFixed(1)}s \u00b7 <span style="color:var(--orange)">+${special.supportBonusPercent ?? '\u2014'}%</span> spt \u00b7 <span style="color:var(--blue-bright)">+${special.activationRateUpPercent ?? '\u2014'}%</span> act`;
+  }
+  wrap.appendChild(feverInfo);
+
+  return wrap;
+}
+
+function renderPowerRow(result, leaderCard, scoreSupport) {
+  powerRowEl.innerHTML = '';
   const panel = document.createElement('div');
   panel.className = 'panel';
   const label = document.createElement('div');
@@ -1291,7 +1312,7 @@ function renderPowerPanel(result, leaderCard, scoreSupport) {
     </div>
     <div class="estimate-note">${estimate._note} Holomem Board and Memory bonuses still require manual input \u2014 currently shown as 0.</div>
   `;
-  return panel;
+  powerRowEl.appendChild(panel);
 }
 
 // ---------------------------------------------------------------------------
@@ -1300,12 +1321,11 @@ function renderPowerPanel(result, leaderCard, scoreSupport) {
 
 async function main() {
   await loadData();
-  renderRoster();
-  renderSongSlot();
+  renderSelectionRow();
   recompute();
 }
 
 main().catch((err) => {
-  resultsEl.innerHTML = `<div class="empty-state">Failed to load data: ${err.message}</div>`;
+  coverageRowEl.innerHTML = `<div class="empty-state">Failed to load data: ${err.message}</div>`;
   console.error(err);
 });

@@ -17,23 +17,19 @@
       <div class="masthead-sub">HOLOLIVE DREAMS &middot; UNIT SIMULATOR &middot; UNOFFICIAL</div>
     </header>
 
-    <div class="main-grid">
-      <div>
-        <div class="panel">
-          <div class="panel-label">Roster</div>
-          <div id="roster"></div>
-        </div>
+    <!-- Row 1: Leader + 5 unit member selection cards -->
+    <div id="selection-row" class="member-grid selection-row"></div>
 
-        <div class="panel">
-          <div class="panel-label">Song</div>
-          <div id="song-slot"></div>
-        </div>
-      </div>
+    <!-- Row 2: Leader info (skill/song/summary) + per-member stats/passive/active -->
+    <div id="info-row" class="member-grid info-row"></div>
 
-      <div id="results">
-        <div class="empty-state">Loading roster data\u2026</div>
-      </div>
+    <!-- Row 3: full-width coverage timeline, column-aligned to the grid above -->
+    <div id="coverage-row" class="panel">
+      <div class="empty-state">Select a leader and all 5 unit members to see results.</div>
     </div>
+
+    <!-- Row 4: Overall Power estimate -->
+    <div id="power-row"></div>
   </div>
 
   <script type="module" src="app.js"></script>
