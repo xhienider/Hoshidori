@@ -921,7 +921,7 @@ header.masthead {
 .member-coverage-wrap { width: 100%; }
 .member-coverage-track {
   position: relative;
-  height: 22px;
+  width: 100%;
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 4px;
@@ -929,16 +929,16 @@ header.masthead {
 }
 .coverage-fever-block {
   position: absolute;
-  top: 0;
-  height: 100%;
+  left: 0;
+  width: 100%;
   background: rgba(225, 90, 36, 0.22);
-  border-left: 2px solid var(--orange);
-  border-right: 2px solid var(--orange);
+  border-top: 2px solid var(--orange);
+  border-bottom: 2px solid var(--orange);
 }
 .coverage-segment {
   position: absolute;
-  top: 0;
-  height: 100%;
+  left: 0;
+  width: 100%;
   border: 2px solid transparent;
   box-sizing: border-box;
   cursor: default;
@@ -955,8 +955,23 @@ header.masthead {
   font-family: var(--font-mono);
   font-size: 9.5px;
   color: var(--text-faint);
-  margin-top: 5px;
+  margin-top: 6px;
   text-align: center;
+  line-height: 1.6;
+}
+
+.coverage-ruler {
+  position: relative;
+  margin-top: 8px;
+}
+.coverage-ruler-mark {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  color: var(--text-faint);
+  white-space: nowrap;
 }
 
 .two-col {

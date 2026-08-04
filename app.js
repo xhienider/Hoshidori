@@ -1183,47 +1183,70 @@ function renderCoverageRow(result, unit, scoreSupport) {
     `;
   }
 
+  const trackHeight = 420;
+
   const grid = document.createElement('div');
   grid.className = 'member-grid coverage-grid';
 
-  // Column 0: axis/legend, aligned under the leader column above.
+  // Column 0: legend + a vertical time ruler shared visually by all columns.
   const axisCol = document.createElement('div');
   axisCol.className = 'member-col';
-  axisCol.innerHTML = `
-    <div class="coverage-axis-legend">
-      <div><span class="legend-swatch fever"></span> Special skill window</div>
-      <div><span class="legend-swatch active"></span> Active skill uptime</div>
-      <div class="slot-sub" style="margin-top:8px;">${song.title}<br>0:00 \u2013 ${Math.floor(duration / 60)}:${String(Math.round(duration % 60)).padStart(2, '0')}</div>
-    </div>
+  const legend = document.createElement('div');
+  legend.className = 'coverage-axis-legend';
+  legend.innerHTML = `
+    <div><span class="legend-swatch fever"></span> Special skill window</div>
+    <div><span class="legend-swatch active"></span> Active skill uptime</div>
+    <div class="slot-sub" style="margin-top:8px;">${song.title}</div>
   `;
+  axisCol.appendChild(legend);
+  axisCol.appendChild(renderTimeRuler(duration, trackHeight));
   grid.appendChild(axisCol);
 
   unitCards.forEach((card, i) => {
     const col = document.createElement('div');
     col.className = 'member-col';
-    col.appendChild(renderMemberCoverageBar(card, i, timeline, specials[i], duration, song));
+    col.appendChild(renderMemberCoverageBar(card, i, timeline, specials[i], duration, trackHeight));
     grid.appendChild(col);
   });
 
   coverageRowEl.appendChild(grid);
 }
 
-/** One member's own Gantt-style coverage bar: active-skill uptime segments plus
- *  her special skill's fever window, scaled to the song's full duration. */
-function renderMemberCoverageBar(card, memberIndex, timeline, special, duration, song) {
+/** A vertical time-axis ruler (0:00 at top, song end at bottom) shown once in
+ *  the leftmost column, shared visually by all the member tracks beside it. */
+function renderTimeRuler(duration, trackHeight) {
+  const ruler = document.createElement('div');
+  ruler.className = 'coverage-ruler';
+  ruler.style.height = trackHeight + 'px';
+  const markCount = 6;
+  for (let m = 0; m <= markCount; m++) {
+    const t = Math.round((duration / markCount) * m);
+    const mark = document.createElement('div');
+    mark.className = 'coverage-ruler-mark';
+    mark.style.top = (t / duration) * 100 + '%';
+    mark.textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
+    ruler.appendChild(mark);
+  }
+  return ruler;
+}
+
+/** One member's own vertical coverage track: active-skill uptime segments plus
+ *  her special skill's fever window, time flowing top (0:00) to bottom (song end). */
+function renderMemberCoverageBar(card, memberIndex, timeline, special, duration, trackHeight) {
   const wrap = document.createElement('div');
   wrap.className = 'member-coverage-wrap';
 
   const track = document.createElement('div');
-  track.className = 'member-coverage-track';
+  track.className = 'member-coverage-track vertical';
+  track.style.height = trackHeight + 'px';
 
   if (special?.activationTimeSeconds != null && special.effectDurationSeconds) {
     const startPct = (special.activationTimeSeconds / duration) * 100;
-    const widthPct = (special.effectDurationSeconds / duration) * 100;
+    const heightPct = (special.effectDurationSeconds / duration) * 100;
     const feverBlock = document.createElement('div');
-    feverBlock.className = 'coverage-fever-block';
-    feverBlock.style.left = startPct + '%';
-    feverBlock.style.width = Math.max(widthPct, 0.6) + '%';
+    feverBlock.className = 'coverage-fever-block vertical';
+    feverBlock.style.top = startPct + '%';
+    feverBlock.style.height = Math.max(heightPct, 0.8) + '%';
     feverBlock.title = `Special skill \u00b7 ${special.activationTimeSeconds.toFixed(1)}s \u00b7 +${special.supportBonusPercent ?? '\u2014'}% support \u00b7 +${special.activationRateUpPercent ?? '\u2014'}% activation`;
     track.appendChild(feverBlock);
   }
@@ -1237,10 +1260,10 @@ function renderMemberCoverageBar(card, memberIndex, timeline, special, duration,
   let segIsWinner = null;
   const flushSegment = (endT) => {
     const seg = document.createElement('div');
-    seg.className = 'coverage-segment' + (segIsWinner ? ' winner' : ' suppressed');
-    const widthPct = Math.max(((endT - segStart) / duration) * 100, 0.5);
-    seg.style.left = (segStart / duration) * 100 + '%';
-    seg.style.width = widthPct + '%';
+    seg.className = 'coverage-segment vertical' + (segIsWinner ? ' winner' : ' suppressed');
+    const heightPct = Math.max(((endT - segStart) / duration) * 100, 0.6);
+    seg.style.top = (segStart / duration) * 100 + '%';
+    seg.style.height = heightPct + '%';
     seg.style.borderColor = activationChanceColor(segActivation);
     seg.title = `${segBonus.toFixed(1)}% score bonus @ ${segActivation}% activation chance${segIsWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus'}`;
     track.appendChild(seg);
@@ -1271,7 +1294,7 @@ function renderMemberCoverageBar(card, memberIndex, timeline, special, duration,
   const feverInfo = document.createElement('div');
   feverInfo.className = 'member-coverage-fever-info';
   if (special?.activationTimeSeconds != null) {
-    feverInfo.innerHTML = `${special.activationTimeSeconds.toFixed(1)}s \u00b7 <span style="color:var(--orange)">+${special.supportBonusPercent ?? '\u2014'}%</span> spt \u00b7 <span style="color:var(--blue-bright)">+${special.activationRateUpPercent ?? '\u2014'}%</span> act`;
+    feverInfo.innerHTML = `${special.activationTimeSeconds.toFixed(1)}s<br><span style="color:var(--orange)">+${special.supportBonusPercent ?? '\u2014'}%</span> spt<br><span style="color:var(--blue-bright)">+${special.activationRateUpPercent ?? '\u2014'}%</span> act`;
   }
   wrap.appendChild(feverInfo);
 
