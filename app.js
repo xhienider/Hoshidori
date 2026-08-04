@@ -345,7 +345,7 @@ function renderSlot(key, slotState, isLeader) {
   boardBtn.disabled = !hasBoard;
   boardBtn.onclick = (e) => {
     e.stopPropagation();
-    openBoardEditor(card);
+    openBoardEditor(card, isLeader);
   };
   wrap.appendChild(boardBtn);
 
@@ -381,7 +381,7 @@ const BOARD_CATEGORY_LABELS = {
   LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP: 'Score Support',
 };
 
-function openBoardEditor(card) {
+function openBoardEditor(card, isLeaderSlotContext) {
   const characterId = card.characterId;
   const charData = DATA.boardCategories[characterId];
   if (!charData) return;
@@ -389,16 +389,13 @@ function openBoardEditor(card) {
   const sel = state.boardSelections[characterId];
   const boardIndex = buildBoardIndex(charData);
 
-  // Only show the board area(s) that actually apply given this character's
-  // current role(s) - Leader (red) only matters if she's actually the
-  // leader; Member (blue) only matters if she's actually a performing unit
-  // member. A character can be both at once (leader who's also in the unit),
-  // in which case both stay visible.
-  const isCurrentLeader = !!(state.leader.cardId && DATA.byId[state.leader.cardId]?.characterId === characterId);
-  const isCurrentUnitMember = state.unit.some((u) => u.cardId && DATA.byId[u.cardId]?.characterId === characterId);
-  const anyRole = isCurrentLeader || isCurrentUnitMember;
-  const showLeaderArea = !anyRole || isCurrentLeader;
-  const showMemberArea = !anyRole || isCurrentUnitMember;
+  // Which board area shows is based purely on which Board button was
+  // clicked - Leader (red) from the leader slot, Member (blue) from a unit
+  // slot - consistently, even for a character who happens to be both at
+  // once. No dual-display exception: opening from one slot never shows the
+  // other area, since that area's nodes don't apply from this context anyway.
+  const showLeaderArea = isLeaderSlotContext;
+  const showMemberArea = !isLeaderSlotContext;
 
   const overlay = document.createElement('div');
   overlay.className = 'picker-overlay';
@@ -408,11 +405,7 @@ function openBoardEditor(card) {
 
   const header = document.createElement('div');
   header.className = 'picker-search';
-  const areaLabel = showLeaderArea && showMemberArea
-    ? 'Leader (red) and Member (blue) areas'
-    : showLeaderArea
-    ? 'Leader (red) area only \u2014 not currently a unit member'
-    : 'Member (blue) area only \u2014 not currently the leader';
+  const areaLabel = showLeaderArea ? 'Leader (red) area' : 'Member (blue) area';
   header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">${areaLabel}</div>`;
   header.querySelector('.board-editor-subtitle').appendChild(
     createInfoIcon(
@@ -576,7 +569,8 @@ function openBoardEditor(card) {
       member: { label: '\ud83d\udd35 Member' },
     };
 
-    for (const slotType of ['center', 'leader', 'member']) {
+    const visibleSlotTypes = ['center', showLeaderArea ? 'leader' : 'member'];
+    for (const slotType of visibleSlotTypes) {
       const setup = config[slotType];
       const meta = SLOT_META[slotType];
 
