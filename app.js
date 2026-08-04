@@ -159,7 +159,13 @@ const state = {
     rarities: new Set(), // rarity numbers (3,4,5); empty = no filter
     generations: new Set(), // generation strings; empty = no filter
   },
+  mobileAccordionExpanded: new Set(['leader']), // which slot keys are open on mobile
 };
+
+const MOBILE_BREAKPOINT = '(max-width: 700px)';
+function isMobileViewport() {
+  return window.matchMedia(MOBILE_BREAKPOINT).matches;
+}
 
 function maxLevelFor(card) {
   const levels = Object.keys(card.levelCurve).map(Number);
@@ -1139,6 +1145,13 @@ function renderInfoRowIncomplete(leaderCard) {
 
 function renderInfoRow(result, leaderCard, unit, scoreSupport) {
   infoRowEl.innerHTML = '';
+
+  if (isMobileViewport()) {
+    infoRowEl.className = 'info-accordion';
+    renderInfoRowMobile(result, leaderCard, unit, scoreSupport);
+    return;
+  }
+
   infoRowEl.className = ''; // no longer a single grid - holds 3 aligned sub-grid rows instead
 
   const maxStat = Math.max(...result.memberStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
@@ -1170,6 +1183,72 @@ function renderInfoRow(result, leaderCard, unit, scoreSupport) {
   rowC.appendChild(document.createElement('div'));
   unit.forEach((u, i) => rowC.appendChild(renderMemberActiveCard(result.actives[i], u.card, scoreSupport)));
   infoRowEl.appendChild(rowC);
+}
+
+/** Mobile layout: one accordion item per slot (leader + 5 members), each
+ *  holding everything about that person in one place - portrait, stats,
+ *  passive, active (or Leader Skill + Song for the leader). Grouping by
+ *  member instead of by card-type avoids the disconnected-sections problem
+ *  that plain grid-reflow causes at narrow widths. */
+function renderInfoRowMobile(result, leaderCard, unit, scoreSupport) {
+  infoRowEl.innerHTML = '';
+  const maxStat = Math.max(...result.memberStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
+
+  const makeAccordionItem = (key, portraitCard, titleText, subtitleText, bodyBuilder) => {
+    const item = document.createElement('div');
+    item.className = 'accordion-item';
+
+    const expanded = state.mobileAccordionExpanded.has(key);
+
+    const header = document.createElement('div');
+    header.className = 'accordion-header';
+    header.innerHTML = `
+      <img class="accordion-portrait" src="images/cards/${portraitCard.cardId}.webp" alt="${portraitCard.characterName}" loading="lazy">
+      <div class="accordion-header-info">
+        <div class="accordion-header-name">${titleText}</div>
+        <div class="slot-sub">${subtitleText}</div>
+      </div>
+      <span class="accordion-chevron">${expanded ? '\u2212' : '+'}</span>
+    `;
+    header.onclick = () => {
+      expanded ? state.mobileAccordionExpanded.delete(key) : state.mobileAccordionExpanded.add(key);
+      renderInfoRowMobile(result, leaderCard, unit, scoreSupport);
+    };
+    item.appendChild(header);
+
+    if (expanded) {
+      const body = document.createElement('div');
+      body.className = 'accordion-body';
+      bodyBuilder(body);
+      item.appendChild(body);
+    }
+
+    return item;
+  };
+
+  infoRowEl.appendChild(
+    makeAccordionItem('leader', leaderCard, leaderCard.characterName, 'Leader', (body) => {
+      body.appendChild(renderLeaderSkillCard(result, leaderCard));
+      const songPanel = document.createElement('div');
+      songPanel.className = 'panel-sm leader-accent';
+      const songLabel = document.createElement('div');
+      songLabel.className = 'panel-label';
+      songLabel.textContent = 'Song';
+      songPanel.appendChild(songLabel);
+      songPanel.appendChild(renderSongSlot());
+      body.appendChild(songPanel);
+    })
+  );
+
+  unit.forEach((u, i) => {
+    infoRowEl.appendChild(
+      makeAccordionItem(`unit-${i}`, u.card, u.card.characterName, u.card.cardSubtitle || '', (body) => {
+        body.appendChild(renderMemberStatsCard(result.memberStats[i], maxStat));
+        body.appendChild(renderMemberPassiveCard(result.passives[i], u.card));
+        body.appendChild(renderMemberActiveCard(result.actives[i], u.card, scoreSupport));
+      })
+    );
+  });
 }
 
 function renderMemberStatsCard(memberStat, maxStat) {
@@ -1480,6 +1559,13 @@ async function main() {
   await loadData();
   renderSelectionRow();
   recompute();
+
+  // Re-render when crossing the mobile breakpoint (resize, orientation change,
+  // or devtools responsive mode) so the layout mode always matches viewport width.
+  window.matchMedia(MOBILE_BREAKPOINT).addEventListener('change', () => {
+    renderSelectionRow();
+    recompute();
+  });
 }
 
 main().catch((err) => {
