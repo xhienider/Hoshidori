@@ -575,6 +575,10 @@ header.masthead {
   filter: drop-shadow(0 0 3px var(--node-color, var(--blue-mid)));
 }
 
+.board-diagram-node-singer {
+  stroke-dasharray: 2.5 1.5;
+}
+
 .board-diagram-legend {
   font-family: var(--font-mono);
   font-size: 10px;

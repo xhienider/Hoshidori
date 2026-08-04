@@ -453,7 +453,9 @@ function openBoardEditor(card) {
       } else {
         const isPermil = n.type.includes('PERMIL');
         const valLabel = isPermil ? `+${(n.value / 10).toFixed(1)}%` : `+${n.value} pts`;
-        title.textContent = `${BOARD_CATEGORY_LABELS[n.type] || n.type} \u00b7 ${valLabel} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}`;
+        const singerNote = n.requiresSinger ? ' \u00b7 only when this character is a singer on the selected song' : '';
+        title.textContent = `${BOARD_CATEGORY_LABELS[n.type] || n.type} \u00b7 ${valLabel} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}${singerNote}`;
+        if (n.requiresSinger) el.classList.add('board-diagram-node-singer');
       }
       el.appendChild(title);
 
@@ -475,9 +477,10 @@ function openBoardEditor(card) {
 
     list.appendChild(svg);
 
+    const hasSingerNode = allNodes.some((n) => n.requiresSinger);
     const legend = document.createElement('div');
     legend.className = 'board-diagram-legend';
-    legend.textContent = `${boardPointsSpentFromSet(boardIndex, sel)} pts spent \u00b7 squares are path connectors (no direct effect) \u00b7 click a node to unlock/lock it`;
+    legend.textContent = `${boardPointsSpentFromSet(boardIndex, sel)} pts spent \u00b7 squares are path connectors (no direct effect) \u00b7 click a node to unlock/lock it${hasSingerNode ? ' \u00b7 dashed border = only applies when this character is a singer on the selected song' : ''}`;
     list.appendChild(legend);
   };
 
@@ -1099,7 +1102,11 @@ function recompute() {
   if (!leaderAlsoInUnit) {
     slots.push({ characterId: leaderCard.characterId, cardId: leaderCard.cardId, isUnitMember: false, isLeaderSlot: true });
   }
-  const boardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, slots);
+  // A handful of Leader board nodes only apply "when included as a singer" on
+  // the currently selected song - needs the song's real singer characterIds.
+  const currentSong = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
+  const songSingerCharacterIds = currentSong?.characterIds || [];
+  const boardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, slots, songSingerCharacterIds);
   const connectBonuses = computeConnectBonuses(
     state.connectSelections,
     DATA.boardCategories,
@@ -1121,7 +1128,7 @@ function recompute() {
   // so it stays out of scope - the Parameters panel will still read slightly
   // low versus the game for anyone with Green nodes unlocked elsewhere.
   const memberOnlySlots = slots.map((s) => ({ ...s, isLeaderSlot: false }));
-  const memberOnlyBoardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, memberOnlySlots);
+  const memberOnlyBoardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, memberOnlySlots, songSingerCharacterIds);
   const memberOnlyConnectBonuses = computeConnectBonuses(
     state.connectSelections,
     DATA.boardCategories,

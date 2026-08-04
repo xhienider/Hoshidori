@@ -219,7 +219,7 @@ export function buildBoardIndex(charData) {
     nodes.forEach((n, i) => {
       const x = n.x || 0;
       const y = n.y || 0;
-      index.set(`${x},${y}`, { kind: 'effect', key, area, type, index: i, cost: n.cost, value: n.value, grade: n.grade });
+      index.set(`${x},${y}`, { kind: 'effect', key, area, type, index: i, cost: n.cost, value: n.value, grade: n.grade, requiresSinger: !!n.requiresSinger });
     });
   }
   for (const c of charData.connectors || []) {
@@ -288,9 +288,15 @@ export function boardPointsSpentFromSet(boardIndex, unlockedSet) {
  *          Leader-area (red) bonuses ONLY apply from this slot's selections.
  *        - isUnitMember: true for the 5 performing slots. Member-area (blue) bonuses
  *          only apply from a slot with this set (and only benefit that slot's own card).
+ * @param {string[]} [songSingerCharacterIds] - characterIds credited as singers on the
+ *        currently selected song. A handful of Leader nodes ("when included as a
+ *        singer, grants...") only apply if the leader's own characterId is in this
+ *        list - real datamined mechanic, not every Leader node has it. Points spent
+ *        still count toward the node regardless; only the stat effect is gated.
  */
-export function computeBoardBonuses(unlockedPositions, boardCategoriesData, slots) {
+export function computeBoardBonuses(unlockedPositions, boardCategoriesData, slots, songSingerCharacterIds) {
   const unitCardIds = slots.filter((s) => s.isUnitMember).map((s) => s.cardId);
+  const singerIds = songSingerCharacterIds || [];
 
   const statFlat = {};
   const statPermil = {};
@@ -318,6 +324,7 @@ export function computeBoardBonuses(unlockedPositions, boardCategoriesData, slot
 
       if (node.area === 'leader' && !slot.isLeaderSlot) continue;
       if (node.area === 'member' && !slot.isUnitMember) continue;
+      if (node.requiresSinger && !singerIds.includes(slot.characterId)) continue;
 
       const recipients = node.area === 'leader' ? unitCardIds : [slot.cardId];
       const sum = node.value;
