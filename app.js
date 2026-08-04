@@ -705,7 +705,7 @@ function openBoardEditor(card) {
       const q = query.trim().toLowerCase();
       const matches = DATA.members.filter((m) => {
         const info = DATA.cardConnectInfo[m.cardId];
-        if (!info) return false; // must have some connect pattern, but any area is fine here
+        if (!info) return false;
         if (q && !m.characterName?.toLowerCase().includes(q) && !m.cardSubtitle?.toLowerCase().includes(q)) return false;
         return true;
       }).slice(0, 60);
@@ -713,7 +713,16 @@ function openBoardEditor(card) {
       if (!matches.length) {
         const empty = document.createElement('div');
         empty.className = 'empty-state';
-        empty.textContent = 'No connect-eligible characters found.';
+        if (q) {
+          const matchingCards = DATA.members.filter(
+            (m) => m.characterName?.toLowerCase().includes(q) || m.cardSubtitle?.toLowerCase().includes(q)
+          );
+          empty.textContent = matchingCards.length
+            ? `No card matching "${query.trim()}" has a Connect Effect.`
+            : `No character matching "${query.trim()}" found.`;
+        } else {
+          empty.textContent = 'No connect-eligible characters found.';
+        }
         pList.appendChild(empty);
         return;
       }
@@ -728,7 +737,7 @@ function openBoardEditor(card) {
         portrait.loading = 'lazy';
         item.appendChild(portrait);
         const infoDiv = document.createElement('div');
-        infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${m.cardSubtitle || ''}</div><div class="picker-item-sub">${AREA_ICON[info.area] || ''} boosts ${info.area} nodes \u00b7 ${info.nodeCount} nodes \u00b7 +${(info.boostPermilLevel1/10).toFixed(0)}\u2013${(info.boostPermilLevel2/10).toFixed(0)}%</div>`;
+        infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${m.cardSubtitle || ''}</div><div class="picker-item-sub">${info.nodeCount}-node pattern \u00b7 +${(info.boostPermilLevel1/10).toFixed(0)}\u2013${(info.boostPermilLevel2/10).toFixed(0)}%</div>`;
         item.appendChild(infoDiv);
         const patternWrap = document.createElement('div');
         patternWrap.className = 'pattern-icon-wrap';
