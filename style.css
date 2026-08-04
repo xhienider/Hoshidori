@@ -223,6 +223,26 @@ header.masthead {
   color: #0a0b0f;
 }
 
+.slot-portrait {
+  width: 52px;
+  height: 52px;
+  border-radius: 8px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
+.picker-item-portrait {
+  width: 34px;
+  height: 34px;
+  border-radius: 6px;
+  object-fit: cover;
+  flex-shrink: 0;
+  border: 1px solid var(--line);
+  background: var(--bg);
+}
+
 .slot-badge.attr-pure { background: var(--attr-pure); }
 .slot-badge.attr-happy { background: var(--attr-happy); }
 .slot-badge.attr-cute { background: var(--attr-cute); }

@@ -198,6 +198,13 @@ function renderSlot(key, slotState, isLeader) {
     badge.className = 'slot-badge attr-empty';
     badge.textContent = isLeader ? 'L' : '+';
     wrap.appendChild(badge);
+  } else {
+    const portrait = document.createElement('img');
+    portrait.className = 'slot-portrait';
+    portrait.src = `images/cards/${card.cardId}.webp`;
+    portrait.alt = card.characterName;
+    portrait.loading = 'lazy';
+    wrap.appendChild(portrait);
   }
 
   const info = document.createElement('div');
@@ -610,13 +617,12 @@ function openBoardEditor(card) {
         const info = DATA.cardConnectInfo[m.cardId];
         const item = document.createElement('div');
         item.className = 'picker-item';
-        const badge = document.createElement('div');
-        badge.className = 'slot-badge ' + attrClass(m.attributeType);
-        badge.style.width = '26px';
-        badge.style.height = '26px';
-        badge.style.fontSize = '11px';
-        badge.textContent = attrLabel(m.attributeType)[0];
-        item.appendChild(badge);
+        const portrait = document.createElement('img');
+        portrait.className = 'picker-item-portrait';
+        portrait.src = `images/cards/${m.cardId}.webp`;
+        portrait.alt = m.characterName;
+        portrait.loading = 'lazy';
+        item.appendChild(portrait);
         const infoDiv = document.createElement('div');
         infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${m.cardSubtitle || ''}</div><div class="picker-item-sub">${AREA_ICON[info.area] || ''} boosts ${info.area} nodes \u00b7 ${info.nodeCount} nodes \u00b7 +${(info.boostPermilLevel1/10).toFixed(0)}\u2013${(info.boostPermilLevel2/10).toFixed(0)}%</div>`;
         item.appendChild(infoDiv);
@@ -710,13 +716,12 @@ function openPicker(slotState, isLeader) {
       const item = document.createElement('div');
       item.className = 'picker-item';
 
-      const badge = document.createElement('div');
-      badge.className = 'slot-badge ' + attrClass(m.attributeType);
-      badge.style.width = '26px';
-      badge.style.height = '26px';
-      badge.style.fontSize = '11px';
-      badge.textContent = attrLabel(m.attributeType)[0];
-      item.appendChild(badge);
+      const portrait = document.createElement('img');
+      portrait.className = 'picker-item-portrait';
+      portrait.src = `images/cards/${m.cardId}.webp`;
+      portrait.alt = m.characterName;
+      portrait.loading = 'lazy';
+      item.appendChild(portrait);
 
       const info = document.createElement('div');
       const name = document.createElement('div');
