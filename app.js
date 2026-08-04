@@ -91,6 +91,46 @@ const CONDITION_LABELS = {
   LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_MUSIC_CHARACTER: () => 'song-specific',
 };
 
+/** A small "i" icon that reveals a text popup on click - used to keep
+ *  disclaimer/limitation text out of the main flow without repeating full
+ *  paragraphs everywhere it's relevant. Closes on click-outside or a second click. */
+function createInfoIcon(text, extraClass) {
+  const wrap = document.createElement('span');
+  wrap.className = 'info-icon-wrap' + (extraClass ? ' ' + extraClass : '');
+  const icon = document.createElement('button');
+  icon.type = 'button';
+  icon.className = 'info-icon';
+  icon.textContent = 'i';
+  icon.setAttribute('aria-label', 'More info');
+  wrap.appendChild(icon);
+
+  let popup = null;
+  const close = () => {
+    if (popup) {
+      popup.remove();
+      popup = null;
+    }
+    document.removeEventListener('click', onOutsideClick);
+  };
+  const onOutsideClick = (e) => {
+    if (!wrap.contains(e.target)) close();
+  };
+  icon.onclick = (e) => {
+    e.stopPropagation();
+    if (popup) {
+      close();
+      return;
+    }
+    popup = document.createElement('div');
+    popup.className = 'info-popup';
+    popup.textContent = text;
+    wrap.appendChild(popup);
+    document.addEventListener('click', onOutsideClick);
+  };
+
+  return wrap;
+}
+
 function attrLabel(type) {
   return ATTR_LABELS[type]?.label ?? '?';
 }
@@ -371,9 +411,14 @@ function openBoardEditor(card) {
   const areaLabel = showLeaderArea && showMemberArea
     ? 'Leader (red) and Member (blue) areas'
     : showLeaderArea
-    ? 'Leader (red) area only \u2014 she\u2019s not currently a unit member, so Member (blue) nodes wouldn\u2019t apply'
-    : 'Member (blue) area only \u2014 she\u2019s not currently the leader, so Leader (red) nodes wouldn\u2019t apply';
-  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">${areaLabel} \u2014 node sizes vary, already reflected in the cost/value shown. Nodes unlock along the physical path: click a node adjacent to the center or another unlocked node to unlock it; locking a node also locks anything past it that becomes disconnected. All Member (green) and Content (yellow) areas aren't modeled yet; enter those as a manual bonus for now.</div>`;
+    ? 'Leader (red) area only \u2014 not currently a unit member'
+    : 'Member (blue) area only \u2014 not currently the leader';
+  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">${areaLabel}</div>`;
+  header.querySelector('.board-editor-subtitle').appendChild(
+    createInfoIcon(
+      'Node sizes vary and are already reflected in the cost/value shown. Nodes unlock along the physical path: click a node adjacent to the center or another unlocked node to unlock it; locking a node also locks anything past it that becomes disconnected. Green (support) and Yellow (content) areas aren\u2019t modeled yet \u2014 enter those as a manual bonus for now.'
+    )
+  );
   box.appendChild(header);
 
   const list = document.createElement('div');
@@ -1333,8 +1378,19 @@ function renderInfoRowMobile(result, leaderCard, unit, scoreSupport, baseStats) 
 function renderMemberStatsCard(memberStat, maxStat) {
   const panel = document.createElement('div');
   panel.className = 'panel-sm';
-  panel.innerHTML = `
-    <div class="panel-label">Parameters</div>
+
+  const label = document.createElement('div');
+  label.className = 'panel-label';
+  label.textContent = 'Parameters';
+  label.appendChild(
+    createInfoIcon(
+      'Includes Member (blue) board bonuses for this card. Excludes Leader (red) buffs, matching the in-game card screen, and Green support bonuses from other characters\u2019 boards, since those depend on your whole roster rather than this unit.'
+    )
+  );
+  panel.appendChild(label);
+
+  const statsHtml = document.createElement('div');
+  statsHtml.innerHTML = `
     <div class="member-stat-row">
       <span class="member-stat-label">PERF</span>
       <div class="meter perf"><span style="width:${maxStat ? Math.round((memberStat.stats.performance / maxStat) * 100) : 0}%"></span></div>
@@ -1350,8 +1406,9 @@ function renderMemberStatsCard(memberStat, maxStat) {
       <div class="meter sense"><span style="width:${maxStat ? Math.round((memberStat.stats.sense / maxStat) * 100) : 0}%"></span></div>
       <span class="member-stat-num">${memberStat.stats.sense}</span>
     </div>
-    <div class="effect-detail" style="margin-top:6px;">Includes Member (blue) board node bonuses for this card. Excludes Leader (red) buffs (matches the in-game card screen) and Green support bonuses from other characters' boards \u2014 those depend on your whole roster, not just this unit.</div>
   `;
+  while (statsHtml.firstChild) panel.appendChild(statsHtml.firstChild);
+
   return panel;
 }
 
@@ -1417,7 +1474,7 @@ function renderMemberPassiveCard(passiveResult, card) {
     inner += `<div class="effect-detail">Requires ${condText}</div>`;
   }
   for (const e of passiveResult.effects) {
-    const recipientNames = e.recipients.map((id) => DATA.byId[id]?.characterName?.split(' ')[0]).join(', ');
+    const recipientNames = e.recipients.map((id) => DATA.byId[id]?.shortName).join(', ');
     const pillClass = e.applies ? 'met' : e.conditionMet === false ? 'unmet' : 'situational';
     const pillText = e.applies ? 'ACTIVE' : e.conditionMet === false ? 'CONDITION NOT MET' : 'NO TARGET';
     inner += `
@@ -1557,7 +1614,7 @@ function renderCoverageRow(result, unit, scoreSupport) {
   const headRow = document.createElement('tr');
   headRow.innerHTML =
     '<th>Time</th><th>Max</th>' +
-    unitCards.map((c) => `<th>${c.characterName.split(' ')[0]}</th>`).join('');
+    unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
   thead.appendChild(headRow);
   table.appendChild(thead);
 
