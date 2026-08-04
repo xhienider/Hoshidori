@@ -107,6 +107,7 @@ header.masthead {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-width: 0;
 }
 
 .member-col.leader-col .panel,
@@ -171,6 +172,7 @@ header.masthead {
   cursor: pointer;
   transition: border-color 0.15s ease, background 0.15s ease;
   margin-bottom: 8px;
+  min-width: 0;
 }
 
 .slot:last-child { margin-bottom: 0; }
@@ -225,8 +227,10 @@ header.masthead {
 
 .lvl-bloom-row {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
   margin-top: 4px;
+  min-width: 0;
 }
 
 .mini-input {
