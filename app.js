@@ -216,15 +216,16 @@ function renderSlot(key, slotState, isLeader) {
   info.appendChild(sub);
 
   if (card) {
-    const row = document.createElement('div');
-    row.className = 'lvl-bloom-row';
-    row.onclick = (e) => e.stopPropagation();
+    const statsBlock = document.createElement('div');
+    statsBlock.className = 'slot-stats-block';
+    statsBlock.onclick = (e) => e.stopPropagation();
 
+    const lvlRow = document.createElement('div');
+    lvlRow.className = 'slot-attr-row';
     const lvlLabel = document.createElement('span');
     lvlLabel.className = 'slot-sub';
     lvlLabel.textContent = 'Lv';
-    row.appendChild(lvlLabel);
-
+    lvlRow.appendChild(lvlLabel);
     const lvlInput = document.createElement('input');
     lvlInput.className = 'mini-input';
     lvlInput.type = 'number';
@@ -236,13 +237,15 @@ function renderSlot(key, slotState, isLeader) {
       lvlInput.value = slotState.level;
       recompute();
     };
-    row.appendChild(lvlInput);
+    lvlRow.appendChild(lvlInput);
+    statsBlock.appendChild(lvlRow);
 
+    const bloomRow = document.createElement('div');
+    bloomRow.className = 'slot-attr-row';
     const bloomLabel = document.createElement('span');
     bloomLabel.className = 'slot-sub';
     bloomLabel.textContent = 'Bloom';
-    row.appendChild(bloomLabel);
-
+    bloomRow.appendChild(bloomLabel);
     const bloomInput = document.createElement('input');
     bloomInput.className = 'mini-input';
     bloomInput.type = 'number';
@@ -254,10 +257,17 @@ function renderSlot(key, slotState, isLeader) {
       bloomInput.value = slotState.bloom;
       recompute();
     };
-    row.appendChild(bloomInput);
+    bloomRow.appendChild(bloomInput);
+    statsBlock.appendChild(bloomRow);
 
+    info.appendChild(statsBlock);
+  }
+
+  wrap.appendChild(info);
+
+  if (card) {
     const boardBtn = document.createElement('button');
-    boardBtn.className = 'board-btn';
+    boardBtn.className = 'board-btn slot-board-btn';
     boardBtn.type = 'button';
     const hasBoard = !!DATA.boardCategories?.[card.characterId];
     const spent = boardPointsSpent(card.characterId);
@@ -267,12 +277,8 @@ function renderSlot(key, slotState, isLeader) {
       e.stopPropagation();
       openBoardEditor(card);
     };
-    row.appendChild(boardBtn);
-
-    info.appendChild(row);
+    wrap.appendChild(boardBtn);
   }
-
-  wrap.appendChild(info);
 
   wrap.addEventListener('click', () => openPicker(slotState, isLeader));
 
@@ -1137,7 +1143,7 @@ function renderCoverageRow(result, unit, scoreSupport) {
 
   const label = document.createElement('div');
   label.className = 'panel-label';
-  label.textContent = 'Bonus Coverage \u00b7 Special Skills \u00b7 Second-by-Second';
+  label.textContent = 'Bonus Coverage \u00b7 Second-by-Second';
   coverageRowEl.appendChild(label);
 
   const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
@@ -1164,8 +1170,6 @@ function renderCoverageRow(result, unit, scoreSupport) {
     durationSeconds: duration,
   });
 
-  const specials = mapSpecialSkillsToSong(result.specials, song.feverSeconds);
-
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
   const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
   const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
@@ -1183,122 +1187,63 @@ function renderCoverageRow(result, unit, scoreSupport) {
     `;
   }
 
-  const trackHeight = 420;
+  // Full special-skill windows (not just the activation instant), so the highlight
+  // can span the whole duration each member's special skill is active for.
+  const specialWindows = song.feverSeconds
+    .map((start, i) => ({ start, end: start + (result.specials[i]?.effectDurationSeconds || 0) }))
+    .filter((w) => w.end > w.start);
+  const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
+  const inAnySpecialWindow = (t) => specialWindows.some((w) => t >= w.start && t < w.end);
 
-  const grid = document.createElement('div');
-  grid.className = 'member-grid coverage-grid';
-
-  // Column 0: legend + a vertical time ruler shared visually by all columns.
-  const axisCol = document.createElement('div');
-  axisCol.className = 'member-col';
-  const legend = document.createElement('div');
-  legend.className = 'coverage-axis-legend';
-  legend.innerHTML = `
-    <div><span class="legend-swatch fever"></span> Special skill window</div>
-    <div><span class="legend-swatch active"></span> Active skill uptime</div>
-    <div class="slot-sub" style="margin-top:8px;">${song.title}</div>
-  `;
-  axisCol.appendChild(legend);
-  axisCol.appendChild(renderTimeRuler(duration, trackHeight));
-  grid.appendChild(axisCol);
-
-  unitCards.forEach((card, i) => {
-    const col = document.createElement('div');
-    col.className = 'member-col';
-    col.appendChild(renderMemberCoverageBar(card, i, timeline, specials[i], duration, trackHeight));
-    grid.appendChild(col);
-  });
-
-  coverageRowEl.appendChild(grid);
-}
-
-/** A vertical time-axis ruler (0:00 at top, song end at bottom) shown once in
- *  the leftmost column, shared visually by all the member tracks beside it. */
-function renderTimeRuler(duration, trackHeight) {
-  const ruler = document.createElement('div');
-  ruler.className = 'coverage-ruler';
-  ruler.style.height = trackHeight + 'px';
-  const markCount = 6;
-  for (let m = 0; m <= markCount; m++) {
-    const t = Math.round((duration / markCount) * m);
-    const mark = document.createElement('div');
-    mark.className = 'coverage-ruler-mark';
-    mark.style.top = (t / duration) * 100 + '%';
-    mark.textContent = `${Math.floor(t / 60)}:${String(t % 60).padStart(2, '0')}`;
-    ruler.appendChild(mark);
-  }
-  return ruler;
-}
-
-/** One member's own vertical coverage track: active-skill uptime segments plus
- *  her special skill's fever window, time flowing top (0:00) to bottom (song end). */
-function renderMemberCoverageBar(card, memberIndex, timeline, special, duration, trackHeight) {
   const wrap = document.createElement('div');
-  wrap.className = 'member-coverage-wrap';
+  wrap.className = 'coverage-table-wrap';
 
-  const track = document.createElement('div');
-  track.className = 'member-coverage-track vertical';
-  track.style.height = trackHeight + 'px';
+  const table = document.createElement('table');
+  table.className = 'coverage-table';
 
-  if (special?.activationTimeSeconds != null && special.effectDurationSeconds) {
-    const startPct = (special.activationTimeSeconds / duration) * 100;
-    const heightPct = (special.effectDurationSeconds / duration) * 100;
-    const feverBlock = document.createElement('div');
-    feverBlock.className = 'coverage-fever-block vertical';
-    feverBlock.style.top = startPct + '%';
-    feverBlock.style.height = Math.max(heightPct, 0.8) + '%';
-    feverBlock.title = `Special skill \u00b7 ${special.activationTimeSeconds.toFixed(1)}s \u00b7 +${special.supportBonusPercent ?? '\u2014'}% support \u00b7 +${special.activationRateUpPercent ?? '\u2014'}% activation`;
-    track.appendChild(feverBlock);
-  }
+  const thead = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  headRow.innerHTML =
+    '<th>Time</th>' +
+    unitCards.map((c) => `<th>${c.characterName.split(' ')[0]}</th>`).join('') +
+    '<th>Max</th>';
+  thead.appendChild(headRow);
+  table.appendChild(thead);
 
-  // Merge consecutive active seconds into segments, splitting on value changes
-  // (including winner/suppressed status, since only the strongest bonus each
-  // second actually applies - see simulateActiveTimeline's tie-break rule).
-  let segStart = null;
-  let segBonus = null;
-  let segActivation = null;
-  let segIsWinner = null;
-  const flushSegment = (endT) => {
-    const seg = document.createElement('div');
-    seg.className = 'coverage-segment vertical' + (segIsWinner ? ' winner' : ' suppressed');
-    const heightPct = Math.max(((endT - segStart) / duration) * 100, 0.6);
-    seg.style.top = (segStart / duration) * 100 + '%';
-    seg.style.height = heightPct + '%';
-    seg.style.borderColor = activationChanceColor(segActivation);
-    seg.title = `${segBonus.toFixed(1)}% score bonus @ ${segActivation}% activation chance${segIsWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus'}`;
-    track.appendChild(seg);
-  };
-  for (let t = 0; t <= timeline.length; t++) {
-    const point = t < timeline.length ? timeline[t].perMember[memberIndex] : null;
-    const isActive = !!point?.active;
-    const isWinner = isActive && timeline[t].winnerCardId === card.cardId;
-    if (isActive && segStart === null) {
-      segStart = t;
-      segBonus = point.effectiveBonus;
-      segActivation = point.activationChance;
-      segIsWinner = isWinner;
-    } else if (isActive && (point.effectiveBonus !== segBonus || point.activationChance !== segActivation || isWinner !== segIsWinner)) {
-      flushSegment(t);
-      segStart = t;
-      segBonus = point.effectiveBonus;
-      segActivation = point.activationChance;
-      segIsWinner = isWinner;
-    } else if (!isActive && segStart !== null) {
-      flushSegment(t);
-      segStart = null;
+  const tbody = document.createElement('tbody');
+  for (const point of timeline) {
+    const tr = document.createElement('tr');
+    const isFeverStart = feverSecondsRounded.has(point.t);
+    if (isFeverStart) tr.classList.add('fever-row');
+    else if (inAnySpecialWindow(point.t)) tr.classList.add('fever-window');
+    if (point.t > 20 && point.maxBonus === 0) tr.classList.add('no-bonus-row');
+
+    const mm = Math.floor(point.t / 60);
+    const ss = String(point.t % 60).padStart(2, '0');
+    let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
+
+    // The highest effective bonus this second suppresses the others (only the
+    // strongest score bonus applies when multiple members are active at once).
+    // Ties: earlier activation wins; same-second ties: earlier unit order wins.
+    for (const m of point.perMember) {
+      if (m.active) {
+        const isWinner = m.cardId === point.winnerCardId;
+        const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
+        const borderColor = activationChanceColor(m.activationChance);
+        const title = `${m.effectiveBonus.toFixed(1)}% score bonus @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
+        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.effectiveBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
+      } else {
+        rowHtml += '<td>\u2014</td>';
+      }
     }
+    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
+    tr.innerHTML = rowHtml;
+    tbody.appendChild(tr);
   }
+  table.appendChild(tbody);
+  wrap.appendChild(table);
 
-  wrap.appendChild(track);
-
-  const feverInfo = document.createElement('div');
-  feverInfo.className = 'member-coverage-fever-info';
-  if (special?.activationTimeSeconds != null) {
-    feverInfo.innerHTML = `${special.activationTimeSeconds.toFixed(1)}s<br><span style="color:var(--orange)">+${special.supportBonusPercent ?? '\u2014'}%</span> spt<br><span style="color:var(--blue-bright)">+${special.activationRateUpPercent ?? '\u2014'}%</span> act`;
-  }
-  wrap.appendChild(feverInfo);
-
-  return wrap;
+  coverageRowEl.appendChild(wrap);
 }
 
 function renderPowerRow(result, leaderCard, scoreSupport) {

@@ -173,7 +173,9 @@ header.masthead {
   transition: border-color 0.15s ease, background 0.15s ease;
   margin-bottom: 8px;
   min-width: 0;
+  position: relative;
 }
+.slot:not(.empty) { padding-bottom: 44px; }
 
 .slot:last-child { margin-bottom: 0; }
 .slot:hover { border-color: var(--orange-dim); background: #1f2230; }
@@ -225,12 +227,28 @@ header.masthead {
   flex-shrink: 0;
 }
 
-.lvl-bloom-row {
+.slot-stats-block {
   display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-  margin-top: 4px;
-  min-width: 0;
+  flex-direction: column;
+  gap: 5px;
+  margin-top: 6px;
+}
+
+.slot-attr-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.slot-attr-row .slot-sub {
+  width: 40px;
+  flex-shrink: 0;
+}
+
+.slot-board-btn {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  margin-left: 0;
 }
 
 .mini-input {
