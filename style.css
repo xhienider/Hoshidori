@@ -93,6 +93,27 @@ header.masthead {
   letter-spacing: 0.03em;
 }
 
+.masthead-right {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+}
+
+.presets-btn {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 12px;
+  padding: 7px 14px;
+  border-radius: 7px;
+  cursor: pointer;
+}
+.presets-btn:hover {
+  border-color: var(--orange-dim);
+  color: var(--orange);
+}
+
 .member-grid {
   display: grid;
   grid-template-columns: repeat(6, 1fr);
@@ -481,6 +502,53 @@ header.masthead {
 }
 
 .board-editor-box { max-width: 640px; }
+
+.presets-box { max-width: 520px; }
+
+.preset-save-row {
+  display: flex;
+  gap: 8px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.preset-save-row input {
+  flex: 1;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--text);
+  border-radius: 8px;
+  padding: 8px 12px;
+  font-size: 13px;
+}
+.preset-save-row input:focus {
+  outline: none;
+  border-color: var(--orange-dim);
+}
+
+.preset-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 12px 14px;
+  border-bottom: 1px solid var(--line);
+}
+.preset-row:last-child { border-bottom: none; }
+.preset-row-info { min-width: 0; }
+.preset-row-name {
+  font-size: 13.5px;
+  font-weight: 600;
+  margin-bottom: 2px;
+}
+.preset-row-actions {
+  display: flex;
+  gap: 8px;
+  flex-shrink: 0;
+}
+.preset-row-actions .board-btn {
+  padding: 6px 12px;
+  font-size: 11px;
+}
 .board-editor-title {
   font-family: var(--font-display);
   font-size: 16px;

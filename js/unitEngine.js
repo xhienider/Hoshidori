@@ -446,9 +446,14 @@ export function applyBoardBonuses(result, boardBonuses) {
     if (actUp && a.activationProbabilityPercent != null) {
       a.activationProbabilityPercent += actUp / 10;
     }
-    const cdShorten = boardBonuses.cooldownShortenPermil[cardId];
-    if (cdShorten && a.coolTimeSeconds != null) {
-      a.coolTimeSeconds = a.coolTimeSeconds * (1 - cdShorten / 1000);
+    const freqUp = boardBonuses.cooldownShortenPermil[cardId];
+    if (freqUp && a.coolTimeSeconds != null) {
+      // The internal name is "cool time shorten" but the in-game description
+      // text is "Activation Frequency UP X%" - it's a frequency increase, not
+      // a direct time reduction. frequency = 1/cooldown, so:
+      //   new_frequency = base_frequency * (1 + freqUp%)
+      //   new_cooldown = 1 / new_frequency = base_cooldown / (1 + freqUp%)
+      a.coolTimeSeconds = a.coolTimeSeconds / (1 + freqUp / 1000);
     }
   });
 

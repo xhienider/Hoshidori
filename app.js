@@ -299,7 +299,6 @@ function renderSlot(key, slotState, isLeader) {
 
   const statsBlock = document.createElement('div');
   statsBlock.className = 'slot-stats-block';
-  statsBlock.onclick = (e) => e.stopPropagation();
 
   const chipRow = document.createElement('div');
   chipRow.className = 'slot-chip-row';
@@ -332,6 +331,7 @@ function renderSlot(key, slotState, isLeader) {
   lvlInput.min = 1;
   lvlInput.max = maxLevelFor(card);
   lvlInput.value = slotState.level;
+  lvlInput.onclick = (e) => e.stopPropagation();
   lvlInput.onchange = () => {
     slotState.level = clamp(Number(lvlInput.value), 1, maxLevelFor(card));
     lvlInput.value = slotState.level;
@@ -352,6 +352,7 @@ function renderSlot(key, slotState, isLeader) {
   bloomInput.min = 0;
   bloomInput.max = 5;
   bloomInput.value = slotState.bloom;
+  bloomInput.onclick = (e) => e.stopPropagation();
   bloomInput.onchange = () => {
     slotState.bloom = clamp(Number(bloomInput.value), 0, 5);
     bloomInput.value = slotState.bloom;
@@ -1766,10 +1767,202 @@ function renderPowerRow(result, leaderCard, scoreSupport) {
 // Boot
 // ---------------------------------------------------------------------------
 
+const PRESETS_STORAGE_KEY = 'hoshidori_presets';
+
+function loadPresetsFromStorage() {
+  try {
+    const raw = localStorage.getItem(PRESETS_STORAGE_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function savePresetsToStorage(presets) {
+  try {
+    localStorage.setItem(PRESETS_STORAGE_KEY, JSON.stringify(presets));
+    return true;
+  } catch {
+    return false; // e.g. storage disabled/full
+  }
+}
+
+/** Every filled slot's characterId (leader + unit), deduplicated - the set of
+ *  characters whose board/connect selections are relevant to save/restore. */
+function getTeamCharacterIds() {
+  const ids = new Set();
+  const leaderCard = state.leader.cardId ? DATA.byId[state.leader.cardId] : null;
+  if (leaderCard) ids.add(leaderCard.characterId);
+  for (const u of state.unit) {
+    const card = u.cardId ? DATA.byId[u.cardId] : null;
+    if (card) ids.add(card.characterId);
+  }
+  return [...ids];
+}
+
+function buildPresetFromCurrentState(name) {
+  const characterData = {};
+  for (const characterId of getTeamCharacterIds()) {
+    characterData[characterId] = {
+      boardSelections: [...(state.boardSelections[characterId] || [])],
+      connectSelections: state.connectSelections[characterId] || null,
+    };
+  }
+  return {
+    name,
+    savedAt: Date.now(),
+    leader: { ...state.leader },
+    unit: state.unit.map((u) => ({ ...u })),
+    songId: state.songId,
+    characterData,
+  };
+}
+
+function applyPreset(preset) {
+  state.leader = { ...preset.leader };
+  state.unit = preset.unit.map((u) => ({ ...u }));
+  state.songId = preset.songId ?? null;
+  for (const [characterId, data] of Object.entries(preset.characterData || {})) {
+    state.boardSelections[characterId] = new Set(data.boardSelections || []);
+    if (data.connectSelections) state.connectSelections[characterId] = data.connectSelections;
+  }
+  renderSelectionRow();
+  recompute();
+}
+
+function openPresetsPanel() {
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+
+  const box = document.createElement('div');
+  box.className = 'picker-box presets-box';
+
+  const header = document.createElement('div');
+  header.className = 'picker-search';
+  header.innerHTML = `<div class="board-editor-title">Presets</div><div class="board-editor-subtitle">Saves the current leader, unit, their levels/bloom, and their board + connect effect selections.</div>`;
+  box.appendChild(header);
+
+  const saveRow = document.createElement('div');
+  saveRow.className = 'preset-save-row';
+  const nameInput = document.createElement('input');
+  nameInput.placeholder = 'Name this team\u2026';
+  nameInput.maxLength = 60;
+  const saveBtn = document.createElement('button');
+  saveBtn.type = 'button';
+  saveBtn.className = 'board-btn';
+  saveBtn.textContent = 'Save current team';
+  saveBtn.onclick = () => {
+    const name = nameInput.value.trim();
+    if (!name) {
+      nameInput.focus();
+      return;
+    }
+    const hasAnyone = state.leader.cardId || state.unit.some((u) => u.cardId);
+    if (!hasAnyone) return;
+    const presets = loadPresetsFromStorage();
+    presets.unshift(buildPresetFromCurrentState(name));
+    const ok = savePresetsToStorage(presets);
+    if (!ok) {
+      statusMsg.textContent = 'Could not save \u2014 your browser storage may be full or disabled.';
+      return;
+    }
+    nameInput.value = '';
+    statusMsg.textContent = '';
+    renderList();
+  };
+  nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') saveBtn.click();
+  });
+  saveRow.appendChild(nameInput);
+  saveRow.appendChild(saveBtn);
+  box.appendChild(saveRow);
+
+  const statusMsg = document.createElement('div');
+  statusMsg.className = 'effect-detail';
+  statusMsg.style.padding = '0 14px';
+  box.appendChild(statusMsg);
+
+  const list = document.createElement('div');
+  list.className = 'picker-list';
+  box.appendChild(list);
+
+  function renderList() {
+    list.innerHTML = '';
+    const presets = loadPresetsFromStorage();
+    if (!presets.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = 'No saved presets yet.';
+      list.appendChild(empty);
+      return;
+    }
+    presets.forEach((preset, i) => {
+      const row = document.createElement('div');
+      row.className = 'preset-row';
+
+      const leaderCard = preset.leader?.cardId ? DATA.byId[preset.leader.cardId] : null;
+      const memberNames = preset.unit
+        .map((u) => (u.cardId ? DATA.byId[u.cardId]?.shortName : null))
+        .filter(Boolean)
+        .join(', ');
+      const date = new Date(preset.savedAt).toLocaleDateString(undefined, { year: 'numeric', month: 'short', day: 'numeric' });
+
+      const info = document.createElement('div');
+      info.className = 'preset-row-info';
+      info.innerHTML = `<div class="preset-row-name">${preset.name}</div><div class="picker-item-sub">Leader: ${leaderCard?.shortName ?? '\u2014'} \u00b7 ${memberNames || 'no members'}</div><div class="picker-item-sub">${date}</div>`;
+      row.appendChild(info);
+
+      const actions = document.createElement('div');
+      actions.className = 'preset-row-actions';
+
+      const loadBtn = document.createElement('button');
+      loadBtn.type = 'button';
+      loadBtn.className = 'board-btn';
+      loadBtn.textContent = 'Load';
+      loadBtn.onclick = () => {
+        applyPreset(preset);
+        overlay.remove();
+      };
+      actions.appendChild(loadBtn);
+
+      const deleteBtn = document.createElement('button');
+      deleteBtn.type = 'button';
+      deleteBtn.className = 'board-btn';
+      deleteBtn.textContent = 'Delete';
+      deleteBtn.onclick = () => {
+        const fresh = loadPresetsFromStorage();
+        fresh.splice(i, 1);
+        savePresetsToStorage(fresh);
+        renderList();
+      };
+      actions.appendChild(deleteBtn);
+
+      row.appendChild(actions);
+      list.appendChild(row);
+    });
+  }
+  renderList();
+
+  const close = document.createElement('div');
+  close.className = 'picker-close';
+  close.textContent = 'CLOSE';
+  close.onclick = () => overlay.remove();
+  box.appendChild(close);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+  nameInput.focus();
+}
+
 async function main() {
   await loadData();
   renderSelectionRow();
   recompute();
+
+  document.getElementById('presets-btn').addEventListener('click', openPresetsPanel);
 
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.
