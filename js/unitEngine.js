@@ -64,21 +64,27 @@ export function computeUnit(input, data) {
     };
   }
 
-  // --- 3. Passive skills (per member, condition = target's own gating) ---
+  // --- 3. Passive skills (per member) - two independent gates: (a) an
+  // optional census-style condition on the SKILL ITSELF (e.g. "2+ Happy cards
+  // in the unit"), same mechanic as Leader Skill conditions; (b) target
+  // resolution (who actually receives the effect once active). A passive with
+  // no condition is unconditionally active and may target itself.
   const passiveResults = unit.map(({ card, bloom }) => {
     const passiveLevel = getSkillLevel(card, bloom, cardPotentials, SKILL_LEVEL_TYPES.PASSIVE);
     const levelData = card.passiveSkill?.[String(passiveLevel)];
     if (!levelData) return { cardId: card.cardId, level: passiveLevel, effects: [] };
+    const conditionMet = evaluateLeaderCondition(levelData.condition, leaderCard, unitCards, characterGroupings);
     const resolved = levelData.effects.map((effect) => {
-      const recipients = resolveEffectRecipients(effect.target, card, unitCards, characterGroupings);
+      const recipients = conditionMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings) : [];
       return {
         type: effect.type,
         valuePermil: Number(effect.value),
         recipients: recipients.map((c) => c.cardId),
         applies: recipients.length > 0,
+        conditionMet,
       };
     });
-    return { cardId: card.cardId, level: passiveLevel, effects: resolved };
+    return { cardId: card.cardId, level: passiveLevel, condition: levelData.condition, conditionMet, effects: resolved };
   });
 
   // --- 4. Active skills (exact values, no High/Medium/Low bucketing) ---

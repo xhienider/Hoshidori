@@ -55,15 +55,17 @@ export function resolveEffectRecipients(target, sourceCard, unitCards, character
       return unitCards.includes(sourceCard) ? [sourceCard] : [];
 
     case 'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE': {
+      // targetCount caps how many recipients this effect reaches - it is NOT a
+      // minimum threshold. A card can still buff itself even if no other
+      // matching-attribute member exists; fewer than targetCount matches just
+      // means fewer recipients, not zero.
       const matching = unitCards.filter((c) => c.attributeType === target.cardAttributeType);
-      if (matching.length < target.targetCount) return [];
       return matching.slice(0, target.targetCount);
     }
 
     case 'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING': {
       const memberIds = characterGroupings[target.characterGroupingId] || [];
       const matching = unitCards.filter((c) => memberIds.includes(c.characterId));
-      if (matching.length < target.targetCount) return [];
       return matching.slice(0, target.targetCount);
     }
 

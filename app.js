@@ -1332,11 +1332,17 @@ function renderMemberPassiveCard(passiveResult, card) {
   if (!passiveResult.effects.length) {
     inner = '<div class="effect-detail">No passive skill</div>';
   }
+  if (passiveResult.condition) {
+    const condText = CONDITION_LABELS[passiveResult.condition.type]?.(passiveResult.condition) ?? 'Conditional';
+    inner += `<div class="effect-detail">Requires ${condText}</div>`;
+  }
   for (const e of passiveResult.effects) {
     const recipientNames = e.recipients.map((id) => DATA.byId[id]?.characterName?.split(' ')[0]).join(', ');
+    const pillClass = e.applies ? 'met' : e.conditionMet === false ? 'unmet' : 'situational';
+    const pillText = e.applies ? 'ACTIVE' : e.conditionMet === false ? 'CONDITION NOT MET' : 'NO TARGET';
     inner += `
       <div class="passive-effect-block">
-        <span class="pill ${e.applies ? 'met' : 'unmet'}">${e.applies ? 'ACTIVE' : 'NO TARGET'}</span>
+        <span class="pill ${pillClass}">${pillText}</span>
         <div class="effect-head" style="margin-top:6px;">
           <span class="effect-name">${effectLabel(e.type)}</span>
           <span class="effect-value">+${(e.valuePermil / 10).toFixed(0)}%</span>
