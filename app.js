@@ -973,7 +973,7 @@ function renderInfoRowIncomplete(leaderCard) {
 function renderInfoRow(result, leaderCard, unit, scoreSupport) {
   infoRowEl.innerHTML = '';
 
-  // --- Column 0: Leader Skill + Song + (summary stats filled in by renderCoverageRow) ---
+  // --- Column 0: Leader Skill + Song ---
   const leaderCol = document.createElement('div');
   leaderCol.className = 'member-col leader-col';
   leaderCol.appendChild(renderLeaderSkillCard(result, leaderCard));
@@ -986,12 +986,6 @@ function renderInfoRow(result, leaderCard, unit, scoreSupport) {
   songPanel.appendChild(songLabel);
   songPanel.appendChild(renderSongSlot());
   leaderCol.appendChild(songPanel);
-
-  const summaryPanel = document.createElement('div');
-  summaryPanel.className = 'panel-sm';
-  summaryPanel.id = 'coverage-summary-slot';
-  summaryPanel.innerHTML = '<div class="empty-state">Select a song to see coverage summary.</div>';
-  leaderCol.appendChild(summaryPanel);
 
   infoRowEl.appendChild(leaderCol);
 
@@ -1147,14 +1141,12 @@ function renderCoverageRow(result, unit, scoreSupport) {
   coverageRowEl.appendChild(label);
 
   const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
-  const summarySlot = document.getElementById('coverage-summary-slot');
 
   if (!song) {
     const empty = document.createElement('div');
     empty.className = 'empty-state';
     empty.textContent = 'Select a song above to simulate active skill uptime across the track.';
     coverageRowEl.appendChild(empty);
-    if (summarySlot) summarySlot.innerHTML = '<div class="empty-state">Select a song to see coverage summary.</div>';
     return;
   }
 
@@ -1170,23 +1162,6 @@ function renderCoverageRow(result, unit, scoreSupport) {
     durationSeconds: duration,
   });
 
-  const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
-  const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
-  const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
-  const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
-
-  if (summarySlot) {
-    summarySlot.innerHTML = `
-      <div class="panel-label">Coverage Summary</div>
-      <div class="coverage-summary-stack">
-        <div class="coverage-stat"><div class="stat-num">${noBonusSeconds}</div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
-        <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial}</div><div class="stat-label">Special skill secs w/ no bonus</div></div>
-        <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
-        <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
-      </div>
-    `;
-  }
-
   // Full special-skill windows (not just the activation instant), so the highlight
   // can span the whole duration each member's special skill is active for.
   const specialWindows = song.feverSeconds
@@ -1200,13 +1175,36 @@ function renderCoverageRow(result, unit, scoreSupport) {
 
   const table = document.createElement('table');
   table.className = 'coverage-table';
+  table.style.tableLayout = 'fixed';
+
+  // Match each member column's width to its card above, so the table lines up
+  // visually with the selection/info grid. Time+Max together take the same
+  // space as the leader's column above.
+  const cardCols = document.querySelectorAll('#selection-row .member-col');
+  const leaderColWidth = cardCols[0]?.getBoundingClientRect().width || 90;
+  const memberColWidths = Array.from(cardCols)
+    .slice(1)
+    .map((el) => el.getBoundingClientRect().width);
+
+  const colgroup = document.createElement('colgroup');
+  const timeCol = document.createElement('col');
+  timeCol.style.width = Math.round(leaderColWidth * 0.55) + 'px';
+  colgroup.appendChild(timeCol);
+  const maxCol = document.createElement('col');
+  maxCol.style.width = Math.round(leaderColWidth * 0.45) + 'px';
+  colgroup.appendChild(maxCol);
+  memberColWidths.forEach((w) => {
+    const c = document.createElement('col');
+    c.style.width = w + 'px';
+    colgroup.appendChild(c);
+  });
+  table.appendChild(colgroup);
 
   const thead = document.createElement('thead');
   const headRow = document.createElement('tr');
   headRow.innerHTML =
-    '<th>Time</th>' +
-    unitCards.map((c) => `<th>${c.characterName.split(' ')[0]}</th>`).join('') +
-    '<th>Max</th>';
+    '<th>Time</th><th>Max</th>' +
+    unitCards.map((c) => `<th>${c.characterName.split(' ')[0]}</th>`).join('');
   thead.appendChild(headRow);
   table.appendChild(thead);
 
@@ -1221,6 +1219,7 @@ function renderCoverageRow(result, unit, scoreSupport) {
     const mm = Math.floor(point.t / 60);
     const ss = String(point.t % 60).padStart(2, '0');
     let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
+    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
 
     // The highest effective bonus this second suppresses the others (only the
     // strongest score bonus applies when multiple members are active at once).
@@ -1236,7 +1235,6 @@ function renderCoverageRow(result, unit, scoreSupport) {
         rowHtml += '<td>\u2014</td>';
       }
     }
-    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
     tr.innerHTML = rowHtml;
     tbody.appendChild(tr);
   }
@@ -1244,6 +1242,24 @@ function renderCoverageRow(result, unit, scoreSupport) {
   wrap.appendChild(table);
 
   coverageRowEl.appendChild(wrap);
+
+  // Full-width horizontal summary, below the table.
+  const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
+  const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
+  const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
+  const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
+
+  const summary = document.createElement('div');
+  summary.className = 'coverage-summary';
+  summary.style.marginTop = '16px';
+  summary.style.marginBottom = '0';
+  summary.innerHTML = `
+    <div class="coverage-stat"><div class="stat-num">${noBonusSeconds}</div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
+    <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial}</div><div class="stat-label">Special skill secs w/ no bonus</div></div>
+    <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
+    <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
+  `;
+  coverageRowEl.appendChild(summary);
 }
 
 function renderPowerRow(result, leaderCard, scoreSupport) {
