@@ -1082,10 +1082,45 @@ function recompute() {
     slots
   );
   const combinedBonuses = mergeBoardBonuses(boardBonuses, connectBonuses);
-  // Snapshot the real per-card base stats (level + bloom only, matching the
-  // in-game card screen) before board/connect bonuses mutate result.memberStats
-  // in place - the Parameters panel should show these, not the buffed totals.
-  const baseStats = result.memberStats.map((m) => ({ cardId: m.cardId, stats: { ...m.stats } }));
+
+  // Snapshot the real per-card base stats (level + bloom only) before board/
+  // connect bonuses mutate result.memberStats in place. The in-game card
+  // screen shows base + Blue (member) + Green (support, from ANY character's
+  // board regardless of unit membership) - but never Red (leader), since
+  // that's a live-performance buff to the whole unit, not the leader's own
+  // stat. We can reproduce Blue (computed per-slot already); Green would need
+  // board data for the player's entire roster, not just the 6 selected slots,
+  // so it stays out of scope - the Parameters panel will still read slightly
+  // low versus the game for anyone with Green nodes unlocked elsewhere.
+  const memberOnlySlots = slots.map((s) => ({ ...s, isLeaderSlot: false }));
+  const memberOnlyBoardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, memberOnlySlots);
+  const memberOnlyConnectBonuses = computeConnectBonuses(
+    state.connectSelections,
+    DATA.boardCategories,
+    state.boardSelections,
+    DATA.cardConnectInfo,
+    DATA.byId,
+    DATA.cardPotentials,
+    memberOnlySlots
+  );
+  const memberOnlyCombined = mergeBoardBonuses(memberOnlyBoardBonuses, memberOnlyConnectBonuses);
+  const baseStats = result.memberStats.map((m) => {
+    const stats = { ...m.stats };
+    const permil = memberOnlyCombined.statPermil[m.cardId];
+    if (permil) {
+      stats.performance = Math.round(stats.performance * (1 + permil.performance / 1000));
+      stats.technique = Math.round(stats.technique * (1 + permil.technique / 1000));
+      stats.sense = Math.round(stats.sense * (1 + permil.sense / 1000));
+    }
+    const flat = memberOnlyCombined.statFlat[m.cardId];
+    if (flat) {
+      stats.performance += flat.performance;
+      stats.technique += flat.technique;
+      stats.sense += flat.sense;
+    }
+    return { cardId: m.cardId, stats };
+  });
+
   applyBoardBonuses(result, combinedBonuses);
 
   const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil);
@@ -1280,6 +1315,7 @@ function renderMemberStatsCard(memberStat, maxStat) {
       <div class="meter sense"><span style="width:${maxStat ? Math.round((memberStat.stats.sense / maxStat) * 100) : 0}%"></span></div>
       <span class="member-stat-num">${memberStat.stats.sense}</span>
     </div>
+    <div class="effect-detail" style="margin-top:6px;">Includes Member (blue) board node bonuses for this card. Excludes Leader (red) buffs (matches the in-game card screen) and Green support bonuses from other characters' boards \u2014 those depend on your whole roster, not just this unit.</div>
   `;
   return panel;
 }
