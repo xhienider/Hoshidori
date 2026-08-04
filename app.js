@@ -193,10 +193,12 @@ function renderSlot(key, slotState, isLeader) {
   wrap.className = 'slot' + (isLeader ? ' leader-slot' : '') + (card ? '' : ' empty');
   wrap.innerHTML = '';
 
-  const badge = document.createElement('div');
-  badge.className = 'slot-badge ' + (card ? attrClass(card.attributeType) : 'attr-empty');
-  badge.textContent = card ? attrLabel(card.attributeType)[0] : (isLeader ? 'L' : '+');
-  wrap.appendChild(badge);
+  if (!card) {
+    const badge = document.createElement('div');
+    badge.className = 'slot-badge attr-empty';
+    badge.textContent = isLeader ? 'L' : '+';
+    wrap.appendChild(badge);
+  }
 
   const info = document.createElement('div');
   info.className = 'slot-info';
@@ -214,6 +216,13 @@ function renderSlot(key, slotState, isLeader) {
   sub.className = 'slot-sub';
   sub.textContent = card ? card.cardSubtitle || '' : 'Click to select from roster';
   info.appendChild(sub);
+
+  if (card) {
+    const chip = document.createElement('div');
+    chip.className = 'attr-chip ' + attrClass(card.attributeType);
+    chip.textContent = attrLabel(card.attributeType);
+    info.appendChild(chip);
+  }
 
   if (card) {
     const statsBlock = document.createElement('div');
@@ -746,16 +755,28 @@ function openPicker(slotState, isLeader) {
 // Song select
 // ---------------------------------------------------------------------------
 
+/** Resolves a list of characterIds to display names via the loaded card roster
+ *  (many cards share a characterId, so any match works). */
+function resolveSingerNames(characterIds) {
+  if (!characterIds?.length) return '';
+  return characterIds
+    .map((id) => DATA.members.find((m) => m.characterId === id)?.characterName)
+    .filter(Boolean)
+    .join(', ');
+}
+
 function renderSongSlot() {
   const song = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
 
   const slot = document.createElement('div');
   slot.className = 'slot' + (song ? '' : ' empty');
 
-  const badge = document.createElement('div');
-  badge.className = 'slot-badge attr-empty';
-  badge.textContent = '\u266a';
-  slot.appendChild(badge);
+  if (!song) {
+    const badge = document.createElement('div');
+    badge.className = 'slot-badge attr-empty';
+    badge.textContent = '\u266a';
+    slot.appendChild(badge);
+  }
 
   const info = document.createElement('div');
   info.className = 'slot-info';
@@ -763,12 +784,27 @@ function renderSongSlot() {
   name.className = 'slot-name';
   name.textContent = song ? song.title : 'Choose a song';
   info.appendChild(name);
-  const sub = document.createElement('div');
-  sub.className = 'slot-sub';
-  sub.textContent = song
-    ? `${Math.floor((song.playingSeconds || 0) / 60)}:${String((song.playingSeconds || 0) % 60).padStart(2, '0')} \u00b7 5 fever points`
-    : 'Click to search from song list';
-  info.appendChild(sub);
+
+  if (song) {
+    const durationLine = document.createElement('div');
+    durationLine.className = 'slot-sub';
+    durationLine.textContent = `${Math.floor((song.playingSeconds || 0) / 60)}:${String((song.playingSeconds || 0) % 60).padStart(2, '0')}`;
+    info.appendChild(durationLine);
+
+    const singers = resolveSingerNames(song.characterIds);
+    if (singers) {
+      const singerLine = document.createElement('div');
+      singerLine.className = 'attr-chip song-singer-chip';
+      singerLine.textContent = singers;
+      info.appendChild(singerLine);
+    }
+  } else {
+    const sub = document.createElement('div');
+    sub.className = 'slot-sub';
+    sub.textContent = 'Click to search from song list';
+    info.appendChild(sub);
+  }
+
   slot.appendChild(info);
 
   slot.addEventListener('click', openSongPicker);
@@ -918,6 +954,7 @@ function recompute() {
  *  basic leader-skill description (without condition-met status, which needs
  *  the full unit) should still work while the rest of the columns wait. */
 function renderInfoRowIncomplete(leaderCard) {
+  infoRowEl.className = 'member-grid info-row';
   infoRowEl.innerHTML = '';
 
   const leaderCol = document.createElement('div');
@@ -972,41 +1009,44 @@ function renderInfoRowIncomplete(leaderCard) {
 
 function renderInfoRow(result, leaderCard, unit, scoreSupport) {
   infoRowEl.innerHTML = '';
+  infoRowEl.className = ''; // no longer a single grid - holds 3 aligned sub-grid rows instead
 
-  // --- Column 0: Leader Skill + Song ---
-  const leaderCol = document.createElement('div');
-  leaderCol.className = 'member-col leader-col';
-  leaderCol.appendChild(renderLeaderSkillCard(result, leaderCard));
+  const maxStat = Math.max(...result.memberStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
 
+  // Row A: Leader Skill + Parameters, stretched to equal height across the row.
+  const rowA = document.createElement('div');
+  rowA.className = 'member-grid info-subrow row-stretch';
+  rowA.appendChild(renderLeaderSkillCard(result, leaderCard));
+  unit.forEach((u, i) => rowA.appendChild(renderMemberStatsCard(result.memberStats[i], maxStat)));
+  infoRowEl.appendChild(rowA);
+
+  // Row B: Song + Passive Skill, top-aligned (heights can differ).
+  const rowB = document.createElement('div');
+  rowB.className = 'member-grid info-subrow row-top';
   const songPanel = document.createElement('div');
-  songPanel.className = 'panel-sm';
+  songPanel.className = 'panel-sm leader-accent';
   const songLabel = document.createElement('div');
   songLabel.className = 'panel-label';
   songLabel.textContent = 'Song';
   songPanel.appendChild(songLabel);
   songPanel.appendChild(renderSongSlot());
-  leaderCol.appendChild(songPanel);
+  rowB.appendChild(songPanel);
+  unit.forEach((u, i) => rowB.appendChild(renderMemberPassiveCard(result.passives[i], u.card)));
+  infoRowEl.appendChild(rowB);
 
-  infoRowEl.appendChild(leaderCol);
-
-  // --- Columns 1-5: per-member stats + passive + active ---
-  const maxStat = Math.max(...result.memberStats.flatMap((m) => [m.stats.performance, m.stats.technique, m.stats.sense]));
-
-  unit.forEach((u, i) => {
-    const col = document.createElement('div');
-    col.className = 'member-col';
-    col.appendChild(renderMemberStatsCard(result.memberStats[i], maxStat));
-    col.appendChild(renderMemberPassiveCard(result.passives[i], u.card));
-    col.appendChild(renderMemberActiveCard(result.actives[i], u.card, scoreSupport));
-    infoRowEl.appendChild(col);
-  });
+  // Row C: (empty under leader) + Active Skill, top-aligned.
+  const rowC = document.createElement('div');
+  rowC.className = 'member-grid info-subrow row-top';
+  rowC.appendChild(document.createElement('div'));
+  unit.forEach((u, i) => rowC.appendChild(renderMemberActiveCard(result.actives[i], u.card, scoreSupport)));
+  infoRowEl.appendChild(rowC);
 }
 
 function renderMemberStatsCard(memberStat, maxStat) {
   const panel = document.createElement('div');
   panel.className = 'panel-sm';
   panel.innerHTML = `
-    <div class="panel-label">${memberStat.name} <span class="slot-sub">Lv${memberStat.level}${memberStat.bloom ? ` \u00b7 Bloom ${memberStat.bloom}` : ''}</span></div>
+    <div class="panel-label">Parameters</div>
     <div class="member-stat-row">
       <span class="member-stat-label">PERF</span>
       <div class="meter perf"><span style="width:${maxStat ? Math.round((memberStat.stats.performance / maxStat) * 100) : 0}%"></span></div>
@@ -1028,7 +1068,7 @@ function renderMemberStatsCard(memberStat, maxStat) {
 
 function renderLeaderSkillCard(result, leaderCard) {
   const panel = document.createElement('div');
-  panel.className = 'panel-sm';
+  panel.className = 'panel-sm leader-accent';
   const label = document.createElement('div');
   label.className = 'panel-label';
   label.textContent = 'Leader Skill';
@@ -1086,10 +1126,13 @@ function renderMemberPassiveCard(passiveResult, card) {
   for (const e of passiveResult.effects) {
     const recipientNames = e.recipients.map((id) => DATA.byId[id]?.characterName?.split(' ')[0]).join(', ');
     inner += `
-      <div class="effect-detail" style="margin-top:2px;">
+      <div class="passive-effect-block">
         <span class="pill ${e.applies ? 'met' : 'unmet'}">${e.applies ? 'ACTIVE' : 'NO TARGET'}</span>
-        ${effectLabel(e.type)} <span class="effect-value">+${(e.valuePermil / 10).toFixed(0)}%</span>
-        ${e.applies ? `\u2192 ${recipientNames}` : ''}
+        <div class="effect-head" style="margin-top:6px;">
+          <span class="effect-name">${effectLabel(e.type)}</span>
+          <span class="effect-value">+${(e.valuePermil / 10).toFixed(0)}%</span>
+        </div>
+        ${e.applies ? `<div class="effect-detail">\u2192 ${recipientNames}</div>` : ''}
       </div>`;
   }
   div.innerHTML = inner;
