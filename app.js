@@ -349,6 +349,17 @@ function openBoardEditor(card) {
   const sel = state.boardSelections[characterId];
   const boardIndex = buildBoardIndex(charData);
 
+  // Only show the board area(s) that actually apply given this character's
+  // current role(s) - Leader (red) only matters if she's actually the
+  // leader; Member (blue) only matters if she's actually a performing unit
+  // member. A character can be both at once (leader who's also in the unit),
+  // in which case both stay visible.
+  const isCurrentLeader = !!(state.leader.cardId && DATA.byId[state.leader.cardId]?.characterId === characterId);
+  const isCurrentUnitMember = state.unit.some((u) => u.cardId && DATA.byId[u.cardId]?.characterId === characterId);
+  const anyRole = isCurrentLeader || isCurrentUnitMember;
+  const showLeaderArea = !anyRole || isCurrentLeader;
+  const showMemberArea = !anyRole || isCurrentUnitMember;
+
   const overlay = document.createElement('div');
   overlay.className = 'picker-overlay';
 
@@ -357,7 +368,12 @@ function openBoardEditor(card) {
 
   const header = document.createElement('div');
   header.className = 'picker-search';
-  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">Leader (red) and Member (blue) areas only \u2014 node sizes vary, already reflected in the cost/value shown. Nodes unlock along the physical path: click a node adjacent to the center or another unlocked node to unlock it; locking a node also locks anything past it that becomes disconnected. All Member (green) and Content (yellow) areas aren't modeled yet; enter those as a manual bonus for now.</div>`;
+  const areaLabel = showLeaderArea && showMemberArea
+    ? 'Leader (red) and Member (blue) areas'
+    : showLeaderArea
+    ? 'Leader (red) area only \u2014 she\u2019s not currently a unit member, so Member (blue) nodes wouldn\u2019t apply'
+    : 'Member (blue) area only \u2014 she\u2019s not currently the leader, so Leader (red) nodes wouldn\u2019t apply';
+  header.innerHTML = `<div class="board-editor-title">${charData.characterName} \u00b7 Holomem Board</div><div class="board-editor-subtitle">${areaLabel} \u2014 node sizes vary, already reflected in the cost/value shown. Nodes unlock along the physical path: click a node adjacent to the center or another unlocked node to unlock it; locking a node also locks anything past it that becomes disconnected. All Member (green) and Content (yellow) areas aren't modeled yet; enter those as a manual bonus for now.</div>`;
   box.appendChild(header);
 
   const list = document.createElement('div');
@@ -365,10 +381,22 @@ function openBoardEditor(card) {
 
   /** Renders the whole board (leader + member + connectors) as one connected spatial diagram. */
   const renderCombinedDiagram = () => {
+    const leaderAnchor = charData.anchors?.leader;
+    const memberAnchor = charData.anchors?.member;
     const allNodes = [];
     for (const [posKey, node] of boardIndex.entries()) {
       if (posKey === '0,0') continue; // already shown as the dedicated center marker
       const [x, y] = posKey.split(',').map(Number);
+      if (node.kind === 'effect') {
+        if (node.area === 'leader' && !showLeaderArea) continue;
+        if (node.area === 'member' && !showMemberArea) continue;
+      } else if (node.kind === 'connector') {
+        const isLeaderAnchor = leaderAnchor && x === leaderAnchor.x && y === leaderAnchor.y;
+        const isMemberAnchor = memberAnchor && x === memberAnchor.x && y === memberAnchor.y;
+        if (isLeaderAnchor && !showLeaderArea) continue;
+        if (isMemberAnchor && !showMemberArea) continue;
+        if (!isLeaderAnchor && !isMemberAnchor) continue; // e.g. content(yellow) anchor - out of scope
+      }
       allNodes.push({ posKey, x, y, ...node });
     }
 
