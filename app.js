@@ -451,8 +451,8 @@ function openBoardEditor(card) {
     const maxX = Math.max(...xs);
     const minY = Math.min(...ys);
     const maxY = Math.max(...ys);
-    const spacing = 22;
-    const pad = 20;
+    const spacing = 32;
+    const pad = 24;
     const width = (maxX - minX) * spacing + pad * 2;
     const height = (maxY - minY) * spacing + pad * 2;
     const toScreenX = (x) => pad + (x - minX) * spacing;
@@ -463,12 +463,12 @@ function openBoardEditor(card) {
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
     svg.setAttribute('width', '100%');
     svg.classList.add('board-diagram');
-    svg.style.maxHeight = Math.min(height, 340) + 'px';
+    svg.style.maxHeight = Math.min(height, 440) + 'px';
 
     const centerCircle = document.createElementNS(svgNS, 'circle');
     centerCircle.setAttribute('cx', toScreenX(0));
     centerCircle.setAttribute('cy', toScreenY(0));
-    centerCircle.setAttribute('r', 6);
+    centerCircle.setAttribute('r', 8);
     centerCircle.setAttribute('class', 'board-diagram-center');
     svg.appendChild(centerCircle);
 
@@ -476,9 +476,10 @@ function openBoardEditor(card) {
       const unlocked = sel.has(n.posKey);
       const el = document.createElementNS(svgNS, n.kind === 'connector' ? 'rect' : 'circle');
       const colorVar = n.kind === 'connector' ? '--text-faint' : n.area === 'leader' ? '--red-node' : '--blue-node';
+      const radius = n.grade >= 2 ? 13 : 10;
 
       if (n.kind === 'connector') {
-        const size = 8;
+        const size = 10;
         el.setAttribute('x', toScreenX(n.x) - size / 2);
         el.setAttribute('y', toScreenY(n.y) - size / 2);
         el.setAttribute('width', size);
@@ -487,7 +488,7 @@ function openBoardEditor(card) {
       } else {
         el.setAttribute('cx', toScreenX(n.x));
         el.setAttribute('cy', toScreenY(n.y));
-        el.setAttribute('r', n.grade >= 2 ? 7 : 5.5);
+        el.setAttribute('r', radius);
       }
       el.setAttribute('class', 'board-diagram-node' + (unlocked ? ' unlocked' : ''));
       el.style.setProperty('--node-color', `var(${colorVar})`);
@@ -518,6 +519,20 @@ function openBoardEditor(card) {
         refreshEditor();
       });
       svg.appendChild(el);
+
+      if (n.kind === 'effect') {
+        const iconSize = radius * 1.5;
+        const img = document.createElementNS(svgNS, 'image');
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `images/board_icons/${n.type}.png`);
+        img.setAttribute('href', `images/board_icons/${n.type}.png`);
+        img.setAttribute('x', toScreenX(n.x) - iconSize / 2);
+        img.setAttribute('y', toScreenY(n.y) - iconSize / 2);
+        img.setAttribute('width', iconSize);
+        img.setAttribute('height', iconSize);
+        img.setAttribute('class', 'board-diagram-icon' + (unlocked ? ' unlocked' : ''));
+        img.style.pointerEvents = 'none';
+        svg.appendChild(img);
+      }
     }
 
     list.appendChild(svg);

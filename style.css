@@ -622,6 +622,14 @@ header.masthead {
   stroke-dasharray: 2.5 1.5;
 }
 
+.board-diagram-icon {
+  opacity: 0.5;
+  transition: opacity 0.1s ease;
+}
+.board-diagram-icon.unlocked {
+  opacity: 1;
+}
+
 .board-diagram-legend {
   font-family: var(--font-mono);
   font-size: 10px;
