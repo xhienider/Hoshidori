@@ -1769,11 +1769,14 @@ function renderCoverageRow(result, unit, scoreSupport) {
     }
     const coveragePercent = (activeSeconds.length / duration) * 100;
     const suppressedPercent = activeSeconds.length ? (suppressedCount / activeSeconds.length) * 100 : 0;
-    const avgEffectiveWhenActive = activeSeconds.length
-      ? activeSeconds.reduce((s, m) => s + m.effectiveBonus, 0) / activeSeconds.length
+    // Per-second expected value (bonus x chance, THEN averaged) rather than
+    // averaging bonus and chance separately - activation chance is boosted
+    // during a Special Skill (fever) window, same seconds where the bonus
+    // itself is often also boosted by that window's score support. Averaging
+    // them separately loses that correlation and understates the expected value.
+    const expectedValue = activeSeconds.length
+      ? activeSeconds.reduce((s, m) => s + m.effectiveBonus * (m.activationChance / 100), 0) / activeSeconds.length
       : 0;
-    const activationChance = activeSeconds.length ? activeSeconds[0].activationChance : 0;
-    const expectedValue = avgEffectiveWhenActive * (activationChance / 100);
 
     const card = document.createElement('div');
     card.className = 'member-coverage-card';
