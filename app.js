@@ -1178,30 +1178,24 @@ function openSongPicker() {
 // Compute + render results
 // ---------------------------------------------------------------------------
 
-function recompute() {
-  const leaderCard = state.leader.cardId ? DATA.byId[state.leader.cardId] : null;
-  const unitFilled = state.unit.every((u) => u.cardId);
+/** Pure computation core - takes a team-state-shaped object (matching what a
+ *  preset stores: leader, unit, boardSelections, connectSelections, songId)
+ *  and returns everything needed to render results, without touching global
+ *  `state` or any DOM. Used by both the main page's recompute() and the
+ *  Compare feature, so both stay consistent with a single source of truth. */
+function computeFullResult(team) {
+  const leaderCard = team.leader.cardId ? DATA.byId[team.leader.cardId] : null;
+  const unitFilled = team.unit.every((u) => u.cardId);
+  if (!leaderCard || !unitFilled) return null;
 
-  if (!leaderCard || !unitFilled) {
-    renderInfoRowIncomplete(leaderCard);
-    coverageRowEl.innerHTML = '<div class="empty-state">Select a leader and all 5 unit members to see results.</div>';
-    powerRowEl.innerHTML = '';
-    return;
-  }
-
-  const unit = state.unit.map((u) => ({ card: DATA.byId[u.cardId], level: u.level, bloom: u.bloom }));
+  const unit = team.unit.map((u) => ({ card: DATA.byId[u.cardId], level: u.level, bloom: u.bloom }));
   const data = { members: DATA.cardPotentials, characterGroupings: DATA.characterGroupings };
 
   const result = computeUnit(
-    { leaderCard, leaderLevel: state.leader.level, leaderBloom: state.leader.bloom, unit },
+    { leaderCard, leaderLevel: team.leader.level, leaderBloom: team.leader.bloom, unit },
     data
   );
 
-  // Holomem Board bonuses. Leader-area (red) nodes only apply from whichever
-  // slot is actually the chosen leader this run - a character's stored
-  // leader-node picks do nothing when she's placed as a plain unit member
-  // instead, even under the same characterId. Member-area (blue) nodes only
-  // apply from a slot that's actually performing.
   const slots = unit.map((u) => ({
     characterId: u.card.characterId,
     cardId: u.card.cardId,
@@ -1212,15 +1206,13 @@ function recompute() {
   if (!leaderAlsoInUnit) {
     slots.push({ characterId: leaderCard.characterId, cardId: leaderCard.cardId, isUnitMember: false, isLeaderSlot: true });
   }
-  // A handful of Leader board nodes only apply "when included as a singer" on
-  // the currently selected song - needs the song's real singer characterIds.
-  const currentSong = state.songId ? DATA.songs.find((s) => s.id === state.songId) : null;
+  const currentSong = team.songId ? DATA.songs.find((s) => s.id === team.songId) : null;
   const songSingerCharacterIds = currentSong?.characterIds || [];
-  const boardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, slots, songSingerCharacterIds);
+  const boardBonuses = computeBoardBonuses(team.boardSelections, DATA.boardCategories, slots, songSingerCharacterIds);
   const connectBonuses = computeConnectBonuses(
-    state.connectSelections,
+    team.connectSelections,
     DATA.boardCategories,
-    state.boardSelections,
+    team.boardSelections,
     DATA.cardConnectInfo,
     DATA.byId,
     DATA.cardPotentials,
@@ -1228,33 +1220,19 @@ function recompute() {
   );
   const combinedBonuses = mergeBoardBonuses(boardBonuses, connectBonuses);
 
-  // Snapshot the real per-card base stats (level + bloom only) before board/
-  // connect bonuses mutate result.memberStats in place. The in-game card
-  // screen shows base + Blue (member) + Green (support, from ANY character's
-  // board regardless of unit membership) - but never Red (leader), since
-  // that's a live-performance buff to the whole unit, not the leader's own
-  // stat. We can reproduce Blue (computed per-slot already); Green would need
-  // board data for the player's entire roster, not just the 6 selected slots,
-  // so it stays out of scope - the Parameters panel will still read slightly
-  // low versus the game for anyone with Green nodes unlocked elsewhere.
   const memberOnlySlots = slots.map((s) => ({ ...s, isLeaderSlot: false }));
-  const memberOnlyBoardBonuses = computeBoardBonuses(state.boardSelections, DATA.boardCategories, memberOnlySlots, songSingerCharacterIds);
+  const memberOnlyBoardBonuses = computeBoardBonuses(team.boardSelections, DATA.boardCategories, memberOnlySlots, songSingerCharacterIds);
   const memberOnlyConnectBonuses = computeConnectBonuses(
-    state.connectSelections,
+    team.connectSelections,
     DATA.boardCategories,
-    state.boardSelections,
+    team.boardSelections,
     DATA.cardConnectInfo,
     DATA.byId,
     DATA.cardPotentials,
     memberOnlySlots
   );
   const memberOnlyCombined = mergeBoardBonuses(memberOnlyBoardBonuses, memberOnlyConnectBonuses);
-  // Truly pure base (level + bloom only, zero board bonuses of any kind) -
-  // used for Overall Power's "Member Parameter" per its own definition,
-  // which explicitly excludes BOTH Leader and Member board buffs.
   const pureBaseStats = result.memberStats.map((m) => ({ cardId: m.cardId, stats: { ...m.stats } }));
-  // Display snapshot for the Parameters panel: pure base + Member (blue)
-  // bonuses only, matching the in-game card screen (see note above).
   const baseStats = result.memberStats.map((m) => {
     const stats = { ...m.stats };
     const permil = memberOnlyCombined.statPermil[m.cardId];
@@ -1276,6 +1254,21 @@ function recompute() {
 
   const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil);
 
+  return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong };
+}
+
+function recompute() {
+  const computed = computeFullResult(state);
+
+  if (!computed) {
+    const leaderCard = state.leader.cardId ? DATA.byId[state.leader.cardId] : null;
+    renderInfoRowIncomplete(leaderCard);
+    coverageRowEl.innerHTML = '<div class="empty-state">Select a leader and all 5 unit members to see results.</div>';
+    powerRowEl.innerHTML = '';
+    return;
+  }
+
+  const { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats } = computed;
   renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats);
   renderCoverageRow(result, unit, scoreSupport);
   renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats);
@@ -2085,12 +2078,312 @@ function openPresetsPanel() {
   nameInput.focus();
 }
 
+/** Presets store board/connect data nested under characterData[id], while
+ *  computeFullResult expects the flat, directly-keyed shape state itself
+ *  uses (boardSelections as Sets, connectSelections as a direct map) -
+ *  convert between the two, same logic as applyPreset() uses for the main page. */
+function presetToTeamState(preset) {
+  const boardSelections = {};
+  const connectSelections = {};
+  for (const [characterId, data] of Object.entries(preset.characterData || {})) {
+    boardSelections[characterId] = new Set(data.boardSelections || []);
+    if (data.connectSelections) connectSelections[characterId] = data.connectSelections;
+  }
+  return {
+    leader: preset.leader,
+    unit: preset.unit,
+    songId: preset.songId ?? null,
+    boardSelections,
+    connectSelections,
+  };
+}
+
+/** Builds a compact single-line summary of a preset's leader + unit, used in
+ *  both the preset-picker sub-list and the compare page's column headers. */
+function presetSummaryLine(preset) {
+  const leaderCard = preset.leader?.cardId ? DATA.byId[preset.leader.cardId] : null;
+  const memberNames = preset.unit
+    .map((u) => (u.cardId ? DATA.byId[u.cardId]?.shortName : null))
+    .filter(Boolean)
+    .join(', ');
+  return `Leader: ${leaderCard?.shortName ?? '\u2014'} \u00b7 ${memberNames || 'no members'}`;
+}
+
+function openComparePage() {
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+
+  const box = document.createElement('div');
+  box.className = 'picker-box compare-box';
+
+  const header = document.createElement('div');
+  header.className = 'picker-search';
+  header.innerHTML = `<div class="board-editor-title">Compare Presets</div><div class="board-editor-subtitle">Choose two saved presets to compare their Overall Power and coverage side by side.</div>`;
+  box.appendChild(header);
+
+  const body = document.createElement('div');
+  body.className = 'compare-body';
+  box.appendChild(body);
+
+  const close = document.createElement('div');
+  close.className = 'picker-close';
+  close.textContent = 'CLOSE';
+  close.onclick = () => overlay.remove();
+  box.appendChild(close);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+
+  const chosen = { a: null, b: null };
+
+  function openPresetSubPicker(onChoose) {
+    const subOverlay = document.createElement('div');
+    subOverlay.className = 'picker-overlay';
+    const subBox = document.createElement('div');
+    subBox.className = 'picker-box';
+    const subHeader = document.createElement('div');
+    subHeader.className = 'picker-search';
+    subHeader.innerHTML = `<div class="board-editor-title">Choose a Preset</div>`;
+    subBox.appendChild(subHeader);
+
+    const list = document.createElement('div');
+    list.className = 'picker-list';
+    const presets = loadPresetsFromStorage();
+    if (!presets.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = 'No saved presets yet \u2014 save one from the Presets button first.';
+      list.appendChild(empty);
+    }
+    presets.forEach((preset) => {
+      const row = document.createElement('div');
+      row.className = 'preset-row';
+      const info = document.createElement('div');
+      info.className = 'preset-row-info';
+      info.innerHTML = `<div class="preset-row-name">${preset.name}</div><div class="picker-item-sub">${presetSummaryLine(preset)}</div>`;
+      row.appendChild(info);
+      const pickBtn = document.createElement('button');
+      pickBtn.type = 'button';
+      pickBtn.className = 'board-btn';
+      pickBtn.textContent = 'Choose';
+      pickBtn.onclick = () => {
+        onChoose(preset);
+        subOverlay.remove();
+      };
+      row.appendChild(pickBtn);
+      list.appendChild(row);
+    });
+    subBox.appendChild(list);
+    const subClose = document.createElement('div');
+    subClose.className = 'picker-close';
+    subClose.textContent = 'CLOSE';
+    subClose.onclick = () => subOverlay.remove();
+    subBox.appendChild(subClose);
+    subOverlay.appendChild(subBox);
+    subOverlay.addEventListener('click', (e) => {
+      if (e.target === subOverlay) subOverlay.remove();
+    });
+    document.body.appendChild(subOverlay);
+  }
+
+  function renderBody() {
+    body.innerHTML = '';
+
+    const selectors = document.createElement('div');
+    selectors.className = 'compare-selectors';
+    for (const side of ['a', 'b']) {
+      const slot = document.createElement('div');
+      slot.className = 'compare-selector-slot compare-side-' + side;
+      const preset = chosen[side];
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'board-btn';
+      btn.textContent = preset ? `${preset.name} (change)` : `Choose Preset ${side === 'a' ? '1' : '2'}`;
+      btn.onclick = () => openPresetSubPicker((p) => {
+        chosen[side] = p;
+        renderBody();
+      });
+      slot.appendChild(btn);
+      if (preset) {
+        const sub = document.createElement('div');
+        sub.className = 'picker-item-sub';
+        sub.textContent = presetSummaryLine(preset);
+        slot.appendChild(sub);
+      }
+      selectors.appendChild(slot);
+    }
+    body.appendChild(selectors);
+
+    if (!chosen.a || !chosen.b) return;
+
+    const computedA = computeFullResult(presetToTeamState(chosen.a));
+    const computedB = computeFullResult(presetToTeamState(chosen.b));
+    if (!computedA || !computedB) {
+      const warn = document.createElement('div');
+      warn.className = 'empty-state';
+      warn.textContent = 'One of these presets is missing its leader or unit and can\u2019t be computed.';
+      body.appendChild(warn);
+      return;
+    }
+
+    renderComparePower(body, chosen.a, computedA, chosen.b, computedB);
+    renderCompareCoverage(body, chosen.a, computedA, chosen.b, computedB);
+  }
+
+  renderBody();
+}
+
+function renderComparePower(container, presetA, computedA, presetB, computedB) {
+  const panel = document.createElement('div');
+  panel.className = 'panel compare-power-panel';
+  const label = document.createElement('div');
+  label.className = 'panel-label';
+  label.textContent = 'Overall Power';
+  panel.appendChild(label);
+
+  const row = document.createElement('div');
+  row.className = 'compare-power-row';
+
+  for (const [side, preset, computed] of [
+    ['a', presetA, computedA],
+    ['b', presetB, computedB],
+  ]) {
+    const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats);
+    const memoryBonus = Math.round(breakdown.memberParameter * ((preset.manualMemoryBonusPercent || 0) / 100));
+    const subtotal = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + memoryBonus;
+    const powerUpBonus = Math.round(subtotal * ((preset.manualPowerUpBonusPercent || 0) / 100));
+    const total = subtotal + breakdown.holomemBoardBonus + powerUpBonus;
+
+    const col = document.createElement('div');
+    col.className = 'compare-power-col compare-side-' + side;
+    col.innerHTML = `
+      <div class="compare-col-title">${preset.name}</div>
+      <div class="power-total">${total.toLocaleString()}</div>
+      <div class="power-breakdown">
+        <span>Member Parameter</span><span class="num">${breakdown.memberParameter.toLocaleString()}</span>
+        <span>Outfit Skill</span><span class="num">${breakdown.outfitSkill.toLocaleString()}</span>
+        <span>Passive Skill</span><span class="num">${breakdown.passiveSkill.toLocaleString()}</span>
+        <span>Holomem Board Bonus</span><span class="num">${breakdown.holomemBoardBonus.toLocaleString()}</span>
+        <span>Memory Bonus</span><span class="num">${memoryBonus.toLocaleString()}</span>
+        <span>Member Power-Up Bonus</span><span class="num">${powerUpBonus.toLocaleString()}</span>
+      </div>
+    `;
+    row.appendChild(col);
+  }
+  panel.appendChild(row);
+  container.appendChild(panel);
+}
+
+function renderCompareCoverage(container, presetA, computedA, presetB, computedB) {
+  const panel = document.createElement('div');
+  panel.className = 'panel compare-coverage-panel';
+  const label = document.createElement('div');
+  label.className = 'panel-label';
+  label.textContent = 'Coverage Statistics';
+  panel.appendChild(label);
+
+  const row = document.createElement('div');
+  row.className = 'compare-power-row';
+
+  for (const [side, preset, computed] of [
+    ['a', presetA, computedA],
+    ['b', presetB, computedB],
+  ]) {
+    const col = document.createElement('div');
+    col.className = 'compare-power-col compare-side-' + side;
+
+    const title = document.createElement('div');
+    title.className = 'compare-col-title';
+    title.textContent = preset.name;
+    col.appendChild(title);
+
+    if (!computed.song) {
+      const noSong = document.createElement('div');
+      noSong.className = 'empty-state';
+      noSong.textContent = 'This preset was saved without a song selected, so coverage can\u2019t be simulated.';
+      col.appendChild(noSong);
+      row.appendChild(col);
+      continue;
+    }
+
+    const duration = computed.song.playingSeconds || Math.max(...computed.song.feverSeconds) + 15;
+    const unitCards = computed.unit.map((u) => u.card);
+    const timeline = simulateActiveTimeline({
+      activeResults: computed.result.actives,
+      specialResults: computed.result.specials,
+      unitCards,
+      scoreSupport: computed.scoreSupport,
+      feverSeconds: computed.song.feverSeconds,
+      durationSeconds: duration,
+    });
+
+    const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
+    const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
+    const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
+    const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
+
+    const summary = document.createElement('div');
+    summary.className = 'coverage-summary';
+    summary.innerHTML = `
+      <div class="coverage-stat"><div class="stat-num">${noBonusSeconds} <span class="stat-num-sub">(${((noBonusSeconds / duration) * 100).toFixed(0)}%)</span></div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
+      <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial} <span class="stat-num-sub">(${((noBonusDuringSpecial / duration) * 100).toFixed(0)}%)</span></div><div class="stat-label">Special skill secs w/ no bonus</div></div>
+      <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
+      <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
+    `;
+    col.appendChild(summary);
+
+    const songNote = document.createElement('div');
+    songNote.className = 'picker-item-sub';
+    songNote.style.marginTop = '6px';
+    songNote.textContent = `Song: ${computed.song.title}`;
+    col.appendChild(songNote);
+
+    const memberStatsWrap = document.createElement('div');
+    memberStatsWrap.className = 'member-coverage-stats';
+    for (const u of unitCards) {
+      const activeSeconds = [];
+      let suppressedCount = 0;
+      for (const point of timeline) {
+        const m = point.perMember.find((pm) => pm.cardId === u.cardId);
+        if (m?.active) {
+          activeSeconds.push(m);
+          if (m.cardId !== point.winnerCardId) suppressedCount++;
+        }
+      }
+      const coveragePercent = (activeSeconds.length / duration) * 100;
+      const suppressedPercent = activeSeconds.length ? (suppressedCount / activeSeconds.length) * 100 : 0;
+      const expectedValue = activeSeconds.length
+        ? activeSeconds.reduce((s, m) => s + m.effectiveBonus * (m.activationChance / 100), 0) / activeSeconds.length
+        : 0;
+
+      const card = document.createElement('div');
+      card.className = 'member-coverage-card';
+      card.innerHTML = `
+        <div class="member-coverage-name">${u.shortName}</div>
+        <div class="member-coverage-row"><span>Coverage</span><span class="num">${coveragePercent.toFixed(0)}%</span></div>
+        <div class="member-coverage-row"><span>Suppressed</span><span class="num">${suppressedPercent.toFixed(0)}%</span></div>
+        <div class="member-coverage-row"><span>Expected bonus \u00d7 chance</span><span class="num">${expectedValue.toFixed(1)}%</span></div>
+      `;
+      memberStatsWrap.appendChild(card);
+    }
+    col.appendChild(memberStatsWrap);
+
+    row.appendChild(col);
+  }
+  panel.appendChild(row);
+  container.appendChild(panel);
+}
+
 async function main() {
   await loadData();
   renderSelectionRow();
   recompute();
 
   document.getElementById('presets-btn').addEventListener('click', openPresetsPanel);
+  document.getElementById('compare-btn').addEventListener('click', openComparePage);
 
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.
