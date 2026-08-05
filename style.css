@@ -605,6 +605,18 @@ header.masthead {
   z-index: 30;
   box-shadow: 0 8px 24px rgba(0,0,0,0.4);
 }
+.info-popup-with-image {
+  width: 280px;
+  max-height: 70vh;
+  overflow-y: auto;
+}
+.info-popup-image {
+  display: block;
+  width: 100%;
+  border-radius: 6px;
+  border: 1px solid var(--line);
+  margin-bottom: 8px;
+}
 .board-editor-list { padding: 10px 14px; }
 
 .board-group-label {
@@ -1127,6 +1139,25 @@ header.masthead {
   margin-top: 10px;
 }
 .power-breakdown .num { text-align: right; }
+
+.power-percent-wrap {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 5px;
+}
+.power-percent-sign {
+  color: var(--text-faint);
+  font-size: 11px;
+}
+.power-percent-computed {
+  min-width: 72px;
+  color: var(--text-dim);
+}
+.power-manual-input {
+  width: 56px;
+  text-align: right;
+}
 
 .estimate-note {
   font-size: 11px;

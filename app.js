@@ -93,9 +93,9 @@ const CONDITION_LABELS = {
 /** A small "i" icon that reveals a text popup on click - used to keep
  *  disclaimer/limitation text out of the main flow without repeating full
  *  paragraphs everywhere it's relevant. Closes on click-outside or a second click. */
-function createInfoIcon(text, extraClass) {
+function createInfoIcon(text, imageSrc) {
   const wrap = document.createElement('span');
-  wrap.className = 'info-icon-wrap' + (extraClass ? ' ' + extraClass : '');
+  wrap.className = 'info-icon-wrap';
   const icon = document.createElement('button');
   icon.type = 'button';
   icon.className = 'info-icon';
@@ -121,8 +121,18 @@ function createInfoIcon(text, extraClass) {
       return;
     }
     popup = document.createElement('div');
-    popup.className = 'info-popup';
-    popup.textContent = text;
+    popup.className = 'info-popup' + (imageSrc ? ' info-popup-with-image' : '');
+    if (imageSrc) {
+      const img = document.createElement('img');
+      img.className = 'info-popup-image';
+      img.src = imageSrc;
+      img.alt = 'Reference screenshot';
+      img.loading = 'lazy';
+      popup.appendChild(img);
+    }
+    const textEl = document.createElement('div');
+    textEl.textContent = text;
+    popup.appendChild(textEl);
     wrap.appendChild(popup);
     document.addEventListener('click', onOutsideClick);
   };
@@ -226,8 +236,8 @@ const state = {
     generations: new Set(), // generation strings; empty = no filter
   },
   mobileAccordionExpanded: new Set(['leader']), // which slot keys are open on mobile
-  manualMemoryBonus: 0, // Memory Bonus - depends on player's whole-account memory unlocks, entered manually
-  manualPowerUpBonus: 0, // Member Power-Up Bonus - depends on player's whole-roster level-up count, entered manually
+  manualMemoryBonusPercent: 0, // "Unit Stats X%" from the Memory Stand screen - % of Member Parameter only
+  manualPowerUpBonusPercent: 0, // "Upgrade Bonus X%" from the Member training screen - % of (Member Parameter + Outfit Skill + Passive Skill + Memory Bonus)
 };
 
 const MOBILE_BREAKPOINT = '(max-width: 700px)';
@@ -1743,13 +1753,15 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   panel.appendChild(label);
 
   const breakdown = computeOverallPowerBreakdown(result, baseStats);
-  const total =
-    breakdown.memberParameter +
-    breakdown.outfitSkill +
-    breakdown.holomemBoardBonus +
-    breakdown.passiveSkill +
-    state.manualMemoryBonus +
-    state.manualPowerUpBonus;
+  // Memory Bonus ("Unit Stats X%" on the Memory Stand screen) - a % of
+  // Member Parameter only, not the whole subtotal.
+  const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
+  // Member Power-Up Bonus ("Upgrade Bonus X%" on the Member training screen)
+  // - a % of everything computed so far, INCLUDING Memory Bonus.
+  const subtotalBeforePowerUp = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + memoryBonus;
+  const powerUpBonus = Math.round(subtotalBeforePowerUp * (state.manualPowerUpBonusPercent / 100));
+
+  const total = subtotalBeforePowerUp + breakdown.holomemBoardBonus + powerUpBonus;
 
   const totalEl = document.createElement('div');
   totalEl.className = 'power-total';
@@ -1759,9 +1771,10 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   const grid = document.createElement('div');
   grid.className = 'power-breakdown';
 
-  const addRow = (label, valueNode) => {
+  const addRow = (label, valueNode, infoIcon) => {
     const labelEl = document.createElement('span');
     labelEl.textContent = label;
+    if (infoIcon) labelEl.appendChild(infoIcon);
     grid.appendChild(labelEl);
     grid.appendChild(valueNode);
   };
@@ -1777,25 +1790,46 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   addRow('Passive Skill', makeNum(breakdown.passiveSkill));
   addRow('Holomem Board Bonus', makeNum(breakdown.holomemBoardBonus));
 
-  const makeManualInput = (value, onChange) => {
+  const makePercentInput = (value, computedValue, onChange) => {
+    const wrap = document.createElement('span');
+    wrap.className = 'power-percent-wrap';
     const el = document.createElement('input');
     el.type = 'number';
     el.className = 'mini-input power-manual-input';
     el.min = 0;
+    el.step = 0.01;
     el.value = value;
+    el.onclick = (e) => e.stopPropagation();
     el.onchange = () => {
-      onChange(clamp(Number(el.value) || 0, 0, 9999999));
+      onChange(clamp(Number(el.value) || 0, 0, 1000));
       recompute();
     };
-    return el;
+    wrap.appendChild(el);
+    const pct = document.createElement('span');
+    pct.className = 'power-percent-sign';
+    pct.textContent = '%';
+    wrap.appendChild(pct);
+    const computed = document.createElement('span');
+    computed.className = 'num power-percent-computed';
+    computed.textContent = `= +${computedValue.toLocaleString()}`;
+    wrap.appendChild(computed);
+    return wrap;
   };
   addRow(
     'Memory Bonus',
-    makeManualInput(state.manualMemoryBonus, (v) => (state.manualMemoryBonus = v))
+    makePercentInput(state.manualMemoryBonusPercent, memoryBonus, (v) => (state.manualMemoryBonusPercent = v)),
+    createInfoIcon(
+      'Enter the "Unit Stats" percentage shown on the Memory Stand screen (Memory tab).',
+      'images/help/memory_bonus_reference.webp'
+    )
   );
   addRow(
     'Member Power-Up Bonus',
-    makeManualInput(state.manualPowerUpBonus, (v) => (state.manualPowerUpBonus = v))
+    makePercentInput(state.manualPowerUpBonusPercent, powerUpBonus, (v) => (state.manualPowerUpBonusPercent = v)),
+    createInfoIcon(
+      'Enter the "Upgrade Bonus" percentage shown on the Member training screen (Level Up / SP Training / Bloom tab).',
+      'images/help/power_up_bonus_reference.webp'
+    )
   );
 
   panel.appendChild(grid);
@@ -1803,7 +1837,7 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   const note = document.createElement('div');
   note.className = 'estimate-note';
   note.textContent =
-    'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green (support) board bonuses aren\u2019t included in Holomem Board Bonus yet. Memory Bonus and Member Power-Up Bonus depend on your whole account and are entered manually above.';
+    'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green (support) board bonuses aren\u2019t included in Holomem Board Bonus yet. Memory Bonus is the "Unit Stats %" from the Memory Stand screen, applied to Member Parameter only. Member Power-Up Bonus is the "Upgrade Bonus %" from the Member training screen, applied to Member Parameter + Outfit Skill + Passive Skill + Memory Bonus. Enter both manually above.';
   panel.appendChild(note);
 
   powerRowEl.appendChild(panel);
