@@ -799,7 +799,7 @@ export function computeScoreSupport(passiveResults) {
  * @param {Record<string,number>} scoreSupport - output of computeScoreSupport(...)
  * @param {number[]} feverSeconds - the song's 5 fever timestamps (special skill activation times)
  * @param {number} durationSeconds - song length
- * @returns {{t:number, perMember:{cardId:string,active:boolean,effectiveBonus:number,activationChance:number|null,activationStart:number|null,unitIndex:number}[], maxBonus:number, winnerCardId:string|null, inSpecialWindow:boolean, noBonusDuringSpecial:boolean}[]}
+ * @returns {{t:number, perMember:{cardId:string,active:boolean,effectiveBonus:number,baseBonus:number,totalSupportBonus:number,activationChance:number|null,activationStart:number|null,unitIndex:number}[], maxBonus:number, winnerCardId:string|null, inSpecialWindow:boolean, noBonusDuringSpecial:boolean}[]}
  */
 export function simulateActiveTimeline({
   activeResults,
@@ -850,7 +850,16 @@ export function simulateActiveTimeline({
       // specific cooldown cycle) - used to break ties: earlier activation wins.
       const activationStart = active ? t - (t % cooldown) : null;
 
-      return { cardId, active, effectiveBonus, activationChance, activationStart, unitIndex: i };
+      return {
+        cardId,
+        active,
+        effectiveBonus,
+        baseBonus,
+        totalSupportBonus: support + specialBonus,
+        activationChance,
+        activationStart,
+        unitIndex: i,
+      };
     });
 
     const maxBonus = Math.max(0, ...perMember.map((m) => m.effectiveBonus));

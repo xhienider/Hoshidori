@@ -1694,8 +1694,8 @@ function renderCoverageRow(result, unit, scoreSupport) {
         const isWinner = m.cardId === point.winnerCardId;
         const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
         const borderColor = activationChanceColor(m.activationChance);
-        const title = `${m.effectiveBonus.toFixed(1)}% score bonus @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
-        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.effectiveBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
+        const title = `${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% score support @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
+        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
       } else {
         rowHtml += '<td>\u2014</td>';
       }
