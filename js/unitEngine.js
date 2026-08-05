@@ -620,6 +620,13 @@ export function computeConnectBonuses(
         const node = byPosition.get(posKey);
         if (!node) continue; // pattern cell lands on empty space - no node there
         if (!unlockedSet?.has(posKey)) continue; // node exists but isn't unlocked - nothing to boost
+        // A connector's pattern can extend beyond its own connect-slot's
+        // "native" area (e.g. a Member-slot connector's pattern reaching a
+        // Leader-area position). Leader-area nodes never contribute unless
+        // this slot is actually the leader, regardless of which connect slot
+        // the connector was assigned to - same rule as plain board nodes.
+        if (node.area === 'leader' && !slot.isLeaderSlot) continue;
+        if (!recipients[node.area]) continue; // e.g. content-area - not modeled/reachable, but guard anyway
 
         const extraValue = node.value * (connectorInfo.boostPermil / 1000);
         for (const cardId of recipients[node.area]) {
