@@ -1798,11 +1798,13 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   // Member Parameter only, not the whole subtotal.
   const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
   // Member Power-Up Bonus ("Upgrade Bonus X%" on the Member training screen)
-  // - a % of everything computed so far, INCLUDING Memory Bonus.
-  const subtotalBeforePowerUp = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + memoryBonus;
+  // - a % of Member Parameter + Outfit Skill + Passive Skill + Holomem Board
+  // Bonus + Memory Bonus (everything else computed so far).
+  const subtotalBeforePowerUp =
+    breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
   const powerUpBonus = Math.round(subtotalBeforePowerUp * (state.manualPowerUpBonusPercent / 100));
 
-  const total = subtotalBeforePowerUp + breakdown.holomemBoardBonus + powerUpBonus;
+  const total = subtotalBeforePowerUp + powerUpBonus;
 
   const totalEl = document.createElement('div');
   totalEl.className = 'power-total';
@@ -1878,7 +1880,7 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   const note = document.createElement('div');
   note.className = 'estimate-note';
   note.textContent =
-    'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green (support) board bonuses aren\u2019t included in Holomem Board Bonus yet. Memory Bonus is the "Unit Stats %" from the Memory Stand screen, applied to Member Parameter only. Member Power-Up Bonus is the "Upgrade Bonus %" from the Member training screen, applied to Member Parameter + Outfit Skill + Passive Skill + Memory Bonus. Enter both manually above.';
+    'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green (support) board bonuses aren\u2019t included in Holomem Board Bonus yet. Memory Bonus is the "Unit Stats %" from the Memory Stand screen, applied to Member Parameter only. Member Power-Up Bonus is the "Upgrade Bonus %" from the Member training screen, applied to Member Parameter + Outfit Skill + Passive Skill + Holomem Board Bonus + Memory Bonus. Enter both manually above.';
   panel.appendChild(note);
 
   powerRowEl.appendChild(panel);
@@ -1935,6 +1937,8 @@ function buildPresetFromCurrentState(name) {
     leader: { ...state.leader },
     unit: state.unit.map((u) => ({ ...u })),
     songId: state.songId,
+    manualMemoryBonusPercent: state.manualMemoryBonusPercent,
+    manualPowerUpBonusPercent: state.manualPowerUpBonusPercent,
     characterData,
   };
 }
@@ -1943,6 +1947,8 @@ function applyPreset(preset) {
   state.leader = { ...preset.leader };
   state.unit = preset.unit.map((u) => ({ ...u }));
   state.songId = preset.songId ?? null;
+  state.manualMemoryBonusPercent = preset.manualMemoryBonusPercent ?? 0;
+  state.manualPowerUpBonusPercent = preset.manualPowerUpBonusPercent ?? 0;
   for (const [characterId, data] of Object.entries(preset.characterData || {})) {
     state.boardSelections[characterId] = new Set(data.boardSelections || []);
     if (data.connectSelections) state.connectSelections[characterId] = data.connectSelections;
@@ -2253,9 +2259,10 @@ function renderComparePower(container, presetA, computedA, presetB, computedB) {
   ]) {
     const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats);
     const memoryBonus = Math.round(breakdown.memberParameter * ((preset.manualMemoryBonusPercent || 0) / 100));
-    const subtotal = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + memoryBonus;
+    const subtotal =
+      breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
     const powerUpBonus = Math.round(subtotal * ((preset.manualPowerUpBonusPercent || 0) / 100));
-    const total = subtotal + breakdown.holomemBoardBonus + powerUpBonus;
+    const total = subtotal + powerUpBonus;
 
     const col = document.createElement('div');
     col.className = 'compare-power-col compare-side-' + side;
