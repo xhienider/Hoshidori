@@ -1239,6 +1239,12 @@ function recompute() {
     memberOnlySlots
   );
   const memberOnlyCombined = mergeBoardBonuses(memberOnlyBoardBonuses, memberOnlyConnectBonuses);
+  // Truly pure base (level + bloom only, zero board bonuses of any kind) -
+  // used for Overall Power's "Member Parameter" per its own definition,
+  // which explicitly excludes BOTH Leader and Member board buffs.
+  const pureBaseStats = result.memberStats.map((m) => ({ cardId: m.cardId, stats: { ...m.stats } }));
+  // Display snapshot for the Parameters panel: pure base + Member (blue)
+  // bonuses only, matching the in-game card screen (see note above).
   const baseStats = result.memberStats.map((m) => {
     const stats = { ...m.stats };
     const permil = memberOnlyCombined.statPermil[m.cardId];
@@ -1262,7 +1268,7 @@ function recompute() {
 
   renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats);
   renderCoverageRow(result, unit, scoreSupport);
-  renderPowerRow(result, leaderCard, scoreSupport, baseStats);
+  renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats);
 }
 
 /** Leader column content when the team isn't complete yet - song picking and a
