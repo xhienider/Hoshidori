@@ -1605,6 +1605,83 @@ function renderMemberActiveCard(activeResult, card, scoreSupport) {
   return panel;
 }
 
+/** Builds the full second-by-second coverage table as a standalone DOM
+ *  fragment (not appended anywhere) - shared by the main page and the
+ *  Compare page's per-team tabs, so both use the exact same proven logic.
+ *  `referenceColEls`, if given, are used to match column widths to the
+ *  selection cards above (main page only); omitted entirely falls back to
+ *  sensible defaults, which is what Compare's tabbed view uses. */
+function buildCoverageTable(timeline, unitCards, song, referenceColEls) {
+  const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
+  const specialWindows = song.feverSeconds
+    .map((start, i) => ({ start, end: start + (timeline._specials?.[i]?.effectDurationSeconds || 0) }))
+    .filter((w) => w.end > w.start);
+  const inAnySpecialWindow = (t) => specialWindows.some((w) => t >= w.start && t < w.end);
+
+  const wrap = document.createElement('div');
+  wrap.className = 'coverage-table-wrap';
+
+  const table = document.createElement('table');
+  table.className = 'coverage-table';
+  table.style.tableLayout = 'fixed';
+
+  const leaderColWidth = referenceColEls?.[0]?.getBoundingClientRect().width || 90;
+  const memberColWidths = referenceColEls
+    ? Array.from(referenceColEls).slice(1).map((el) => el.getBoundingClientRect().width)
+    : unitCards.map(() => 110);
+
+  const colgroup = document.createElement('colgroup');
+  const timeCol = document.createElement('col');
+  timeCol.style.width = Math.round(leaderColWidth * 0.55) + 'px';
+  colgroup.appendChild(timeCol);
+  const maxCol = document.createElement('col');
+  maxCol.style.width = Math.round(leaderColWidth * 0.45) + 'px';
+  colgroup.appendChild(maxCol);
+  memberColWidths.forEach((w) => {
+    const c = document.createElement('col');
+    c.style.width = w + 'px';
+    colgroup.appendChild(c);
+  });
+  table.appendChild(colgroup);
+
+  const thead = document.createElement('thead');
+  const headRow = document.createElement('tr');
+  headRow.innerHTML = '<th>Time</th><th>Max</th>' + unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
+  thead.appendChild(headRow);
+  table.appendChild(thead);
+
+  const tbody = document.createElement('tbody');
+  for (const point of timeline) {
+    const tr = document.createElement('tr');
+    const isFeverStart = feverSecondsRounded.has(point.t);
+    if (isFeverStart) tr.classList.add('fever-row');
+    else if (inAnySpecialWindow(point.t)) tr.classList.add('fever-window');
+    if (point.t > 20 && point.maxBonus === 0) tr.classList.add('no-bonus-row');
+
+    const mm = Math.floor(point.t / 60);
+    const ss = String(point.t % 60).padStart(2, '0');
+    let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
+    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
+
+    for (const m of point.perMember) {
+      if (m.active) {
+        const isWinner = m.cardId === point.winnerCardId;
+        const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
+        const borderColor = activationChanceColor(m.activationChance);
+        const title = `${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% score support @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
+        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
+      } else {
+        rowHtml += '<td>\u2014</td>';
+      }
+    }
+    tr.innerHTML = rowHtml;
+    tbody.appendChild(tr);
+  }
+  table.appendChild(tbody);
+  wrap.appendChild(table);
+  return wrap;
+}
+
 function renderCoverageRow(result, unit, scoreSupport) {
   coverageRowEl.innerHTML = '';
   coverageRowEl.className = 'panel';
@@ -1635,87 +1712,10 @@ function renderCoverageRow(result, unit, scoreSupport) {
     feverSeconds: song.feverSeconds,
     durationSeconds: duration,
   });
+  timeline._specials = result.specials; // stashed for buildCoverageTable's special-window highlighting
 
-  // Full special-skill windows (not just the activation instant), so the highlight
-  // can span the whole duration each member's special skill is active for.
-  const specialWindows = song.feverSeconds
-    .map((start, i) => ({ start, end: start + (result.specials[i]?.effectDurationSeconds || 0) }))
-    .filter((w) => w.end > w.start);
-  const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
-  const inAnySpecialWindow = (t) => specialWindows.some((w) => t >= w.start && t < w.end);
-
-  const wrap = document.createElement('div');
-  wrap.className = 'coverage-table-wrap';
-
-  const table = document.createElement('table');
-  table.className = 'coverage-table';
-  table.style.tableLayout = 'fixed';
-
-  // Match each member column's width to its card above, so the table lines up
-  // visually with the selection/info grid. Time+Max together take the same
-  // space as the leader's column above.
   const cardCols = document.querySelectorAll('#selection-row .member-col');
-  const leaderColWidth = cardCols[0]?.getBoundingClientRect().width || 90;
-  const memberColWidths = Array.from(cardCols)
-    .slice(1)
-    .map((el) => el.getBoundingClientRect().width);
-
-  const colgroup = document.createElement('colgroup');
-  const timeCol = document.createElement('col');
-  timeCol.style.width = Math.round(leaderColWidth * 0.55) + 'px';
-  colgroup.appendChild(timeCol);
-  const maxCol = document.createElement('col');
-  maxCol.style.width = Math.round(leaderColWidth * 0.45) + 'px';
-  colgroup.appendChild(maxCol);
-  memberColWidths.forEach((w) => {
-    const c = document.createElement('col');
-    c.style.width = w + 'px';
-    colgroup.appendChild(c);
-  });
-  table.appendChild(colgroup);
-
-  const thead = document.createElement('thead');
-  const headRow = document.createElement('tr');
-  headRow.innerHTML =
-    '<th>Time</th><th>Max</th>' +
-    unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
-  thead.appendChild(headRow);
-  table.appendChild(thead);
-
-  const tbody = document.createElement('tbody');
-  for (const point of timeline) {
-    const tr = document.createElement('tr');
-    const isFeverStart = feverSecondsRounded.has(point.t);
-    if (isFeverStart) tr.classList.add('fever-row');
-    else if (inAnySpecialWindow(point.t)) tr.classList.add('fever-window');
-    if (point.t > 20 && point.maxBonus === 0) tr.classList.add('no-bonus-row');
-
-    const mm = Math.floor(point.t / 60);
-    const ss = String(point.t % 60).padStart(2, '0');
-    let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
-    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
-
-    // The highest effective bonus this second suppresses the others (only the
-    // strongest score bonus applies when multiple members are active at once).
-    // Ties: earlier activation wins; same-second ties: earlier unit order wins.
-    for (const m of point.perMember) {
-      if (m.active) {
-        const isWinner = m.cardId === point.winnerCardId;
-        const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
-        const borderColor = activationChanceColor(m.activationChance);
-        const title = `${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% score support @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
-        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
-      } else {
-        rowHtml += '<td>\u2014</td>';
-      }
-    }
-    tr.innerHTML = rowHtml;
-    tbody.appendChild(tr);
-  }
-  table.appendChild(tbody);
-  wrap.appendChild(table);
-
-  coverageRowEl.appendChild(wrap);
+  coverageRowEl.appendChild(buildCoverageTable(timeline, unitCards, song, cardCols));
 
   // Full-width horizontal summary, below the table.
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
@@ -2402,8 +2402,67 @@ function openComparePage() {
   layout.className = 'compare-3col-layout';
   overlay.appendChild(layout);
 
+  const secBySecSection = document.createElement('div');
+  secBySecSection.className = 'panel compare-secbysec-panel';
+  overlay.appendChild(secBySecSection);
+
   const chosen = { a: null, b: null };
   const chosenSong = { a: null, b: null };
+  let activeTab = 'a';
+
+  function renderSecBySec(computedA, computedB) {
+    secBySecSection.innerHTML = '';
+    const label = document.createElement('div');
+    label.className = 'panel-label';
+    label.textContent = 'Bonus Coverage \u00b7 Second-by-Second';
+    secBySecSection.appendChild(label);
+
+    if (!chosen.a || !chosen.b) {
+      const msg = document.createElement('div');
+      msg.className = 'empty-state';
+      msg.textContent = 'Choose both presets to see second-by-second coverage.';
+      secBySecSection.appendChild(msg);
+      return;
+    }
+
+    const tabs = document.createElement('div');
+    tabs.className = 'compare-tabs';
+    for (const side of ['a', 'b']) {
+      const tabBtn = document.createElement('button');
+      tabBtn.type = 'button';
+      tabBtn.className = 'compare-tab' + (activeTab === side ? ' compare-tab-active' : '');
+      tabBtn.textContent = chosen[side].name;
+      tabBtn.onclick = () => {
+        activeTab = side;
+        renderSecBySec(computedA, computedB);
+      };
+      tabs.appendChild(tabBtn);
+    }
+    secBySecSection.appendChild(tabs);
+
+    const song = chosenSong[activeTab];
+    const computed = activeTab === 'a' ? computedA : computedB;
+    if (!song) {
+      const msg = document.createElement('div');
+      msg.className = 'empty-state';
+      msg.textContent = `Choose a song for ${chosen[activeTab].name} above (in Coverage Statistics) to see its second-by-second table.`;
+      secBySecSection.appendChild(msg);
+      return;
+    }
+
+    const unitCards = computed.unit.map((u) => u.card);
+    const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
+    const timeline = simulateActiveTimeline({
+      activeResults: computed.result.actives,
+      specialResults: computed.result.specials,
+      unitCards,
+      scoreSupport: computed.scoreSupport,
+      feverSeconds: song.feverSeconds,
+      durationSeconds: duration,
+    });
+    timeline._specials = computed.result.specials;
+    secBySecSection.appendChild(buildCoverageTable(timeline, unitCards, song));
+  }
 
   function openSongSubPicker(side, onPicked) {
     const subOverlay = document.createElement('div');
@@ -2556,6 +2615,8 @@ function openComparePage() {
         })
       )
     );
+
+    renderSecBySec(computedA, computedB);
   }
 
   renderLayout();
