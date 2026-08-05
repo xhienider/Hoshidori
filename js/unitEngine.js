@@ -628,7 +628,7 @@ export function computeConnectBonuses(
         if (node.area === 'leader' && !slot.isLeaderSlot) continue;
         if (!recipients[node.area]) continue; // e.g. content-area - not modeled/reachable, but guard anyway
 
-        const extraValue = node.value * (connectorInfo.boostPermil / 1000);
+        const extraValue = Math.ceil(node.value * (connectorInfo.boostPermil / 1000));
         for (const cardId of recipients[node.area]) {
           applyValue(cardId, node.type, extraValue);
         }

@@ -64,9 +64,14 @@ export function resolveMemberStats(card, level, bloomLevel, cardPotentials) {
   const bonusPermil = getParameterBonusPermil(card, bloomLevel, cardPotentials);
   const mult = 1 + bonusPermil / 1000;
 
-  const performance = Math.ceil((base * card.performancePermilMultiply) / 1000 * mult);
-  const technique = Math.ceil((base * card.techniquePermilMultiply) / 1000 * mult);
-  const sense = Math.ceil((base * card.sensePermilMultiply) / 1000 * mult);
+  // The game appears to round the base (pre-bloom) stat to a whole number
+  // FIRST, then apply the bloom multiplier and round again - not a single
+  // combined rounding at the end. Confirmed against Suisei's real Lv80/Bloom2
+  // card: single-ceil undershoots Technique/Sense by 1; double-ceil matches
+  // all three stats exactly.
+  const performance = Math.ceil(Math.ceil((base * card.performancePermilMultiply) / 1000) * mult);
+  const technique = Math.ceil(Math.ceil((base * card.techniquePermilMultiply) / 1000) * mult);
+  const sense = Math.ceil(Math.ceil((base * card.sensePermilMultiply) / 1000) * mult);
 
   return { performance, technique, sense };
 }
