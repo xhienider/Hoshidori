@@ -2188,16 +2188,16 @@ function computeComparePower(preset, computed) {
   return { ...breakdown, memoryBonus, powerUpBonus, total };
 }
 
-function computeCompareCoverage(computed) {
-  if (!computed.song) return null;
-  const duration = computed.song.playingSeconds || Math.max(...computed.song.feverSeconds) + 15;
+function computeCompareCoverage(computed, song) {
+  if (!song) return null;
+  const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
   const unitCards = computed.unit.map((u) => u.card);
   const timeline = simulateActiveTimeline({
     activeResults: computed.result.actives,
     specialResults: computed.result.specials,
     unitCards,
     scoreSupport: computed.scoreSupport,
-    feverSeconds: computed.song.feverSeconds,
+    feverSeconds: song.feverSeconds,
     durationSeconds: duration,
   });
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
@@ -2223,7 +2223,7 @@ function computeCompareCoverage(computed) {
     return { name: u.shortName, coveragePercent, suppressedPercent, expectedValue };
   });
 
-  return { duration, noBonusSeconds, noBonusDuringSpecial, peakBonus, avgBonus, perMember, songTitle: computed.song.title };
+  return { duration, noBonusSeconds, noBonusDuringSpecial, peakBonus, avgBonus, perMember, songTitle: song.title };
 }
 
 /** A single scoreboard-style row: value A on the left, label centered, value
@@ -2254,7 +2254,7 @@ function compareRow(label, valueA, valueB, highlightHigher) {
   return row;
 }
 
-function renderCompareMiddle(preset1, computed1, preset2, computed2) {
+function renderCompareMiddle(preset1, computed1, preset2, computed2, songA, songB, onChangeSongA, onChangeSongB) {
   const middle = document.createElement('div');
   middle.className = 'compare-middle-col';
 
@@ -2282,7 +2282,9 @@ function renderCompareMiddle(preset1, computed1, preset2, computed2) {
   powerPanel.appendChild(compareRow('Member Power-Up Bonus', powerA.powerUpBonus.toLocaleString(), powerB.powerUpBonus.toLocaleString(), true));
   middle.appendChild(powerPanel);
 
-  // Coverage
+  // Coverage - each side picks its OWN song independently. Pick the same
+  // song on both sides to compare two teams head-to-head; pick different
+  // songs to see how (even the same) team's coverage shifts across tracks.
   const coveragePanel = document.createElement('div');
   coveragePanel.className = 'panel compare-mid-panel';
   const coverageLabel = document.createElement('div');
@@ -2290,39 +2292,84 @@ function renderCompareMiddle(preset1, computed1, preset2, computed2) {
   coverageLabel.textContent = 'Coverage Statistics';
   coveragePanel.appendChild(coverageLabel);
 
-  const covA = computeCompareCoverage(computed1);
-  const covB = computeCompareCoverage(computed2);
+  const songRow = document.createElement('div');
+  songRow.className = 'compare-row compare-song-row';
+  const songBtnA = document.createElement('button');
+  songBtnA.type = 'button';
+  songBtnA.className = 'board-btn compare-song-btn-a';
+  songBtnA.textContent = songA ? `${songA.title} (change)` : 'Choose a song';
+  songBtnA.onclick = onChangeSongA;
+  const songLabelEl = document.createElement('span');
+  songLabelEl.className = 'compare-row-label';
+  songLabelEl.textContent = 'Song';
+  const songBtnB = document.createElement('button');
+  songBtnB.type = 'button';
+  songBtnB.className = 'board-btn compare-song-btn-b';
+  songBtnB.textContent = songB ? `${songB.title} (change)` : 'Choose a song';
+  songBtnB.onclick = onChangeSongB;
+  songRow.appendChild(songBtnA);
+  songRow.appendChild(songLabelEl);
+  songRow.appendChild(songBtnB);
+  coveragePanel.appendChild(songRow);
 
-  if (!covA || !covB) {
+  const covA = songA ? computeCompareCoverage(computed1, songA) : null;
+  const covB = songB ? computeCompareCoverage(computed2, songB) : null;
+
+  if (!covA && !covB) {
     const warn = document.createElement('div');
     warn.className = 'empty-state';
-    warn.textContent = 'Both presets need a saved song to compare coverage.';
+    warn.textContent = 'Choose a song for each side above to simulate coverage.';
     coveragePanel.appendChild(warn);
   } else {
-    coveragePanel.appendChild(compareRow('Song', covA.songTitle, covB.songTitle, false));
+    const pct = (n, d) => `${n} (${((n / d) * 100).toFixed(0)}%)`;
     coveragePanel.appendChild(
-      compareRow('Secs with no bonus (>20s in)', `${covA.noBonusSeconds} (${((covA.noBonusSeconds / covA.duration) * 100).toFixed(0)}%)`, `${covB.noBonusSeconds} (${((covB.noBonusSeconds / covB.duration) * 100).toFixed(0)}%)`, false)
+      compareRow(
+        'Secs with no bonus (>20s in)',
+        covA ? pct(covA.noBonusSeconds, covA.duration) : '\u2014',
+        covB ? pct(covB.noBonusSeconds, covB.duration) : '\u2014',
+        false
+      )
     );
     coveragePanel.appendChild(
-      compareRow('Special skill secs w/ no bonus', `${covA.noBonusDuringSpecial} (${((covA.noBonusDuringSpecial / covA.duration) * 100).toFixed(0)}%)`, `${covB.noBonusDuringSpecial} (${((covB.noBonusDuringSpecial / covB.duration) * 100).toFixed(0)}%)`, false)
+      compareRow(
+        'Special skill secs w/ no bonus',
+        covA ? pct(covA.noBonusDuringSpecial, covA.duration) : '\u2014',
+        covB ? pct(covB.noBonusDuringSpecial, covB.duration) : '\u2014',
+        false
+      )
     );
-    coveragePanel.appendChild(compareRow('Peak score bonus', covA.peakBonus.toFixed(0) + '%', covB.peakBonus.toFixed(0) + '%', true));
-    coveragePanel.appendChild(compareRow('Average score bonus', covA.avgBonus.toFixed(0) + '%', covB.avgBonus.toFixed(0) + '%', true));
+    coveragePanel.appendChild(
+      compareRow('Peak score bonus', covA ? covA.peakBonus.toFixed(0) + '%' : '\u2014', covB ? covB.peakBonus.toFixed(0) + '%' : '\u2014', true)
+    );
+    coveragePanel.appendChild(
+      compareRow('Average score bonus', covA ? covA.avgBonus.toFixed(0) + '%' : '\u2014', covB ? covB.avgBonus.toFixed(0) + '%' : '\u2014', true)
+    );
 
     const memberHeader = document.createElement('div');
     memberHeader.className = 'compare-member-stats-header';
     memberHeader.textContent = 'Per-Member';
     coveragePanel.appendChild(memberHeader);
 
-    const maxLen = Math.max(covA.perMember.length, covB.perMember.length);
+    const maxLen = Math.max(covA?.perMember.length || 0, covB?.perMember.length || 0);
     for (let i = 0; i < maxLen; i++) {
-      const ma = covA.perMember[i];
-      const mb = covB.perMember[i];
+      const ma = covA?.perMember[i];
+      const mb = covB?.perMember[i];
       const group = document.createElement('div');
       group.className = 'compare-member-stat-group';
-      if (ma) group.appendChild(compareRow(`${ma.name} \u00b7 Coverage`, ma.coveragePercent.toFixed(0) + '%', mb ? mb.coveragePercent.toFixed(0) + '%' : '\u2014', true));
-      if (ma) group.appendChild(compareRow(`${ma.name} \u00b7 Suppressed`, ma.suppressedPercent.toFixed(0) + '%', mb ? mb.suppressedPercent.toFixed(0) + '%' : '\u2014', false));
-      if (ma) group.appendChild(compareRow(`${ma.name} \u00b7 Expected`, ma.expectedValue.toFixed(1) + '%', mb ? mb.expectedValue.toFixed(1) + '%' : '\u2014', true));
+
+      const groupHeader = document.createElement('div');
+      groupHeader.className = 'compare-performer-header';
+      const nameA = ma?.name ?? '\u2014';
+      const nameB = mb?.name ?? '\u2014';
+      const sameCharacter = ma && mb && nameA === nameB;
+      groupHeader.innerHTML = sameCharacter
+        ? `<span class="compare-performer-slot">Performer ${i + 1}</span><span class="compare-performer-names">${nameA}</span>`
+        : `<span class="compare-performer-slot">Performer ${i + 1}</span><span class="compare-performer-names">${nameA} <span class="compare-performer-vs">vs</span> ${nameB}</span>`;
+      group.appendChild(groupHeader);
+
+      group.appendChild(compareRow('Coverage', ma ? ma.coveragePercent.toFixed(0) + '%' : '\u2014', mb ? mb.coveragePercent.toFixed(0) + '%' : '\u2014', true));
+      group.appendChild(compareRow('Suppressed', ma ? ma.suppressedPercent.toFixed(0) + '%' : '\u2014', mb ? mb.suppressedPercent.toFixed(0) + '%' : '\u2014', false));
+      group.appendChild(compareRow('Expected', ma ? ma.expectedValue.toFixed(1) + '%' : '\u2014', mb ? mb.expectedValue.toFixed(1) + '%' : '\u2014', true));
       coveragePanel.appendChild(group);
     }
   }
@@ -2356,6 +2403,62 @@ function openComparePage() {
   overlay.appendChild(layout);
 
   const chosen = { a: null, b: null };
+  const chosenSong = { a: null, b: null };
+
+  function openSongSubPicker(side, onPicked) {
+    const subOverlay = document.createElement('div');
+    subOverlay.className = 'picker-overlay';
+    const subBox = document.createElement('div');
+    subBox.className = 'picker-box';
+    const subHeader = document.createElement('div');
+    subHeader.className = 'picker-search';
+    const searchInput = document.createElement('input');
+    searchInput.placeholder = 'Search for a song\u2026';
+    subHeader.appendChild(searchInput);
+    subBox.appendChild(subHeader);
+
+    const list = document.createElement('div');
+    list.className = 'picker-list';
+    subBox.appendChild(list);
+
+    function renderSongList(query) {
+      list.innerHTML = '';
+      const q = query.trim().toLowerCase();
+      const matches = DATA.songs.filter((s) => !q || s.title?.toLowerCase().includes(q)).slice(0, 60);
+      if (!matches.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = 'No matches.';
+        list.appendChild(empty);
+        return;
+      }
+      for (const s of matches) {
+        const item = document.createElement('div');
+        item.className = 'picker-item';
+        item.innerHTML = `<div class="picker-item-name">${s.title}</div>`;
+        item.onclick = () => {
+          chosenSong[side] = s;
+          subOverlay.remove();
+          onPicked();
+        };
+        list.appendChild(item);
+      }
+    }
+    searchInput.addEventListener('input', () => renderSongList(searchInput.value));
+    renderSongList('');
+
+    const subClose = document.createElement('div');
+    subClose.className = 'picker-close';
+    subClose.textContent = 'CLOSE';
+    subClose.onclick = () => subOverlay.remove();
+    subBox.appendChild(subClose);
+    subOverlay.appendChild(subBox);
+    subOverlay.addEventListener('click', (e) => {
+      if (e.target === subOverlay) subOverlay.remove();
+    });
+    document.body.appendChild(subOverlay);
+    searchInput.focus();
+  }
 
   function openPresetSubPicker(onChoose) {
     const subOverlay = document.createElement('div');
@@ -2423,7 +2526,18 @@ function openComparePage() {
     );
 
     if (chosen.a && chosen.b && computedA && computedB) {
-      layout.appendChild(renderCompareMiddle(chosen.a, computedA, chosen.b, computedB));
+      layout.appendChild(
+        renderCompareMiddle(
+          chosen.a,
+          computedA,
+          chosen.b,
+          computedB,
+          chosenSong.a,
+          chosenSong.b,
+          () => openSongSubPicker('a', renderLayout),
+          () => openSongSubPicker('b', renderLayout)
+        )
+      );
     } else {
       const placeholder = document.createElement('div');
       placeholder.className = 'compare-middle-col';

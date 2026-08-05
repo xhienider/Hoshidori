@@ -575,7 +575,7 @@ header.masthead {
   align-items: center;
   gap: 10px;
 }
-.compare-side-b .compare-member-row { flex-direction: row-reverse; }
+.compare-side-b .compare-member-row { justify-content: flex-end; }
 .compare-member-portrait {
   width: 48px;
   height: 48px;
@@ -612,6 +612,17 @@ header.masthead {
   min-width: 0;
 }
 .compare-mid-panel { padding: 16px; }
+
+.compare-song-row { margin-bottom: 10px; }
+.compare-song-btn-a,
+.compare-song-btn-b {
+  font-size: 11px;
+  padding: 6px 10px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
 
 .compare-row {
   display: grid;
@@ -651,7 +662,39 @@ header.masthead {
   padding-top: 10px;
   border-top: 1px solid var(--line);
 }
-.compare-member-stat-group { margin-top: 4px; }
+.compare-member-stat-group {
+  margin-top: 12px;
+  padding-top: 10px;
+  border-top: 1px solid var(--line);
+}
+.compare-member-stat-group:first-of-type {
+  border-top: none;
+  padding-top: 0;
+}
+.compare-performer-header {
+  text-align: center;
+  margin-bottom: 4px;
+}
+.compare-performer-slot {
+  display: block;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-faint);
+}
+.compare-performer-names {
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--text);
+}
+.compare-performer-vs {
+  font-size: 10px;
+  font-weight: 400;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  margin: 0 2px;
+}
 
 .preset-save-row {
   display: flex;
