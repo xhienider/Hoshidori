@@ -1729,18 +1729,63 @@ function renderCoverageRow(result, unit, scoreSupport) {
   const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
   const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
   const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
+  const noBonusPercent = (noBonusSeconds / duration) * 100;
+  const noBonusDuringSpecialPercent = (noBonusDuringSpecial / duration) * 100;
 
   const summary = document.createElement('div');
   summary.className = 'coverage-summary';
   summary.style.marginTop = '16px';
   summary.style.marginBottom = '0';
   summary.innerHTML = `
-    <div class="coverage-stat"><div class="stat-num">${noBonusSeconds}</div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
-    <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial}</div><div class="stat-label">Special skill secs w/ no bonus</div></div>
+    <div class="coverage-stat"><div class="stat-num">${noBonusSeconds} <span class="stat-num-sub">(${noBonusPercent.toFixed(0)}%)</span></div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
+    <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial} <span class="stat-num-sub">(${noBonusDuringSpecialPercent.toFixed(0)}%)</span></div><div class="stat-label">Special skill secs w/ no bonus</div></div>
     <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
     <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
   `;
   coverageRowEl.appendChild(summary);
+
+  // Per-member stats: how much of the song each member's skill was actually
+  // up, how often that uptime got suppressed by someone else's bigger bonus,
+  // and an expected-value figure (her typical bonus when active, weighted by
+  // how likely she is to actually trigger).
+  const memberLabel = document.createElement('div');
+  memberLabel.className = 'panel-label';
+  memberLabel.style.marginTop = '18px';
+  memberLabel.textContent = 'Per-Member Stats';
+  coverageRowEl.appendChild(memberLabel);
+
+  const memberStatsWrap = document.createElement('div');
+  memberStatsWrap.className = 'member-coverage-stats';
+
+  for (const u of unitCards) {
+    const activeSeconds = [];
+    let suppressedCount = 0;
+    for (const point of timeline) {
+      const m = point.perMember.find((pm) => pm.cardId === u.cardId);
+      if (m?.active) {
+        activeSeconds.push(m);
+        if (m.cardId !== point.winnerCardId) suppressedCount++;
+      }
+    }
+    const coveragePercent = (activeSeconds.length / duration) * 100;
+    const suppressedPercent = activeSeconds.length ? (suppressedCount / activeSeconds.length) * 100 : 0;
+    const avgEffectiveWhenActive = activeSeconds.length
+      ? activeSeconds.reduce((s, m) => s + m.effectiveBonus, 0) / activeSeconds.length
+      : 0;
+    const activationChance = activeSeconds.length ? activeSeconds[0].activationChance : 0;
+    const expectedValue = avgEffectiveWhenActive * (activationChance / 100);
+
+    const card = document.createElement('div');
+    card.className = 'member-coverage-card';
+    card.innerHTML = `
+      <div class="member-coverage-name">${u.shortName}</div>
+      <div class="member-coverage-row"><span>Coverage</span><span class="num">${coveragePercent.toFixed(0)}%</span></div>
+      <div class="member-coverage-row"><span>Suppressed</span><span class="num">${suppressedPercent.toFixed(0)}%</span></div>
+      <div class="member-coverage-row"><span>Expected bonus \u00d7 chance</span><span class="num">${expectedValue.toFixed(1)}%</span></div>
+    `;
+    memberStatsWrap.appendChild(card);
+  }
+  coverageRowEl.appendChild(memberStatsWrap);
 }
 
 function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {

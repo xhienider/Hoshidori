@@ -1194,6 +1194,40 @@ header.masthead {
   color: var(--text-dim);
   margin-top: 2px;
 }
+.stat-num-sub {
+  font-size: 13px;
+  color: var(--text-faint);
+}
+
+.member-coverage-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+  gap: 10px;
+  margin-top: 10px;
+}
+.member-coverage-card {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.member-coverage-name {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+.member-coverage-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  padding: 2px 0;
+}
+.member-coverage-row .num {
+  color: var(--text);
+  font-weight: 500;
+}
 
 .coverage-layout {
   display: flex;
