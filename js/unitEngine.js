@@ -653,6 +653,84 @@ export const SCORE_SUPPORT_TYPE =
  * Same caveat as estimateOverallPower: the per-member offsets (2137/5, 5139/5) are
  * the original author's fitted constants, not datamined truth.
  */
+/**
+ * Real (non-fitted) Overall Power breakdown, matching the in-game "Unit Score
+ * Details" screen's left-hand side. Each bucket is computed independently
+ * against the unbuffed base stat (never stacking on another bucket's output),
+ * matching the game's simple additive total.
+ *
+ * @param {object} result - computeUnit() output, AFTER applyBoardBonuses (so
+ *        result.memberStats holds the final board/connect-buffed values).
+ * @param {{cardId:string, stats:{performance,technique,sense}}[]} baseStats
+ *        - the pre-board snapshot (level + bloom only) for the same 5 unit
+ *        members, in the same order as result.memberStats.
+ */
+export function computeOverallPowerBreakdown(result, baseStats) {
+  const baseByCardId = Object.fromEntries(baseStats.map((m) => [m.cardId, m.stats]));
+
+  // Member Parameter: base (level + bloom, no board) stats, summed.
+  let memberParameter = 0;
+  for (const m of baseStats) {
+    memberParameter += m.stats.performance + m.stats.technique + m.stats.sense;
+  }
+
+  // Holomem Board Bonus: the delta board+connect bonuses added on top of base.
+  let holomemBoardBonus = 0;
+  for (const m of result.memberStats) {
+    const base = baseByCardId[m.cardId];
+    if (!base) continue;
+    holomemBoardBonus += m.stats.performance + m.stats.technique + m.stats.sense;
+    holomemBoardBonus -= base.performance + base.technique + base.sense;
+  }
+
+  // Outfit Skill: the leader's own leader-skill stat buff, applied to the
+  // relevant BASE stat total across the unit (not the board-buffed total).
+  let outfitSkill = 0;
+  const leaderEffect = result.leader?.effects?.[0];
+  if (leaderEffect && result.leader.conditionMet === true) {
+    const permil = Number(leaderEffect.valuePermil ?? leaderEffect.value ?? 0);
+    let relevantBase = 0;
+    if (leaderEffect.type?.includes('ALL_PARAMETER')) {
+      relevantBase = memberParameter;
+    } else if (leaderEffect.type?.includes('PERFORMANCE')) {
+      relevantBase = baseStats.reduce((s, m) => s + m.stats.performance, 0);
+    } else if (leaderEffect.type?.includes('TECHNIQUE')) {
+      relevantBase = baseStats.reduce((s, m) => s + m.stats.technique, 0);
+    } else if (leaderEffect.type?.includes('SENSE')) {
+      relevantBase = baseStats.reduce((s, m) => s + m.stats.sense, 0);
+    }
+    outfitSkill = Math.round(relevantBase * (permil / 1000));
+  }
+
+  // Passive Skill: only the stat-boosting passive effect types (ALL/PERF/
+  // TECH/SENSE _UP_PERMIL_UP) - Score Support is a different mechanic and
+  // belongs to the Score Bonus side, not Overall Power.
+  const STAT_KEY_BY_TYPE = {
+    LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP: 'performance',
+    LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP: 'technique',
+    LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP: 'sense',
+  };
+  const ALL_PARAM_TYPE = 'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_ALL_PARAMETER_UP_PERMIL_UP';
+  let passiveSkill = 0;
+  for (const p of result.passives) {
+    for (const effect of p.effects) {
+      if (!effect.applies) continue;
+      const statKey = STAT_KEY_BY_TYPE[effect.type];
+      const isAllParam = effect.type === ALL_PARAM_TYPE;
+      if (!statKey && !isAllParam) continue;
+      for (const recipientId of effect.recipients) {
+        const base = baseByCardId[recipientId];
+        if (!base) continue;
+        const relevantBase = isAllParam ? base.performance + base.technique + base.sense : base[statKey];
+        passiveSkill += relevantBase * (effect.valuePermil / 1000);
+      }
+    }
+  }
+  passiveSkill = Math.round(passiveSkill);
+
+  return { memberParameter, outfitSkill, holomemBoardBonus, passiveSkill };
+}
+
 export function estimatePassivePower(passiveResults, memberStats) {
   const statsByCardId = Object.fromEntries(memberStats.map((m) => [m.cardId, m.stats]));
   let total = 0;

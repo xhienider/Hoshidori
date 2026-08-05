@@ -3,8 +3,7 @@ import { evaluateLeaderCondition, resolveEffectRecipients } from './js/skillEngi
 import {
   computeUnit,
   mapSpecialSkillsToSong,
-  estimateOverallPower,
-  estimatePassivePower,
+  computeOverallPowerBreakdown,
   computeScoreSupport,
   simulateActiveTimeline,
   computeBoardBonuses,
@@ -227,6 +226,8 @@ const state = {
     generations: new Set(), // generation strings; empty = no filter
   },
   mobileAccordionExpanded: new Set(['leader']), // which slot keys are open on mobile
+  manualMemoryBonus: 0, // Memory Bonus - depends on player's whole-account memory unlocks, entered manually
+  manualPowerUpBonus: 0, // Member Power-Up Bonus - depends on player's whole-roster level-up count, entered manually
 };
 
 const MOBILE_BREAKPOINT = '(max-width: 700px)';
@@ -1261,7 +1262,7 @@ function recompute() {
 
   renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats);
   renderCoverageRow(result, unit, scoreSupport);
-  renderPowerRow(result, leaderCard, scoreSupport);
+  renderPowerRow(result, leaderCard, scoreSupport, baseStats);
 }
 
 /** Leader column content when the team isn't complete yet - song picking and a
@@ -1726,40 +1727,79 @@ function renderCoverageRow(result, unit, scoreSupport) {
   coverageRowEl.appendChild(summary);
 }
 
-function renderPowerRow(result, leaderCard, scoreSupport) {
+function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   powerRowEl.innerHTML = '';
   const panel = document.createElement('div');
   panel.className = 'panel';
   const label = document.createElement('div');
   label.className = 'panel-label';
-  label.textContent = 'Overall Power \u00b7 Estimate';
+  label.textContent = 'Overall Power';
   panel.appendChild(label);
 
-  const leaderEffect = result.leader?.effects?.[0];
-  let buffStat = 'all';
-  if (leaderEffect?.type?.includes('TECHNIQUE')) buffStat = 'technique';
-  else if (leaderEffect?.type?.includes('PERFORMANCE')) buffStat = 'performance';
-  else if (leaderEffect?.type?.includes('SENSE')) buffStat = 'sense';
+  const breakdown = computeOverallPowerBreakdown(result, baseStats);
+  const total =
+    breakdown.memberParameter +
+    breakdown.outfitSkill +
+    breakdown.holomemBoardBonus +
+    breakdown.passiveSkill +
+    state.manualMemoryBonus +
+    state.manualPowerUpBonus;
 
-  const estimate = estimateOverallPower({
-    statTotals: result.statTotals,
-    leaderBuff: leaderEffect
-      ? { buffStat, buffScorePercent: Number(leaderEffect.value) / 10, conditionMet: result.leader.conditionMet === true }
-      : null,
-    passivePowerEstimate: estimatePassivePower(result.passives, result.memberStats),
-  });
+  const totalEl = document.createElement('div');
+  totalEl.className = 'power-total';
+  totalEl.textContent = total.toLocaleString();
+  panel.appendChild(totalEl);
 
-  panel.innerHTML = `
-    <div class="power-total">${estimate.total.toLocaleString()}</div>
-    <div class="power-breakdown">
-      <span>Member Parameter</span><span class="num">${estimate.memberParameter.toLocaleString()}</span>
-      <span>Outfit Skill</span><span class="num">${estimate.outfitSkill.toLocaleString()}</span>
-      <span>Passive Skill</span><span class="num">${estimate.passiveSkill.toLocaleString()}</span>
-      <span>Holomem Board Bonus</span><span class="num">${estimate.boardBonus.toLocaleString()}</span>
-      <span>Memory Bonus</span><span class="num">${estimate.memoryBonus.toLocaleString()}</span>
-    </div>
-    <div class="estimate-note">${estimate._note} Holomem Board and Memory bonuses still require manual input \u2014 currently shown as 0.</div>
-  `;
+  const grid = document.createElement('div');
+  grid.className = 'power-breakdown';
+
+  const addRow = (label, valueNode) => {
+    const labelEl = document.createElement('span');
+    labelEl.textContent = label;
+    grid.appendChild(labelEl);
+    grid.appendChild(valueNode);
+  };
+
+  const makeNum = (n) => {
+    const el = document.createElement('span');
+    el.className = 'num';
+    el.textContent = n.toLocaleString();
+    return el;
+  };
+  addRow('Member Parameter', makeNum(breakdown.memberParameter));
+  addRow('Outfit Skill', makeNum(breakdown.outfitSkill));
+  addRow('Passive Skill', makeNum(breakdown.passiveSkill));
+  addRow('Holomem Board Bonus', makeNum(breakdown.holomemBoardBonus));
+
+  const makeManualInput = (value, onChange) => {
+    const el = document.createElement('input');
+    el.type = 'number';
+    el.className = 'mini-input power-manual-input';
+    el.min = 0;
+    el.value = value;
+    el.onchange = () => {
+      onChange(clamp(Number(el.value) || 0, 0, 9999999));
+      recompute();
+    };
+    return el;
+  };
+  addRow(
+    'Memory Bonus',
+    makeManualInput(state.manualMemoryBonus, (v) => (state.manualMemoryBonus = v))
+  );
+  addRow(
+    'Member Power-Up Bonus',
+    makeManualInput(state.manualPowerUpBonus, (v) => (state.manualPowerUpBonus = v))
+  );
+
+  panel.appendChild(grid);
+
+  const note = document.createElement('div');
+  note.className = 'estimate-note';
+  note.textContent =
+    'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green (support) board bonuses aren\u2019t included in Holomem Board Bonus yet. Memory Bonus and Member Power-Up Bonus depend on your whole account and are entered manually above.';
+  panel.appendChild(note);
+
   powerRowEl.appendChild(panel);
 }
 
