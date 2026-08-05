@@ -2115,33 +2115,245 @@ function presetSummaryLine(preset) {
   return `Leader: ${leaderCard?.shortName ?? '\u2014'} \u00b7 ${memberNames || 'no members'}`;
 }
 
+/** Builds one team column for the compare page: leader on top, 5 members
+ *  stacked vertically below, each showing portrait + name + subtitle. */
+function renderCompareTeamColumn(side, preset, computed, onChoosePreset) {
+  const col = document.createElement('div');
+  col.className = 'compare-team-col compare-side-' + side;
+
+  if (!preset) {
+    const chooseBtn = document.createElement('button');
+    chooseBtn.type = 'button';
+    chooseBtn.className = 'board-btn compare-choose-btn';
+    chooseBtn.textContent = `Choose Preset ${side === 'a' ? '1' : '2'}`;
+    chooseBtn.onclick = onChoosePreset;
+    col.appendChild(chooseBtn);
+    return col;
+  }
+
+  const changeBtn = document.createElement('button');
+  changeBtn.type = 'button';
+  changeBtn.className = 'compare-change-btn';
+  changeBtn.textContent = `${preset.name} (change)`;
+  changeBtn.onclick = onChoosePreset;
+  col.appendChild(changeBtn);
+
+  if (!computed) {
+    const warn = document.createElement('div');
+    warn.className = 'empty-state';
+    warn.textContent = 'Missing leader or unit.';
+    col.appendChild(warn);
+    return col;
+  }
+
+  const makeMemberRow = (card, roleLabel) => {
+    const row = document.createElement('div');
+    row.className = 'compare-member-row';
+    const portrait = document.createElement('img');
+    portrait.className = 'compare-member-portrait';
+    portrait.src = `images/cards/${card.cardId}.webp`;
+    portrait.alt = card.characterName;
+    portrait.loading = 'lazy';
+    const info = document.createElement('div');
+    info.className = 'compare-member-info';
+    info.innerHTML = `<div class="compare-member-name">${card.characterName}</div><div class="compare-member-role">${roleLabel}</div>`;
+    if (side === 'a') {
+      row.appendChild(portrait);
+      row.appendChild(info);
+    } else {
+      row.appendChild(info);
+      row.appendChild(portrait);
+    }
+    return row;
+  };
+
+  col.appendChild(makeMemberRow(computed.leaderCard, 'Leader'));
+  const divider = document.createElement('div');
+  divider.className = 'compare-team-divider';
+  col.appendChild(divider);
+  for (const u of computed.unit) {
+    col.appendChild(makeMemberRow(u.card, u.card.cardSubtitle || ''));
+  }
+
+  return col;
+}
+
+function computeComparePower(preset, computed) {
+  const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats);
+  const memoryBonus = Math.round(breakdown.memberParameter * ((preset.manualMemoryBonusPercent || 0) / 100));
+  const subtotal =
+    breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
+  const powerUpBonus = Math.round(subtotal * ((preset.manualPowerUpBonusPercent || 0) / 100));
+  const total = subtotal + powerUpBonus;
+  return { ...breakdown, memoryBonus, powerUpBonus, total };
+}
+
+function computeCompareCoverage(computed) {
+  if (!computed.song) return null;
+  const duration = computed.song.playingSeconds || Math.max(...computed.song.feverSeconds) + 15;
+  const unitCards = computed.unit.map((u) => u.card);
+  const timeline = simulateActiveTimeline({
+    activeResults: computed.result.actives,
+    specialResults: computed.result.specials,
+    unitCards,
+    scoreSupport: computed.scoreSupport,
+    feverSeconds: computed.song.feverSeconds,
+    durationSeconds: duration,
+  });
+  const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
+  const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
+  const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
+  const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
+
+  const perMember = unitCards.map((u) => {
+    const activeSeconds = [];
+    let suppressedCount = 0;
+    for (const point of timeline) {
+      const m = point.perMember.find((pm) => pm.cardId === u.cardId);
+      if (m?.active) {
+        activeSeconds.push(m);
+        if (m.cardId !== point.winnerCardId) suppressedCount++;
+      }
+    }
+    const coveragePercent = (activeSeconds.length / duration) * 100;
+    const suppressedPercent = activeSeconds.length ? (suppressedCount / activeSeconds.length) * 100 : 0;
+    const expectedValue = activeSeconds.length
+      ? activeSeconds.reduce((s, m) => s + m.effectiveBonus * (m.activationChance / 100), 0) / activeSeconds.length
+      : 0;
+    return { name: u.shortName, coveragePercent, suppressedPercent, expectedValue };
+  });
+
+  return { duration, noBonusSeconds, noBonusDuringSpecial, peakBonus, avgBonus, perMember, songTitle: computed.song.title };
+}
+
+/** A single scoreboard-style row: value A on the left, label centered, value
+ *  B on the right - the "in-between" comparison format the layout calls for,
+ *  rather than two separate side-by-side blocks. */
+function compareRow(label, valueA, valueB, highlightHigher) {
+  const row = document.createElement('div');
+  row.className = 'compare-row';
+  const aEl = document.createElement('span');
+  aEl.className = 'compare-row-value compare-row-value-a';
+  const bEl = document.createElement('span');
+  bEl.className = 'compare-row-value compare-row-value-b';
+  aEl.textContent = valueA;
+  bEl.textContent = valueB;
+  if (highlightHigher) {
+    const numA = parseFloat(String(valueA).replace(/[^0-9.-]/g, ''));
+    const numB = parseFloat(String(valueB).replace(/[^0-9.-]/g, ''));
+    if (!Number.isNaN(numA) && !Number.isNaN(numB) && numA !== numB) {
+      (numA > numB ? aEl : bEl).classList.add('compare-row-value-winner');
+    }
+  }
+  const labelEl = document.createElement('span');
+  labelEl.className = 'compare-row-label';
+  labelEl.textContent = label;
+  row.appendChild(aEl);
+  row.appendChild(labelEl);
+  row.appendChild(bEl);
+  return row;
+}
+
+function renderCompareMiddle(preset1, computed1, preset2, computed2) {
+  const middle = document.createElement('div');
+  middle.className = 'compare-middle-col';
+
+  // Overall Power
+  const powerPanel = document.createElement('div');
+  powerPanel.className = 'panel compare-mid-panel';
+  const powerLabel = document.createElement('div');
+  powerLabel.className = 'panel-label';
+  powerLabel.textContent = 'Overall Power';
+  powerPanel.appendChild(powerLabel);
+
+  const powerA = computeComparePower(preset1, computed1);
+  const powerB = computeComparePower(preset2, computed2);
+
+  const totalRow = document.createElement('div');
+  totalRow.className = 'compare-row compare-row-total';
+  totalRow.innerHTML = `<span class="compare-row-value compare-row-value-a ${powerA.total >= powerB.total ? 'compare-row-value-winner' : ''}">${powerA.total.toLocaleString()}</span><span class="compare-row-label">Total</span><span class="compare-row-value compare-row-value-b ${powerB.total > powerA.total ? 'compare-row-value-winner' : ''}">${powerB.total.toLocaleString()}</span>`;
+  powerPanel.appendChild(totalRow);
+
+  powerPanel.appendChild(compareRow('Member Parameter', powerA.memberParameter.toLocaleString(), powerB.memberParameter.toLocaleString(), true));
+  powerPanel.appendChild(compareRow('Outfit Skill', powerA.outfitSkill.toLocaleString(), powerB.outfitSkill.toLocaleString(), true));
+  powerPanel.appendChild(compareRow('Passive Skill', powerA.passiveSkill.toLocaleString(), powerB.passiveSkill.toLocaleString(), true));
+  powerPanel.appendChild(compareRow('Holomem Board Bonus', powerA.holomemBoardBonus.toLocaleString(), powerB.holomemBoardBonus.toLocaleString(), true));
+  powerPanel.appendChild(compareRow('Memory Bonus', powerA.memoryBonus.toLocaleString(), powerB.memoryBonus.toLocaleString(), true));
+  powerPanel.appendChild(compareRow('Member Power-Up Bonus', powerA.powerUpBonus.toLocaleString(), powerB.powerUpBonus.toLocaleString(), true));
+  middle.appendChild(powerPanel);
+
+  // Coverage
+  const coveragePanel = document.createElement('div');
+  coveragePanel.className = 'panel compare-mid-panel';
+  const coverageLabel = document.createElement('div');
+  coverageLabel.className = 'panel-label';
+  coverageLabel.textContent = 'Coverage Statistics';
+  coveragePanel.appendChild(coverageLabel);
+
+  const covA = computeCompareCoverage(computed1);
+  const covB = computeCompareCoverage(computed2);
+
+  if (!covA || !covB) {
+    const warn = document.createElement('div');
+    warn.className = 'empty-state';
+    warn.textContent = 'Both presets need a saved song to compare coverage.';
+    coveragePanel.appendChild(warn);
+  } else {
+    coveragePanel.appendChild(compareRow('Song', covA.songTitle, covB.songTitle, false));
+    coveragePanel.appendChild(
+      compareRow('Secs with no bonus (>20s in)', `${covA.noBonusSeconds} (${((covA.noBonusSeconds / covA.duration) * 100).toFixed(0)}%)`, `${covB.noBonusSeconds} (${((covB.noBonusSeconds / covB.duration) * 100).toFixed(0)}%)`, false)
+    );
+    coveragePanel.appendChild(
+      compareRow('Special skill secs w/ no bonus', `${covA.noBonusDuringSpecial} (${((covA.noBonusDuringSpecial / covA.duration) * 100).toFixed(0)}%)`, `${covB.noBonusDuringSpecial} (${((covB.noBonusDuringSpecial / covB.duration) * 100).toFixed(0)}%)`, false)
+    );
+    coveragePanel.appendChild(compareRow('Peak score bonus', covA.peakBonus.toFixed(0) + '%', covB.peakBonus.toFixed(0) + '%', true));
+    coveragePanel.appendChild(compareRow('Average score bonus', covA.avgBonus.toFixed(0) + '%', covB.avgBonus.toFixed(0) + '%', true));
+
+    const memberHeader = document.createElement('div');
+    memberHeader.className = 'compare-member-stats-header';
+    memberHeader.textContent = 'Per-Member';
+    coveragePanel.appendChild(memberHeader);
+
+    const maxLen = Math.max(covA.perMember.length, covB.perMember.length);
+    for (let i = 0; i < maxLen; i++) {
+      const ma = covA.perMember[i];
+      const mb = covB.perMember[i];
+      const group = document.createElement('div');
+      group.className = 'compare-member-stat-group';
+      if (ma) group.appendChild(compareRow(`${ma.name} \u00b7 Coverage`, ma.coveragePercent.toFixed(0) + '%', mb ? mb.coveragePercent.toFixed(0) + '%' : '\u2014', true));
+      if (ma) group.appendChild(compareRow(`${ma.name} \u00b7 Suppressed`, ma.suppressedPercent.toFixed(0) + '%', mb ? mb.suppressedPercent.toFixed(0) + '%' : '\u2014', false));
+      if (ma) group.appendChild(compareRow(`${ma.name} \u00b7 Expected`, ma.expectedValue.toFixed(1) + '%', mb ? mb.expectedValue.toFixed(1) + '%' : '\u2014', true));
+      coveragePanel.appendChild(group);
+    }
+  }
+  middle.appendChild(coveragePanel);
+
+  return middle;
+}
+
 function openComparePage() {
   const overlay = document.createElement('div');
-  overlay.className = 'picker-overlay';
-
-  const box = document.createElement('div');
-  box.className = 'picker-box compare-box';
+  overlay.className = 'compare-page-overlay';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
 
   const header = document.createElement('div');
-  header.className = 'picker-search';
-  header.innerHTML = `<div class="board-editor-title">Compare Presets</div><div class="board-editor-subtitle">Choose two saved presets to compare their Overall Power and coverage side by side.</div>`;
-  box.appendChild(header);
+  header.className = 'compare-page-header';
+  header.innerHTML = `<div class="board-editor-title">Compare Presets</div>`;
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'compare-page-close';
+  closeBtn.textContent = '\u2715 Back to Builder';
+  closeBtn.onclick = () => {
+    overlay.remove();
+    document.body.style.overflow = '';
+  };
+  header.appendChild(closeBtn);
+  overlay.appendChild(header);
 
-  const body = document.createElement('div');
-  body.className = 'compare-body';
-  box.appendChild(body);
-
-  const close = document.createElement('div');
-  close.className = 'picker-close';
-  close.textContent = 'CLOSE';
-  close.onclick = () => overlay.remove();
-  box.appendChild(close);
-
-  overlay.appendChild(box);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.remove();
-  });
-  document.body.appendChild(overlay);
+  const layout = document.createElement('div');
+  layout.className = 'compare-3col-layout';
+  overlay.appendChild(layout);
 
   const chosen = { a: null, b: null };
 
@@ -2195,193 +2407,44 @@ function openComparePage() {
     document.body.appendChild(subOverlay);
   }
 
-  function renderBody() {
-    body.innerHTML = '';
+  function renderLayout() {
+    layout.innerHTML = '';
 
-    const selectors = document.createElement('div');
-    selectors.className = 'compare-selectors';
-    for (const side of ['a', 'b']) {
-      const slot = document.createElement('div');
-      slot.className = 'compare-selector-slot compare-side-' + side;
-      const preset = chosen[side];
-      const btn = document.createElement('button');
-      btn.type = 'button';
-      btn.className = 'board-btn';
-      btn.textContent = preset ? `${preset.name} (change)` : `Choose Preset ${side === 'a' ? '1' : '2'}`;
-      btn.onclick = () => openPresetSubPicker((p) => {
-        chosen[side] = p;
-        renderBody();
-      });
-      slot.appendChild(btn);
-      if (preset) {
-        const sub = document.createElement('div');
-        sub.className = 'picker-item-sub';
-        sub.textContent = presetSummaryLine(preset);
-        slot.appendChild(sub);
-      }
-      selectors.appendChild(slot);
-    }
-    body.appendChild(selectors);
+    const computedA = chosen.a ? computeFullResult(presetToTeamState(chosen.a)) : null;
+    const computedB = chosen.b ? computeFullResult(presetToTeamState(chosen.b)) : null;
 
-    if (!chosen.a || !chosen.b) return;
+    layout.appendChild(
+      renderCompareTeamColumn('a', chosen.a, computedA, () =>
+        openPresetSubPicker((p) => {
+          chosen.a = p;
+          renderLayout();
+        })
+      )
+    );
 
-    const computedA = computeFullResult(presetToTeamState(chosen.a));
-    const computedB = computeFullResult(presetToTeamState(chosen.b));
-    if (!computedA || !computedB) {
-      const warn = document.createElement('div');
-      warn.className = 'empty-state';
-      warn.textContent = 'One of these presets is missing its leader or unit and can\u2019t be computed.';
-      body.appendChild(warn);
-      return;
+    if (chosen.a && chosen.b && computedA && computedB) {
+      layout.appendChild(renderCompareMiddle(chosen.a, computedA, chosen.b, computedB));
+    } else {
+      const placeholder = document.createElement('div');
+      placeholder.className = 'compare-middle-col';
+      const msg = document.createElement('div');
+      msg.className = 'empty-state';
+      msg.textContent = 'Choose both presets to see the comparison.';
+      placeholder.appendChild(msg);
+      layout.appendChild(placeholder);
     }
 
-    renderComparePower(body, chosen.a, computedA, chosen.b, computedB);
-    renderCompareCoverage(body, chosen.a, computedA, chosen.b, computedB);
+    layout.appendChild(
+      renderCompareTeamColumn('b', chosen.b, computedB, () =>
+        openPresetSubPicker((p) => {
+          chosen.b = p;
+          renderLayout();
+        })
+      )
+    );
   }
 
-  renderBody();
-}
-
-function renderComparePower(container, presetA, computedA, presetB, computedB) {
-  const panel = document.createElement('div');
-  panel.className = 'panel compare-power-panel';
-  const label = document.createElement('div');
-  label.className = 'panel-label';
-  label.textContent = 'Overall Power';
-  panel.appendChild(label);
-
-  const row = document.createElement('div');
-  row.className = 'compare-power-row';
-
-  for (const [side, preset, computed] of [
-    ['a', presetA, computedA],
-    ['b', presetB, computedB],
-  ]) {
-    const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats);
-    const memoryBonus = Math.round(breakdown.memberParameter * ((preset.manualMemoryBonusPercent || 0) / 100));
-    const subtotal =
-      breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
-    const powerUpBonus = Math.round(subtotal * ((preset.manualPowerUpBonusPercent || 0) / 100));
-    const total = subtotal + powerUpBonus;
-
-    const col = document.createElement('div');
-    col.className = 'compare-power-col compare-side-' + side;
-    col.innerHTML = `
-      <div class="compare-col-title">${preset.name}</div>
-      <div class="power-total">${total.toLocaleString()}</div>
-      <div class="power-breakdown">
-        <span>Member Parameter</span><span class="num">${breakdown.memberParameter.toLocaleString()}</span>
-        <span>Outfit Skill</span><span class="num">${breakdown.outfitSkill.toLocaleString()}</span>
-        <span>Passive Skill</span><span class="num">${breakdown.passiveSkill.toLocaleString()}</span>
-        <span>Holomem Board Bonus</span><span class="num">${breakdown.holomemBoardBonus.toLocaleString()}</span>
-        <span>Memory Bonus</span><span class="num">${memoryBonus.toLocaleString()}</span>
-        <span>Member Power-Up Bonus</span><span class="num">${powerUpBonus.toLocaleString()}</span>
-      </div>
-    `;
-    row.appendChild(col);
-  }
-  panel.appendChild(row);
-  container.appendChild(panel);
-}
-
-function renderCompareCoverage(container, presetA, computedA, presetB, computedB) {
-  const panel = document.createElement('div');
-  panel.className = 'panel compare-coverage-panel';
-  const label = document.createElement('div');
-  label.className = 'panel-label';
-  label.textContent = 'Coverage Statistics';
-  panel.appendChild(label);
-
-  const row = document.createElement('div');
-  row.className = 'compare-power-row';
-
-  for (const [side, preset, computed] of [
-    ['a', presetA, computedA],
-    ['b', presetB, computedB],
-  ]) {
-    const col = document.createElement('div');
-    col.className = 'compare-power-col compare-side-' + side;
-
-    const title = document.createElement('div');
-    title.className = 'compare-col-title';
-    title.textContent = preset.name;
-    col.appendChild(title);
-
-    if (!computed.song) {
-      const noSong = document.createElement('div');
-      noSong.className = 'empty-state';
-      noSong.textContent = 'This preset was saved without a song selected, so coverage can\u2019t be simulated.';
-      col.appendChild(noSong);
-      row.appendChild(col);
-      continue;
-    }
-
-    const duration = computed.song.playingSeconds || Math.max(...computed.song.feverSeconds) + 15;
-    const unitCards = computed.unit.map((u) => u.card);
-    const timeline = simulateActiveTimeline({
-      activeResults: computed.result.actives,
-      specialResults: computed.result.specials,
-      unitCards,
-      scoreSupport: computed.scoreSupport,
-      feverSeconds: computed.song.feverSeconds,
-      durationSeconds: duration,
-    });
-
-    const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
-    const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
-    const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
-    const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
-
-    const summary = document.createElement('div');
-    summary.className = 'coverage-summary';
-    summary.innerHTML = `
-      <div class="coverage-stat"><div class="stat-num">${noBonusSeconds} <span class="stat-num-sub">(${((noBonusSeconds / duration) * 100).toFixed(0)}%)</span></div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
-      <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial} <span class="stat-num-sub">(${((noBonusDuringSpecial / duration) * 100).toFixed(0)}%)</span></div><div class="stat-label">Special skill secs w/ no bonus</div></div>
-      <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
-      <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
-    `;
-    col.appendChild(summary);
-
-    const songNote = document.createElement('div');
-    songNote.className = 'picker-item-sub';
-    songNote.style.marginTop = '6px';
-    songNote.textContent = `Song: ${computed.song.title}`;
-    col.appendChild(songNote);
-
-    const memberStatsWrap = document.createElement('div');
-    memberStatsWrap.className = 'member-coverage-stats';
-    for (const u of unitCards) {
-      const activeSeconds = [];
-      let suppressedCount = 0;
-      for (const point of timeline) {
-        const m = point.perMember.find((pm) => pm.cardId === u.cardId);
-        if (m?.active) {
-          activeSeconds.push(m);
-          if (m.cardId !== point.winnerCardId) suppressedCount++;
-        }
-      }
-      const coveragePercent = (activeSeconds.length / duration) * 100;
-      const suppressedPercent = activeSeconds.length ? (suppressedCount / activeSeconds.length) * 100 : 0;
-      const expectedValue = activeSeconds.length
-        ? activeSeconds.reduce((s, m) => s + m.effectiveBonus * (m.activationChance / 100), 0) / activeSeconds.length
-        : 0;
-
-      const card = document.createElement('div');
-      card.className = 'member-coverage-card';
-      card.innerHTML = `
-        <div class="member-coverage-name">${u.shortName}</div>
-        <div class="member-coverage-row"><span>Coverage</span><span class="num">${coveragePercent.toFixed(0)}%</span></div>
-        <div class="member-coverage-row"><span>Suppressed</span><span class="num">${suppressedPercent.toFixed(0)}%</span></div>
-        <div class="member-coverage-row"><span>Expected bonus \u00d7 chance</span><span class="num">${expectedValue.toFixed(1)}%</span></div>
-      `;
-      memberStatsWrap.appendChild(card);
-    }
-    col.appendChild(memberStatsWrap);
-
-    row.appendChild(col);
-  }
-  panel.appendChild(row);
-  container.appendChild(panel);
+  renderLayout();
 }
 
 async function main() {
