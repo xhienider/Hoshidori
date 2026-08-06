@@ -1,6 +1,6 @@
 # Hoshidori
 
-Holodori Unofficial Simulator and Comparison Tool
+Holodori Unofficial Simulator and Comparison Tool v1
 
 
 
