@@ -1,2705 +1,2781 @@
 [
-  {
-    "id": "m0049",
-    "title": "SPARKS",
-    "playingSeconds": 104,
-    "feverSeconds": [
-      9.09,
-      27.27,
-      43.64,
-      60.0,
-      85.45
-    ],
-    "characterIds": [
-      "chr-04002"
-    ]
-  },
-  {
-    "id": "m0140",
-    "title": "Escort me! Luknight",
-    "playingSeconds": 111,
-    "feverSeconds": [
-      25.37,
-      40.71,
-      56.06,
-      74.2,
-      90.95
-    ],
-    "characterIds": [
-      "chr-00028"
-    ]
-  },
-  {
-    "id": "m0022",
-    "title": "Dream☆Story",
-    "playingSeconds": 120,
-    "feverSeconds": [
-      15.88,
-      33.53,
-      51.18,
-      67.06,
-      98.82
-    ],
-    "characterIds": [
-      "chr-00001"
-    ]
-  },
-  {
-    "id": "m0023",
-    "title": "rirubi",
-    "playingSeconds": 142,
-    "feverSeconds": [
-      23.83,
-      44.77,
-      72.01,
-      91.13,
-      123.47
-    ],
-    "characterIds": [
-      "chr-00002"
-    ]
-  },
-  {
-    "id": "m0026",
-    "title": "SHALLYS",
-    "playingSeconds": 146,
-    "feverSeconds": [
-      27.0,
-      51.0,
-      75.0,
-      98.05,
-      120.21
-    ],
-    "characterIds": [
-      "chr-00004"
-    ]
-  },
-  {
-    "id": "m0034",
-    "title": "PEKORANDOMBRAIN",
-    "playingSeconds": 113,
-    "feverSeconds": [
-      17.83,
-      34.29,
-      50.74,
-      76.8,
-      93.26
-    ],
-    "characterIds": [
-      "chr-00019"
-    ]
-  },
-  {
-    "id": "m0041",
-    "title": "Lioness’ Pride",
-    "playingSeconds": 120,
-    "feverSeconds": [
-      14.21,
-      33.16,
-      52.11,
-      74.21,
-      93.16
-    ],
-    "characterIds": [
-      "chr-00032"
-    ]
-  },
-  {
-    "id": "m0044",
-    "title": "WAO!!(2025 ver.)",
-    "playingSeconds": 159,
-    "feverSeconds": [
-      16.96,
-      49.57,
-      66.52,
-      87.39,
-      121.3
-    ],
-    "characterIds": [
-      "chr-00037"
-    ]
-  },
-  {
-    "id": "m0052",
-    "title": "JOLLIE JOLLIE",
-    "playingSeconds": 119,
-    "feverSeconds": [
-      14.22,
-      37.33,
-      58.67,
-      80.0,
-      101.33
-    ],
-    "characterIds": [
-      "chr-03004"
-    ]
-  },
-  {
-    "id": "m0060",
-    "title": "You're Mine",
-    "playingSeconds": 150,
-    "feverSeconds": [
-      17.14,
-      47.62,
-      70.48,
-      93.33,
-      123.81
-    ],
-    "characterIds": [
-      "chr-03007"
-    ]
-  },
-  {
-    "id": "m0171",
-    "title": "Touch the hurt again",
-    "playingSeconds": 114,
-    "feverSeconds": [
-      18.18,
-      42.42,
-      61.82,
-      81.21,
-      96.97
-    ],
-    "characterIds": [
-      "chr-00021",
-      "chr-00027",
-      "chr-00034"
-    ]
-  },
-  {
-    "id": "m0014",
-    "title": "High Tide",
-    "playingSeconds": 130,
-    "feverSeconds": [
-      13.01,
-      47.71,
-      65.06,
-      88.19,
-      105.54
-    ],
-    "characterIds": [
-      "chr-03002"
-    ]
-  },
-  {
-    "id": "m0021",
-    "title": "Overd",
-    "playingSeconds": 112,
-    "feverSeconds": [
-      9.23,
-      31.38,
-      53.54,
-      72.0,
-      88.62
-    ],
-    "characterIds": [
-      "chr-00036"
-    ]
-  },
-  {
-    "id": "m0028",
-    "title": "Virtualove",
-    "playingSeconds": 155,
-    "feverSeconds": [
-      17.33,
-      52.0,
-      76.0,
-      110.67,
-      129.33
-    ],
-    "characterIds": [
-      "chr-00007"
-    ]
-  },
-  {
-    "id": "m0032",
-    "title": "Pleiades!",
-    "playingSeconds": 96,
-    "feverSeconds": [
-      17.84,
-      34.05,
-      50.27,
-      66.49,
-      81.08
-    ],
-    "characterIds": [
-      "chr-00012"
-    ]
-  },
-  {
-    "id": "m0020",
-    "title": "NENENENENENENENE!DAIBAKUSOU",
-    "playingSeconds": 122,
-    "feverSeconds": [
-      25.62,
-      42.56,
-      59.5,
-      80.68,
-      99.03
-    ],
-    "characterIds": [
-      "chr-00031"
-    ]
-  },
-  {
-    "id": "m0033",
-    "title": "Doggy god's street",
-    "playingSeconds": 127,
-    "feverSeconds": [
-      9.38,
-      31.88,
-      61.88,
-      84.38,
-      108.75
-    ],
-    "characterIds": [
-      "chr-00017"
-    ]
-  },
-  {
-    "id": "m0040",
-    "title": "Asuenokyokaisen",
-    "playingSeconds": 133,
-    "feverSeconds": [
-      13.5,
-      37.5,
-      57.0,
-      85.5,
-      103.5
-    ],
-    "characterIds": [
-      "chr-00030"
-    ]
-  },
-  {
-    "id": "m0206",
-    "title": "Renai Circulation",
-    "playingSeconds": 90,
-    "feverSeconds": [
-      14.0,
-      28.0,
-      44.0,
-      58.0,
-      74.0
-    ],
-    "characterIds": [
-      "chr-00026"
-    ]
-  },
-  {
-    "id": "m0042",
-    "title": "Po",
-    "playingSeconds": 141,
-    "feverSeconds": [
-      19.46,
-      42.52,
-      65.59,
-      82.88,
-      107.39
-    ],
-    "characterIds": [
-      "chr-00034"
-    ]
-  },
-  {
-    "id": "m0302",
-    "title": "Dead Ma’am’s Chest",
-    "playingSeconds": 132,
-    "feverSeconds": [
-      18.0,
-      36.0,
-      60.0,
-      81.0,
-      108.0
-    ],
-    "characterIds": [
-      "chr-00023"
-    ]
-  },
-  {
-    "id": "m0304",
-    "title": "LET'S JUST CRASH",
-    "playingSeconds": 112,
-    "feverSeconds": [
-      14.27,
-      32.43,
-      53.19,
-      80.43,
-      96.0
-    ],
-    "characterIds": [
-      "chr-04001"
-    ]
-  },
-  {
-    "id": "m0306",
-    "title": "1:15 AM",
-    "playingSeconds": 147,
-    "feverSeconds": [
-      15.16,
-      45.47,
-      65.68,
-      101.05,
-      121.26
-    ],
-    "characterIds": [
-      "chr-03001"
-    ]
-  },
-  {
-    "id": "m0308",
-    "title": "UFO",
-    "playingSeconds": 104,
-    "feverSeconds": [
-      17.96,
-      35.5,
-      52.95,
-      70.4,
-      87.91
-    ],
-    "characterIds": [
-      "chr-06004",
-      "chr-06005"
-    ]
-  },
-  {
-    "id": "m0053",
-    "title": "Unreal Veil",
-    "playingSeconds": 123,
-    "feverSeconds": [
-      17.68,
-      37.89,
-      68.21,
-      88.42,
-      106.11
-    ],
-    "characterIds": [
-      "chr-03005"
-    ]
-  },
-  {
-    "id": "m0035",
-    "title": "Zenryoku-Jumping!",
-    "playingSeconds": 97,
-    "feverSeconds": [
-      15.0,
-      31.67,
-      48.33,
-      65.0,
-      80.0
-    ],
-    "characterIds": [
-      "chr-00021"
-    ]
-  },
-  {
-    "id": "m0038",
-    "title": "Palette",
-    "playingSeconds": 153,
-    "feverSeconds": [
-      26.5,
-      50.06,
-      79.51,
-      97.18,
-      126.63
-    ],
-    "characterIds": [
-      "chr-00027"
-    ]
-  },
-  {
-    "id": "m0309",
-    "title": "Boom! Boom! Tropica Vacation",
-    "playingSeconds": 136,
-    "feverSeconds": [
-      14.59,
-      43.78,
-      76.22,
-      95.68,
-      118.38
-    ],
-    "characterIds": [
-      "chr-00012",
-      "chr-00021",
-      "chr-00022",
-      "chr-00026",
-      "chr-06002"
-    ]
-  },
-  {
-    "id": "m0310",
-    "title": "HOT DUCK!",
-    "playingSeconds": 136,
-    "feverSeconds": [
-      21.0,
-      48.0,
-      66.0,
-      82.5,
-      99.0
-    ],
-    "characterIds": [
-      "chr-00012"
-    ]
-  },
-  {
-    "id": "m0054",
-    "title": "Gate Open: START!",
-    "playingSeconds": 145,
-    "feverSeconds": [
-      26.05,
-      55.81,
-      81.86,
-      105.12,
-      123.72
-    ],
-    "characterIds": [
-      "chr-03006"
-    ]
-  },
-  {
-    "id": "m0311",
-    "title": "Homenobi",
-    "playingSeconds": 146,
-    "feverSeconds": [
-      21.43,
-      53.57,
-      70.71,
-      87.86,
-      117.86
-    ],
-    "characterIds": [
-      "chr-00022"
-    ]
-  },
-  {
-    "id": "m0312",
-    "title": "UNDEAD",
-    "playingSeconds": 104,
-    "feverSeconds": [
-      15.0,
-      33.33,
-      51.67,
-      68.33,
-      86.67
-    ],
-    "characterIds": [
-      "chr-00021"
-    ]
-  },
-  {
-    "id": "m0317",
-    "title": "Kibun Joujou↑↑",
-    "playingSeconds": 138,
-    "feverSeconds": [
-      21.12,
-      55.68,
-      78.72,
-      101.76,
-      117.12
-    ],
-    "characterIds": [
-      "chr-03004",
-      "chr-03005",
-      "chr-03006"
-    ]
-  },
-  {
-    "id": "m0321",
-    "title": "KINGWORLD",
-    "playingSeconds": 128,
-    "feverSeconds": [
-      21.12,
-      51.62,
-      67.62,
-      87.25,
-      103.25
-    ],
-    "characterIds": [
-      "chr-00006"
-    ]
-  },
-  {
-    "id": "m0069",
-    "title": "Kyoumodaitensai!",
-    "playingSeconds": 112,
-    "feverSeconds": [
-      18.95,
-      36.63,
-      55.58,
-      73.26,
-      90.95
-    ],
-    "characterIds": [
-      "chr-06003"
-    ]
-  },
-  {
-    "id": "m0327",
-    "title": "QUEEN",
-    "playingSeconds": 141,
-    "feverSeconds": [
-      18.35,
-      46.59,
-      69.18,
-      97.41,
-      122.82
-    ],
-    "characterIds": [
-      "chr-00035"
-    ]
-  },
-  {
-    "id": "m0329",
-    "title": "Doku no Oujisama",
-    "playingSeconds": 146,
-    "feverSeconds": [
-      18.78,
-      43.83,
-      75.13,
-      102.26,
-      125.22
-    ],
-    "characterIds": [
-      "chr-00016"
-    ]
-  },
-  {
-    "id": "m0331",
-    "title": "Here I am",
-    "playingSeconds": 148,
-    "feverSeconds": [
-      19.25,
-      46.42,
-      64.53,
-      100.75,
-      118.87
-    ],
-    "characterIds": [
-      "chr-03003"
-    ]
-  },
-  {
-    "id": "m0524",
-    "title": "You & aIzu",
-    "playingSeconds": 157,
-    "feverSeconds": [
-      22.67,
-      52.0,
-      73.33,
-      105.33,
-      121.33
-    ],
-    "characterIds": [
-      "chr-06002"
-    ]
-  },
-  {
-    "id": "m0058",
-    "title": "Daydream",
-    "playingSeconds": 97,
-    "feverSeconds": [
-      13.17,
-      28.54,
-      43.9,
-      59.27,
-      74.63
-    ],
-    "characterIds": [
-      "chr-04010"
-    ]
-  },
-  {
-    "id": "m0076",
-    "title": "flower rhapsody",
-    "playingSeconds": 117,
-    "feverSeconds": [
-      18.67,
-      38.67,
-      57.33,
-      76.0,
-      96.0
-    ],
-    "characterIds": [
-      "chr-00015"
-    ]
-  },
-  {
-    "id": "m0086",
-    "title": "Show",
-    "playingSeconds": 101,
-    "feverSeconds": [
-      16.36,
-      34.55,
-      50.91,
-      67.27,
-      85.45
-    ],
-    "characterIds": [
-      "chr-00017"
-    ]
-  },
-  {
-    "id": "m0062",
-    "title": "Mantra Hujan",
-    "playingSeconds": 110,
-    "feverSeconds": [
-      19.5,
-      36.0,
-      52.5,
-      69.0,
-      87.0
-    ],
-    "characterIds": [
-      "chr-03009"
-    ]
-  },
-  {
-    "id": "m0071",
-    "title": "Countach",
-    "playingSeconds": 144,
-    "feverSeconds": [
-      24.0,
-      48.0,
-      72.0,
-      96.0,
-      120.0
-    ],
-    "characterIds": [
-      "chr-06005"
-    ]
-  },
-  {
-    "id": "m0063",
-    "title": "Lifetime Showtime",
-    "playingSeconds": 128,
-    "feverSeconds": [
-      13.33,
-      34.67,
-      54.67,
-      92.0,
-      110.67
-    ],
-    "characterIds": [
-      "chr-04016",
-      "chr-04017"
-    ]
-  },
-  {
-    "id": "m0112",
-    "title": "NAI NAI",
-    "playingSeconds": 132,
-    "feverSeconds": [
-      9.23,
-      27.69,
-      53.54,
-      86.77,
-      110.77
-    ],
-    "characterIds": [
-      "chr-04003"
-    ]
-  },
-  {
-    "id": "m0064",
-    "title": "Monsters and Men",
-    "playingSeconds": 141,
-    "feverSeconds": [
-      26.67,
-      49.52,
-      68.57,
-      95.24,
-      120.0
-    ],
-    "characterIds": [
-      "chr-04013"
-    ]
-  },
-  {
-    "id": "m0124",
-    "title": "Overdose",
-    "playingSeconds": 128,
-    "feverSeconds": [
-      18.31,
-      34.58,
-      50.85,
-      77.29,
-      101.69
-    ],
-    "characterIds": [
-      "chr-03009"
-    ]
-  },
-  {
-    "id": "m0065",
-    "title": "Prism no Mahou",
-    "playingSeconds": 139,
-    "feverSeconds": [
-      26.0,
-      50.0,
-      82.0,
-      106.0,
-      122.0
-    ],
-    "characterIds": [
-      "chr-04014"
-    ]
-  },
-  {
-    "id": "m0075",
-    "title": "BIBBIDIBA",
-    "playingSeconds": 122,
-    "feverSeconds": [
-      20.0,
-      40.0,
-      60.0,
-      80.0,
-      100.0
-    ],
-    "characterIds": [
-      "chr-00018"
-    ]
-  },
-  {
-    "id": "m0146",
-    "title": "ONIKEMODANCE",
-    "playingSeconds": 146,
-    "feverSeconds": [
-      9.75,
-      29.24,
-      60.91,
-      85.28,
-      105.99
-    ],
-    "characterIds": [
-      "chr-00006",
-      "chr-00010",
-      "chr-00014"
-    ]
-  },
-  {
-    "id": "m0083",
-    "title": "Yoi no Yo, Yoi!",
-    "playingSeconds": 100,
-    "feverSeconds": [
-      17.35,
-      33.25,
-      50.6,
-      66.51,
-      83.86
-    ],
-    "characterIds": [
-      "chr-00010"
-    ]
-  },
-  {
-    "id": "m0072",
-    "title": "Star,star,start",
-    "playingSeconds": 129,
-    "feverSeconds": [
-      20.39,
-      42.35,
-      62.75,
-      84.71,
-      105.1
-    ],
-    "characterIds": [
-      "chr-00001"
-    ]
-  },
-  {
-    "id": "m0137",
-    "title": "Ridin' on Dreams",
-    "playingSeconds": 159,
-    "feverSeconds": [
-      16.0,
-      58.67,
-      90.67,
-      109.33,
-      136.0
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0138",
-    "title": "DAI DAI DAI Fantasista",
-    "playingSeconds": 120,
-    "feverSeconds": [
-      14.9,
-      31.45,
-      48.0,
-      67.86,
-      97.66
-    ],
-    "characterIds": [
-      "chr-00015"
-    ]
-  },
-  {
-    "id": "m0089",
-    "title": "ZenjinruiUsagikakeikaku!",
-    "playingSeconds": 141,
-    "feverSeconds": [
-      23.61,
-      46.23,
-      69.84,
-      92.46,
-      116.07
-    ],
-    "characterIds": [
-      "chr-00019"
-    ]
-  },
-  {
-    "id": "m0092",
-    "title": "Gyu-Don Carnival!",
-    "playingSeconds": 116,
-    "feverSeconds": [
-      13.71,
-      35.66,
-      56.23,
-      71.31,
-      90.51
-    ],
-    "characterIds": [
-      "chr-00022"
-    ]
-  },
-  {
-    "id": "m0147",
-    "title": "zigokudeaouze!subachocolunatan",
-    "playingSeconds": 144,
-    "feverSeconds": [
-      17.23,
-      36.92,
-      56.62,
-      88.62,
-      108.31
-    ],
-    "characterIds": [
-      "chr-00011",
-      "chr-00012",
-      "chr-00028",
-      "chr-00032"
-    ]
-  },
-  {
-    "id": "m0094",
-    "title": "What an amazing swing",
-    "playingSeconds": 128,
-    "feverSeconds": [
-      17.28,
-      48.0,
-      71.04,
-      96.0,
-      111.36
-    ],
-    "characterIds": [
-      "chr-00026"
-    ]
-  },
-  {
-    "id": "m0097",
-    "title": "The Brave",
-    "playingSeconds": 108,
-    "feverSeconds": [
-      15.0,
-      30.0,
-      45.0,
-      60.0,
-      78.46
-    ],
-    "characterIds": [
-      "chr-00030"
-    ]
-  },
-  {
-    "id": "m0153",
-    "title": "Secret Garden",
-    "playingSeconds": 137,
-    "feverSeconds": [
-      15.43,
-      44.57,
-      68.57,
-      97.71,
-      118.29
-    ],
-    "characterIds": [
-      "chr-00004",
-      "chr-00005",
-      "chr-00006",
-      "chr-00007"
-    ]
-  },
-  {
-    "id": "m0162",
-    "title": "Shunkan Heartbeat",
-    "playingSeconds": 131,
-    "feverSeconds": [
-      9.23,
-      27.69,
-      57.23,
-      79.38,
-      105.23
-    ],
-    "characterIds": [
-      "chr-06002",
-      "chr-06003",
-      "chr-06004",
-      "chr-06005"
-    ]
-  },
-  {
-    "id": "m0018",
-    "title": "Howling",
-    "playingSeconds": 100,
-    "feverSeconds": [
-      15.09,
-      31.54,
-      48.0,
-      65.83,
-      82.29
-    ],
-    "characterIds": [
-      "chr-00014"
-    ]
-  },
-  {
-    "id": "m0046",
-    "title": "IrohaStep!",
-    "playingSeconds": 130,
-    "feverSeconds": [
-      9.23,
-      27.69,
-      49.23,
-      76.92,
-      100.0
-    ],
-    "characterIds": [
-      "chr-00039"
-    ]
-  },
-  {
-    "id": "m0193",
-    "title": "Let Me Be With You",
-    "playingSeconds": 108,
-    "feverSeconds": [
-      9.23,
-      31.38,
-      53.54,
-      70.15,
-      86.77
-    ],
-    "characterIds": [
-      "chr-04016",
-      "chr-04017"
-    ]
-  },
-  {
-    "id": "m0154",
-    "title": "BLUE CLAPPER",
-    "playingSeconds": 128,
-    "feverSeconds": [
-      18.21,
-      46.34,
-      66.21,
-      86.07,
-      105.93
-    ],
-    "characterIds": [
-      "chr-00030",
-      "chr-00031",
-      "chr-00032",
-      "chr-00034"
-    ]
-  },
-  {
-    "id": "m0047",
-    "title": "ALiCE&u",
-    "playingSeconds": 130,
-    "feverSeconds": [
-      9.53,
-      39.18,
-      56.12,
-      75.84,
-      92.78
-    ],
-    "characterIds": [
-      "chr-03001"
-    ]
-  },
-  {
-    "id": "m0048",
-    "title": "Q&A=E",
-    "playingSeconds": 144,
-    "feverSeconds": [
-      18.0,
-      38.0,
-      70.0,
-      90.0,
-      124.0
-    ],
-    "characterIds": [
-      "chr-03003"
-    ]
-  },
-  {
-    "id": "m0099",
-    "title": "Chu,Tayousei.",
-    "playingSeconds": 123,
-    "feverSeconds": [
-      14.12,
-      39.22,
-      64.31,
-      83.14,
-      101.96
-    ],
-    "characterIds": [
-      "chr-00031"
-    ]
-  },
-  {
-    "id": "m0121",
-    "title": "PSYCHO",
-    "playingSeconds": 95,
-    "feverSeconds": [
-      13.5,
-      28.5,
-      43.5,
-      58.5,
-      73.5
-    ],
-    "characterIds": [
-      "chr-04012"
-    ]
-  },
-  {
-    "id": "m0074",
-    "title": "ω cat",
-    "playingSeconds": 137,
-    "feverSeconds": [
-      22.74,
-      45.47,
-      68.21,
-      90.95,
-      113.68
-    ],
-    "characterIds": [
-      "chr-00013"
-    ]
-  },
-  {
-    "id": "m0100",
-    "title": "ENVY BABY",
-    "playingSeconds": 135,
-    "feverSeconds": [
-      18.25,
-      40.7,
-      63.16,
-      96.84,
-      113.68
-    ],
-    "characterIds": [
-      "chr-00034"
-    ]
-  },
-  {
-    "id": "m0101",
-    "title": "God-ish",
-    "playingSeconds": 107,
-    "feverSeconds": [
-      15.21,
-      33.8,
-      52.39,
-      69.3,
-      86.2
-    ],
-    "characterIds": [
-      "chr-00035"
-    ]
-  },
-  {
-    "id": "m0109",
-    "title": "DEAD BEATS",
-    "playingSeconds": 120,
-    "feverSeconds": [
-      14.4,
-      30.4,
-      52.8,
-      72.0,
-      91.2
-    ],
-    "characterIds": [
-      "chr-04001"
-    ]
-  },
-  {
-    "id": "m0116",
-    "title": "Usseewa",
-    "playingSeconds": 134,
-    "feverSeconds": [
-      17.53,
-      33.71,
-      52.58,
-      75.51,
-      97.08
-    ],
-    "characterIds": [
-      "chr-03006"
-    ]
-  },
-  {
-    "id": "m0122",
-    "title": "KAWAIKUTE GOMEN",
-    "playingSeconds": 124,
-    "feverSeconds": [
-      19.5,
-      43.5,
-      61.5,
-      82.5,
-      102.75
-    ],
-    "characterIds": [
-      "chr-03007"
-    ]
-  },
-  {
-    "id": "m0127",
-    "title": "Kyoufuu All Back",
-    "playingSeconds": 135,
-    "feverSeconds": [
-      16.0,
-      37.33,
-      58.67,
-      80.0,
-      108.44
-    ],
-    "characterIds": [
-      "chr-04013"
-    ]
-  },
-  {
-    "id": "m0066",
-    "title": "Say My Name",
-    "playingSeconds": 137,
-    "feverSeconds": [
-      13.09,
-      52.36,
-      69.82,
-      100.36,
-      117.82
-    ],
-    "characterIds": [
-      "chr-04015"
-    ]
-  },
-  {
-    "id": "m0128",
-    "title": "The Mirror’s Ripples",
-    "playingSeconds": 109,
-    "feverSeconds": [
-      13.71,
-      28.8,
-      45.26,
-      67.2,
-      89.14
-    ],
-    "characterIds": [
-      "chr-04014"
-    ]
-  },
-  {
-    "id": "m0123",
-    "title": "Brave Heart",
-    "playingSeconds": 109,
-    "feverSeconds": [
-      18.59,
-      38.87,
-      54.08,
-      70.99,
-      89.58
-    ],
-    "characterIds": [
-      "chr-03008"
-    ]
-  },
-  {
-    "id": "m0090",
-    "title": "Bishoujyo Muzai♡Pirates",
-    "playingSeconds": 100,
-    "feverSeconds": [
-      16.94,
-      33.88,
-      50.82,
-      67.76,
-      84.71
-    ],
-    "characterIds": [
-      "chr-00023"
-    ]
-  },
-  {
-    "id": "m0139",
-    "title": "Myth or Treat",
-    "playingSeconds": 124,
-    "feverSeconds": [
-      14.59,
-      30.81,
-      47.03,
-      66.49,
-      98.92
-    ],
-    "characterIds": [
-      "chr-04001",
-      "chr-04002",
-      "chr-04003"
-    ]
-  },
-  {
-    "id": "m0141",
-    "title": "Setsunatick Code",
-    "playingSeconds": 105,
-    "feverSeconds": [
-      15.71,
-      33.3,
-      50.89,
-      68.48,
-      86.07
-    ],
-    "characterIds": [
-      "chr-00001",
-      "chr-00013"
-    ]
-  },
-  {
-    "id": "m0142",
-    "title": "Suspect",
-    "playingSeconds": 117,
-    "feverSeconds": [
-      9.38,
-      24.38,
-      46.88,
-      69.38,
-      91.88
-    ],
-    "characterIds": [
-      "chr-00002",
-      "chr-00004",
-      "chr-00010"
-    ]
-  },
-  {
-    "id": "m0144",
-    "title": "NAKAMAKA",
-    "playingSeconds": 131,
-    "feverSeconds": [
-      25.85,
-      45.54,
-      67.69,
-      84.92,
-      110.77
-    ],
-    "characterIds": [
-      "chr-00015",
-      "chr-00018",
-      "chr-00021",
-      "chr-00022",
-      "chr-00034"
-    ]
-  },
-  {
-    "id": "m0149",
-    "title": "I I I",
-    "playingSeconds": 146,
-    "feverSeconds": [
-      16.12,
-      44.78,
-      66.27,
-      87.76,
-      120.0
-    ],
-    "characterIds": [
-      "chr-00023",
-      "chr-03009"
-    ]
-  },
-  {
-    "id": "m0150",
-    "title": "Shishi Wata Cooking feat. Shishiro Botan",
-    "playingSeconds": 119,
-    "feverSeconds": [
-      17.6,
-      44.8,
-      64.0,
-      83.2,
-      100.8
-    ],
-    "characterIds": [
-      "chr-00026",
-      "chr-00032"
-    ]
-  },
-  {
-    "id": "m0104",
-    "title": "Owl",
-    "playingSeconds": 126,
-    "feverSeconds": [
-      14.81,
-      31.11,
-      48.89,
-      72.59,
-      103.7
-    ],
-    "characterIds": [
-      "chr-00036"
-    ]
-  },
-  {
-    "id": "m0134",
-    "title": "Tsuppari High School Rock'n Roll (Toukou-hen)",
-    "playingSeconds": 132,
-    "feverSeconds": [
-      26.55,
-      41.73,
-      61.88,
-      82.1,
-      107.45
-    ],
-    "characterIds": [
-      "chr-06005"
-    ]
-  },
-  {
-    "id": "m0129",
-    "title": "YUKINO HANA",
-    "playingSeconds": 128,
-    "feverSeconds": [
-      16.67,
-      45.0,
-      71.67,
-      88.33,
-      101.67
-    ],
-    "characterIds": [
-      "chr-04015"
-    ]
-  },
-  {
-    "id": "m0131",
-    "title": "KANADE",
-    "playingSeconds": 166,
-    "feverSeconds": [
-      19.2,
-      46.4,
-      78.4,
-      108.8,
-      134.4
-    ],
-    "characterIds": [
-      "chr-06002"
-    ]
-  },
-  {
-    "id": "m0136",
-    "title": "Color Rise Harmony",
-    "playingSeconds": 159,
-    "feverSeconds": [
-      15.35,
-      34.88,
-      60.0,
-      96.28,
-      121.4
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0115",
-    "title": "Marshall Maximizer",
-    "playingSeconds": 121,
-    "feverSeconds": [
-      15.16,
-      32.84,
-      50.53,
-      70.74,
-      101.05
-    ],
-    "characterIds": [
-      "chr-03005"
-    ]
-  },
-  {
-    "id": "m0156",
-    "title": "Bridal Dream",
-    "playingSeconds": 126,
-    "feverSeconds": [
-      15.0,
-      40.0,
-      67.5,
-      92.5,
-      108.75
-    ],
-    "characterIds": [
-      "chr-00019",
-      "chr-00023"
-    ]
-  },
-  {
-    "id": "m0177",
-    "title": "Mikkorone×Showtime!!",
-    "playingSeconds": 126,
-    "feverSeconds": [
-      9.52,
-      28.57,
-      55.24,
-      81.9,
-      100.95
-    ],
-    "characterIds": [
-      "chr-00015",
-      "chr-00017"
-    ]
-  },
-  {
-    "id": "m0184",
-    "title": "SUPERNOVA",
-    "playingSeconds": 118,
-    "feverSeconds": [
-      22.42,
-      43.52,
-      61.98,
-      79.12,
-      100.22
-    ],
-    "characterIds": [
-      "chr-00006"
-    ]
-  },
-  {
-    "id": "m0188",
-    "title": "Colorful Universe",
-    "playingSeconds": 120,
-    "feverSeconds": [
-      15.1,
-      35.24,
-      55.38,
-      82.24,
-      102.38
-    ],
-    "characterIds": [
-      "chr-00014"
-    ]
-  },
-  {
-    "id": "m0157",
-    "title": "Our Promise",
-    "playingSeconds": 132,
-    "feverSeconds": [
-      24.0,
-      51.0,
-      76.5,
-      94.5,
-      106.5
-    ],
-    "characterIds": [
-      "chr-04007",
-      "chr-04010",
-      "chr-04012"
-    ]
-  },
-  {
-    "id": "m0161",
-    "title": "save our hearts",
-    "playingSeconds": 136,
-    "feverSeconds": [
-      15.77,
-      43.8,
-      64.82,
-      91.97,
-      120.0
-    ],
-    "characterIds": [
-      "chr-03007",
-      "chr-03008",
-      "chr-03009"
-    ]
-  },
-  {
-    "id": "m0108",
-    "title": "Alien Alien",
-    "playingSeconds": 139,
-    "feverSeconds": [
-      17.37,
-      48.95,
-      74.21,
-      99.43,
-      118.35
-    ],
-    "characterIds": [
-      "chr-03003"
-    ]
-  },
-  {
-    "id": "m0155",
-    "title": "Jouya Repaint",
-    "playingSeconds": 116,
-    "feverSeconds": [
-      18.23,
-      42.53,
-      66.84,
-      82.03,
-      98.73
-    ],
-    "characterIds": [
-      "chr-00035",
-      "chr-00036",
-      "chr-00037",
-      "chr-00039"
-    ]
-  },
-  {
-    "id": "m0198",
-    "title": "I~ya I~ya I~ya",
-    "playingSeconds": 143,
-    "feverSeconds": [
-      24.38,
-      54.38,
-      76.88,
-      99.38,
-      114.38
-    ],
-    "characterIds": [
-      "chr-04002",
-      "chr-04003"
-    ]
-  },
-  {
-    "id": "m0301",
-    "title": "Gimmick Gimmick Entertainment",
-    "playingSeconds": 152,
-    "feverSeconds": [
-      15.65,
-      51.7,
-      81.27,
-      110.37,
-      131.23
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0303",
-    "title": "A Tale of Six Trillion Years and a Night",
-    "playingSeconds": 155,
-    "feverSeconds": [
-      19.98,
-      56.11,
-      76.76,
-      106.43,
-      129.3
-    ],
-    "characterIds": [
-      "chr-00001",
-      "chr-00013"
-    ]
-  },
-  {
-    "id": "m0300",
-    "title": "yumeiro wonder",
-    "playingSeconds": 157,
-    "feverSeconds": [
-      13.34,
-      43.34,
-      62.55,
-      116.46,
-      139.54
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0330",
-    "title": "HELP!!",
-    "playingSeconds": 131,
-    "feverSeconds": [
-      18.78,
-      43.83,
-      68.87,
-      87.65,
-      112.7
-    ],
-    "characterIds": [
-      "chr-03009"
-    ]
-  },
-  {
-    "id": "m0337",
-    "title": "Pretty Guardian Matsulimit Zero",
-    "playingSeconds": 117,
-    "feverSeconds": [
-      15.16,
-      35.37,
-      55.58,
-      78.32,
-      98.53
-    ],
-    "characterIds": [
-      "chr-00007"
-    ]
-  },
-  {
-    "id": "m0318",
-    "title": "Natsuyadori",
-    "playingSeconds": 114,
-    "feverSeconds": [
-      20.4,
-      42.0,
-      61.2,
-      80.4,
-      97.2
-    ],
-    "characterIds": [
-      "chr-00014"
-    ]
-  },
-  {
-    "id": "m0158",
-    "title": "Rebellion",
-    "playingSeconds": 113,
-    "feverSeconds": [
-      16.24,
-      36.09,
-      52.33,
-      68.57,
-      86.62
-    ],
-    "characterIds": [
-      "chr-04013",
-      "chr-04014",
-      "chr-04015",
-      "chr-04016",
-      "chr-04017"
-    ]
-  },
-  {
-    "id": "m0159",
-    "title": "HI-15",
-    "playingSeconds": 113,
-    "feverSeconds": [
-      22.29,
-      39.43,
-      56.57,
-      77.14,
-      94.29
-    ],
-    "characterIds": [
-      "chr-03001",
-      "chr-03002",
-      "chr-03003"
-    ]
-  },
-  {
-    "id": "m0160",
-    "title": "Slap by Step",
-    "playingSeconds": 129,
-    "feverSeconds": [
-      13.42,
-      28.32,
-      52.17,
-      76.02,
-      100.25
-    ],
-    "characterIds": [
-      "chr-03004",
-      "chr-03005",
-      "chr-03006"
-    ]
-  },
-  {
-    "id": "m0307",
-    "title": "Orange",
-    "playingSeconds": 133,
-    "feverSeconds": [
-      15.43,
-      42.86,
-      75.43,
-      96.0,
-      114.86
-    ],
-    "characterIds": [
-      "chr-00031",
-      "chr-04002"
-    ]
-  },
-  {
-    "id": "m9999",
-    "title": "Shiny Smily Story (2022 ver.)",
-    "playingSeconds": 40,
-    "feverSeconds": [
-      4.42,
-      20.61
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0176",
-    "title": "Stay Blue",
-    "playingSeconds": 125,
-    "feverSeconds": [
-      17.73,
-      36.65,
-      56.75,
-      89.85,
-      106.4
-    ],
-    "characterIds": [
-      "chr-00021",
-      "chr-04007"
-    ]
-  },
-  {
-    "id": "m0319",
-    "title": "Bling-Bang-Bang-Born",
-    "playingSeconds": 120,
-    "feverSeconds": [
-      15.29,
-      39.75,
-      64.2,
-      82.55,
-      100.89
-    ],
-    "characterIds": [
-      "chr-04003",
-      "chr-04012"
-    ]
-  },
-  {
-    "id": "m0326",
-    "title": "TwiLight",
-    "playingSeconds": 120,
-    "feverSeconds": [
-      16.49,
-      45.8,
-      64.12,
-      82.44,
-      100.76
-    ],
-    "characterIds": [
-      "chr-04007"
-    ]
-  },
-  {
-    "id": "m0007",
-    "title": "Prism Melody",
-    "playingSeconds": 110,
-    "feverSeconds": [
-      13.19,
-      29.01,
-      44.84,
-      64.62,
-      80.44
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0031",
-    "title": "NoDistance",
-    "playingSeconds": 152,
-    "feverSeconds": [
-      18.14,
-      43.26,
-      65.58,
-      87.91,
-      113.02
-    ],
-    "characterIds": [
-      "chr-00011"
-    ]
-  },
-  {
-    "id": "m0004",
-    "title": "Kirameki Rider",
-    "playingSeconds": 109,
-    "feverSeconds": [
-      13.19,
-      29.01,
-      44.84,
-      63.3,
-      79.12
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0005",
-    "title": "Dreaming Days",
-    "playingSeconds": 103,
-    "feverSeconds": [
-      18.57,
-      35.71,
-      51.43,
-      68.57,
-      85.71
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0006",
-    "title": "AsuiroClearSky",
-    "playingSeconds": 108,
-    "feverSeconds": [
-      18.46,
-      39.56,
-      60.66,
-      76.48,
-      92.31
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0008",
-    "title": "Our Bright Parade",
-    "playingSeconds": 137,
-    "feverSeconds": [
-      45.04,
-      60.36,
-      75.68,
-      91.0,
-      111.43
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0009",
-    "title": "Stellar Stellar",
-    "playingSeconds": 138,
-    "feverSeconds": [
-      26.18,
-      47.75,
-      70.67,
-      92.25,
-      108.43
-    ],
-    "characterIds": [
-      "chr-00018"
-    ]
-  },
-  {
-    "id": "m0017",
-    "title": "Mogu Mogu YUMMY！",
-    "playingSeconds": 122,
-    "feverSeconds": [
-      15.43,
-      36.0,
-      56.57,
-      73.71,
-      92.57
-    ],
-    "characterIds": [
-      "chr-00016"
-    ]
-  },
-  {
-    "id": "m0077",
-    "title": "Sʼil vous President",
-    "playingSeconds": 117,
-    "feverSeconds": [
-      19.09,
-      39.55,
-      58.64,
-      77.73,
-      98.18
-    ],
-    "characterIds": [
-      "chr-00006"
-    ]
-  },
-  {
-    "id": "m0037",
-    "title": "My song",
-    "playingSeconds": 127,
-    "feverSeconds": [
-      16.6,
-      45.96,
-      66.38,
-      91.91,
-      108.51
-    ],
-    "characterIds": [
-      "chr-00026"
-    ]
-  },
-  {
-    "id": "m0050",
-    "title": "VIOLET",
-    "playingSeconds": 136,
-    "feverSeconds": [
-      13.33,
-      45.33,
-      66.67,
-      88.0,
-      109.33
-    ],
-    "characterIds": [
-      "chr-04003"
-    ]
-  },
-  {
-    "id": "m0078",
-    "title": "Kimagure Mercy",
-    "playingSeconds": 149,
-    "feverSeconds": [
-      24.0,
-      49.5,
-      73.5,
-      97.5,
-      123.0
-    ],
-    "characterIds": [
-      "chr-00004"
-    ]
-  },
-  {
-    "id": "m0080",
-    "title": "DOUTAN KYOHI",
-    "playingSeconds": 144,
-    "feverSeconds": [
-      24.0,
-      48.0,
-      72.0,
-      96.0,
-      120.0
-    ],
-    "characterIds": [
-      "chr-00007"
-    ]
-  },
-  {
-    "id": "m0091",
-    "title": "Kaibutsu",
-    "playingSeconds": 135,
-    "feverSeconds": [
-      22.59,
-      45.18,
-      67.76,
-      90.35,
-      112.94
-    ],
-    "characterIds": [
-      "chr-00021"
-    ]
-  },
-  {
-    "id": "m0073",
-    "title": "ONINO UTAGE",
-    "playingSeconds": 132,
-    "feverSeconds": [
-      22.15,
-      44.31,
-      66.46,
-      88.62,
-      110.77
-    ],
-    "characterIds": [
-      "chr-00002"
-    ]
-  },
-  {
-    "id": "m0068",
-    "title": "GREATEST",
-    "playingSeconds": 125,
-    "feverSeconds": [
-      9.23,
-      33.63,
-      57.36,
-      75.82,
-      96.92
-    ],
-    "characterIds": [
-      "chr-06002"
-    ]
-  },
-  {
-    "id": "m0105",
-    "title": "Kyu-kurarin",
-    "playingSeconds": 126,
-    "feverSeconds": [
-      20.73,
-      38.18,
-      55.64,
-      81.82,
-      108.0
-    ],
-    "characterIds": [
-      "chr-00039"
-    ]
-  },
-  {
-    "id": "m0079",
-    "title": "BUTASANDER",
-    "playingSeconds": 136,
-    "feverSeconds": [
-      23.17,
-      44.69,
-      67.86,
-      89.38,
-      112.55
-    ],
-    "characterIds": [
-      "chr-00005"
-    ]
-  },
-  {
-    "id": "m0095",
-    "title": "-ERROR",
-    "playingSeconds": 146,
-    "feverSeconds": [
-      17.1,
-      49.5,
-      74.7,
-      92.7,
-      114.3
-    ],
-    "characterIds": [
-      "chr-00027"
-    ]
-  },
-  {
-    "id": "m0114",
-    "title": "Kyouran Hey Kids!!",
-    "playingSeconds": 131,
-    "feverSeconds": [
-      15.21,
-      32.11,
-      49.01,
-      76.06,
-      99.72
-    ],
-    "characterIds": [
-      "chr-03004"
-    ]
-  },
-  {
-    "id": "m0117",
-    "title": "IDOL",
-    "playingSeconds": 126,
-    "feverSeconds": [
-      15.9,
-      36.14,
-      56.39,
-      85.3,
-      108.43
-    ],
-    "characterIds": [
-      "chr-04007"
-    ]
-  },
-  {
-    "id": "m0120",
-    "title": "Mafia",
-    "playingSeconds": 134,
-    "feverSeconds": [
-      16.0,
-      34.29,
-      52.57,
-      70.86,
-      89.14
-    ],
-    "characterIds": [
-      "chr-04010"
-    ]
-  },
-  {
-    "id": "m0010",
-    "title": "Ahoy!! We are Houshou Pirates",
-    "playingSeconds": 108,
-    "feverSeconds": [
-      19.76,
-      36.71,
-      53.65,
-      72.0,
-      88.94
-    ],
-    "characterIds": [
-      "chr-00023"
-    ]
-  },
-  {
-    "id": "m0012",
-    "title": "Excuse My Rudeness, But Could You Please RIP?",
-    "playingSeconds": 91,
-    "feverSeconds": [
-      13.55,
-      29.03,
-      44.52,
-      61.94,
-      78.39
-    ],
-    "characterIds": [
-      "chr-04001"
-    ]
-  },
-  {
-    "id": "m0102",
-    "title": "God knows...",
-    "playingSeconds": 160,
-    "feverSeconds": [
-      16.0,
-      35.2,
-      54.4,
-      83.2,
-      112.0
-    ],
-    "characterIds": [
-      "chr-00037"
-    ]
-  },
-  {
-    "id": "m0098",
-    "title": "Non-breath oblige",
-    "playingSeconds": 130,
-    "feverSeconds": [
-      22.7,
-      42.16,
-      61.62,
-      87.57,
-      107.03
-    ],
-    "characterIds": [
-      "chr-00032"
-    ]
-  },
-  {
-    "id": "m0107",
-    "title": "Snow halation",
-    "playingSeconds": 116,
-    "feverSeconds": [
-      13.87,
-      36.07,
-      52.72,
-      74.91,
-      92.95
-    ],
-    "characterIds": [
-      "chr-03001"
-    ]
-  },
-  {
-    "id": "m0085",
-    "title": "Do my best!",
-    "playingSeconds": 103,
-    "feverSeconds": [
-      16.88,
-      33.75,
-      52.5,
-      69.38,
-      86.25
-    ],
-    "characterIds": [
-      "chr-00012"
-    ]
-  },
-  {
-    "id": "m0106",
-    "title": "FIRE BIRD",
-    "playingSeconds": 136,
-    "feverSeconds": [
-      15.0,
-      41.85,
-      67.45,
-      85.05,
-      104.25
-    ],
-    "characterIds": [
-      "chr-03002"
-    ]
-  },
-  {
-    "id": "m0002",
-    "title": "Seishun Archive",
-    "playingSeconds": 110,
-    "feverSeconds": [
-      13.26,
-      29.17,
-      51.71,
-      67.62,
-      83.54
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0182",
-    "title": "Los! Los! Los!",
-    "playingSeconds": 134,
-    "feverSeconds": [
-      14.0,
-      38.0,
-      64.0,
-      86.0,
-      107.0
-    ],
-    "characterIds": [
-      "chr-04012"
-    ]
-  },
-  {
-    "id": "m0003",
-    "title": "Yumemiru Sora He",
-    "playingSeconds": 102,
-    "feverSeconds": [
-      20.0,
-      36.0,
-      52.0,
-      68.0,
-      84.0
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0135",
-    "title": "Capture the Moment",
-    "playingSeconds": 117,
-    "feverSeconds": [
-      15.35,
-      30.7,
-      46.05,
-      72.56,
-      94.88
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0001",
-    "title": "Shiny Smily Story (2022 ver.)",
-    "playingSeconds": 100,
-    "feverSeconds": [
-      13.25,
-      32.39,
-      48.59,
-      64.79,
-      80.98
-    ],
-    "characterIds": []
-  },
-  {
-    "id": "m0070",
-    "title": "Japan no bijutsushi oboemasho",
-    "playingSeconds": 134,
-    "feverSeconds": [
-      23.04,
-      46.08,
-      69.12,
-      92.16,
-      110.63
-    ],
-    "characterIds": [
-      "chr-06004"
-    ]
-  },
-  {
-    "id": "m0111",
-    "title": "The Vampire",
-    "playingSeconds": 121,
-    "feverSeconds": [
-      14.63,
-      38.05,
-      58.54,
-      76.1,
-      93.66
-    ],
-    "characterIds": [
-      "chr-04002"
-    ]
-  },
-  {
-    "id": "m0145",
-    "title": "Wicked feat. Mori Calliope",
-    "playingSeconds": 124,
-    "feverSeconds": [
-      13.94,
-      29.42,
-      54.19,
-      78.97,
-      103.74
-    ],
-    "characterIds": [
-      "chr-00018",
-      "chr-04001"
-    ]
-  },
-  {
-    "id": "m0148",
-    "title": "ORANGE PARADE feat. Inugami Korone",
-    "playingSeconds": 123,
-    "feverSeconds": [
-      13.85,
-      38.46,
-      58.46,
-      76.92,
-      96.92
-    ],
-    "characterIds": [
-      "chr-00016",
-      "chr-00017"
-    ]
-  },
-  {
-    "id": "m0163",
-    "title": "Maware! Setsugetsuka",
-    "playingSeconds": 141,
-    "feverSeconds": [
-      15.0,
-      40.5,
-      60.0,
-      90.0,
-      111.0
-    ],
-    "characterIds": [
-      "chr-00006",
-      "chr-00013",
-      "chr-00023"
-    ]
-  },
-  {
-    "id": "m0165",
-    "title": "HAO",
-    "playingSeconds": 126,
-    "feverSeconds": [
-      17.73,
-      39.55,
-      65.45,
-      79.09,
-      105.0
-    ],
-    "characterIds": [
-      "chr-00026",
-      "chr-03006"
-    ]
-  },
-  {
-    "id": "m0167",
-    "title": "Megitsune",
-    "playingSeconds": 135,
-    "feverSeconds": [
-      15.21,
-      37.18,
-      57.46,
-      86.2,
-      113.24
-    ],
-    "characterIds": [
-      "chr-04013",
-      "chr-04014",
-      "chr-04015",
-      "chr-04016",
-      "chr-04017"
-    ]
-  },
-  {
-    "id": "m0087",
-    "title": "Neko Kaburi-Na",
-    "playingSeconds": 133,
-    "feverSeconds": [
-      22.4,
-      43.2,
-      65.6,
-      88.0,
-      108.8
-    ],
-    "characterIds": [
-      "chr-00016"
-    ]
-  },
-  {
-    "id": "m0084",
-    "title": "Delusion Tax",
-    "playingSeconds": 118,
-    "feverSeconds": [
-      19.7,
-      39.4,
-      59.1,
-      78.81,
-      98.51
-    ],
-    "characterIds": [
-      "chr-00011"
-    ]
-  },
-  {
-    "id": "m0168",
-    "title": "Hyadain no Jojo Yujo",
-    "playingSeconds": 133,
-    "feverSeconds": [
-      15.6,
-      44.4,
-      67.2,
-      92.4,
-      109.2
-    ],
-    "characterIds": [
-      "chr-00016",
-      "chr-00017"
-    ]
-  },
-  {
-    "id": "m0166",
-    "title": "Watashi no Ichiban Kawaiitokoro",
-    "playingSeconds": 146,
-    "feverSeconds": [
-      15.0,
-      37.5,
-      69.38,
-      91.88,
-      121.88
-    ],
-    "characterIds": [
-      "chr-00015",
-      "chr-00028",
-      "chr-03003",
-      "chr-04016",
-      "chr-04017"
-    ]
-  },
-  {
-    "id": "m0179",
-    "title": "dahlah.",
-    "playingSeconds": 135,
-    "feverSeconds": [
-      16.0,
-      44.44,
-      69.33,
-      90.67,
-      115.56
-    ],
-    "characterIds": [
-      "chr-03008"
-    ]
-  },
-  {
-    "id": "m0180",
-    "title": "Goodbye Declaration",
-    "playingSeconds": 127,
-    "feverSeconds": [
-      19.76,
-      36.71,
-      59.29,
-      81.88,
-      91.76
-    ],
-    "characterIds": [
-      "chr-00010"
-    ]
-  },
-  {
-    "id": "m0181",
-    "title": "FUWAFUWA TIME",
-    "playingSeconds": 130,
-    "feverSeconds": [
-      22.67,
-      44.0,
-      62.67,
-      89.33,
-      108.0
-    ],
-    "characterIds": [
-      "chr-00028"
-    ]
-  },
-  {
-    "id": "m0183",
-    "title": "Carbonated Love",
-    "playingSeconds": 118,
-    "feverSeconds": [
-      20.13,
-      38.71,
-      58.84,
-      80.52,
-      100.65
-    ],
-    "characterIds": [
-      "chr-04007"
-    ]
-  },
-  {
-    "id": "m0133",
-    "title": "PI PIKASO",
-    "playingSeconds": 144,
-    "feverSeconds": [
-      13.14,
-      44.39,
-      69.95,
-      95.52,
-      121.09
-    ],
-    "characterIds": [
-      "chr-06004"
-    ]
-  },
-  {
-    "id": "m0187",
-    "title": "Cherry Pop",
-    "playingSeconds": 142,
-    "feverSeconds": [
-      22.5,
-      40.0,
-      71.25,
-      91.25,
-      116.25
-    ],
-    "characterIds": [
-      "chr-06003"
-    ]
-  },
-  {
-    "id": "m0191",
-    "title": "Cute Na Kanojo",
-    "playingSeconds": 131,
-    "feverSeconds": [
-      16.5,
-      40.5,
-      58.5,
-      81.0,
-      105.0
-    ],
-    "characterIds": [
-      "chr-04016",
-      "chr-04017"
-    ]
-  },
-  {
-    "id": "m0189",
-    "title": "Inochi(2024 ver.)",
-    "playingSeconds": 109,
-    "feverSeconds": [
-      13.19,
-      31.65,
-      50.11,
-      73.85,
-      87.03
-    ],
-    "characterIds": [
-      "chr-00013"
-    ]
-  },
-  {
-    "id": "m0164",
-    "title": "(Not) A Devil",
-    "playingSeconds": 132,
-    "feverSeconds": [
-      17.14,
-      35.84,
-      65.45,
-      90.39,
-      109.09
-    ],
-    "characterIds": [
-      "chr-00013",
-      "chr-00039"
-    ]
-  },
-  {
-    "id": "m0190",
-    "title": "sensation -KANSHOKU-",
-    "playingSeconds": 144,
-    "feverSeconds": [
-      19.92,
-      41.66,
-      63.4,
-      81.51,
-      107.77
-    ],
-    "characterIds": [
-      "chr-00005"
-    ]
-  },
-  {
-    "id": "m0192",
-    "title": "Born to be \"BAU\"DOL☆★",
-    "playingSeconds": 152,
-    "feverSeconds": [
-      13.61,
-      39.59,
-      61.86,
-      86.6,
-      123.71
-    ],
-    "characterIds": [
-      "chr-04016",
-      "chr-04017"
-    ]
-  },
-  {
-    "id": "m0197",
-    "title": "KAMINO MANIMANI",
-    "playingSeconds": 130,
-    "feverSeconds": [
-      24.89,
-      46.22,
-      71.11,
-      92.44,
-      110.22
-    ],
-    "characterIds": [
-      "chr-00011",
-      "chr-00012",
-      "chr-00028"
-    ]
-  },
-  {
-    "id": "m0185",
-    "title": "Not Interested",
-    "playingSeconds": 129,
-    "feverSeconds": [
-      18.08,
-      36.16,
-      64.11,
-      86.3,
-      106.03
-    ],
-    "characterIds": [
-      "chr-00035"
-    ]
-  },
-  {
-    "id": "m0186",
-    "title": "Waking Yashinoki",
-    "playingSeconds": 116,
-    "feverSeconds": [
-      9.0,
-      39.0,
-      57.0,
-      75.0,
-      93.0
-    ],
-    "characterIds": [
-      "chr-00022"
-    ]
-  },
-  {
-    "id": "m0196",
-    "title": "SAIKAI",
-    "playingSeconds": 130,
-    "feverSeconds": [
-      24.0,
-      48.0,
-      64.0,
-      88.0,
-      109.33
-    ],
-    "characterIds": [
-      "chr-00018",
-      "chr-03002"
-    ]
-  },
-  {
-    "id": "m0201",
-    "title": "Erandekurete Arigatou",
-    "playingSeconds": 110,
-    "feverSeconds": [
-      16.97,
-      36.36,
-      53.33,
-      72.73,
-      89.7
-    ],
-    "characterIds": [
-      "chr-04007",
-      "chr-04012"
-    ]
-  }
+ {
+  "id": "m0049",
+  "title": "SPARKS",
+  "playingSeconds": 104,
+  "feverSeconds": [
+   9.09,
+   27.27,
+   43.64,
+   60.0,
+   85.45
+  ],
+  "characterIds": [
+   "chr-04002"
+  ]
+ },
+ {
+  "id": "m0140",
+  "title": "Escort me! Luknight",
+  "playingSeconds": 111,
+  "feverSeconds": [
+   25.37,
+   40.71,
+   56.06,
+   74.2,
+   90.95
+  ],
+  "characterIds": [
+   "chr-00028"
+  ]
+ },
+ {
+  "id": "m0022",
+  "title": "Dream☆Story",
+  "playingSeconds": 120,
+  "feverSeconds": [
+   15.88,
+   33.53,
+   51.18,
+   67.06,
+   98.82
+  ],
+  "characterIds": [
+   "chr-00001"
+  ]
+ },
+ {
+  "id": "m0023",
+  "title": "rirubi",
+  "playingSeconds": 142,
+  "feverSeconds": [
+   23.83,
+   44.77,
+   72.01,
+   91.13,
+   123.47
+  ],
+  "characterIds": [
+   "chr-00002"
+  ]
+ },
+ {
+  "id": "m0026",
+  "title": "SHALLYS",
+  "playingSeconds": 146,
+  "feverSeconds": [
+   27.0,
+   51.0,
+   75.0,
+   98.05,
+   120.21
+  ],
+  "characterIds": [
+   "chr-00004"
+  ]
+ },
+ {
+  "id": "m0034",
+  "title": "PEKORANDOMBRAIN",
+  "playingSeconds": 113,
+  "feverSeconds": [
+   17.83,
+   34.29,
+   50.74,
+   76.8,
+   93.26
+  ],
+  "characterIds": [
+   "chr-00019"
+  ]
+ },
+ {
+  "id": "m0041",
+  "title": "Lioness’ Pride",
+  "playingSeconds": 120,
+  "feverSeconds": [
+   14.21,
+   33.16,
+   52.11,
+   74.21,
+   93.16
+  ],
+  "characterIds": [
+   "chr-00032"
+  ]
+ },
+ {
+  "id": "m0044",
+  "title": "WAO!!(2025 ver.)",
+  "playingSeconds": 159,
+  "feverSeconds": [
+   16.96,
+   49.57,
+   66.52,
+   87.39,
+   121.3
+  ],
+  "characterIds": [
+   "chr-00037"
+  ]
+ },
+ {
+  "id": "m0052",
+  "title": "JOLLIE JOLLIE",
+  "playingSeconds": 119,
+  "feverSeconds": [
+   14.22,
+   37.33,
+   58.67,
+   80.0,
+   101.33
+  ],
+  "characterIds": [
+   "chr-03004"
+  ]
+ },
+ {
+  "id": "m0060",
+  "title": "You're Mine",
+  "playingSeconds": 150,
+  "feverSeconds": [
+   17.14,
+   47.62,
+   70.48,
+   93.33,
+   123.81
+  ],
+  "characterIds": [
+   "chr-03007"
+  ]
+ },
+ {
+  "id": "m0171",
+  "title": "Touch the hurt again",
+  "playingSeconds": 114,
+  "feverSeconds": [
+   18.18,
+   42.42,
+   61.82,
+   81.21,
+   96.97
+  ],
+  "characterIds": [
+   "chr-00021",
+   "chr-00027",
+   "chr-00034"
+  ]
+ },
+ {
+  "id": "m0014",
+  "title": "High Tide",
+  "playingSeconds": 130,
+  "feverSeconds": [
+   13.01,
+   47.71,
+   65.06,
+   88.19,
+   105.54
+  ],
+  "characterIds": [
+   "chr-03002"
+  ]
+ },
+ {
+  "id": "m0021",
+  "title": "Overd",
+  "playingSeconds": 112,
+  "feverSeconds": [
+   9.23,
+   31.38,
+   53.54,
+   72.0,
+   88.62
+  ],
+  "characterIds": [
+   "chr-00036"
+  ]
+ },
+ {
+  "id": "m0028",
+  "title": "Virtualove",
+  "playingSeconds": 155,
+  "feverSeconds": [
+   17.33,
+   52.0,
+   76.0,
+   110.67,
+   129.33
+  ],
+  "characterIds": [
+   "chr-00007"
+  ]
+ },
+ {
+  "id": "m0032",
+  "title": "Pleiades!",
+  "playingSeconds": 96,
+  "feverSeconds": [
+   17.84,
+   34.05,
+   50.27,
+   66.49,
+   81.08
+  ],
+  "characterIds": [
+   "chr-00012"
+  ]
+ },
+ {
+  "id": "m0020",
+  "title": "NENENENENENENENE!DAIBAKUSOU",
+  "playingSeconds": 122,
+  "feverSeconds": [
+   25.62,
+   42.56,
+   59.5,
+   80.68,
+   99.03
+  ],
+  "characterIds": [
+   "chr-00031"
+  ]
+ },
+ {
+  "id": "m0033",
+  "title": "Doggy god's street",
+  "playingSeconds": 127,
+  "feverSeconds": [
+   9.38,
+   31.88,
+   61.88,
+   84.38,
+   108.75
+  ],
+  "characterIds": [
+   "chr-00017"
+  ]
+ },
+ {
+  "id": "m0040",
+  "title": "Asuenokyokaisen",
+  "playingSeconds": 133,
+  "feverSeconds": [
+   13.5,
+   37.5,
+   57.0,
+   85.5,
+   103.5
+  ],
+  "characterIds": [
+   "chr-00030"
+  ]
+ },
+ {
+  "id": "m0206",
+  "title": "Renai Circulation",
+  "playingSeconds": 90,
+  "feverSeconds": [
+   14.0,
+   28.0,
+   44.0,
+   58.0,
+   74.0
+  ],
+  "characterIds": [
+   "chr-00026"
+  ]
+ },
+ {
+  "id": "m0042",
+  "title": "Po",
+  "playingSeconds": 141,
+  "feverSeconds": [
+   19.46,
+   42.52,
+   65.59,
+   82.88,
+   107.39
+  ],
+  "characterIds": [
+   "chr-00034"
+  ]
+ },
+ {
+  "id": "m0302",
+  "title": "Dead Ma’am’s Chest",
+  "playingSeconds": 132,
+  "feverSeconds": [
+   18.0,
+   36.0,
+   60.0,
+   81.0,
+   108.0
+  ],
+  "characterIds": [
+   "chr-00023"
+  ]
+ },
+ {
+  "id": "m0304",
+  "title": "LET'S JUST CRASH",
+  "playingSeconds": 112,
+  "feverSeconds": [
+   14.27,
+   32.43,
+   53.19,
+   80.43,
+   96.0
+  ],
+  "characterIds": [
+   "chr-04001"
+  ]
+ },
+ {
+  "id": "m0306",
+  "title": "1:15 AM",
+  "playingSeconds": 147,
+  "feverSeconds": [
+   15.16,
+   45.47,
+   65.68,
+   101.05,
+   121.26
+  ],
+  "characterIds": [
+   "chr-03001"
+  ]
+ },
+ {
+  "id": "m0308",
+  "title": "UFO",
+  "playingSeconds": 104,
+  "feverSeconds": [
+   17.96,
+   35.5,
+   52.95,
+   70.4,
+   87.91
+  ],
+  "characterIds": [
+   "chr-06004",
+   "chr-06005"
+  ]
+ },
+ {
+  "id": "m0053",
+  "title": "Unreal Veil",
+  "playingSeconds": 123,
+  "feverSeconds": [
+   17.68,
+   37.89,
+   68.21,
+   88.42,
+   106.11
+  ],
+  "characterIds": [
+   "chr-03005"
+  ]
+ },
+ {
+  "id": "m0035",
+  "title": "Zenryoku-Jumping!",
+  "playingSeconds": 97,
+  "feverSeconds": [
+   15.0,
+   31.67,
+   48.33,
+   65.0,
+   80.0
+  ],
+  "characterIds": [
+   "chr-00021"
+  ]
+ },
+ {
+  "id": "m0038",
+  "title": "Palette",
+  "playingSeconds": 153,
+  "feverSeconds": [
+   26.5,
+   50.06,
+   79.51,
+   97.18,
+   126.63
+  ],
+  "characterIds": [
+   "chr-00027"
+  ]
+ },
+ {
+  "id": "m0309",
+  "title": "Boom! Boom! Tropica Vacation",
+  "playingSeconds": 136,
+  "feverSeconds": [
+   14.59,
+   43.78,
+   76.22,
+   95.68,
+   118.38
+  ],
+  "characterIds": [
+   "chr-00012",
+   "chr-00021",
+   "chr-00022",
+   "chr-00026",
+   "chr-06002"
+  ]
+ },
+ {
+  "id": "m0310",
+  "title": "HOT DUCK!",
+  "playingSeconds": 136,
+  "feverSeconds": [
+   21.0,
+   48.0,
+   66.0,
+   82.5,
+   99.0
+  ],
+  "characterIds": [
+   "chr-00012"
+  ]
+ },
+ {
+  "id": "m0054",
+  "title": "Gate Open: START!",
+  "playingSeconds": 145,
+  "feverSeconds": [
+   26.05,
+   55.81,
+   81.86,
+   105.12,
+   123.72
+  ],
+  "characterIds": [
+   "chr-03006"
+  ]
+ },
+ {
+  "id": "m0311",
+  "title": "Homenobi",
+  "playingSeconds": 146,
+  "feverSeconds": [
+   21.43,
+   53.57,
+   70.71,
+   87.86,
+   117.86
+  ],
+  "characterIds": [
+   "chr-00022"
+  ]
+ },
+ {
+  "id": "m0312",
+  "title": "UNDEAD",
+  "playingSeconds": 104,
+  "feverSeconds": [
+   15.0,
+   33.33,
+   51.67,
+   68.33,
+   86.67
+  ],
+  "characterIds": [
+   "chr-00021"
+  ]
+ },
+ {
+  "id": "m0317",
+  "title": "Kibun Joujou↑↑",
+  "playingSeconds": 138,
+  "feverSeconds": [
+   21.12,
+   55.68,
+   78.72,
+   101.76,
+   117.12
+  ],
+  "characterIds": [
+   "chr-03004",
+   "chr-03005",
+   "chr-03006"
+  ]
+ },
+ {
+  "id": "m0321",
+  "title": "KINGWORLD",
+  "playingSeconds": 128,
+  "feverSeconds": [
+   21.12,
+   51.62,
+   67.62,
+   87.25,
+   103.25
+  ],
+  "characterIds": [
+   "chr-00006"
+  ]
+ },
+ {
+  "id": "m0069",
+  "title": "Kyoumodaitensai!",
+  "playingSeconds": 112,
+  "feverSeconds": [
+   18.95,
+   36.63,
+   55.58,
+   73.26,
+   90.95
+  ],
+  "characterIds": [
+   "chr-06003"
+  ]
+ },
+ {
+  "id": "m0327",
+  "title": "QUEEN",
+  "playingSeconds": 141,
+  "feverSeconds": [
+   18.35,
+   46.59,
+   69.18,
+   97.41,
+   122.82
+  ],
+  "characterIds": [
+   "chr-00035"
+  ]
+ },
+ {
+  "id": "m0329",
+  "title": "Doku no Oujisama",
+  "playingSeconds": 146,
+  "feverSeconds": [
+   18.78,
+   43.83,
+   75.13,
+   102.26,
+   125.22
+  ],
+  "characterIds": [
+   "chr-00016"
+  ]
+ },
+ {
+  "id": "m0331",
+  "title": "Here I am",
+  "playingSeconds": 148,
+  "feverSeconds": [
+   19.25,
+   46.42,
+   64.53,
+   100.75,
+   118.87
+  ],
+  "characterIds": [
+   "chr-03003"
+  ]
+ },
+ {
+  "id": "m0524",
+  "title": "You & aIzu",
+  "playingSeconds": 157,
+  "feverSeconds": [
+   22.67,
+   52.0,
+   73.33,
+   105.33,
+   121.33
+  ],
+  "characterIds": [
+   "chr-06002"
+  ]
+ },
+ {
+  "id": "m0058",
+  "title": "Daydream",
+  "playingSeconds": 97,
+  "feverSeconds": [
+   13.17,
+   28.54,
+   43.9,
+   59.27,
+   74.63
+  ],
+  "characterIds": [
+   "chr-04010"
+  ]
+ },
+ {
+  "id": "m0076",
+  "title": "flower rhapsody",
+  "playingSeconds": 117,
+  "feverSeconds": [
+   18.67,
+   38.67,
+   57.33,
+   76.0,
+   96.0
+  ],
+  "characterIds": [
+   "chr-00015"
+  ]
+ },
+ {
+  "id": "m0086",
+  "title": "Show",
+  "playingSeconds": 101,
+  "feverSeconds": [
+   16.36,
+   34.55,
+   50.91,
+   67.27,
+   85.45
+  ],
+  "characterIds": [
+   "chr-00017"
+  ]
+ },
+ {
+  "id": "m0062",
+  "title": "Mantra Hujan",
+  "playingSeconds": 110,
+  "feverSeconds": [
+   19.5,
+   36.0,
+   52.5,
+   69.0,
+   87.0
+  ],
+  "characterIds": [
+   "chr-03009"
+  ]
+ },
+ {
+  "id": "m0071",
+  "title": "Countach",
+  "playingSeconds": 144,
+  "feverSeconds": [
+   24.0,
+   48.0,
+   72.0,
+   96.0,
+   120.0
+  ],
+  "characterIds": [
+   "chr-06005"
+  ]
+ },
+ {
+  "id": "m0063",
+  "title": "Lifetime Showtime",
+  "playingSeconds": 128,
+  "feverSeconds": [
+   13.33,
+   34.67,
+   54.67,
+   92.0,
+   110.67
+  ],
+  "characterIds": [
+   "chr-04016",
+   "chr-04017"
+  ]
+ },
+ {
+  "id": "m0112",
+  "title": "NAI NAI",
+  "playingSeconds": 132,
+  "feverSeconds": [
+   9.23,
+   27.69,
+   53.54,
+   86.77,
+   110.77
+  ],
+  "characterIds": [
+   "chr-04003"
+  ]
+ },
+ {
+  "id": "m0064",
+  "title": "Monsters and Men",
+  "playingSeconds": 141,
+  "feverSeconds": [
+   26.67,
+   49.52,
+   68.57,
+   95.24,
+   120.0
+  ],
+  "characterIds": [
+   "chr-04013"
+  ]
+ },
+ {
+  "id": "m0124",
+  "title": "Overdose",
+  "playingSeconds": 128,
+  "feverSeconds": [
+   18.31,
+   34.58,
+   50.85,
+   77.29,
+   101.69
+  ],
+  "characterIds": [
+   "chr-03009"
+  ]
+ },
+ {
+  "id": "m0065",
+  "title": "Prism no Mahou",
+  "playingSeconds": 139,
+  "feverSeconds": [
+   26.0,
+   50.0,
+   82.0,
+   106.0,
+   122.0
+  ],
+  "characterIds": [
+   "chr-04014"
+  ]
+ },
+ {
+  "id": "m0075",
+  "title": "BIBBIDIBA",
+  "playingSeconds": 122,
+  "feverSeconds": [
+   20.0,
+   40.0,
+   60.0,
+   80.0,
+   100.0
+  ],
+  "characterIds": [
+   "chr-00018"
+  ]
+ },
+ {
+  "id": "m0146",
+  "title": "ONIKEMODANCE",
+  "playingSeconds": 146,
+  "feverSeconds": [
+   9.75,
+   29.24,
+   60.91,
+   85.28,
+   105.99
+  ],
+  "characterIds": [
+   "chr-00006",
+   "chr-00010",
+   "chr-00014"
+  ]
+ },
+ {
+  "id": "m0083",
+  "title": "Yoi no Yo, Yoi!",
+  "playingSeconds": 100,
+  "feverSeconds": [
+   17.35,
+   33.25,
+   50.6,
+   66.51,
+   83.86
+  ],
+  "characterIds": [
+   "chr-00010"
+  ]
+ },
+ {
+  "id": "m0072",
+  "title": "Star,star,start",
+  "playingSeconds": 129,
+  "feverSeconds": [
+   20.39,
+   42.35,
+   62.75,
+   84.71,
+   105.1
+  ],
+  "characterIds": [
+   "chr-00001"
+  ]
+ },
+ {
+  "id": "m0137",
+  "title": "Ridin' on Dreams",
+  "playingSeconds": 159,
+  "feverSeconds": [
+   16.0,
+   58.67,
+   90.67,
+   109.33,
+   136.0
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0138",
+  "title": "DAI DAI DAI Fantasista",
+  "playingSeconds": 120,
+  "feverSeconds": [
+   14.9,
+   31.45,
+   48.0,
+   67.86,
+   97.66
+  ],
+  "characterIds": [
+   "chr-00015"
+  ]
+ },
+ {
+  "id": "m0089",
+  "title": "ZenjinruiUsagikakeikaku!",
+  "playingSeconds": 141,
+  "feverSeconds": [
+   23.61,
+   46.23,
+   69.84,
+   92.46,
+   116.07
+  ],
+  "characterIds": [
+   "chr-00019"
+  ]
+ },
+ {
+  "id": "m0092",
+  "title": "Gyu-Don Carnival!",
+  "playingSeconds": 116,
+  "feverSeconds": [
+   13.71,
+   35.66,
+   56.23,
+   71.31,
+   90.51
+  ],
+  "characterIds": [
+   "chr-00022"
+  ]
+ },
+ {
+  "id": "m0147",
+  "title": "zigokudeaouze!subachocolunatan",
+  "playingSeconds": 144,
+  "feverSeconds": [
+   17.23,
+   36.92,
+   56.62,
+   88.62,
+   108.31
+  ],
+  "characterIds": [
+   "chr-00011",
+   "chr-00012",
+   "chr-00028",
+   "chr-00032"
+  ]
+ },
+ {
+  "id": "m0094",
+  "title": "What an amazing swing",
+  "playingSeconds": 128,
+  "feverSeconds": [
+   17.28,
+   48.0,
+   71.04,
+   96.0,
+   111.36
+  ],
+  "characterIds": [
+   "chr-00026"
+  ]
+ },
+ {
+  "id": "m0097",
+  "title": "The Brave",
+  "playingSeconds": 108,
+  "feverSeconds": [
+   15.0,
+   30.0,
+   45.0,
+   60.0,
+   78.46
+  ],
+  "characterIds": [
+   "chr-00030"
+  ]
+ },
+ {
+  "id": "m0153",
+  "title": "Secret Garden",
+  "playingSeconds": 137,
+  "feverSeconds": [
+   15.43,
+   44.57,
+   68.57,
+   97.71,
+   118.29
+  ],
+  "characterIds": [
+   "chr-00004",
+   "chr-00005",
+   "chr-00006",
+   "chr-00007"
+  ]
+ },
+ {
+  "id": "m0162",
+  "title": "Shunkan Heartbeat",
+  "playingSeconds": 131,
+  "feverSeconds": [
+   9.23,
+   27.69,
+   57.23,
+   79.38,
+   105.23
+  ],
+  "characterIds": [
+   "chr-06002",
+   "chr-06003",
+   "chr-06004",
+   "chr-06005"
+  ]
+ },
+ {
+  "id": "m0018",
+  "title": "Howling",
+  "playingSeconds": 100,
+  "feverSeconds": [
+   15.09,
+   31.54,
+   48.0,
+   65.83,
+   82.29
+  ],
+  "characterIds": [
+   "chr-00014"
+  ]
+ },
+ {
+  "id": "m0046",
+  "title": "IrohaStep!",
+  "playingSeconds": 130,
+  "feverSeconds": [
+   9.23,
+   27.69,
+   49.23,
+   76.92,
+   100.0
+  ],
+  "characterIds": [
+   "chr-00039"
+  ]
+ },
+ {
+  "id": "m0193",
+  "title": "Let Me Be With You",
+  "playingSeconds": 108,
+  "feverSeconds": [
+   9.23,
+   31.38,
+   53.54,
+   70.15,
+   86.77
+  ],
+  "characterIds": [
+   "chr-04016",
+   "chr-04017"
+  ]
+ },
+ {
+  "id": "m0154",
+  "title": "BLUE CLAPPER",
+  "playingSeconds": 128,
+  "feverSeconds": [
+   18.21,
+   46.34,
+   66.21,
+   86.07,
+   105.93
+  ],
+  "characterIds": [
+   "chr-00030",
+   "chr-00031",
+   "chr-00032",
+   "chr-00034"
+  ]
+ },
+ {
+  "id": "m0047",
+  "title": "ALiCE&u",
+  "playingSeconds": 130,
+  "feverSeconds": [
+   9.53,
+   39.18,
+   56.12,
+   75.84,
+   92.78
+  ],
+  "characterIds": [
+   "chr-03001"
+  ]
+ },
+ {
+  "id": "m0048",
+  "title": "Q&A=E",
+  "playingSeconds": 144,
+  "feverSeconds": [
+   18.0,
+   38.0,
+   70.0,
+   90.0,
+   124.0
+  ],
+  "characterIds": [
+   "chr-03003"
+  ]
+ },
+ {
+  "id": "m0099",
+  "title": "Chu,Tayousei.",
+  "playingSeconds": 123,
+  "feverSeconds": [
+   14.12,
+   39.22,
+   64.31,
+   83.14,
+   101.96
+  ],
+  "characterIds": [
+   "chr-00031"
+  ]
+ },
+ {
+  "id": "m0121",
+  "title": "PSYCHO",
+  "playingSeconds": 95,
+  "feverSeconds": [
+   13.5,
+   28.5,
+   43.5,
+   58.5,
+   73.5
+  ],
+  "characterIds": [
+   "chr-04012"
+  ]
+ },
+ {
+  "id": "m0074",
+  "title": "ω cat",
+  "playingSeconds": 137,
+  "feverSeconds": [
+   22.74,
+   45.47,
+   68.21,
+   90.95,
+   113.68
+  ],
+  "characterIds": [
+   "chr-00013"
+  ]
+ },
+ {
+  "id": "m0100",
+  "title": "ENVY BABY",
+  "playingSeconds": 135,
+  "feverSeconds": [
+   18.25,
+   40.7,
+   63.16,
+   96.84,
+   113.68
+  ],
+  "characterIds": [
+   "chr-00034"
+  ]
+ },
+ {
+  "id": "m0101",
+  "title": "God-ish",
+  "playingSeconds": 107,
+  "feverSeconds": [
+   15.21,
+   33.8,
+   52.39,
+   69.3,
+   86.2
+  ],
+  "characterIds": [
+   "chr-00035"
+  ]
+ },
+ {
+  "id": "m0109",
+  "title": "DEAD BEATS",
+  "playingSeconds": 120,
+  "feverSeconds": [
+   14.4,
+   30.4,
+   52.8,
+   72.0,
+   91.2
+  ],
+  "characterIds": [
+   "chr-04001"
+  ]
+ },
+ {
+  "id": "m0116",
+  "title": "Usseewa",
+  "playingSeconds": 134,
+  "feverSeconds": [
+   17.53,
+   33.71,
+   52.58,
+   75.51,
+   97.08
+  ],
+  "characterIds": [
+   "chr-03006"
+  ]
+ },
+ {
+  "id": "m0122",
+  "title": "KAWAIKUTE GOMEN",
+  "playingSeconds": 124,
+  "feverSeconds": [
+   19.5,
+   43.5,
+   61.5,
+   82.5,
+   102.75
+  ],
+  "characterIds": [
+   "chr-03007"
+  ]
+ },
+ {
+  "id": "m0127",
+  "title": "Kyoufuu All Back",
+  "playingSeconds": 135,
+  "feverSeconds": [
+   16.0,
+   37.33,
+   58.67,
+   80.0,
+   108.44
+  ],
+  "characterIds": [
+   "chr-04013"
+  ]
+ },
+ {
+  "id": "m0066",
+  "title": "Say My Name",
+  "playingSeconds": 137,
+  "feverSeconds": [
+   13.09,
+   52.36,
+   69.82,
+   100.36,
+   117.82
+  ],
+  "characterIds": [
+   "chr-04015"
+  ]
+ },
+ {
+  "id": "m0128",
+  "title": "The Mirror’s Ripples",
+  "playingSeconds": 109,
+  "feverSeconds": [
+   13.71,
+   28.8,
+   45.26,
+   67.2,
+   89.14
+  ],
+  "characterIds": [
+   "chr-04014"
+  ]
+ },
+ {
+  "id": "m0123",
+  "title": "Brave Heart",
+  "playingSeconds": 109,
+  "feverSeconds": [
+   18.59,
+   38.87,
+   54.08,
+   70.99,
+   89.58
+  ],
+  "characterIds": [
+   "chr-03008"
+  ]
+ },
+ {
+  "id": "m0090",
+  "title": "Bishoujyo Muzai♡Pirates",
+  "playingSeconds": 100,
+  "feverSeconds": [
+   16.94,
+   33.88,
+   50.82,
+   67.76,
+   84.71
+  ],
+  "characterIds": [
+   "chr-00023"
+  ]
+ },
+ {
+  "id": "m0139",
+  "title": "Myth or Treat",
+  "playingSeconds": 124,
+  "feverSeconds": [
+   14.59,
+   30.81,
+   47.03,
+   66.49,
+   98.92
+  ],
+  "characterIds": [
+   "chr-04001",
+   "chr-04002",
+   "chr-04003"
+  ]
+ },
+ {
+  "id": "m0141",
+  "title": "Setsunatick Code",
+  "playingSeconds": 105,
+  "feverSeconds": [
+   15.71,
+   33.3,
+   50.89,
+   68.48,
+   86.07
+  ],
+  "characterIds": [
+   "chr-00001",
+   "chr-00013"
+  ]
+ },
+ {
+  "id": "m0142",
+  "title": "Suspect",
+  "playingSeconds": 117,
+  "feverSeconds": [
+   9.38,
+   24.38,
+   46.88,
+   69.38,
+   91.88
+  ],
+  "characterIds": [
+   "chr-00002",
+   "chr-00004",
+   "chr-00010"
+  ]
+ },
+ {
+  "id": "m0144",
+  "title": "NAKAMAKA",
+  "playingSeconds": 131,
+  "feverSeconds": [
+   25.85,
+   45.54,
+   67.69,
+   84.92,
+   110.77
+  ],
+  "characterIds": [
+   "chr-00015",
+   "chr-00018",
+   "chr-00021",
+   "chr-00022",
+   "chr-00034"
+  ]
+ },
+ {
+  "id": "m0149",
+  "title": "I I I",
+  "playingSeconds": 146,
+  "feverSeconds": [
+   16.12,
+   44.78,
+   66.27,
+   87.76,
+   120.0
+  ],
+  "characterIds": [
+   "chr-00023",
+   "chr-03009"
+  ]
+ },
+ {
+  "id": "m0150",
+  "title": "Shishi Wata Cooking feat. Shishiro Botan",
+  "playingSeconds": 119,
+  "feverSeconds": [
+   17.6,
+   44.8,
+   64.0,
+   83.2,
+   100.8
+  ],
+  "characterIds": [
+   "chr-00026",
+   "chr-00032"
+  ]
+ },
+ {
+  "id": "m0104",
+  "title": "Owl",
+  "playingSeconds": 126,
+  "feverSeconds": [
+   14.81,
+   31.11,
+   48.89,
+   72.59,
+   103.7
+  ],
+  "characterIds": [
+   "chr-00036"
+  ]
+ },
+ {
+  "id": "m0134",
+  "title": "Tsuppari High School Rock'n Roll (Toukou-hen)",
+  "playingSeconds": 132,
+  "feverSeconds": [
+   26.55,
+   41.73,
+   61.88,
+   82.1,
+   107.45
+  ],
+  "characterIds": [
+   "chr-06005"
+  ]
+ },
+ {
+  "id": "m0129",
+  "title": "YUKINO HANA",
+  "playingSeconds": 128,
+  "feverSeconds": [
+   16.67,
+   45.0,
+   71.67,
+   88.33,
+   101.67
+  ],
+  "characterIds": [
+   "chr-04015"
+  ]
+ },
+ {
+  "id": "m0131",
+  "title": "KANADE",
+  "playingSeconds": 166,
+  "feverSeconds": [
+   19.2,
+   46.4,
+   78.4,
+   108.8,
+   134.4
+  ],
+  "characterIds": [
+   "chr-06002"
+  ]
+ },
+ {
+  "id": "m0136",
+  "title": "Color Rise Harmony",
+  "playingSeconds": 159,
+  "feverSeconds": [
+   15.35,
+   34.88,
+   60.0,
+   96.28,
+   121.4
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0115",
+  "title": "Marshall Maximizer",
+  "playingSeconds": 121,
+  "feverSeconds": [
+   15.16,
+   32.84,
+   50.53,
+   70.74,
+   101.05
+  ],
+  "characterIds": [
+   "chr-03005"
+  ]
+ },
+ {
+  "id": "m0156",
+  "title": "Bridal Dream",
+  "playingSeconds": 126,
+  "feverSeconds": [
+   15.0,
+   40.0,
+   67.5,
+   92.5,
+   108.75
+  ],
+  "characterIds": [
+   "chr-00019",
+   "chr-00023"
+  ]
+ },
+ {
+  "id": "m0177",
+  "title": "Mikkorone×Showtime!!",
+  "playingSeconds": 126,
+  "feverSeconds": [
+   9.52,
+   28.57,
+   55.24,
+   81.9,
+   100.95
+  ],
+  "characterIds": [
+   "chr-00015",
+   "chr-00017"
+  ]
+ },
+ {
+  "id": "m0184",
+  "title": "SUPERNOVA",
+  "playingSeconds": 118,
+  "feverSeconds": [
+   22.42,
+   43.52,
+   61.98,
+   79.12,
+   100.22
+  ],
+  "characterIds": [
+   "chr-00006"
+  ]
+ },
+ {
+  "id": "m0188",
+  "title": "Colorful Universe",
+  "playingSeconds": 120,
+  "feverSeconds": [
+   15.1,
+   35.24,
+   55.38,
+   82.24,
+   102.38
+  ],
+  "characterIds": [
+   "chr-00014"
+  ]
+ },
+ {
+  "id": "m0157",
+  "title": "Our Promise",
+  "playingSeconds": 132,
+  "feverSeconds": [
+   24.0,
+   51.0,
+   76.5,
+   94.5,
+   106.5
+  ],
+  "characterIds": [
+   "chr-04007",
+   "chr-04010",
+   "chr-04012"
+  ]
+ },
+ {
+  "id": "m0161",
+  "title": "save our hearts",
+  "playingSeconds": 136,
+  "feverSeconds": [
+   15.77,
+   43.8,
+   64.82,
+   91.97,
+   120.0
+  ],
+  "characterIds": [
+   "chr-03007",
+   "chr-03008",
+   "chr-03009"
+  ]
+ },
+ {
+  "id": "m0108",
+  "title": "Alien Alien",
+  "playingSeconds": 139,
+  "feverSeconds": [
+   17.37,
+   48.95,
+   74.21,
+   99.43,
+   118.35
+  ],
+  "characterIds": [
+   "chr-03003"
+  ]
+ },
+ {
+  "id": "m0155",
+  "title": "Jouya Repaint",
+  "playingSeconds": 116,
+  "feverSeconds": [
+   18.23,
+   42.53,
+   66.84,
+   82.03,
+   98.73
+  ],
+  "characterIds": [
+   "chr-00035",
+   "chr-00036",
+   "chr-00037",
+   "chr-00039"
+  ]
+ },
+ {
+  "id": "m0198",
+  "title": "I~ya I~ya I~ya",
+  "playingSeconds": 143,
+  "feverSeconds": [
+   24.38,
+   54.38,
+   76.88,
+   99.38,
+   114.38
+  ],
+  "characterIds": [
+   "chr-04002",
+   "chr-04003"
+  ]
+ },
+ {
+  "id": "m0301",
+  "title": "Gimmick Gimmick Entertainment",
+  "playingSeconds": 152,
+  "feverSeconds": [
+   15.65,
+   51.7,
+   81.27,
+   110.37,
+   131.23
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0303",
+  "title": "A Tale of Six Trillion Years and a Night",
+  "playingSeconds": 155,
+  "feverSeconds": [
+   19.98,
+   56.11,
+   76.76,
+   106.43,
+   129.3
+  ],
+  "characterIds": [
+   "chr-00001",
+   "chr-00013"
+  ]
+ },
+ {
+  "id": "m0300",
+  "title": "yumeiro wonder",
+  "playingSeconds": 157,
+  "feverSeconds": [
+   13.34,
+   43.34,
+   62.55,
+   116.46,
+   139.54
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0330",
+  "title": "HELP!!",
+  "playingSeconds": 131,
+  "feverSeconds": [
+   18.78,
+   43.83,
+   68.87,
+   87.65,
+   112.7
+  ],
+  "characterIds": [
+   "chr-03009"
+  ]
+ },
+ {
+  "id": "m0337",
+  "title": "Pretty Guardian Matsulimit Zero",
+  "playingSeconds": 117,
+  "feverSeconds": [
+   15.16,
+   35.37,
+   55.58,
+   78.32,
+   98.53
+  ],
+  "characterIds": [
+   "chr-00007"
+  ]
+ },
+ {
+  "id": "m0318",
+  "title": "Natsuyadori",
+  "playingSeconds": 114,
+  "feverSeconds": [
+   20.4,
+   42.0,
+   61.2,
+   80.4,
+   97.2
+  ],
+  "characterIds": [
+   "chr-00014"
+  ]
+ },
+ {
+  "id": "m0158",
+  "title": "Rebellion",
+  "playingSeconds": 113,
+  "feverSeconds": [
+   16.24,
+   36.09,
+   52.33,
+   68.57,
+   86.62
+  ],
+  "characterIds": [
+   "chr-04013",
+   "chr-04014",
+   "chr-04015",
+   "chr-04016",
+   "chr-04017"
+  ]
+ },
+ {
+  "id": "m0159",
+  "title": "HI-15",
+  "playingSeconds": 113,
+  "feverSeconds": [
+   22.29,
+   39.43,
+   56.57,
+   77.14,
+   94.29
+  ],
+  "characterIds": [
+   "chr-03001",
+   "chr-03002",
+   "chr-03003"
+  ]
+ },
+ {
+  "id": "m0160",
+  "title": "Slap by Step",
+  "playingSeconds": 129,
+  "feverSeconds": [
+   13.42,
+   28.32,
+   52.17,
+   76.02,
+   100.25
+  ],
+  "characterIds": [
+   "chr-03004",
+   "chr-03005",
+   "chr-03006"
+  ]
+ },
+ {
+  "id": "m0307",
+  "title": "Orange",
+  "playingSeconds": 133,
+  "feverSeconds": [
+   15.43,
+   42.86,
+   75.43,
+   96.0,
+   114.86
+  ],
+  "characterIds": [
+   "chr-00031",
+   "chr-04002"
+  ]
+ },
+ {
+  "id": "m9999",
+  "title": "Shiny Smily Story (2022 ver.)",
+  "playingSeconds": 40,
+  "feverSeconds": [
+   4.42,
+   20.61
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0176",
+  "title": "Stay Blue",
+  "playingSeconds": 125,
+  "feverSeconds": [
+   17.73,
+   36.65,
+   56.75,
+   89.85,
+   106.4
+  ],
+  "characterIds": [
+   "chr-00021",
+   "chr-04007"
+  ]
+ },
+ {
+  "id": "m0319",
+  "title": "Bling-Bang-Bang-Born",
+  "playingSeconds": 120,
+  "feverSeconds": [
+   15.29,
+   39.75,
+   64.2,
+   82.55,
+   100.89
+  ],
+  "characterIds": [
+   "chr-04003",
+   "chr-04012"
+  ]
+ },
+ {
+  "id": "m0326",
+  "title": "TwiLight",
+  "playingSeconds": 120,
+  "feverSeconds": [
+   16.49,
+   45.8,
+   64.12,
+   82.44,
+   100.76
+  ],
+  "characterIds": [
+   "chr-04007"
+  ]
+ },
+ {
+  "id": "m0007",
+  "title": "Prism Melody",
+  "playingSeconds": 110,
+  "feverSeconds": [
+   13.19,
+   29.01,
+   44.84,
+   64.62,
+   80.44
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0031",
+  "title": "NoDistance",
+  "playingSeconds": 152,
+  "feverSeconds": [
+   18.14,
+   43.26,
+   65.58,
+   87.91,
+   113.02
+  ],
+  "characterIds": [
+   "chr-00011"
+  ]
+ },
+ {
+  "id": "m0004",
+  "title": "Kirameki Rider",
+  "playingSeconds": 109,
+  "feverSeconds": [
+   13.19,
+   29.01,
+   44.84,
+   63.3,
+   79.12
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0005",
+  "title": "Dreaming Days",
+  "playingSeconds": 103,
+  "feverSeconds": [
+   18.57,
+   35.71,
+   51.43,
+   68.57,
+   85.71
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0006",
+  "title": "AsuiroClearSky",
+  "playingSeconds": 108,
+  "feverSeconds": [
+   18.46,
+   39.56,
+   60.66,
+   76.48,
+   92.31
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0008",
+  "title": "Our Bright Parade",
+  "playingSeconds": 137,
+  "feverSeconds": [
+   45.04,
+   60.36,
+   75.68,
+   91.0,
+   111.43
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0009",
+  "title": "Stellar Stellar",
+  "playingSeconds": 138,
+  "feverSeconds": [
+   26.18,
+   47.75,
+   70.67,
+   92.25,
+   108.43
+  ],
+  "characterIds": [
+   "chr-00018"
+  ]
+ },
+ {
+  "id": "m0017",
+  "title": "Mogu Mogu YUMMY！",
+  "playingSeconds": 122,
+  "feverSeconds": [
+   15.43,
+   36.0,
+   56.57,
+   73.71,
+   92.57
+  ],
+  "characterIds": [
+   "chr-00016"
+  ]
+ },
+ {
+  "id": "m0077",
+  "title": "Sʼil vous President",
+  "playingSeconds": 117,
+  "feverSeconds": [
+   19.09,
+   39.55,
+   58.64,
+   77.73,
+   98.18
+  ],
+  "characterIds": [
+   "chr-00006"
+  ]
+ },
+ {
+  "id": "m0037",
+  "title": "My song",
+  "playingSeconds": 127,
+  "feverSeconds": [
+   16.6,
+   45.96,
+   66.38,
+   91.91,
+   108.51
+  ],
+  "characterIds": [
+   "chr-00026"
+  ]
+ },
+ {
+  "id": "m0050",
+  "title": "VIOLET",
+  "playingSeconds": 136,
+  "feverSeconds": [
+   13.33,
+   45.33,
+   66.67,
+   88.0,
+   109.33
+  ],
+  "characterIds": [
+   "chr-04003"
+  ]
+ },
+ {
+  "id": "m0078",
+  "title": "Kimagure Mercy",
+  "playingSeconds": 149,
+  "feverSeconds": [
+   24.0,
+   49.5,
+   73.5,
+   97.5,
+   123.0
+  ],
+  "characterIds": [
+   "chr-00004"
+  ]
+ },
+ {
+  "id": "m0080",
+  "title": "DOUTAN KYOHI",
+  "playingSeconds": 144,
+  "feverSeconds": [
+   24.0,
+   48.0,
+   72.0,
+   96.0,
+   120.0
+  ],
+  "characterIds": [
+   "chr-00007"
+  ]
+ },
+ {
+  "id": "m0091",
+  "title": "Kaibutsu",
+  "playingSeconds": 135,
+  "feverSeconds": [
+   22.59,
+   45.18,
+   67.76,
+   90.35,
+   112.94
+  ],
+  "characterIds": [
+   "chr-00021"
+  ]
+ },
+ {
+  "id": "m0073",
+  "title": "ONINO UTAGE",
+  "playingSeconds": 132,
+  "feverSeconds": [
+   22.15,
+   44.31,
+   66.46,
+   88.62,
+   110.77
+  ],
+  "characterIds": [
+   "chr-00002"
+  ]
+ },
+ {
+  "id": "m0068",
+  "title": "GREATEST",
+  "playingSeconds": 125,
+  "feverSeconds": [
+   9.23,
+   33.63,
+   57.36,
+   75.82,
+   96.92
+  ],
+  "characterIds": [
+   "chr-06002"
+  ]
+ },
+ {
+  "id": "m0105",
+  "title": "Kyu-kurarin",
+  "playingSeconds": 126,
+  "feverSeconds": [
+   20.73,
+   38.18,
+   55.64,
+   81.82,
+   108.0
+  ],
+  "characterIds": [
+   "chr-00039"
+  ]
+ },
+ {
+  "id": "m0079",
+  "title": "BUTASANDER",
+  "playingSeconds": 136,
+  "feverSeconds": [
+   23.17,
+   44.69,
+   67.86,
+   89.38,
+   112.55
+  ],
+  "characterIds": [
+   "chr-00005"
+  ]
+ },
+ {
+  "id": "m0095",
+  "title": "-ERROR",
+  "playingSeconds": 146,
+  "feverSeconds": [
+   17.1,
+   49.5,
+   74.7,
+   92.7,
+   114.3
+  ],
+  "characterIds": [
+   "chr-00027"
+  ]
+ },
+ {
+  "id": "m0114",
+  "title": "Kyouran Hey Kids!!",
+  "playingSeconds": 131,
+  "feverSeconds": [
+   15.21,
+   32.11,
+   49.01,
+   76.06,
+   99.72
+  ],
+  "characterIds": [
+   "chr-03004"
+  ]
+ },
+ {
+  "id": "m0117",
+  "title": "IDOL",
+  "playingSeconds": 126,
+  "feverSeconds": [
+   15.9,
+   36.14,
+   56.39,
+   85.3,
+   108.43
+  ],
+  "characterIds": [
+   "chr-04007"
+  ]
+ },
+ {
+  "id": "m0120",
+  "title": "Mafia",
+  "playingSeconds": 134,
+  "feverSeconds": [
+   16.0,
+   34.29,
+   52.57,
+   70.86,
+   89.14
+  ],
+  "characterIds": [
+   "chr-04010"
+  ]
+ },
+ {
+  "id": "m0010",
+  "title": "Ahoy!! We are Houshou Pirates",
+  "playingSeconds": 108,
+  "feverSeconds": [
+   19.76,
+   36.71,
+   53.65,
+   72.0,
+   88.94
+  ],
+  "characterIds": [
+   "chr-00023"
+  ]
+ },
+ {
+  "id": "m0012",
+  "title": "Excuse My Rudeness, But Could You Please RIP?",
+  "playingSeconds": 91,
+  "feverSeconds": [
+   13.55,
+   29.03,
+   44.52,
+   61.94,
+   78.39
+  ],
+  "characterIds": [
+   "chr-04001"
+  ]
+ },
+ {
+  "id": "m0102",
+  "title": "God knows...",
+  "playingSeconds": 160,
+  "feverSeconds": [
+   16.0,
+   35.2,
+   54.4,
+   83.2,
+   112.0
+  ],
+  "characterIds": [
+   "chr-00037"
+  ]
+ },
+ {
+  "id": "m0098",
+  "title": "Non-breath oblige",
+  "playingSeconds": 130,
+  "feverSeconds": [
+   22.7,
+   42.16,
+   61.62,
+   87.57,
+   107.03
+  ],
+  "characterIds": [
+   "chr-00032"
+  ]
+ },
+ {
+  "id": "m0107",
+  "title": "Snow halation",
+  "playingSeconds": 116,
+  "feverSeconds": [
+   13.87,
+   36.07,
+   52.72,
+   74.91,
+   92.95
+  ],
+  "characterIds": [
+   "chr-03001"
+  ]
+ },
+ {
+  "id": "m0085",
+  "title": "Do my best!",
+  "playingSeconds": 103,
+  "feverSeconds": [
+   16.88,
+   33.75,
+   52.5,
+   69.38,
+   86.25
+  ],
+  "characterIds": [
+   "chr-00012"
+  ]
+ },
+ {
+  "id": "m0106",
+  "title": "FIRE BIRD",
+  "playingSeconds": 136,
+  "feverSeconds": [
+   15.0,
+   41.85,
+   67.45,
+   85.05,
+   104.25
+  ],
+  "characterIds": [
+   "chr-03002"
+  ]
+ },
+ {
+  "id": "m0002",
+  "title": "Seishun Archive",
+  "playingSeconds": 110,
+  "feverSeconds": [
+   13.26,
+   29.17,
+   51.71,
+   67.62,
+   83.54
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0182",
+  "title": "Los! Los! Los!",
+  "playingSeconds": 134,
+  "feverSeconds": [
+   14.0,
+   38.0,
+   64.0,
+   86.0,
+   107.0
+  ],
+  "characterIds": [
+   "chr-04012"
+  ]
+ },
+ {
+  "id": "m0003",
+  "title": "Yumemiru Sora He",
+  "playingSeconds": 102,
+  "feverSeconds": [
+   20.0,
+   36.0,
+   52.0,
+   68.0,
+   84.0
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0135",
+  "title": "Capture the Moment",
+  "playingSeconds": 117,
+  "feverSeconds": [
+   15.35,
+   30.7,
+   46.05,
+   72.56,
+   94.88
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0001",
+  "title": "Shiny Smily Story (2022 ver.)",
+  "playingSeconds": 100,
+  "feverSeconds": [
+   13.25,
+   32.39,
+   48.59,
+   64.79,
+   80.98
+  ],
+  "characterIds": []
+ },
+ {
+  "id": "m0070",
+  "title": "Japan no bijutsushi oboemasho",
+  "playingSeconds": 134,
+  "feverSeconds": [
+   23.04,
+   46.08,
+   69.12,
+   92.16,
+   110.63
+  ],
+  "characterIds": [
+   "chr-06004"
+  ]
+ },
+ {
+  "id": "m0111",
+  "title": "The Vampire",
+  "playingSeconds": 121,
+  "feverSeconds": [
+   14.63,
+   38.05,
+   58.54,
+   76.1,
+   93.66
+  ],
+  "characterIds": [
+   "chr-04002"
+  ]
+ },
+ {
+  "id": "m0145",
+  "title": "Wicked feat. Mori Calliope",
+  "playingSeconds": 124,
+  "feverSeconds": [
+   13.94,
+   29.42,
+   54.19,
+   78.97,
+   103.74
+  ],
+  "characterIds": [
+   "chr-00018",
+   "chr-04001"
+  ]
+ },
+ {
+  "id": "m0148",
+  "title": "ORANGE PARADE feat. Inugami Korone",
+  "playingSeconds": 123,
+  "feverSeconds": [
+   13.85,
+   38.46,
+   58.46,
+   76.92,
+   96.92
+  ],
+  "characterIds": [
+   "chr-00016",
+   "chr-00017"
+  ]
+ },
+ {
+  "id": "m0163",
+  "title": "Maware! Setsugetsuka",
+  "playingSeconds": 141,
+  "feverSeconds": [
+   15.0,
+   40.5,
+   60.0,
+   90.0,
+   111.0
+  ],
+  "characterIds": [
+   "chr-00006",
+   "chr-00013",
+   "chr-00023"
+  ]
+ },
+ {
+  "id": "m0165",
+  "title": "HAO",
+  "playingSeconds": 126,
+  "feverSeconds": [
+   17.73,
+   39.55,
+   65.45,
+   79.09,
+   105.0
+  ],
+  "characterIds": [
+   "chr-00026",
+   "chr-03006"
+  ]
+ },
+ {
+  "id": "m0167",
+  "title": "Megitsune",
+  "playingSeconds": 135,
+  "feverSeconds": [
+   15.21,
+   37.18,
+   57.46,
+   86.2,
+   113.24
+  ],
+  "characterIds": [
+   "chr-04013",
+   "chr-04014",
+   "chr-04015",
+   "chr-04016",
+   "chr-04017"
+  ]
+ },
+ {
+  "id": "m0087",
+  "title": "Neko Kaburi-Na",
+  "playingSeconds": 133,
+  "feverSeconds": [
+   22.4,
+   43.2,
+   65.6,
+   88.0,
+   108.8
+  ],
+  "characterIds": [
+   "chr-00016"
+  ]
+ },
+ {
+  "id": "m0084",
+  "title": "Delusion Tax",
+  "playingSeconds": 118,
+  "feverSeconds": [
+   19.7,
+   39.4,
+   59.1,
+   78.81,
+   98.51
+  ],
+  "characterIds": [
+   "chr-00011"
+  ]
+ },
+ {
+  "id": "m0168",
+  "title": "Hyadain no Jojo Yujo",
+  "playingSeconds": 133,
+  "feverSeconds": [
+   15.6,
+   44.4,
+   67.2,
+   92.4,
+   109.2
+  ],
+  "characterIds": [
+   "chr-00016",
+   "chr-00017"
+  ]
+ },
+ {
+  "id": "m0166",
+  "title": "Watashi no Ichiban Kawaiitokoro",
+  "playingSeconds": 146,
+  "feverSeconds": [
+   15.0,
+   37.5,
+   69.38,
+   91.88,
+   121.88
+  ],
+  "characterIds": [
+   "chr-00015",
+   "chr-00028",
+   "chr-03003",
+   "chr-04016",
+   "chr-04017"
+  ]
+ },
+ {
+  "id": "m0179",
+  "title": "dahlah.",
+  "playingSeconds": 135,
+  "feverSeconds": [
+   16.0,
+   44.44,
+   69.33,
+   90.67,
+   115.56
+  ],
+  "characterIds": [
+   "chr-03008"
+  ]
+ },
+ {
+  "id": "m0180",
+  "title": "Goodbye Declaration",
+  "playingSeconds": 127,
+  "feverSeconds": [
+   19.76,
+   36.71,
+   59.29,
+   81.88,
+   91.76
+  ],
+  "characterIds": [
+   "chr-00010"
+  ]
+ },
+ {
+  "id": "m0181",
+  "title": "FUWAFUWA TIME",
+  "playingSeconds": 130,
+  "feverSeconds": [
+   22.67,
+   44.0,
+   62.67,
+   89.33,
+   108.0
+  ],
+  "characterIds": [
+   "chr-00028"
+  ]
+ },
+ {
+  "id": "m0183",
+  "title": "Carbonated Love",
+  "playingSeconds": 118,
+  "feverSeconds": [
+   20.13,
+   38.71,
+   58.84,
+   80.52,
+   100.65
+  ],
+  "characterIds": [
+   "chr-04007"
+  ]
+ },
+ {
+  "id": "m0133",
+  "title": "PI PIKASO",
+  "playingSeconds": 144,
+  "feverSeconds": [
+   13.14,
+   44.39,
+   69.95,
+   95.52,
+   121.09
+  ],
+  "characterIds": [
+   "chr-06004"
+  ]
+ },
+ {
+  "id": "m0187",
+  "title": "Cherry Pop",
+  "playingSeconds": 142,
+  "feverSeconds": [
+   22.5,
+   40.0,
+   71.25,
+   91.25,
+   116.25
+  ],
+  "characterIds": [
+   "chr-06003"
+  ]
+ },
+ {
+  "id": "m0191",
+  "title": "Cute Na Kanojo",
+  "playingSeconds": 131,
+  "feverSeconds": [
+   16.5,
+   40.5,
+   58.5,
+   81.0,
+   105.0
+  ],
+  "characterIds": [
+   "chr-04016",
+   "chr-04017"
+  ]
+ },
+ {
+  "id": "m0189",
+  "title": "Inochi(2024 ver.)",
+  "playingSeconds": 109,
+  "feverSeconds": [
+   13.19,
+   31.65,
+   50.11,
+   73.85,
+   87.03
+  ],
+  "characterIds": [
+   "chr-00013"
+  ]
+ },
+ {
+  "id": "m0164",
+  "title": "(Not) A Devil",
+  "playingSeconds": 132,
+  "feverSeconds": [
+   17.14,
+   35.84,
+   65.45,
+   90.39,
+   109.09
+  ],
+  "characterIds": [
+   "chr-00013",
+   "chr-00039"
+  ]
+ },
+ {
+  "id": "m0190",
+  "title": "sensation -KANSHOKU-",
+  "playingSeconds": 144,
+  "feverSeconds": [
+   19.92,
+   41.66,
+   63.4,
+   81.51,
+   107.77
+  ],
+  "characterIds": [
+   "chr-00005"
+  ]
+ },
+ {
+  "id": "m0192",
+  "title": "Born to be \"BAU\"DOL☆★",
+  "playingSeconds": 152,
+  "feverSeconds": [
+   13.61,
+   39.59,
+   61.86,
+   86.6,
+   123.71
+  ],
+  "characterIds": [
+   "chr-04016",
+   "chr-04017"
+  ]
+ },
+ {
+  "id": "m0197",
+  "title": "KAMINO MANIMANI",
+  "playingSeconds": 130,
+  "feverSeconds": [
+   24.89,
+   46.22,
+   71.11,
+   92.44,
+   110.22
+  ],
+  "characterIds": [
+   "chr-00011",
+   "chr-00012",
+   "chr-00028"
+  ]
+ },
+ {
+  "id": "m0185",
+  "title": "Not Interested",
+  "playingSeconds": 129,
+  "feverSeconds": [
+   18.08,
+   36.16,
+   64.11,
+   86.3,
+   106.03
+  ],
+  "characterIds": [
+   "chr-00035"
+  ]
+ },
+ {
+  "id": "m0186",
+  "title": "Waking Yashinoki",
+  "playingSeconds": 116,
+  "feverSeconds": [
+   9.0,
+   39.0,
+   57.0,
+   75.0,
+   93.0
+  ],
+  "characterIds": [
+   "chr-00022"
+  ]
+ },
+ {
+  "id": "m0196",
+  "title": "SAIKAI",
+  "playingSeconds": 130,
+  "feverSeconds": [
+   24.0,
+   48.0,
+   64.0,
+   88.0,
+   109.33
+  ],
+  "characterIds": [
+   "chr-00018",
+   "chr-03002"
+  ]
+ },
+ {
+  "id": "m0201",
+  "title": "Erandekurete Arigatou",
+  "playingSeconds": 110,
+  "feverSeconds": [
+   16.97,
+   36.36,
+   53.33,
+   72.73,
+   89.7
+  ],
+  "characterIds": [
+   "chr-04007",
+   "chr-04012"
+  ]
+ },
+ {
+  "id": "m0323",
+  "title": "Kyun Kyun MIKO Kyun kyun♡",
+  "playingSeconds": 144,
+  "feverSeconds": [
+   24.0,
+   58.67,
+   80.0,
+   112.0,
+   128.0
+  ],
+  "characterIds": [
+   "chr-00015"
+  ]
+ },
+ {
+  "id": "m0324",
+  "title": "GHOST",
+  "playingSeconds": 118,
+  "feverSeconds": [
+   22.42,
+   38.24,
+   54.07,
+   72.53,
+   88.35
+  ],
+  "characterIds": [
+   "chr-00018"
+  ]
+ },
+ {
+  "id": "m0325",
+  "title": "Sugar Rush",
+  "playingSeconds": 134,
+  "feverSeconds": [
+   17.65,
+   45.88,
+   67.06,
+   86.47,
+   115.96
+  ],
+  "characterIds": [
+   "chr-00015",
+   "chr-00018"
+  ]
+ },
+ {
+  "id": "m0346",
+  "title": "FACT",
+  "playingSeconds": 140,
+  "feverSeconds": [
+   18.05,
+   36.09,
+   54.14,
+   79.4,
+   101.05
+  ],
+  "characterIds": [
+   "chr-00027"
+  ]
+ },
+ {
+  "id": "m0347",
+  "title": "Infinity (Remastered)",
+  "playingSeconds": 122,
+  "feverSeconds": [
+   14.9,
+   34.76,
+   54.62,
+   81.1,
+   100.97
+  ],
+  "characterIds": [
+   "chr-00005"
+  ]
+ }
 ]
