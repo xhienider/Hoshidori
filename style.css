@@ -506,7 +506,7 @@ header.masthead {
 .presets-box { max-width: 520px; }
 
 .cost-calc-box { max-width: 620px; }
-.cost-calc-body { padding: 4px 0; }
+.cost-calc-body { padding: 4px 0; overflow-y: auto; }
 .cost-calc-section {
   padding: 14px 20px;
   border-bottom: 1px solid var(--line);
@@ -570,6 +570,7 @@ header.masthead {
 .cost-calc-note { font-size: 12px; color: var(--text-dim); line-height: 1.5; margin-top: 10px; }
 
 .cost-calc-hero-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 8px; }
+.cost-calc-hero-grid-single { grid-template-columns: 1fr; }
 .cost-calc-stat {
   background: var(--panel-raised);
   border: 1px solid var(--line);

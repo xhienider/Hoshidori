@@ -2647,7 +2647,7 @@ function openCostCalculator() {
 
   const header = document.createElement('div');
   header.className = 'picker-search';
-  header.innerHTML = `<div class="board-editor-title">Cost Calculator</div><div class="board-editor-subtitle">Level, SP Training, and Bloom costs for any rarity/attribute combination \u2014 not tied to a specific card.</div>`;
+  header.innerHTML = `<div class="board-editor-title">Cost Calculator</div><div class="board-editor-subtitle">Level and SP Training costs for any rarity/attribute combination \u2014 not tied to a specific card.</div>`;
   box.appendChild(header);
 
   const body = document.createElement('div');
@@ -2666,7 +2666,7 @@ function openCostCalculator() {
   });
   document.body.appendChild(overlay);
 
-  const cc = { rarity: 'rarity_5', attr: 'attribute_1', lvlFrom: 1, lvlTo: 80, bloomFrom: 0, bloomTo: 5, exchangeAmount: 0 };
+  const cc = { rarity: 'rarity_5', attr: 'attribute_1', lvlFrom: 1, lvlTo: 80, exchangeAmount: 0 };
 
   function maxLevel() {
     return COST_CALC_RARITIES.find((r) => r.key === cc.rarity).maxLevel;
@@ -2769,57 +2769,6 @@ function openCostCalculator() {
     levelSection.appendChild(levelGrid);
     body.appendChild(levelSection);
 
-    // Bloom range
-    const bloomSection = document.createElement('div');
-    bloomSection.className = 'cost-calc-section';
-    const bloomLabel = document.createElement('div');
-    bloomLabel.className = 'board-group-label';
-    bloomLabel.textContent = 'Bloom Range';
-    bloomSection.appendChild(bloomLabel);
-    const bloomGrid = document.createElement('div');
-    bloomGrid.className = 'cost-calc-range-grid';
-
-    const makeBloomField = (labelText, current, onPick) => {
-      const field = document.createElement('div');
-      field.className = 'cost-calc-range-field';
-      const lbl = document.createElement('label');
-      lbl.textContent = labelText;
-      field.appendChild(lbl);
-      const row = document.createElement('div');
-      row.className = 'cost-calc-bloom-row';
-      for (let i = 0; i <= 5; i++) {
-        const dot = document.createElement('button');
-        dot.type = 'button';
-        dot.className = 'cost-calc-bloom-dot' + (i === current ? ' cost-calc-bloom-active' : '');
-        dot.textContent = i;
-        dot.onclick = () => onPick(i);
-        row.appendChild(dot);
-      }
-      field.appendChild(row);
-      return field;
-    };
-    bloomGrid.appendChild(
-      makeBloomField('Current Bloom', cc.bloomFrom, (i) => {
-        cc.bloomFrom = i;
-        if (cc.bloomTo < i) cc.bloomTo = i;
-        render();
-      })
-    );
-    bloomGrid.appendChild(
-      makeBloomField('Target Bloom', cc.bloomTo, (i) => {
-        cc.bloomTo = i;
-        if (cc.bloomFrom > i) cc.bloomFrom = i;
-        render();
-      })
-    );
-    bloomSection.appendChild(bloomGrid);
-    const bloomNote = document.createElement('div');
-    bloomNote.className = 'cost-calc-note';
-    bloomNote.textContent =
-      'Each Bloom level needs one additional copy of the exact card owned (Bloom 1 = 2nd copy, Bloom 5 = 6th copy) \u2014 not a crafted material.';
-    bloomSection.appendChild(bloomNote);
-    body.appendChild(bloomSection);
-
     // Results
     const resultsSection = document.createElement('div');
     resultsSection.className = 'cost-calc-section';
@@ -2832,13 +2781,11 @@ function openCostCalculator() {
     const expFrom = expTable[String(cc.lvlFrom)] || 0;
     const expTo = expTable[String(cc.lvlTo)] || 0;
     const expNeeded = Math.max(0, expTo - expFrom);
-    const bloomNeeded = Math.max(0, cc.bloomTo - cc.bloomFrom);
 
     const heroGrid = document.createElement('div');
-    heroGrid.className = 'cost-calc-hero-grid';
+    heroGrid.className = 'cost-calc-hero-grid cost-calc-hero-grid-single';
     heroGrid.innerHTML = `
       <div class="cost-calc-stat"><div class="cost-calc-stat-num">${expNeeded.toLocaleString()}</div><div class="cost-calc-stat-lbl">EXP needed</div></div>
-      <div class="cost-calc-stat"><div class="cost-calc-stat-num">${bloomNeeded}</div><div class="cost-calc-stat-lbl">Extra copies needed (Bloom)</div></div>
     `;
     resultsSection.appendChild(heroGrid);
 
