@@ -18,6 +18,8 @@ import {
   pruneDisconnected,
 } from './js/unitEngine.js';
 
+const COST_CALC_DATA = {"expTables": {"rarity_3": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150}, "rarity_4": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150, "61": 424650, "62": 446150, "63": 468650, "64": 492150, "65": 516650, "66": 542650, "67": 570150, "68": 599150, "69": 629650, "70": 661650}, "rarity_5": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150, "61": 424650, "62": 446150, "63": 468650, "64": 492150, "65": 516650, "66": 542650, "67": 570150, "68": 599150, "69": 629650, "70": 661650, "71": 695650, "72": 731650, "73": 769650, "74": 810150, "75": 853150, "76": 899150, "77": 948650, "78": 1001650, "79": 1059650, "80": 1122650}}, "spTraining": {"rarity_3_attribute_1": [{"newCap": 30, "materials": [{"name": "Cute Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Cute Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 400}, {"name": "Cute Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_3_attribute_2": [{"newCap": 30, "materials": [{"name": "Pure Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Pure Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 400}, {"name": "Pure Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_3_attribute_3": [{"newCap": 30, "materials": [{"name": "Happy Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Happy Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 400}, {"name": "Happy Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_4_attribute_1": [{"newCap": 40, "materials": [{"name": "Cute Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 400}, {"name": "Cute Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Cute Beads", "qty": 800}, {"name": "Cute Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_4_attribute_2": [{"newCap": 40, "materials": [{"name": "Pure Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 400}, {"name": "Pure Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Pure Beads", "qty": 800}, {"name": "Pure Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_4_attribute_3": [{"newCap": 40, "materials": [{"name": "Happy Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 400}, {"name": "Happy Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Happy Beads", "qty": 800}, {"name": "Happy Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_5_attribute_1": [{"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Cute Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Cute Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}], "rarity_5_attribute_2": [{"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Pure Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Pure Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}], "rarity_5_attribute_3": [{"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Happy Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Happy Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}]}};
+
 const ATTR_LABELS = {
   CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1: { label: 'Cute', cls: 'attr-cute' },
   CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2: { label: 'Pure', cls: 'attr-pure' },
@@ -144,7 +146,7 @@ const GENERATION_LABELS = {
   'DEV_IS ReGLOSS': 'ReGLOSS',
   'hololive 0th Generation': 'Gen 0',
   'hololive 1st Generation': 'Gen 1',
-  'hololive 1st Generation / Gamers': 'Gen 1',
+  'hololive 1st Generation / Gamers': 'Gen 1 \u00b7 Gamers',
   'hololive 2nd Generation': 'Gen 2',
   'hololive 3rd Generation': 'Gen 3',
   'hololive 4th Generation': 'Gen 4',
@@ -1183,7 +1185,7 @@ function openSongPicker() {
  *  and returns everything needed to render results, without touching global
  *  `state` or any DOM. Used by both the main page's recompute() and the
  *  Compare feature, so both stay consistent with a single source of truth. */
-function computeFullResult(team) {
+function computeFullResult(team, songOverride) {
   const leaderCard = team.leader.cardId ? DATA.byId[team.leader.cardId] : null;
   const unitFilled = team.unit.every((u) => u.cardId);
   if (!leaderCard || !unitFilled) return null;
@@ -1206,7 +1208,10 @@ function computeFullResult(team) {
   if (!leaderAlsoInUnit) {
     slots.push({ characterId: leaderCard.characterId, cardId: leaderCard.cardId, isUnitMember: false, isLeaderSlot: true });
   }
-  const currentSong = team.songId ? DATA.songs.find((s) => s.id === team.songId) : null;
+  // Which song determines singer-conditional Leader board nodes: an explicit
+  // override (Compare page's own per-side song choice) takes priority over
+  // the team's own saved songId (used everywhere else, including main page).
+  const currentSong = songOverride !== undefined ? songOverride : team.songId ? DATA.songs.find((s) => s.id === team.songId) : null;
   const songSingerCharacterIds = currentSong?.characterIds || [];
   const boardBonuses = computeBoardBonuses(team.boardSelections, DATA.boardCategories, slots, songSingerCharacterIds);
   const connectBonuses = computeConnectBonuses(
@@ -2572,8 +2577,8 @@ function openComparePage() {
   function renderLayout() {
     layout.innerHTML = '';
 
-    const computedA = chosen.a ? computeFullResult(presetToTeamState(chosen.a)) : null;
-    const computedB = chosen.b ? computeFullResult(presetToTeamState(chosen.b)) : null;
+    const computedA = chosen.a ? computeFullResult(presetToTeamState(chosen.a), chosenSong.a) : null;
+    const computedB = chosen.b ? computeFullResult(presetToTeamState(chosen.b), chosenSong.b) : null;
 
     layout.appendChild(
       renderCompareTeamColumn('a', chosen.a, computedA, () =>
@@ -2622,6 +2627,314 @@ function openComparePage() {
   renderLayout();
 }
 
+const COST_CALC_RARITIES = [
+  { key: 'rarity_3', label: '3\u2605', maxLevel: 60 },
+  { key: 'rarity_4', label: '4\u2605', maxLevel: 70 },
+  { key: 'rarity_5', label: '5\u2605', maxLevel: 80 },
+];
+const COST_CALC_ATTRS = [
+  { key: 'attribute_1', label: 'Cute', cls: 'attr-cute' },
+  { key: 'attribute_2', label: 'Pure', cls: 'attr-pure' },
+  { key: 'attribute_3', label: 'Happy', cls: 'attr-happy' },
+];
+
+function openCostCalculator() {
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+
+  const box = document.createElement('div');
+  box.className = 'picker-box cost-calc-box';
+
+  const header = document.createElement('div');
+  header.className = 'picker-search';
+  header.innerHTML = `<div class="board-editor-title">Cost Calculator</div><div class="board-editor-subtitle">Level, SP Training, and Bloom costs for any rarity/attribute combination \u2014 not tied to a specific card.</div>`;
+  box.appendChild(header);
+
+  const body = document.createElement('div');
+  body.className = 'cost-calc-body';
+  box.appendChild(body);
+
+  const close = document.createElement('div');
+  close.className = 'picker-close';
+  close.textContent = 'CLOSE';
+  close.onclick = () => overlay.remove();
+  box.appendChild(close);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+
+  const cc = { rarity: 'rarity_5', attr: 'attribute_1', lvlFrom: 1, lvlTo: 80, bloomFrom: 0, bloomTo: 5, exchangeAmount: 0 };
+
+  function maxLevel() {
+    return COST_CALC_RARITIES.find((r) => r.key === cc.rarity).maxLevel;
+  }
+
+  function render() {
+    body.innerHTML = '';
+
+    // Rarity pills
+    const raritySection = document.createElement('div');
+    raritySection.className = 'cost-calc-section';
+    const rarityLabel = document.createElement('div');
+    rarityLabel.className = 'board-group-label';
+    rarityLabel.textContent = 'Card Rarity';
+    raritySection.appendChild(rarityLabel);
+    const rarityRow = document.createElement('div');
+    rarityRow.className = 'cost-calc-pill-row';
+    COST_CALC_RARITIES.forEach((r) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cost-calc-pill' + (cc.rarity === r.key ? ' cost-calc-pill-active-rar' : '');
+      btn.textContent = r.label;
+      btn.onclick = () => {
+        cc.rarity = r.key;
+        const max = maxLevel();
+        cc.lvlFrom = Math.min(cc.lvlFrom, max);
+        cc.lvlTo = Math.min(cc.lvlTo, max);
+        render();
+      };
+      rarityRow.appendChild(btn);
+    });
+    raritySection.appendChild(rarityRow);
+    body.appendChild(raritySection);
+
+    // Attribute pills
+    const attrSection = document.createElement('div');
+    attrSection.className = 'cost-calc-section';
+    const attrLabelEl = document.createElement('div');
+    attrLabelEl.className = 'board-group-label';
+    attrLabelEl.textContent = 'Attribute';
+    attrSection.appendChild(attrLabelEl);
+    const attrRow = document.createElement('div');
+    attrRow.className = 'cost-calc-pill-row';
+    COST_CALC_ATTRS.forEach((a) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cost-calc-pill' + (cc.attr === a.key ? ' cost-calc-pill-active ' + a.cls : '');
+      btn.textContent = a.label;
+      btn.onclick = () => {
+        cc.attr = a.key;
+        render();
+      };
+      attrRow.appendChild(btn);
+    });
+    attrSection.appendChild(attrRow);
+    body.appendChild(attrSection);
+
+    // Level range
+    const levelSection = document.createElement('div');
+    levelSection.className = 'cost-calc-section';
+    const levelLabel = document.createElement('div');
+    levelLabel.className = 'board-group-label';
+    levelLabel.textContent = 'Level Range';
+    levelSection.appendChild(levelLabel);
+    const levelGrid = document.createElement('div');
+    levelGrid.className = 'cost-calc-range-grid';
+    const max = maxLevel();
+
+    const makeLevelField = (labelText, value, onChange) => {
+      const field = document.createElement('div');
+      field.className = 'cost-calc-range-field';
+      const lbl = document.createElement('label');
+      lbl.textContent = labelText;
+      field.appendChild(lbl);
+      const input = document.createElement('input');
+      input.type = 'range';
+      input.min = 1;
+      input.max = max;
+      input.value = value;
+      input.oninput = () => onChange(Number(input.value));
+      field.appendChild(input);
+      const valEl = document.createElement('div');
+      valEl.className = 'cost-calc-range-value';
+      valEl.textContent = value + (labelText.includes('Target') ? ` (max ${max})` : '');
+      field.appendChild(valEl);
+      return field;
+    };
+    levelGrid.appendChild(
+      makeLevelField('Current Level', cc.lvlFrom, (v) => {
+        cc.lvlFrom = Math.min(v, cc.lvlTo);
+        render();
+      })
+    );
+    levelGrid.appendChild(
+      makeLevelField('Target Level', cc.lvlTo, (v) => {
+        cc.lvlTo = Math.max(v, cc.lvlFrom);
+        render();
+      })
+    );
+    levelSection.appendChild(levelGrid);
+    body.appendChild(levelSection);
+
+    // Bloom range
+    const bloomSection = document.createElement('div');
+    bloomSection.className = 'cost-calc-section';
+    const bloomLabel = document.createElement('div');
+    bloomLabel.className = 'board-group-label';
+    bloomLabel.textContent = 'Bloom Range';
+    bloomSection.appendChild(bloomLabel);
+    const bloomGrid = document.createElement('div');
+    bloomGrid.className = 'cost-calc-range-grid';
+
+    const makeBloomField = (labelText, current, onPick) => {
+      const field = document.createElement('div');
+      field.className = 'cost-calc-range-field';
+      const lbl = document.createElement('label');
+      lbl.textContent = labelText;
+      field.appendChild(lbl);
+      const row = document.createElement('div');
+      row.className = 'cost-calc-bloom-row';
+      for (let i = 0; i <= 5; i++) {
+        const dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'cost-calc-bloom-dot' + (i === current ? ' cost-calc-bloom-active' : '');
+        dot.textContent = i;
+        dot.onclick = () => onPick(i);
+        row.appendChild(dot);
+      }
+      field.appendChild(row);
+      return field;
+    };
+    bloomGrid.appendChild(
+      makeBloomField('Current Bloom', cc.bloomFrom, (i) => {
+        cc.bloomFrom = i;
+        if (cc.bloomTo < i) cc.bloomTo = i;
+        render();
+      })
+    );
+    bloomGrid.appendChild(
+      makeBloomField('Target Bloom', cc.bloomTo, (i) => {
+        cc.bloomTo = i;
+        if (cc.bloomFrom > i) cc.bloomFrom = i;
+        render();
+      })
+    );
+    bloomSection.appendChild(bloomGrid);
+    const bloomNote = document.createElement('div');
+    bloomNote.className = 'cost-calc-note';
+    bloomNote.textContent =
+      'Each Bloom level needs one additional copy of the exact card owned (Bloom 1 = 2nd copy, Bloom 5 = 6th copy) \u2014 not a crafted material.';
+    bloomSection.appendChild(bloomNote);
+    body.appendChild(bloomSection);
+
+    // Results
+    const resultsSection = document.createElement('div');
+    resultsSection.className = 'cost-calc-section';
+    const resultsLabel = document.createElement('div');
+    resultsLabel.className = 'board-group-label';
+    resultsLabel.textContent = 'Results';
+    resultsSection.appendChild(resultsLabel);
+
+    const expTable = COST_CALC_DATA.expTables[cc.rarity];
+    const expFrom = expTable[String(cc.lvlFrom)] || 0;
+    const expTo = expTable[String(cc.lvlTo)] || 0;
+    const expNeeded = Math.max(0, expTo - expFrom);
+    const bloomNeeded = Math.max(0, cc.bloomTo - cc.bloomFrom);
+
+    const heroGrid = document.createElement('div');
+    heroGrid.className = 'cost-calc-hero-grid';
+    heroGrid.innerHTML = `
+      <div class="cost-calc-stat"><div class="cost-calc-stat-num">${expNeeded.toLocaleString()}</div><div class="cost-calc-stat-lbl">EXP needed</div></div>
+      <div class="cost-calc-stat"><div class="cost-calc-stat-num">${bloomNeeded}</div><div class="cost-calc-stat-lbl">Extra copies needed (Bloom)</div></div>
+    `;
+    resultsSection.appendChild(heroGrid);
+
+    const stepCaption = document.createElement('div');
+    stepCaption.className = 'cost-calc-step-caption';
+    stepCaption.textContent = 'SP Training materials (level cap steps crossed)';
+    resultsSection.appendChild(stepCaption);
+
+    const steps = COST_CALC_DATA.spTraining[cc.rarity + '_' + cc.attr] || [];
+    const crossedSteps = steps.filter((s) => s.newCap > cc.lvlFrom && s.newCap <= cc.lvlTo);
+
+    if (!crossedSteps.length) {
+      const note = document.createElement('div');
+      note.className = 'empty-state';
+      note.textContent = 'No level cap steps crossed in this range \u2014 no SP Training needed.';
+      resultsSection.appendChild(note);
+    } else {
+      const totals = {};
+      crossedSteps.forEach((s) => {
+        s.materials.forEach((m) => {
+          totals[m.name] = (totals[m.name] || 0) + m.qty;
+        });
+      });
+
+      // Find the Crystal/Beads pair for this attribute, if present, so the
+      // exchange slider can trade directly-farmed Crystals for Beads + Mega
+      // Sphere Coins (Material Exchange Shop rate: 1 Crystal = 3 Beads + 20
+      // Sphere Coins).
+      const crystalName = Object.keys(totals).find((n) => n.endsWith('Crystals'));
+      const beadsName = crystalName ? crystalName.replace('Crystals', 'Beads') : null;
+      const baseCrystals = crystalName ? totals[crystalName] : 0;
+      const baseBeads = beadsName ? totals[beadsName] || 0 : 0;
+
+      cc.exchangeAmount = clamp(cc.exchangeAmount, 0, baseCrystals);
+      const adjustedCrystals = baseCrystals - cc.exchangeAmount;
+      const adjustedBeads = baseBeads + cc.exchangeAmount * 3;
+      const sphereCoins = cc.exchangeAmount * 20;
+
+      const displayTotals = { ...totals };
+      if (crystalName) displayTotals[crystalName] = adjustedCrystals;
+      if (beadsName) displayTotals[beadsName] = adjustedBeads;
+      else if (crystalName && cc.exchangeAmount > 0) displayTotals[crystalName.replace('Crystals', 'Beads')] = cc.exchangeAmount * 3;
+      if (sphereCoins > 0) displayTotals['Mega Sphere Coins'] = sphereCoins;
+
+      const table = document.createElement('table');
+      table.className = 'cost-calc-mat-table';
+      table.innerHTML =
+        '<thead><tr><th>Material</th><th style="text-align:right">Quantity</th></tr></thead><tbody>' +
+        Object.entries(displayTotals)
+          .filter(([, qty]) => qty > 0)
+          .map(([name, qty]) => `<tr><td>${name}</td><td class="qty">${qty.toLocaleString()}</td></tr>`)
+          .join('') +
+        '</tbody>';
+      resultsSection.appendChild(table);
+
+      if (crystalName) {
+        const sliderWrap = document.createElement('div');
+        sliderWrap.className = 'cost-calc-exchange-slider-wrap';
+        const sliderLabel = document.createElement('div');
+        sliderLabel.className = 'cost-calc-note';
+        sliderLabel.innerHTML = `Farm directly vs. exchange for <b>${crystalName}</b> (Material Exchange Shop, 1 Crystal = 3 Beads + 20 Mega Sphere Coins):`;
+        sliderWrap.appendChild(sliderLabel);
+
+        const slider = document.createElement('input');
+        slider.type = 'range';
+        slider.min = 0;
+        slider.max = baseCrystals;
+        slider.value = cc.exchangeAmount;
+        slider.className = 'cost-calc-exchange-slider';
+        slider.oninput = () => {
+          cc.exchangeAmount = Number(slider.value);
+          render();
+        };
+        sliderWrap.appendChild(slider);
+
+        const sliderReadout = document.createElement('div');
+        sliderReadout.className = 'cost-calc-exchange-readout';
+        sliderReadout.innerHTML = `<span>${adjustedCrystals.toLocaleString()} farmed directly</span><span>${cc.exchangeAmount.toLocaleString()} via exchange (+${(cc.exchangeAmount * 3).toLocaleString()} Beads, +${sphereCoins.toLocaleString()} Sphere Coins)</span>`;
+        sliderWrap.appendChild(sliderReadout);
+
+        resultsSection.appendChild(sliderWrap);
+      }
+
+      const stepList = document.createElement('div');
+      stepList.className = 'cost-calc-note';
+      stepList.style.marginTop = '8px';
+      stepList.textContent = 'Steps: ' + crossedSteps.map((s) => `cap \u2192 ${s.newCap}`).join(', ');
+      resultsSection.appendChild(stepList);
+    }
+
+    body.appendChild(resultsSection);
+  }
+
+  render();
+}
+
 async function main() {
   await loadData();
   renderSelectionRow();
@@ -2629,6 +2942,7 @@ async function main() {
 
   document.getElementById('presets-btn').addEventListener('click', openPresetsPanel);
   document.getElementById('compare-btn').addEventListener('click', openComparePage);
+  document.getElementById('cost-calc-btn').addEventListener('click', openCostCalculator);
 
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.
