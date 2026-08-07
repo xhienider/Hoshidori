@@ -398,6 +398,40 @@ function renderSlot(key, slotState, isLeader) {
   };
   wrap.appendChild(boardBtn);
 
+  if (!isLeader) {
+    const swapRow = document.createElement('div');
+    swapRow.className = 'slot-swap-row';
+    const leftBtn = document.createElement('button');
+    leftBtn.type = 'button';
+    leftBtn.className = 'slot-swap-btn';
+    leftBtn.textContent = '\u2190';
+    leftBtn.title = 'Move left';
+    leftBtn.disabled = key === 0;
+    leftBtn.onclick = (e) => {
+      e.stopPropagation();
+      [state.unit[key - 1], state.unit[key]] = [state.unit[key], state.unit[key - 1]];
+      renderSelectionRow();
+      recompute();
+    };
+    swapRow.appendChild(leftBtn);
+
+    const rightBtn = document.createElement('button');
+    rightBtn.type = 'button';
+    rightBtn.className = 'slot-swap-btn';
+    rightBtn.textContent = '\u2192';
+    rightBtn.title = 'Move right';
+    rightBtn.disabled = key === state.unit.length - 1;
+    rightBtn.onclick = (e) => {
+      e.stopPropagation();
+      [state.unit[key], state.unit[key + 1]] = [state.unit[key + 1], state.unit[key]];
+      renderSelectionRow();
+      recompute();
+    };
+    swapRow.appendChild(rightBtn);
+
+    wrap.appendChild(swapRow);
+  }
+
   wrap.addEventListener('click', () => openPicker(slotState, isLeader));
 
   return wrap;
