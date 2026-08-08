@@ -177,6 +177,14 @@ function rarityNumber(rarity) {
   const m = rarity?.match(/RARITY_(\d)$/);
   return m ? Number(m[1]) : null;
 }
+/** Which of Performance/Technique/Sense is this card's highest permil stat -
+ *  ties broken in Performance > Technique > Sense order (arbitrary but stable). */
+function mainStatOf(card) {
+  const { performancePermilMultiply: p, techniquePermilMultiply: t, sensePermilMultiply: s } = card;
+  if (p >= t && p >= s) return 'performance';
+  if (t >= s) return 'technique';
+  return 'sense';
+}
 function rarityLabel(rarity) {
   const n = rarityNumber(rarity);
   return n ? `${n}\u2605` : '';
@@ -236,6 +244,7 @@ const state = {
     types: new Set(), // attributeType values; empty = no filter
     rarities: new Set(), // rarity numbers (3,4,5); empty = no filter
     generations: new Set(), // generation strings; empty = no filter
+    mainStats: new Set(), // 'performance' | 'technique' | 'sense' (highest permil); empty = no filter
   },
   mobileAccordionExpanded: new Set(['leader']), // which slot keys are open on mobile
   manualMemoryBonusPercent: 0, // "Unit Stats X%" from the Memory Stand screen - % of Member Parameter only
@@ -898,6 +907,7 @@ function openPicker(slotState, isLeader) {
       .filter((m) => !f.types.size || f.types.has(m.attributeType))
       .filter((m) => !f.rarities.size || f.rarities.has(rarityNumber(m.rarity)))
       .filter((m) => !f.generations.size || f.generations.has(m.generation))
+      .filter((m) => !f.mainStats.size || f.mainStats.has(mainStatOf(m)))
       .slice(0, 60);
 
     if (!matches.length) {
@@ -1005,6 +1015,29 @@ function renderFilterBar(onChange) {
   }
   bar.appendChild(rarityGroup);
 
+  const statGroup = document.createElement('div');
+  statGroup.className = 'filter-group';
+  statGroup.innerHTML = '<span class="filter-group-label">Main Stat</span>';
+  for (const stat of [
+    { key: 'performance', label: 'Perf' },
+    { key: 'technique', label: 'Tech' },
+    { key: 'sense', label: 'Sense' },
+  ]) {
+    const chip = document.createElement('label');
+    chip.className = 'filter-checkbox';
+    const cb = document.createElement('input');
+    cb.type = 'checkbox';
+    cb.checked = f.mainStats.has(stat.key);
+    cb.onchange = () => {
+      cb.checked ? f.mainStats.add(stat.key) : f.mainStats.delete(stat.key);
+      onChange();
+    };
+    chip.appendChild(cb);
+    chip.appendChild(document.createTextNode(stat.label));
+    statGroup.appendChild(chip);
+  }
+  bar.appendChild(statGroup);
+
   const allGenerations = [...new Set(DATA.members.map((m) => m.generation).filter(Boolean))];
   const genGroup = document.createElement('div');
   genGroup.className = 'filter-group filter-group-dropdown';
@@ -1060,6 +1093,7 @@ function renderFilterBar(onChange) {
     f.types.clear();
     f.rarities.clear();
     f.generations.clear();
+    f.mainStats.clear();
     onChange();
     // Re-render the bar itself so checkboxes visually reset too.
     bar.replaceWith(renderFilterBar(onChange));
