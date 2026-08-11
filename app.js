@@ -2950,6 +2950,560 @@ function openCostCalculator() {
   render();
 }
 
+/** Normalizes every filterable attribute for one card into a flat, queryable
+ *  shape, using each skill's base (level 1) values for consistent comparison
+ *  across cards regardless of a specific bloom context. Computed once per
+ *  card and cached by the Card Viewer, not recomputed per-filter-change. */
+function computeCardFilterData(card) {
+  const perf = card.performancePermilMultiply;
+  const tech = card.techniquePermilMultiply;
+  const sense = card.sensePermilMultiply;
+  const mainStat = mainStatOf(card);
+
+  const passiveLvl1 = card.passiveSkill?.['1'];
+  const passive = {
+    hasCondition: !!passiveLvl1?.condition,
+    conditionType: passiveLvl1?.condition?.type || null,
+    effects: (passiveLvl1?.effects || []).map((e) => ({
+      type: e.type,
+      valuePermil: Number(e.value),
+      recipientType: e.target?.type || null,
+      recipientAttribute: e.target?.cardAttributeType || null,
+      recipientGrouping: e.target?.characterGroupingId || null,
+      recipientCount: e.target?.targetCount ?? null,
+    })),
+  };
+
+  const specialLvl1 = card.specialSkill?.['1'];
+  const special = {
+    durationSeconds: specialLvl1 ? specialLvl1.effectDurationMs / 1000 : null,
+    hasScoreSupport: (specialLvl1?.effects || []).some((e) => e.type.includes('SCORE_UP_EFFECT_UP')),
+    hasActivationRateBonus: (specialLvl1?.additionalEffects || []).some((e) => e.type.includes('ACTIVATION_PROBABILITY')),
+    hasComboCondition: specialLvl1?.condition?.type?.includes('COMBO') || false,
+    hasLifeCondition: specialLvl1?.condition?.type?.includes('LIFE') || false,
+  };
+
+  const leaderData = card.leaderSkill;
+  const leader = {
+    hasCondition: !!leaderData?.condition,
+    conditionType: leaderData?.condition?.type || null,
+    effects: (leaderData?.effects || []).map((e) => ({ type: e.type, valuePermil: Number(e.value) })),
+  };
+
+  const activeLvl1 = card.activeSkill?.['1'];
+  const active = {
+    durationSeconds: activeLvl1 ? activeLvl1.effectDurationMs / 1000 : null,
+    intervalSeconds: activeLvl1 ? activeLvl1.coolTimeMs / 1000 : null,
+    chancePercent: activeLvl1 ? activeLvl1.activationProbabilityPermil / 10 : null,
+    effects: (activeLvl1?.effects || []).map((e) => ({ type: e.type, valuePermil: Number(e.value) })),
+    hasComboCondition: activeLvl1?.enhancedCondition?.type?.includes('COMBO') || false,
+    hasLifeCondition: activeLvl1?.enhancedCondition?.type?.includes('LIFE') || false,
+  };
+
+  const connectInfo = DATA.cardConnectInfo?.[card.cardId];
+  const connect = {
+    isEligible: !!connectInfo,
+    area: connectInfo?.area || null,
+    nodeCount: connectInfo?.nodeCount ?? null,
+    boostPercent: connectInfo ? connectInfo.boostPermilLevel1 / 10 : null,
+  };
+
+  return {
+    card,
+    mainStat,
+    passive,
+    special,
+    leader,
+    active,
+    connect,
+  };
+}
+
+const CARD_VIEWER_STATE = {
+  view: 'card',
+  search: '',
+  filters: {
+    types: new Set(),
+    rarities: new Set(),
+    generations: new Set(),
+    mainStats: new Set(),
+    passiveHasCondition: null,
+    passiveRecipientTypes: new Set(),
+    passiveBonusTypes: new Set(),
+    specialDurationMin: null,
+    specialDurationMax: null,
+    specialHasScoreSupport: null,
+    specialHasActivationRate: null,
+    specialHasCombo: null,
+    specialHasLife: null,
+    leaderHasCondition: null,
+    leaderBonusTypes: new Set(),
+    activeDurationMin: null,
+    activeDurationMax: null,
+    activeChanceMin: null,
+    activeChanceMax: null,
+    activeIntervalMin: null,
+    activeIntervalMax: null,
+    activeBonusTypes: new Set(),
+    activeHasCombo: null,
+    activeHasLife: null,
+    connectEligible: null,
+    connectNodeCountMin: null,
+    connectNodeCountMax: null,
+    connectBonusMin: null,
+    connectBonusMax: null,
+  },
+};
+
+function cardMatchesStandardFilters(card, f) {
+  if (f.types.size && !f.types.has(card.attributeType)) return false;
+  if (f.rarities.size && !f.rarities.has(rarityNumber(card.rarity))) return false;
+  if (f.generations.size && !f.generations.has(card.generation)) return false;
+  if (f.mainStats.size && !f.mainStats.has(mainStatOf(card))) return false;
+  return true;
+}
+
+function inRange(value, min, max) {
+  if (value == null) return min == null && max == null;
+  if (min != null && value < min) return false;
+  if (max != null && value > max) return false;
+  return true;
+}
+
+function cardMatchesAllFilters(d, f) {
+  if (!cardMatchesStandardFilters(d.card, f)) return false;
+
+  if (f.passiveHasCondition != null && d.passive.hasCondition !== f.passiveHasCondition) return false;
+  if (f.passiveRecipientTypes.size && !d.passive.effects.some((e) => f.passiveRecipientTypes.has(e.recipientType))) return false;
+  if (f.passiveBonusTypes.size && !d.passive.effects.some((e) => f.passiveBonusTypes.has(e.type))) return false;
+
+  if (!inRange(d.special.durationSeconds, f.specialDurationMin, f.specialDurationMax)) return false;
+  if (f.specialHasScoreSupport != null && d.special.hasScoreSupport !== f.specialHasScoreSupport) return false;
+  if (f.specialHasActivationRate != null && d.special.hasActivationRateBonus !== f.specialHasActivationRate) return false;
+  if (f.specialHasCombo != null && d.special.hasComboCondition !== f.specialHasCombo) return false;
+  if (f.specialHasLife != null && d.special.hasLifeCondition !== f.specialHasLife) return false;
+
+  if (f.leaderHasCondition != null && d.leader.hasCondition !== f.leaderHasCondition) return false;
+  if (f.leaderBonusTypes.size && !d.leader.effects.some((e) => f.leaderBonusTypes.has(e.type))) return false;
+
+  if (!inRange(d.active.durationSeconds, f.activeDurationMin, f.activeDurationMax)) return false;
+  if (!inRange(d.active.chancePercent, f.activeChanceMin, f.activeChanceMax)) return false;
+  if (!inRange(d.active.intervalSeconds, f.activeIntervalMin, f.activeIntervalMax)) return false;
+  if (f.activeBonusTypes.size && !d.active.effects.some((e) => f.activeBonusTypes.has(e.type))) return false;
+  if (f.activeHasCombo != null && d.active.hasComboCondition !== f.activeHasCombo) return false;
+  if (f.activeHasLife != null && d.active.hasLifeCondition !== f.activeHasLife) return false;
+
+  if (f.connectEligible != null && d.connect.isEligible !== f.connectEligible) return false;
+  if (!inRange(d.connect.nodeCount, f.connectNodeCountMin, f.connectNodeCountMax)) return false;
+  if (!inRange(d.connect.boostPercent, f.connectBonusMin, f.connectBonusMax)) return false;
+
+  return true;
+}
+
+function openCardViewer() {
+  const overlay = document.createElement('div');
+  overlay.className = 'compare-page-overlay';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  const header = document.createElement('div');
+  header.className = 'compare-page-header';
+  header.innerHTML = `<div class="board-editor-title">Card Viewer</div>`;
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'compare-page-close';
+  closeBtn.textContent = '\u2715 Back to Builder';
+  closeBtn.onclick = () => {
+    overlay.remove();
+    document.body.style.overflow = '';
+  };
+  header.appendChild(closeBtn);
+  overlay.appendChild(header);
+
+  const layout = document.createElement('div');
+  layout.className = 'cv-layout';
+  overlay.appendChild(layout);
+
+  const sidebar = document.createElement('div');
+  sidebar.className = 'cv-sidebar';
+  layout.appendChild(sidebar);
+
+  const main = document.createElement('div');
+  main.className = 'cv-main';
+  layout.appendChild(main);
+
+  const cv = CARD_VIEWER_STATE;
+  const allCardData = DATA.members.map((card) => computeCardFilterData(card));
+
+  function renderSidebar() {
+    sidebar.innerHTML = '';
+
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'cv-search-wrap';
+    const searchInput = document.createElement('input');
+    searchInput.placeholder = 'Search name or subtitle\u2026';
+    searchInput.value = cv.search;
+    searchInput.oninput = () => {
+      cv.search = searchInput.value;
+      renderMain();
+    };
+    searchWrap.appendChild(searchInput);
+    sidebar.appendChild(searchWrap);
+
+    const makeCheckboxGroup = (title, options, selectedSet, getKey, getLabel) => {
+      const group = document.createElement('div');
+      group.className = 'cv-filter-group';
+      const label = document.createElement('div');
+      label.className = 'cv-filter-group-label';
+      label.textContent = title;
+      group.appendChild(label);
+      const row = document.createElement('div');
+      row.className = 'cv-filter-chip-row';
+      for (const opt of options) {
+        const key = getKey(opt);
+        const chip = document.createElement('label');
+        chip.className = 'filter-checkbox';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = selectedSet.has(key);
+        cb.onchange = () => {
+          cb.checked ? selectedSet.add(key) : selectedSet.delete(key);
+          renderMain();
+        };
+        chip.appendChild(cb);
+        chip.appendChild(document.createTextNode(getLabel(opt)));
+        row.appendChild(chip);
+      }
+      group.appendChild(row);
+      sidebar.appendChild(group);
+    };
+
+    makeCheckboxGroup(
+      'Type',
+      ['CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1', 'CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2', 'CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3'],
+      cv.filters.types,
+      (t) => t,
+      (t) => attrLabel(t)
+    );
+    makeCheckboxGroup(
+      'Rarity',
+      [5, 4, 3],
+      cv.filters.rarities,
+      (r) => r,
+      (r) => `${r}\u2605`
+    );
+    makeCheckboxGroup(
+      'Main Stat',
+      ['performance', 'technique', 'sense'],
+      cv.filters.mainStats,
+      (s) => s,
+      (s) => s[0].toUpperCase() + s.slice(1)
+    );
+    const generations = [...new Set(DATA.members.map((m) => m.generation))].sort();
+    makeCheckboxGroup(
+      'Generation',
+      generations,
+      cv.filters.generations,
+      (g) => g,
+      (g) => genLabel(g) || g
+    );
+
+    const makeTriState = (title, currentValue, onChange) => {
+      const group = document.createElement('div');
+      group.className = 'cv-filter-group';
+      const label = document.createElement('div');
+      label.className = 'cv-filter-group-label';
+      label.textContent = title;
+      group.appendChild(label);
+      const row = document.createElement('div');
+      row.className = 'cv-tri-row';
+      for (const opt of [
+        { key: null, label: 'Any' },
+        { key: true, label: 'Yes' },
+        { key: false, label: 'No' },
+      ]) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cv-tri-btn' + (currentValue === opt.key ? ' cv-tri-btn-active' : '');
+        btn.textContent = opt.label;
+        btn.onclick = () => {
+          onChange(opt.key);
+          renderMain();
+          renderSidebar();
+        };
+        row.appendChild(btn);
+      }
+      group.appendChild(row);
+      sidebar.appendChild(group);
+    };
+
+    const makeRange = (title, unit, minVal, maxVal, onChangeMin, onChangeMax) => {
+      const group = document.createElement('div');
+      group.className = 'cv-filter-group';
+      const label = document.createElement('div');
+      label.className = 'cv-filter-group-label';
+      label.textContent = title;
+      group.appendChild(label);
+      const row = document.createElement('div');
+      row.className = 'cv-filter-range-row';
+      const minInput = document.createElement('input');
+      minInput.type = 'number';
+      minInput.placeholder = 'min';
+      minInput.value = minVal ?? '';
+      minInput.onchange = () => {
+        onChangeMin(minInput.value === '' ? null : Number(minInput.value));
+        renderMain();
+      };
+      row.appendChild(minInput);
+      row.appendChild(document.createTextNode('\u2013'));
+      const maxInput = document.createElement('input');
+      maxInput.type = 'number';
+      maxInput.placeholder = 'max';
+      maxInput.value = maxVal ?? '';
+      maxInput.onchange = () => {
+        onChangeMax(maxInput.value === '' ? null : Number(maxInput.value));
+        renderMain();
+      };
+      row.appendChild(maxInput);
+      if (unit) row.appendChild(document.createTextNode(unit));
+      group.appendChild(row);
+      sidebar.appendChild(group);
+    };
+
+    const BONUS_TYPE_OPTIONS = [
+      'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_ALL_PARAMETER_UP_PERMIL_UP',
+      'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP',
+      'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP',
+      'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP',
+      'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP',
+    ];
+    const RECIPIENT_TYPE_OPTIONS = [
+      'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL',
+      'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE',
+      'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING',
+      'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_SELF',
+    ];
+    const recipientShortLabel = (t) => t.split('_TARGET_TYPE_')[1]?.replaceAll('_', ' ') ?? t;
+
+    const passiveHeader = document.createElement('div');
+    passiveHeader.className = 'cv-section-header';
+    passiveHeader.textContent = 'Passive Skill';
+    sidebar.appendChild(passiveHeader);
+    makeTriState('Has Condition', cv.filters.passiveHasCondition, (v) => (cv.filters.passiveHasCondition = v));
+    makeCheckboxGroup('Recipient Type', RECIPIENT_TYPE_OPTIONS, cv.filters.passiveRecipientTypes, (t) => t, recipientShortLabel);
+    makeCheckboxGroup('Bonus Type', BONUS_TYPE_OPTIONS, cv.filters.passiveBonusTypes, (t) => t, effectLabel);
+
+    const specialHeader = document.createElement('div');
+    specialHeader.className = 'cv-section-header';
+    specialHeader.textContent = 'Special Skill';
+    sidebar.appendChild(specialHeader);
+    makeRange(
+      'Duration',
+      's',
+      cv.filters.specialDurationMin,
+      cv.filters.specialDurationMax,
+      (v) => (cv.filters.specialDurationMin = v),
+      (v) => (cv.filters.specialDurationMax = v)
+    );
+    makeTriState('Has Score Support', cv.filters.specialHasScoreSupport, (v) => (cv.filters.specialHasScoreSupport = v));
+    makeTriState('Has Activation Rate Bonus', cv.filters.specialHasActivationRate, (v) => (cv.filters.specialHasActivationRate = v));
+    makeTriState('Has Combo Condition', cv.filters.specialHasCombo, (v) => (cv.filters.specialHasCombo = v));
+    makeTriState('Has Life Condition', cv.filters.specialHasLife, (v) => (cv.filters.specialHasLife = v));
+
+    const leaderHeader = document.createElement('div');
+    leaderHeader.className = 'cv-section-header';
+    leaderHeader.textContent = 'Outfit (Leader) Skill';
+    sidebar.appendChild(leaderHeader);
+    makeTriState('Has Condition', cv.filters.leaderHasCondition, (v) => (cv.filters.leaderHasCondition = v));
+    makeCheckboxGroup('Bonus Type', BONUS_TYPE_OPTIONS, cv.filters.leaderBonusTypes, (t) => t, effectLabel);
+
+    const activeHeader = document.createElement('div');
+    activeHeader.className = 'cv-section-header';
+    activeHeader.textContent = 'Active Skill';
+    sidebar.appendChild(activeHeader);
+    makeRange(
+      'Duration',
+      's',
+      cv.filters.activeDurationMin,
+      cv.filters.activeDurationMax,
+      (v) => (cv.filters.activeDurationMin = v),
+      (v) => (cv.filters.activeDurationMax = v)
+    );
+    makeRange(
+      'Chance',
+      '%',
+      cv.filters.activeChanceMin,
+      cv.filters.activeChanceMax,
+      (v) => (cv.filters.activeChanceMin = v),
+      (v) => (cv.filters.activeChanceMax = v)
+    );
+    makeRange(
+      'Interval',
+      's',
+      cv.filters.activeIntervalMin,
+      cv.filters.activeIntervalMax,
+      (v) => (cv.filters.activeIntervalMin = v),
+      (v) => (cv.filters.activeIntervalMax = v)
+    );
+    makeCheckboxGroup(
+      'Bonus Type',
+      ['LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP'],
+      cv.filters.activeBonusTypes,
+      (t) => t,
+      effectLabel
+    );
+    makeTriState('Has Combo Condition', cv.filters.activeHasCombo, (v) => (cv.filters.activeHasCombo = v));
+    makeTriState('Has Life Condition', cv.filters.activeHasLife, (v) => (cv.filters.activeHasLife = v));
+
+    const connectHeader = document.createElement('div');
+    connectHeader.className = 'cv-section-header';
+    connectHeader.textContent = 'Connect Effect';
+    sidebar.appendChild(connectHeader);
+    makeTriState('Eligible', cv.filters.connectEligible, (v) => (cv.filters.connectEligible = v));
+    makeRange(
+      'Pattern Size',
+      'nodes',
+      cv.filters.connectNodeCountMin,
+      cv.filters.connectNodeCountMax,
+      (v) => (cv.filters.connectNodeCountMin = v),
+      (v) => (cv.filters.connectNodeCountMax = v)
+    );
+    makeRange(
+      'Bonus',
+      '%',
+      cv.filters.connectBonusMin,
+      cv.filters.connectBonusMax,
+      (v) => (cv.filters.connectBonusMin = v),
+      (v) => (cv.filters.connectBonusMax = v)
+    );
+
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'filter-clear-btn';
+    clearBtn.textContent = 'Clear filters';
+    clearBtn.onclick = () => {
+      cv.filters.types.clear();
+      cv.filters.rarities.clear();
+      cv.filters.generations.clear();
+      cv.filters.mainStats.clear();
+      cv.filters.passiveHasCondition = null;
+      cv.filters.passiveRecipientTypes.clear();
+      cv.filters.passiveBonusTypes.clear();
+      cv.filters.specialDurationMin = null;
+      cv.filters.specialDurationMax = null;
+      cv.filters.specialHasScoreSupport = null;
+      cv.filters.specialHasActivationRate = null;
+      cv.filters.specialHasCombo = null;
+      cv.filters.specialHasLife = null;
+      cv.filters.leaderHasCondition = null;
+      cv.filters.leaderBonusTypes.clear();
+      cv.filters.activeDurationMin = null;
+      cv.filters.activeDurationMax = null;
+      cv.filters.activeChanceMin = null;
+      cv.filters.activeChanceMax = null;
+      cv.filters.activeIntervalMin = null;
+      cv.filters.activeIntervalMax = null;
+      cv.filters.activeBonusTypes.clear();
+      cv.filters.activeHasCombo = null;
+      cv.filters.activeHasLife = null;
+      cv.filters.connectEligible = null;
+      cv.filters.connectNodeCountMin = null;
+      cv.filters.connectNodeCountMax = null;
+      cv.filters.connectBonusMin = null;
+      cv.filters.connectBonusMax = null;
+      renderSidebar();
+      renderMain();
+    };
+    sidebar.appendChild(clearBtn);
+  }
+
+  function renderMain() {
+    main.innerHTML = '';
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'cv-toolbar';
+    const countEl = document.createElement('div');
+    countEl.className = 'cv-count';
+    toolbar.appendChild(countEl);
+    const viewToggle = document.createElement('div');
+    viewToggle.className = 'cv-view-toggle';
+    for (const v of ['card', 'list']) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'cv-view-btn' + (cv.view === v ? ' cv-view-btn-active' : '');
+      btn.textContent = v === 'card' ? 'Card View' : 'List View';
+      btn.onclick = () => {
+        cv.view = v;
+        renderMain();
+      };
+      viewToggle.appendChild(btn);
+    }
+    toolbar.appendChild(viewToggle);
+    main.appendChild(toolbar);
+
+    const q = cv.search.trim().toLowerCase();
+    const filtered = allCardData.filter((d) => {
+      if (!cardMatchesAllFilters(d, cv.filters)) return false;
+      if (q && !(d.card.characterName.toLowerCase().includes(q) || d.card.cardSubtitle?.toLowerCase().includes(q))) return false;
+      return true;
+    });
+    countEl.textContent = `${filtered.length} of ${allCardData.length} cards`;
+
+    const resultsWrap = document.createElement('div');
+    resultsWrap.className = cv.view === 'card' ? 'cv-card-grid' : 'cv-list';
+    main.appendChild(resultsWrap);
+
+    if (cv.view === 'card') {
+      for (const d of filtered) resultsWrap.appendChild(renderCardViewerTile(d));
+    } else {
+      resultsWrap.appendChild(renderCardViewerListHeader());
+      for (const d of filtered) resultsWrap.appendChild(renderCardViewerListRow(d));
+    }
+  }
+
+  renderSidebar();
+  renderMain();
+}
+
+function renderCardViewerTile(d) {
+  const card = d.card;
+  const tile = document.createElement('div');
+  tile.className = 'cv-tile';
+  tile.innerHTML = `
+    <img class="cv-tile-portrait" src="images/cards/${card.cardId}.webp" alt="${card.characterName}" loading="lazy">
+    <div class="cv-tile-name">${card.characterName}</div>
+    <div class="cv-tile-sub">${card.cardSubtitle || ''}</div>
+    <div class="cv-tile-chips">
+      <span class="attr-chip ${attrClass(card.attributeType)}">${attrLabel(card.attributeType)}</span>
+      <span class="gen-chip">${genLabel(card.generation) || ''}</span>
+      <span class="rarity-badge">${rarityLabel(card.rarity)}</span>
+    </div>
+    <div class="cv-tile-stat">Main: ${d.mainStat[0].toUpperCase() + d.mainStat.slice(1)}</div>
+  `;
+  return tile;
+}
+
+function renderCardViewerListHeader() {
+  const row = document.createElement('div');
+  row.className = 'cv-list-row cv-list-header';
+  row.innerHTML = `<span>Character</span><span>Type</span><span>Gen</span><span>Rarity</span><span>Main Stat</span>`;
+  return row;
+}
+
+function renderCardViewerListRow(d) {
+  const card = d.card;
+  const row = document.createElement('div');
+  row.className = 'cv-list-row';
+  row.innerHTML = `
+    <span class="cv-list-name">${card.characterName} <span class="cv-list-sub">${card.cardSubtitle || ''}</span></span>
+    <span class="attr-chip ${attrClass(card.attributeType)}">${attrLabel(card.attributeType)}</span>
+    <span>${genLabel(card.generation) || ''}</span>
+    <span class="rarity-badge">${rarityLabel(card.rarity)}</span>
+    <span>${d.mainStat[0].toUpperCase() + d.mainStat.slice(1)}</span>
+  `;
+  return row;
+}
+
 async function main() {
   await loadData();
   renderSelectionRow();
@@ -2958,6 +3512,7 @@ async function main() {
   document.getElementById('presets-btn').addEventListener('click', openPresetsPanel);
   document.getElementById('compare-btn').addEventListener('click', openComparePage);
   document.getElementById('cost-calc-btn').addEventListener('click', openCostCalculator);
+  document.getElementById('card-viewer-btn').addEventListener('click', openCardViewer);
 
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.
