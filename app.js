@@ -3492,10 +3492,123 @@ function openCardViewer() {
   renderMain();
 }
 
+function openCardDetailsPopup(d) {
+  const card = d.card;
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+
+  const box = document.createElement('div');
+  box.className = 'picker-box cv-details-box';
+
+  const maxLevel = maxLevelFor(card);
+  const stats = resolveMemberStats(card, maxLevel, 0, DATA.cardPotentials);
+
+  const condText = (condition) => (condition ? CONDITION_LABELS[condition.type]?.(condition) ?? 'Conditional' : 'Always active');
+  const recipientText = (e) => {
+    if (e.recipientType === 'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_SELF') return 'Self';
+    if (e.recipientType === 'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE')
+      return `Up to ${e.recipientCount} ${attrLabel(e.recipientAttribute)} member${e.recipientCount === 1 ? '' : 's'}`;
+    if (e.recipientType === 'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING')
+      return `Up to ${e.recipientCount} members from ${e.recipientGrouping}`;
+    if (e.recipientType === 'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL') return 'All members';
+    return '\u2014';
+  };
+
+  const activeLvl1 = card.activeSkill?.['1'];
+  const specialLvl1 = card.specialSkill?.['1'];
+
+  box.innerHTML = `
+    <div class="picker-search">
+      <div class="cv-details-header">
+        <img class="cv-details-portrait" src="images/cards/${card.cardId}.webp" alt="${card.characterName}" loading="lazy">
+        <div>
+          <div class="board-editor-title">${card.characterName}</div>
+          <div class="board-editor-subtitle">${card.cardSubtitle || ''}</div>
+          <div class="cv-tile-chips" style="justify-content:flex-start; margin-top:8px;">
+            <span class="attr-chip ${attrClass(card.attributeType)}">${attrLabel(card.attributeType)}</span>
+            <span class="gen-chip">${genLabel(card.generation) || ''}</span>
+            <span class="rarity-badge">${rarityLabel(card.rarity)}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="cv-details-body">
+      <div class="cv-details-section">
+        <div class="cv-section-header" style="margin-top:0; padding-top:0; border-top:none;">Parameters (Lv${maxLevel}, Bloom 0)</div>
+        <div class="cv-details-stat-row"><span>PERF</span><b>${stats.performance}</b></div>
+        <div class="cv-details-stat-row"><span>TECH</span><b>${stats.technique}</b></div>
+        <div class="cv-details-stat-row"><span>SENSE</span><b>${stats.sense}</b></div>
+      </div>
+
+      <div class="cv-details-section">
+        <div class="cv-section-header">Outfit (Leader) Skill</div>
+        <div class="cv-details-note">Condition: ${condText(card.leaderSkill?.condition)}</div>
+        ${(card.leaderSkill?.effects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b></div>`).join('') || '<div class="cv-details-note">No effect data</div>'}
+      </div>
+
+      <div class="cv-details-section">
+        <div class="cv-section-header">Passive Skill</div>
+        <div class="cv-details-note">Condition: ${condText(d.passive.hasCondition ? card.passiveSkill?.['1']?.condition : null)}</div>
+        ${d.passive.effects.map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${e.valuePermil / 10}%</b> \u2192 ${recipientText(e)}</div>`).join('') || '<div class="cv-details-note">No effect data</div>'}
+      </div>
+
+      <div class="cv-details-section">
+        <div class="cv-section-header">Active Skill</div>
+        ${
+          activeLvl1
+            ? `
+          <div class="cv-details-note">Cooldown: ${activeLvl1.coolTimeMs / 1000}s &middot; Activation: ${activeLvl1.activationProbabilityPermil / 10}% &middot; Duration: ${activeLvl1.effectDurationMs / 1000}s</div>
+          ${(activeLvl1.effects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b></div>`).join('')}
+          ${activeLvl1.enhancedCondition ? `<div class="cv-details-note" style="margin-top:6px;">Enhanced if: ${condText(activeLvl1.enhancedCondition)}</div>` : ''}
+          ${(activeLvl1.enhancedEffects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b> (enhanced)</div>`).join('')}
+        `
+            : '<div class="cv-details-note">No active skill</div>'
+        }
+      </div>
+
+      <div class="cv-details-section">
+        <div class="cv-section-header">Special Skill</div>
+        ${
+          specialLvl1
+            ? `
+          <div class="cv-details-note">Duration: ${specialLvl1.effectDurationMs / 1000}s</div>
+          ${(specialLvl1.effects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b></div>`).join('')}
+          ${(specialLvl1.additionalEffects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b></div>`).join('')}
+          ${specialLvl1.additionalCondition ? `<div class="cv-details-note" style="margin-top:6px;">Condition: ${condText(specialLvl1.additionalCondition)}</div>` : ''}
+        `
+            : '<div class="cv-details-note">No special skill</div>'
+        }
+      </div>
+
+      <div class="cv-details-section">
+        <div class="cv-section-header">Connect Effect</div>
+        ${
+          d.connect.isEligible
+            ? `
+          <div class="cv-details-connect-row">
+            ${buildPatternIcon(DATA.cardConnectInfo[card.cardId].pattern, d.connect.area === 'leader' ? '--attr-cute' : '--attr-pure')}
+            <div class="cv-details-note">Bonus: <b>+${d.connect.boostPercent}%</b> &middot; Area: ${d.connect.area}</div>
+          </div>
+        `
+            : '<div class="cv-details-note">Not connect-eligible</div>'
+        }
+      </div>
+    </div>
+    <div class="picker-close">CLOSE</div>
+  `;
+  box.querySelector('.picker-close').onclick = () => overlay.remove();
+
+  overlay.appendChild(box);
+  document.body.appendChild(overlay);
+}
+
 function renderCardViewerTile(d) {
   const card = d.card;
   const tile = document.createElement('div');
-  tile.className = 'cv-tile';
+  tile.className = 'cv-tile cv-tile-clickable';
   tile.innerHTML = `
     <img class="cv-tile-portrait" src="images/cards/${card.cardId}.webp" alt="${card.characterName}" loading="lazy">
     <div class="cv-tile-name">${card.characterName}</div>
@@ -3507,6 +3620,7 @@ function renderCardViewerTile(d) {
     </div>
     <div class="cv-tile-stat">Main: ${d.mainStat[0].toUpperCase() + d.mainStat.slice(1)}</div>
   `;
+  tile.onclick = () => openCardDetailsPopup(d);
   return tile;
 }
 
@@ -3520,7 +3634,7 @@ function renderCardViewerListHeader() {
 function renderCardViewerListRow(d) {
   const card = d.card;
   const row = document.createElement('div');
-  row.className = 'cv-list-row';
+  row.className = 'cv-list-row cv-tile-clickable';
   row.innerHTML = `
     <span class="cv-list-name">${card.characterName} <span class="cv-list-sub">${card.cardSubtitle || ''}</span></span>
     <span class="attr-chip ${attrClass(card.attributeType)}">${attrLabel(card.attributeType)}</span>
@@ -3528,6 +3642,7 @@ function renderCardViewerListRow(d) {
     <span class="rarity-badge">${rarityLabel(card.rarity)}</span>
     <span>${d.mainStat[0].toUpperCase() + d.mainStat.slice(1)}</span>
   `;
+  row.onclick = () => openCardDetailsPopup(d);
   return row;
 }
 

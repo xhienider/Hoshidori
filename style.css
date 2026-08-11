@@ -719,6 +719,37 @@ header.masthead {
 }
 .cv-search-wrap input:focus { outline: none; border-color: var(--orange-dim); }
 
+.cv-tile-clickable { cursor: pointer; transition: border-color 0.15s; }
+.cv-tile-clickable:hover { border-color: var(--orange-dim); }
+
+.cv-details-box { max-width: 640px; }
+.cv-details-header { display: flex; gap: 16px; align-items: flex-start; }
+.cv-details-portrait {
+  width: 72px;
+  height: 72px;
+  border-radius: 10px;
+  object-fit: cover;
+  border: 1px solid var(--line);
+  flex-shrink: 0;
+}
+.cv-details-body { padding: 4px 20px 16px; max-height: 60vh; overflow-y: auto; }
+.cv-details-section {
+  padding: 12px 0;
+  border-bottom: 1px solid var(--line);
+}
+.cv-details-section:last-child { border-bottom: none; }
+.cv-details-stat-row {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 3px 0;
+}
+.cv-details-stat-row span { color: var(--text-dim); }
+.cv-details-note { font-size: 12.5px; color: var(--text-dim); margin-bottom: 4px; }
+.cv-details-effect { font-size: 13px; padding: 2px 0; }
+.cv-details-connect-row { display: flex; align-items: center; gap: 12px; }
+
 .cv-section-header {
   font-size: 13px;
   font-weight: 700;
