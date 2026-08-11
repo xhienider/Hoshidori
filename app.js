@@ -2975,12 +2975,15 @@ function computeCardFilterData(card) {
   };
 
   const specialLvl1 = card.specialSkill?.['1'];
+  const specialConditionType = specialLvl1?.additionalCondition?.type || null;
   const special = {
     durationSeconds: specialLvl1 ? specialLvl1.effectDurationMs / 1000 : null,
     hasScoreSupport: (specialLvl1?.effects || []).some((e) => e.type.includes('SCORE_UP_EFFECT_UP')),
     hasActivationRateBonus: (specialLvl1?.additionalEffects || []).some((e) => e.type.includes('ACTIVATION_PROBABILITY')),
-    hasComboCondition: specialLvl1?.condition?.type?.includes('COMBO') || false,
-    hasLifeCondition: specialLvl1?.condition?.type?.includes('LIFE') || false,
+    hasComboCondition: specialConditionType?.includes('COMBO') || false,
+    hasLifeCondition: specialConditionType?.includes('LIFE') || false,
+    hasTypeCondition: specialConditionType?.includes('ATTRIBUTE') || false,
+    hasGenerationCondition: specialConditionType?.includes('CHARACTER_GROUPING') || false,
   };
 
   const leaderData = card.leaderSkill;
@@ -3001,11 +3004,13 @@ function computeCardFilterData(card) {
   };
 
   const connectInfo = DATA.cardConnectInfo?.[card.cardId];
+  const patternCells = new Set((connectInfo?.pattern || []).map((p) => `${p.x || 0},${p.y || 0}`));
   const connect = {
     isEligible: !!connectInfo,
     area: connectInfo?.area || null,
     nodeCount: connectInfo?.nodeCount ?? null,
     boostPercent: connectInfo ? connectInfo.boostPermilLevel1 / 10 : null,
+    patternCells,
   };
 
   return {
@@ -3032,10 +3037,11 @@ const CARD_VIEWER_STATE = {
     passiveBonusTypes: new Set(),
     specialDurationMin: null,
     specialDurationMax: null,
-    specialHasScoreSupport: null,
     specialHasActivationRate: null,
     specialHasCombo: null,
     specialHasLife: null,
+    specialHasTypeCondition: null,
+    specialHasGenerationCondition: null,
     leaderHasCondition: null,
     leaderBonusTypes: new Set(),
     activeDurationMin: null,
@@ -3044,12 +3050,9 @@ const CARD_VIEWER_STATE = {
     activeChanceMax: null,
     activeIntervalMin: null,
     activeIntervalMax: null,
-    activeBonusTypes: new Set(),
     activeHasCombo: null,
     activeHasLife: null,
-    connectEligible: null,
-    connectNodeCountMin: null,
-    connectNodeCountMax: null,
+    connectPatternCells: new Set(), // "x,y" strings the user has checked on the pattern grid
     connectBonusMin: null,
     connectBonusMax: null,
   },
@@ -3078,10 +3081,11 @@ function cardMatchesAllFilters(d, f) {
   if (f.passiveBonusTypes.size && !d.passive.effects.some((e) => f.passiveBonusTypes.has(e.type))) return false;
 
   if (!inRange(d.special.durationSeconds, f.specialDurationMin, f.specialDurationMax)) return false;
-  if (f.specialHasScoreSupport != null && d.special.hasScoreSupport !== f.specialHasScoreSupport) return false;
   if (f.specialHasActivationRate != null && d.special.hasActivationRateBonus !== f.specialHasActivationRate) return false;
   if (f.specialHasCombo != null && d.special.hasComboCondition !== f.specialHasCombo) return false;
   if (f.specialHasLife != null && d.special.hasLifeCondition !== f.specialHasLife) return false;
+  if (f.specialHasTypeCondition != null && d.special.hasTypeCondition !== f.specialHasTypeCondition) return false;
+  if (f.specialHasGenerationCondition != null && d.special.hasGenerationCondition !== f.specialHasGenerationCondition) return false;
 
   if (f.leaderHasCondition != null && d.leader.hasCondition !== f.leaderHasCondition) return false;
   if (f.leaderBonusTypes.size && !d.leader.effects.some((e) => f.leaderBonusTypes.has(e.type))) return false;
@@ -3089,12 +3093,15 @@ function cardMatchesAllFilters(d, f) {
   if (!inRange(d.active.durationSeconds, f.activeDurationMin, f.activeDurationMax)) return false;
   if (!inRange(d.active.chancePercent, f.activeChanceMin, f.activeChanceMax)) return false;
   if (!inRange(d.active.intervalSeconds, f.activeIntervalMin, f.activeIntervalMax)) return false;
-  if (f.activeBonusTypes.size && !d.active.effects.some((e) => f.activeBonusTypes.has(e.type))) return false;
   if (f.activeHasCombo != null && d.active.hasComboCondition !== f.activeHasCombo) return false;
   if (f.activeHasLife != null && d.active.hasLifeCondition !== f.activeHasLife) return false;
 
-  if (f.connectEligible != null && d.connect.isEligible !== f.connectEligible) return false;
-  if (!inRange(d.connect.nodeCount, f.connectNodeCountMin, f.connectNodeCountMax)) return false;
+  if (f.connectPatternCells.size) {
+    if (!d.connect.isEligible) return false;
+    for (const cell of f.connectPatternCells) {
+      if (!d.connect.patternCells.has(cell)) return false;
+    }
+  }
   if (!inRange(d.connect.boostPercent, f.connectBonusMin, f.connectBonusMax)) return false;
 
   return true;
@@ -3278,12 +3285,16 @@ function openCardViewer() {
       'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP',
     ];
     const RECIPIENT_TYPE_OPTIONS = [
-      'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL',
       'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE',
       'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING',
       'LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_SELF',
     ];
-    const recipientShortLabel = (t) => t.split('_TARGET_TYPE_')[1]?.replaceAll('_', ' ') ?? t;
+    const RECIPIENT_TYPE_LABELS = {
+      LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE: 'PARAMETER',
+      LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING: 'GENERATION',
+      LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_SELF: 'SELF',
+    };
+    const recipientShortLabel = (t) => RECIPIENT_TYPE_LABELS[t] ?? t;
 
     const passiveHeader = document.createElement('div');
     passiveHeader.className = 'cv-section-header';
@@ -3305,10 +3316,11 @@ function openCardViewer() {
       (v) => (cv.filters.specialDurationMin = v),
       (v) => (cv.filters.specialDurationMax = v)
     );
-    makeTriState('Has Score Support', cv.filters.specialHasScoreSupport, (v) => (cv.filters.specialHasScoreSupport = v));
     makeTriState('Has Activation Rate Bonus', cv.filters.specialHasActivationRate, (v) => (cv.filters.specialHasActivationRate = v));
     makeTriState('Has Combo Condition', cv.filters.specialHasCombo, (v) => (cv.filters.specialHasCombo = v));
     makeTriState('Has Life Condition', cv.filters.specialHasLife, (v) => (cv.filters.specialHasLife = v));
+    makeTriState('Has Type Condition', cv.filters.specialHasTypeCondition, (v) => (cv.filters.specialHasTypeCondition = v));
+    makeTriState('Has Generation Condition', cv.filters.specialHasGenerationCondition, (v) => (cv.filters.specialHasGenerationCondition = v));
 
     const leaderHeader = document.createElement('div');
     leaderHeader.className = 'cv-section-header';
@@ -3345,13 +3357,6 @@ function openCardViewer() {
       (v) => (cv.filters.activeIntervalMin = v),
       (v) => (cv.filters.activeIntervalMax = v)
     );
-    makeCheckboxGroup(
-      'Bonus Type',
-      ['LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP'],
-      cv.filters.activeBonusTypes,
-      (t) => t,
-      effectLabel
-    );
     makeTriState('Has Combo Condition', cv.filters.activeHasCombo, (v) => (cv.filters.activeHasCombo = v));
     makeTriState('Has Life Condition', cv.filters.activeHasLife, (v) => (cv.filters.activeHasLife = v));
 
@@ -3359,15 +3364,39 @@ function openCardViewer() {
     connectHeader.className = 'cv-section-header';
     connectHeader.textContent = 'Connect Effect';
     sidebar.appendChild(connectHeader);
-    makeTriState('Eligible', cv.filters.connectEligible, (v) => (cv.filters.connectEligible = v));
-    makeRange(
-      'Pattern Size',
-      'nodes',
-      cv.filters.connectNodeCountMin,
-      cv.filters.connectNodeCountMax,
-      (v) => (cv.filters.connectNodeCountMin = v),
-      (v) => (cv.filters.connectNodeCountMax = v)
-    );
+
+    const patternGroup = document.createElement('div');
+    patternGroup.className = 'cv-filter-group';
+    const patternLabel = document.createElement('div');
+    patternLabel.className = 'cv-filter-group-label';
+    patternLabel.textContent = 'Pattern (click cells the connector must cover)';
+    patternGroup.appendChild(patternLabel);
+
+    const patternGrid = document.createElement('div');
+    patternGrid.className = 'cv-pattern-grid';
+    for (let y = -3; y <= 3; y++) {
+      for (let x = -3; x <= 3; x++) {
+        const key = `${x},${y}`;
+        const cell = document.createElement('button');
+        cell.type = 'button';
+        cell.className = 'cv-pattern-cell' + (x === 0 && y === 0 ? ' cv-pattern-cell-anchor' : '');
+        if (cv.filters.connectPatternCells.has(key)) cell.classList.add('cv-pattern-cell-active');
+        cell.onclick = () => {
+          cv.filters.connectPatternCells.has(key) ? cv.filters.connectPatternCells.delete(key) : cv.filters.connectPatternCells.add(key);
+          cell.classList.toggle('cv-pattern-cell-active');
+          renderMain();
+        };
+        patternGrid.appendChild(cell);
+      }
+    }
+    patternGroup.appendChild(patternGrid);
+    const patternNote = document.createElement('div');
+    patternNote.className = 'cv-filter-range-row';
+    patternNote.style.marginTop = '6px';
+    patternNote.textContent = 'Center = connector anchor';
+    patternGroup.appendChild(patternNote);
+    sidebar.appendChild(patternGroup);
+
     makeRange(
       'Bonus',
       '%',
@@ -3391,10 +3420,11 @@ function openCardViewer() {
       cv.filters.passiveBonusTypes.clear();
       cv.filters.specialDurationMin = null;
       cv.filters.specialDurationMax = null;
-      cv.filters.specialHasScoreSupport = null;
       cv.filters.specialHasActivationRate = null;
       cv.filters.specialHasCombo = null;
       cv.filters.specialHasLife = null;
+      cv.filters.specialHasTypeCondition = null;
+      cv.filters.specialHasGenerationCondition = null;
       cv.filters.leaderHasCondition = null;
       cv.filters.leaderBonusTypes.clear();
       cv.filters.activeDurationMin = null;
@@ -3403,12 +3433,9 @@ function openCardViewer() {
       cv.filters.activeChanceMax = null;
       cv.filters.activeIntervalMin = null;
       cv.filters.activeIntervalMax = null;
-      cv.filters.activeBonusTypes.clear();
       cv.filters.activeHasCombo = null;
       cv.filters.activeHasLife = null;
-      cv.filters.connectEligible = null;
-      cv.filters.connectNodeCountMin = null;
-      cv.filters.connectNodeCountMax = null;
+      cv.filters.connectPatternCells.clear();
       cv.filters.connectBonusMin = null;
       cv.filters.connectBonusMax = null;
       renderSidebar();

@@ -728,6 +728,25 @@ header.masthead {
   border-top: 1px solid var(--line);
 }
 
+.cv-pattern-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 3px;
+  max-width: 175px;
+}
+.cv-pattern-cell {
+  width: 22px;
+  height: 22px;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 3px;
+  cursor: pointer;
+  padding: 0;
+}
+.cv-pattern-cell:hover { border-color: var(--text-faint); }
+.cv-pattern-cell-anchor { border-color: var(--orange-dim); }
+.cv-pattern-cell-active { background: var(--orange); border-color: var(--orange); }
+
 .cv-filter-group {
   background: var(--panel);
   border: 1px solid var(--line);

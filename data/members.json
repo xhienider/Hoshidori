@@ -471,7 +471,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -482,7 +483,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -970,7 +972,8 @@
       "value": "350",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -987,7 +990,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -1463,7 +1467,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_3",
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 12000,
@@ -1480,7 +1491,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_3",
+     "characterIds": null
+    }
    }
   }
  },
@@ -1968,7 +1986,8 @@
       "value": "350",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -1985,7 +2004,8 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -2421,7 +2441,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -2432,7 +2453,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -2902,7 +2924,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -2913,7 +2936,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -3367,7 +3391,14 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "40",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 12000,
@@ -3384,7 +3415,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "40",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -3848,7 +3886,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -3865,7 +3910,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -4313,7 +4365,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -4324,7 +4377,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -4806,7 +4860,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -4823,7 +4878,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -5253,7 +5309,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 11000,
@@ -5264,7 +5321,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -5740,7 +5798,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -5751,7 +5810,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -6205,7 +6265,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 9000,
@@ -6222,7 +6289,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -6692,7 +6766,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -6703,7 +6778,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -7151,7 +7227,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 13000,
@@ -7162,7 +7239,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -7638,7 +7716,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 10000,
@@ -7649,7 +7728,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -8006,7 +8086,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -8017,7 +8098,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -8447,7 +8529,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -8458,7 +8541,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -8934,7 +9018,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -8945,7 +9030,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -9314,7 +9400,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -9325,7 +9412,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -9761,7 +9849,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -9772,7 +9861,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -10230,7 +10320,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -10241,7 +10332,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -10616,7 +10708,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -10633,7 +10726,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -11069,7 +11163,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -11080,7 +11175,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -11556,7 +11652,8 @@
       "value": "350",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -11573,7 +11670,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -12003,7 +12101,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -12014,7 +12113,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -12496,7 +12596,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 10000,
@@ -12513,7 +12614,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -12888,7 +12990,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -12905,7 +13008,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -13347,7 +13451,14 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -13364,7 +13475,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -13834,7 +13952,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -13845,7 +13964,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -14287,7 +14407,14 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 12000,
@@ -14304,7 +14431,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -14786,7 +14920,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -14803,7 +14938,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -15166,7 +15302,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 7000,
@@ -15183,7 +15320,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -15637,7 +15775,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "40",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 9000,
@@ -15654,7 +15799,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "40",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -16029,7 +16181,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 7000,
@@ -16046,7 +16199,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -16476,7 +16630,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -16487,7 +16642,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -16951,7 +17107,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -16968,7 +17131,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -17422,7 +17592,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "600",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 9000,
@@ -17439,7 +17616,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "600",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -17921,7 +18105,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -17938,7 +18123,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -18313,7 +18499,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -18330,7 +18517,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -18784,7 +18972,14 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -18801,7 +18996,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -19158,7 +19360,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -19169,7 +19372,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -19599,7 +19803,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -19610,7 +19815,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -20092,7 +20298,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -20109,7 +20316,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -20484,7 +20692,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -20501,7 +20710,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -20931,7 +21141,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -20942,7 +21153,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -21430,7 +21642,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -21441,7 +21654,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -21810,7 +22024,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -21821,7 +22036,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -22257,7 +22473,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -22268,7 +22485,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -22744,7 +22962,8 @@
       "value": "350",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -22761,7 +22980,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -23136,7 +23356,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -23153,7 +23374,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -23595,7 +23817,14 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -23612,7 +23841,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -24088,7 +24324,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -24099,7 +24336,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -24474,7 +24712,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -24491,7 +24730,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -24939,7 +25179,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -24950,7 +25191,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -25426,7 +25668,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -25443,7 +25686,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -25800,7 +26044,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -25811,7 +26056,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -26241,7 +26487,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -26252,7 +26499,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -26728,7 +26976,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -26739,7 +26988,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -27108,7 +27358,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -27119,7 +27370,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -27555,7 +27807,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -27566,7 +27819,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -28042,7 +28296,8 @@
       "value": "350",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -28059,7 +28314,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -28422,7 +28678,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -28439,7 +28696,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -28869,7 +29127,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -28880,7 +29139,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -29356,7 +29616,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -29367,7 +29628,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -29742,7 +30004,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 7000,
@@ -29759,7 +30022,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -30207,7 +30471,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -30218,7 +30483,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -30706,7 +30972,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -30717,7 +30984,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -31074,7 +31342,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -31085,7 +31354,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -31533,7 +31803,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -31544,7 +31815,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -32026,7 +32298,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -32043,7 +32316,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -32412,7 +32686,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -32423,7 +32698,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -32859,7 +33135,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -32870,7 +33147,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -33340,7 +33618,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -33351,7 +33630,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -33720,7 +34000,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -33731,7 +34012,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -34179,7 +34461,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -34190,7 +34473,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -34678,7 +34962,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 14000,
@@ -34689,7 +34974,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -35064,7 +35350,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -35081,7 +35368,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -35523,7 +35811,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 9000,
@@ -35540,7 +35835,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -36016,7 +36318,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -36033,7 +36342,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -36402,7 +36718,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 8000,
@@ -36413,7 +36730,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -36843,7 +37161,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -36854,7 +37173,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -37318,7 +37638,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -37335,7 +37662,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -37710,7 +38044,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 7000,
@@ -37727,7 +38062,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -38181,7 +38517,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 9000,
@@ -38198,7 +38541,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -38662,7 +39012,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 12000,
@@ -38679,7 +39036,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -39048,7 +39412,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -39059,7 +39424,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -39495,7 +39861,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -39506,7 +39873,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -39982,7 +40350,8 @@
       "value": "350",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -39999,7 +40368,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -40374,7 +40744,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 7000,
@@ -40391,7 +40762,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -40821,7 +41193,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 11000,
@@ -40832,7 +41205,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -41296,7 +41670,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -41313,7 +41694,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -41682,7 +42070,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -41693,7 +42082,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -42129,7 +42519,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -42140,7 +42531,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -42616,7 +43008,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -42627,7 +43020,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -42984,7 +43378,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -42995,7 +43390,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -43449,7 +43845,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 9000,
@@ -43466,7 +43869,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -43936,7 +44346,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -43947,7 +44358,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -44322,7 +44734,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -44339,7 +44752,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -44769,7 +45183,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -44780,7 +45195,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -45256,7 +45672,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -45267,7 +45684,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -45636,7 +46054,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -45647,7 +46066,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -46083,7 +46503,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 11000,
@@ -46094,7 +46515,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -46469,7 +46891,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -46486,7 +46909,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -46916,7 +47340,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -46927,7 +47352,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -47403,7 +47829,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -47414,7 +47841,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -47783,7 +48211,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -47794,7 +48223,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -48230,7 +48660,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -48241,7 +48672,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -48729,7 +49161,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -48740,7 +49173,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -49115,7 +49549,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -49132,7 +49567,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -49568,7 +50004,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -49579,7 +50016,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -50055,7 +50493,8 @@
       "value": "350",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -50072,7 +50511,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -50447,7 +50887,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -50464,7 +50905,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -50894,7 +51336,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -50905,7 +51348,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -51369,7 +51813,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -51386,7 +51837,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -51761,7 +52219,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -51778,7 +52237,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -52232,7 +52692,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 9000,
@@ -52249,7 +52716,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -52737,7 +53211,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -52748,7 +53223,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -53117,7 +53593,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -53128,7 +53605,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -53570,7 +54048,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "1": {
     "effectDurationMs": 9000,
@@ -53587,7 +54072,14 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -54051,7 +54543,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -54068,7 +54567,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "1000",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -54431,7 +54937,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 7000,
@@ -54448,7 +54955,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -54866,7 +55374,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -54877,7 +55386,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -55353,7 +55863,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -55364,7 +55875,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -55739,7 +56251,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -55756,7 +56269,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -56192,7 +56706,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -56203,7 +56718,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -56661,7 +57177,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 12000,
@@ -56672,7 +57189,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -57047,7 +57565,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -57064,7 +57583,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -57494,7 +58014,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -57505,7 +58026,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -57987,7 +58509,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -58004,7 +58527,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -58379,7 +58903,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -58396,7 +58921,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -58826,7 +59352,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -58837,7 +59364,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -59319,7 +59847,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -59336,7 +59865,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -59705,7 +60235,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -59716,7 +60247,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -60170,7 +60702,14 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "600",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -60187,7 +60726,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_LIFE_GTE",
+     "threshold": "600",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -60657,7 +61203,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -60668,7 +61215,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -61043,7 +61591,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -61060,7 +61609,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -61496,7 +62046,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -61507,7 +62058,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -61989,7 +62541,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -62006,7 +62559,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -62375,7 +62929,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -62386,7 +62941,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -62840,7 +63396,14 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "40",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -62857,7 +63420,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "40",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -63321,7 +63891,14 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 11000,
@@ -63338,7 +63915,14 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -63707,7 +64291,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -63718,7 +64303,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -64148,7 +64734,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -64159,7 +64746,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -64522,7 +65110,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -64539,7 +65128,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -64969,7 +65559,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -64980,7 +65571,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -65462,7 +66054,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -65479,7 +66072,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -65842,7 +66436,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -65859,7 +66454,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -66307,7 +66903,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -66318,7 +66915,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -66800,7 +67398,8 @@
       "value": "500",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 10000,
@@ -66817,7 +67416,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -67287,7 +67887,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -67298,7 +67899,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -67673,7 +68275,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -67690,7 +68293,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -68059,7 +68663,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -68070,7 +68675,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -68546,7 +69152,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -68557,7 +69164,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -69027,7 +69635,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -69038,7 +69647,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -69508,7 +70118,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 14000,
@@ -69519,7 +70130,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -69894,7 +70506,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -69911,7 +70524,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -70268,7 +70882,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 12000,
@@ -70279,7 +70894,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -70654,7 +71270,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -70671,7 +71288,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -71046,7 +71664,8 @@
       "value": "300",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 10000,
@@ -71063,7 +71682,8 @@
       "value": "400",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -71438,7 +72058,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -71455,7 +72076,8 @@
       "value": null,
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": null
    }
   }
  },
@@ -71824,7 +72446,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 9000,
@@ -71835,7 +72458,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -72192,7 +72816,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 8000,
@@ -72203,7 +72828,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -72667,7 +73293,14 @@
       "value": "450",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    },
    "2": {
     "effectDurationMs": 10000,
@@ -72684,7 +73317,14 @@
       "value": "550",
       "target": null
      }
-    ]
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE",
+     "threshold": "100",
+     "cardAttributeType": null,
+     "characterGroupingId": null,
+     "characterIds": null
+    }
    }
   }
  },
@@ -73053,7 +73693,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 11000,
@@ -73064,7 +73705,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -73500,7 +74142,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "1": {
     "effectDurationMs": 8000,
@@ -73511,7 +74154,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
@@ -73981,7 +74625,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    },
    "2": {
     "effectDurationMs": 12000,
@@ -73992,7 +74637,8 @@
       "target": null
      }
     ],
-    "additionalEffects": []
+    "additionalEffects": [],
+    "additionalCondition": null
    }
   }
  },
