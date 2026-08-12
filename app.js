@@ -3107,6 +3107,284 @@ function cardMatchesAllFilters(d, f) {
   return true;
 }
 
+const MUSIC_VIEWER_STATE = {
+  search: '',
+  filters: {
+    releaseTypes: new Set(),
+    durationMin: null,
+    durationMax: null,
+    releaseDateAfter: null,
+    releaseDateBefore: null,
+    hasUnlockCost: null,
+    hasMvUrl: null,
+    singers: new Set(),
+  },
+};
+
+function songMatchesFilters(song, f, singerNamesById) {
+  if (f.releaseTypes.size && !f.releaseTypes.has(song.releaseType)) return false;
+  if (!inRange(song.playingSeconds, f.durationMin, f.durationMax)) return false;
+  if (f.releaseDateAfter && (!song.releaseDate || song.releaseDate < f.releaseDateAfter)) return false;
+  if (f.releaseDateBefore && (!song.releaseDate || song.releaseDate > f.releaseDateBefore)) return false;
+  if (f.hasUnlockCost != null && !!song.unlockCost !== f.hasUnlockCost) return false;
+  if (f.hasMvUrl != null && !!song.mvUrl !== f.hasMvUrl) return false;
+  if (f.singers.size && !song.characterIds.some((cid) => f.singers.has(cid))) return false;
+  return true;
+}
+
+function openMusicViewer() {
+  const overlay = document.createElement('div');
+  overlay.className = 'compare-page-overlay';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  const header = document.createElement('div');
+  header.className = 'compare-page-header';
+  header.innerHTML = `<div class="board-editor-title">Music</div>`;
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'compare-page-close';
+  closeBtn.textContent = '\u2715 Back to Builder';
+  closeBtn.onclick = () => {
+    overlay.remove();
+    document.body.style.overflow = '';
+  };
+  header.appendChild(closeBtn);
+  overlay.appendChild(header);
+
+  const layout = document.createElement('div');
+  layout.className = 'cv-layout';
+  overlay.appendChild(layout);
+
+  const sidebar = document.createElement('div');
+  sidebar.className = 'cv-sidebar';
+  layout.appendChild(sidebar);
+
+  const main = document.createElement('div');
+  main.className = 'cv-main';
+  layout.appendChild(main);
+
+  const mv = MUSIC_VIEWER_STATE;
+  const charNameById = {};
+  for (const m of DATA.members) charNameById[m.characterId] = m.characterName;
+  const singerIdsInUse = [...new Set(DATA.songs.flatMap((s) => s.characterIds))].sort((a, b) =>
+    (charNameById[a] || a).localeCompare(charNameById[b] || b)
+  );
+
+  function renderSidebar() {
+    sidebar.innerHTML = '';
+
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'cv-search-wrap';
+    const searchInput = document.createElement('input');
+    searchInput.placeholder = 'Search song title\u2026';
+    searchInput.value = mv.search;
+    searchInput.oninput = () => {
+      mv.search = searchInput.value;
+      renderMain();
+    };
+    searchWrap.appendChild(searchInput);
+    sidebar.appendChild(searchWrap);
+
+    const makeCheckboxGroup = (title, options, selectedSet, getKey, getLabel) => {
+      const group = document.createElement('div');
+      group.className = 'cv-filter-group';
+      const label = document.createElement('div');
+      label.className = 'cv-filter-group-label';
+      label.textContent = title;
+      group.appendChild(label);
+      const row = document.createElement('div');
+      row.className = 'cv-filter-chip-row';
+      for (const opt of options) {
+        const key = getKey(opt);
+        const chip = document.createElement('label');
+        chip.className = 'filter-checkbox';
+        const cb = document.createElement('input');
+        cb.type = 'checkbox';
+        cb.checked = selectedSet.has(key);
+        cb.onchange = () => {
+          cb.checked ? selectedSet.add(key) : selectedSet.delete(key);
+          renderMain();
+        };
+        chip.appendChild(cb);
+        chip.appendChild(document.createTextNode(getLabel(opt)));
+        row.appendChild(chip);
+      }
+      group.appendChild(row);
+      sidebar.appendChild(group);
+    };
+
+    makeCheckboxGroup(
+      'Release Type',
+      ['Reward', 'Preset (default unlocked)', 'Shop'],
+      mv.filters.releaseTypes,
+      (t) => t,
+      (t) => t
+    );
+
+    const makeTriState = (title, currentValue, onChange) => {
+      const group = document.createElement('div');
+      group.className = 'cv-filter-group';
+      const label = document.createElement('div');
+      label.className = 'cv-filter-group-label';
+      label.textContent = title;
+      group.appendChild(label);
+      const row = document.createElement('div');
+      row.className = 'cv-tri-row';
+      for (const opt of [
+        { key: null, label: 'Any' },
+        { key: true, label: 'Yes' },
+        { key: false, label: 'No' },
+      ]) {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'cv-tri-btn' + (currentValue === opt.key ? ' cv-tri-btn-active' : '');
+        btn.textContent = opt.label;
+        btn.onclick = () => {
+          onChange(opt.key);
+          renderMain();
+          renderSidebar();
+        };
+        row.appendChild(btn);
+      }
+      group.appendChild(row);
+      sidebar.appendChild(group);
+    };
+    makeTriState('Has Unlock Cost', mv.filters.hasUnlockCost, (v) => (mv.filters.hasUnlockCost = v));
+    makeTriState('Has YouTube Link', mv.filters.hasMvUrl, (v) => (mv.filters.hasMvUrl = v));
+
+    const durationGroup = document.createElement('div');
+    durationGroup.className = 'cv-filter-group';
+    durationGroup.innerHTML = '<div class="cv-filter-group-label">Duration</div>';
+    const durRow = document.createElement('div');
+    durRow.className = 'cv-filter-range-row';
+    const durMin = document.createElement('input');
+    durMin.type = 'number';
+    durMin.placeholder = 'min';
+    durMin.value = mv.filters.durationMin ?? '';
+    durMin.onchange = () => {
+      mv.filters.durationMin = durMin.value === '' ? null : Number(durMin.value);
+      renderMain();
+    };
+    durRow.appendChild(durMin);
+    durRow.appendChild(document.createTextNode('\u2013'));
+    const durMax = document.createElement('input');
+    durMax.type = 'number';
+    durMax.placeholder = 'max';
+    durMax.value = mv.filters.durationMax ?? '';
+    durMax.onchange = () => {
+      mv.filters.durationMax = durMax.value === '' ? null : Number(durMax.value);
+      renderMain();
+    };
+    durRow.appendChild(durMax);
+    durRow.appendChild(document.createTextNode('s'));
+    durationGroup.appendChild(durRow);
+    sidebar.appendChild(durationGroup);
+
+    const dateGroup = document.createElement('div');
+    dateGroup.className = 'cv-filter-group';
+    dateGroup.innerHTML = '<div class="cv-filter-group-label">Release Date</div>';
+    const dateRow = document.createElement('div');
+    dateRow.className = 'cv-filter-range-row';
+    const dateAfter = document.createElement('input');
+    dateAfter.type = 'date';
+    dateAfter.value = mv.filters.releaseDateAfter || '';
+    dateAfter.onchange = () => {
+      mv.filters.releaseDateAfter = dateAfter.value || null;
+      renderMain();
+    };
+    dateRow.appendChild(dateAfter);
+    dateGroup.appendChild(dateRow);
+    const dateRow2 = document.createElement('div');
+    dateRow2.className = 'cv-filter-range-row';
+    dateRow2.style.marginTop = '6px';
+    const dateBefore = document.createElement('input');
+    dateBefore.type = 'date';
+    dateBefore.value = mv.filters.releaseDateBefore || '';
+    dateBefore.onchange = () => {
+      mv.filters.releaseDateBefore = dateBefore.value || null;
+      renderMain();
+    };
+    dateRow2.appendChild(dateBefore);
+    dateGroup.appendChild(dateRow2);
+    sidebar.appendChild(dateGroup);
+
+    makeCheckboxGroup(
+      'Singer',
+      singerIdsInUse,
+      mv.filters.singers,
+      (cid) => cid,
+      (cid) => charNameById[cid] || cid
+    );
+
+    const clearBtn = document.createElement('button');
+    clearBtn.type = 'button';
+    clearBtn.className = 'filter-clear-btn';
+    clearBtn.textContent = 'Clear filters';
+    clearBtn.onclick = () => {
+      mv.filters.releaseTypes.clear();
+      mv.filters.durationMin = null;
+      mv.filters.durationMax = null;
+      mv.filters.releaseDateAfter = null;
+      mv.filters.releaseDateBefore = null;
+      mv.filters.hasUnlockCost = null;
+      mv.filters.hasMvUrl = null;
+      mv.filters.singers.clear();
+      renderSidebar();
+      renderMain();
+    };
+    sidebar.appendChild(clearBtn);
+  }
+
+  function renderMain() {
+    main.innerHTML = '';
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'cv-toolbar';
+    const countEl = document.createElement('div');
+    countEl.className = 'cv-count';
+    toolbar.appendChild(countEl);
+    main.appendChild(toolbar);
+
+    const q = mv.search.trim().toLowerCase();
+    const filtered = DATA.songs.filter((s) => {
+      if (!songMatchesFilters(s, mv.filters, charNameById)) return false;
+      if (q && !s.title.toLowerCase().includes(q)) return false;
+      return true;
+    });
+    countEl.textContent = `${filtered.length} of ${DATA.songs.length} songs`;
+
+    const list = document.createElement('div');
+    list.className = 'mv-list';
+    const headerRow = document.createElement('div');
+    headerRow.className = 'mv-list-row mv-list-header';
+    headerRow.innerHTML = `<span>Title</span><span>Duration</span><span>Singers</span><span>Release Date</span><span>Type</span><span>Unlock Cost</span><span>MV</span>`;
+    list.appendChild(headerRow);
+
+    for (const s of filtered) {
+      const row = document.createElement('div');
+      row.className = 'mv-list-row';
+      const mins = Math.floor(s.playingSeconds / 60);
+      const secs = s.playingSeconds % 60;
+      const singerNames = s.characterIds.map((cid) => charNameById[cid] || cid).join(', ');
+      row.innerHTML = `
+        <span class="mv-title">${s.title}</span>
+        <span>${mins}:${String(secs).padStart(2, '0')}</span>
+        <span>${singerNames}</span>
+        <span>${s.releaseDate || '\u2014'}</span>
+        <span>${s.releaseType || '\u2014'}</span>
+        <span>${s.unlockCost ? `${s.unlockCost.quantity}x ${s.unlockCost.item}` : '\u2014'}</span>
+        <span>${s.mvUrl ? `<a href="${s.mvUrl}" target="_blank" rel="noopener" class="mv-yt-link">Watch</a>` : '\u2014'}</span>
+      `;
+      list.appendChild(row);
+    }
+    main.appendChild(list);
+  }
+
+  renderSidebar();
+  renderMain();
+}
+
 function openCardViewer() {
   const overlay = document.createElement('div');
   overlay.className = 'compare-page-overlay';
@@ -3655,6 +3933,7 @@ async function main() {
   document.getElementById('compare-btn').addEventListener('click', openComparePage);
   document.getElementById('cost-calc-btn').addEventListener('click', openCostCalculator);
   document.getElementById('card-viewer-btn').addEventListener('click', openCardViewer);
+  document.getElementById('music-viewer-btn').addEventListener('click', openMusicViewer);
 
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.

@@ -12,7 +12,11 @@
   ],
   "characterIds": [
    "chr-04002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Lq9eqHDKJPE"
  },
  {
   "id": "m0140",
@@ -27,7 +31,11 @@
   ],
   "characterIds": [
    "chr-00028"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=ua9r5T3WZj8"
  },
  {
   "id": "m0022",
@@ -42,7 +50,11 @@
   ],
   "characterIds": [
    "chr-00001"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=rbd-m8r5Ujs"
  },
  {
   "id": "m0023",
@@ -57,7 +69,11 @@
   ],
   "characterIds": [
    "chr-00002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=K8n-pGOrpzc"
  },
  {
   "id": "m0026",
@@ -72,7 +88,11 @@
   ],
   "characterIds": [
    "chr-00004"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Ii7rtNaGlls"
  },
  {
   "id": "m0034",
@@ -87,7 +107,11 @@
   ],
   "characterIds": [
    "chr-00019"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=_KTwDH_KQ_g"
  },
  {
   "id": "m0041",
@@ -102,7 +126,11 @@
   ],
   "characterIds": [
    "chr-00032"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=npVP58NvdQ8"
  },
  {
   "id": "m0044",
@@ -117,7 +145,11 @@
   ],
   "characterIds": [
    "chr-00037"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Mt5SB2igQUM"
  },
  {
   "id": "m0052",
@@ -132,7 +164,11 @@
   ],
   "characterIds": [
    "chr-03004"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=2ZqtRc3fa_s"
  },
  {
   "id": "m0060",
@@ -147,7 +183,11 @@
   ],
   "characterIds": [
    "chr-03007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=KFFtUqQVLrI"
  },
  {
   "id": "m0171",
@@ -164,7 +204,14 @@
    "chr-00021",
    "chr-00027",
    "chr-00034"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=UyS1mJ7TD5E"
  },
  {
   "id": "m0014",
@@ -179,7 +226,11 @@
   ],
   "characterIds": [
    "chr-03002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=stmZAThUl64"
  },
  {
   "id": "m0021",
@@ -194,7 +245,11 @@
   ],
   "characterIds": [
    "chr-00036"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=O0aSJdN3mVY"
  },
  {
   "id": "m0028",
@@ -209,7 +264,11 @@
   ],
   "characterIds": [
    "chr-00007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=a9CWgFuoULU"
  },
  {
   "id": "m0032",
@@ -224,7 +283,11 @@
   ],
   "characterIds": [
    "chr-00012"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=RRsw5tT8BJI"
  },
  {
   "id": "m0020",
@@ -239,7 +302,11 @@
   ],
   "characterIds": [
    "chr-00031"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=7P5oggg7aSE"
  },
  {
   "id": "m0033",
@@ -254,7 +321,11 @@
   ],
   "characterIds": [
    "chr-00017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=wLNTAMY1NZA"
  },
  {
   "id": "m0040",
@@ -269,7 +340,11 @@
   ],
   "characterIds": [
    "chr-00030"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=ULtGHb83pTI"
  },
  {
   "id": "m0206",
@@ -284,7 +359,11 @@
   ],
   "characterIds": [
    "chr-00026"
-  ]
+  ],
+  "releaseDate": "2026-07-28",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=L7MvA9i7byQ"
  },
  {
   "id": "m0042",
@@ -299,7 +378,11 @@
   ],
   "characterIds": [
    "chr-00034"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=TGJ9-1LWFtE"
  },
  {
   "id": "m0302",
@@ -314,7 +397,11 @@
   ],
   "characterIds": [
    "chr-00023"
-  ]
+  ],
+  "releaseDate": "2026-07-29",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=QfGuQELt1Tk"
  },
  {
   "id": "m0304",
@@ -329,7 +416,14 @@
   ],
   "characterIds": [
    "chr-04001"
-  ]
+  ],
+  "releaseDate": "2026-08-05",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=do8EmK-XoAg"
  },
  {
   "id": "m0306",
@@ -344,7 +438,14 @@
   ],
   "characterIds": [
    "chr-03001"
-  ]
+  ],
+  "releaseDate": "2026-08-01",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=lvDNdCBcKJE"
  },
  {
   "id": "m0308",
@@ -360,7 +461,14 @@
   "characterIds": [
    "chr-06004",
    "chr-06005"
-  ]
+  ],
+  "releaseDate": "2026-07-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=ywKsX9cXcUg"
  },
  {
   "id": "m0053",
@@ -375,7 +483,11 @@
   ],
   "characterIds": [
    "chr-03005"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=eMxyel5LP8Y"
  },
  {
   "id": "m0035",
@@ -390,7 +502,11 @@
   ],
   "characterIds": [
    "chr-00021"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=bPwIwUJKrdU"
  },
  {
   "id": "m0038",
@@ -405,7 +521,11 @@
   ],
   "characterIds": [
    "chr-00027"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Ud73fm4Uoq0"
  },
  {
   "id": "m0309",
@@ -424,7 +544,11 @@
    "chr-00022",
    "chr-00026",
    "chr-06002"
-  ]
+  ],
+  "releaseDate": "2026-07-28",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0310",
@@ -439,7 +563,11 @@
   ],
   "characterIds": [
    "chr-00012"
-  ]
+  ],
+  "releaseDate": "2026-07-28",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=K_IsIE1TS8U"
  },
  {
   "id": "m0054",
@@ -454,7 +582,11 @@
   ],
   "characterIds": [
    "chr-03006"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=VFpOBazE3rs"
  },
  {
   "id": "m0311",
@@ -469,7 +601,11 @@
   ],
   "characterIds": [
    "chr-00022"
-  ]
+  ],
+  "releaseDate": "2026-07-28",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=LMYIam2RFkg"
  },
  {
   "id": "m0312",
@@ -484,7 +620,11 @@
   ],
   "characterIds": [
    "chr-00021"
-  ]
+  ],
+  "releaseDate": "2026-07-28",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=6Eeb15-SjEU"
  },
  {
   "id": "m0317",
@@ -501,7 +641,14 @@
    "chr-03004",
    "chr-03005",
    "chr-03006"
-  ]
+  ],
+  "releaseDate": "2026-08-02",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=s_HsEltY_O0"
  },
  {
   "id": "m0321",
@@ -516,7 +663,14 @@
   ],
   "characterIds": [
    "chr-00006"
-  ]
+  ],
+  "releaseDate": "2026-08-06",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=yVaQpUUAzik"
  },
  {
   "id": "m0069",
@@ -531,7 +685,11 @@
   ],
   "characterIds": [
    "chr-06003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=6pY67sEsNWA"
  },
  {
   "id": "m0327",
@@ -546,7 +704,14 @@
   ],
   "characterIds": [
    "chr-00035"
-  ]
+  ],
+  "releaseDate": "2026-08-04",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=Y6RkFM3G9V4"
  },
  {
   "id": "m0329",
@@ -561,7 +726,14 @@
   ],
   "characterIds": [
    "chr-00016"
-  ]
+  ],
+  "releaseDate": "2026-07-29",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=M8UmWCeIKyQ"
  },
  {
   "id": "m0331",
@@ -576,7 +748,14 @@
   ],
   "characterIds": [
    "chr-03003"
-  ]
+  ],
+  "releaseDate": "2026-08-03",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=EVKGLK4NPXU"
  },
  {
   "id": "m0524",
@@ -591,7 +770,11 @@
   ],
   "characterIds": [
    "chr-06002"
-  ]
+  ],
+  "releaseDate": "2026-07-28",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=_xwOiIMM2a4"
  },
  {
   "id": "m0058",
@@ -606,7 +789,11 @@
   ],
   "characterIds": [
    "chr-04010"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=6W749jRBg-4"
  },
  {
   "id": "m0076",
@@ -621,7 +808,11 @@
   ],
   "characterIds": [
    "chr-00015"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=BerwUFzdj4U"
  },
  {
   "id": "m0086",
@@ -636,7 +827,11 @@
   ],
   "characterIds": [
    "chr-00017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=VN4VqQ5PTDI"
  },
  {
   "id": "m0062",
@@ -651,7 +846,11 @@
   ],
   "characterIds": [
    "chr-03009"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=SF-_47-oCtk"
  },
  {
   "id": "m0071",
@@ -666,7 +865,11 @@
   ],
   "characterIds": [
    "chr-06005"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=eB2kswPDFaI"
  },
  {
   "id": "m0063",
@@ -682,7 +885,11 @@
   "characterIds": [
    "chr-04016",
    "chr-04017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Nj17tbZP4oA"
  },
  {
   "id": "m0112",
@@ -697,7 +904,11 @@
   ],
   "characterIds": [
    "chr-04003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=injd7gHrIGU"
  },
  {
   "id": "m0064",
@@ -712,7 +923,11 @@
   ],
   "characterIds": [
    "chr-04013"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=NX1ZCKJ67dc"
  },
  {
   "id": "m0124",
@@ -727,7 +942,11 @@
   ],
   "characterIds": [
    "chr-03009"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=iiw9Z1I1AcE"
  },
  {
   "id": "m0065",
@@ -742,7 +961,11 @@
   ],
   "characterIds": [
    "chr-04014"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=M3pjFfKBonI"
  },
  {
   "id": "m0075",
@@ -757,7 +980,11 @@
   ],
   "characterIds": [
    "chr-00018"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=8ZP5eqm4JqM"
  },
  {
   "id": "m0146",
@@ -774,7 +1001,14 @@
    "chr-00006",
    "chr-00010",
    "chr-00014"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=4Hg0Nchl3HU"
  },
  {
   "id": "m0083",
@@ -789,7 +1023,11 @@
   ],
   "characterIds": [
    "chr-00010"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=ECkxzFgbJqQ"
  },
  {
   "id": "m0072",
@@ -804,7 +1042,11 @@
   ],
   "characterIds": [
    "chr-00001"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=VCsWgOMu4_8"
  },
  {
   "id": "m0137",
@@ -817,7 +1059,11 @@
    109.33,
    136.0
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0138",
@@ -832,7 +1078,11 @@
   ],
   "characterIds": [
    "chr-00015"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=7wEkDdBa4QQ"
  },
  {
   "id": "m0089",
@@ -847,7 +1097,11 @@
   ],
   "characterIds": [
    "chr-00019"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Yzdie2uH0N4"
  },
  {
   "id": "m0092",
@@ -862,7 +1116,11 @@
   ],
   "characterIds": [
    "chr-00022"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=65HJRp_GAig"
  },
  {
   "id": "m0147",
@@ -880,7 +1138,14 @@
    "chr-00012",
    "chr-00028",
    "chr-00032"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=ao3DUIEaO4c"
  },
  {
   "id": "m0094",
@@ -895,7 +1160,11 @@
   ],
   "characterIds": [
    "chr-00026"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=d3UTywBDSW4"
  },
  {
   "id": "m0097",
@@ -910,7 +1179,11 @@
   ],
   "characterIds": [
    "chr-00030"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=BjSIDePerx0"
  },
  {
   "id": "m0153",
@@ -928,7 +1201,14 @@
    "chr-00005",
    "chr-00006",
    "chr-00007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=SjACQutMV3A"
  },
  {
   "id": "m0162",
@@ -946,7 +1226,14 @@
    "chr-06003",
    "chr-06004",
    "chr-06005"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=Ix_uXN_ybxc"
  },
  {
   "id": "m0018",
@@ -961,7 +1248,11 @@
   ],
   "characterIds": [
    "chr-00014"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=YPm9T622OX0"
  },
  {
   "id": "m0046",
@@ -976,7 +1267,11 @@
   ],
   "characterIds": [
    "chr-00039"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=LO8TO2kdftE"
  },
  {
   "id": "m0193",
@@ -992,7 +1287,11 @@
   "characterIds": [
    "chr-04016",
    "chr-04017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=93FgkYhAQmI"
  },
  {
   "id": "m0154",
@@ -1010,7 +1309,14 @@
    "chr-00031",
    "chr-00032",
    "chr-00034"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=Gf0iunVGj0I"
  },
  {
   "id": "m0047",
@@ -1025,7 +1331,11 @@
   ],
   "characterIds": [
    "chr-03001"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=IGviVpVE1fA"
  },
  {
   "id": "m0048",
@@ -1040,7 +1350,11 @@
   ],
   "characterIds": [
    "chr-03003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Rd6kufQ7ONc"
  },
  {
   "id": "m0099",
@@ -1055,7 +1369,11 @@
   ],
   "characterIds": [
    "chr-00031"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=5kpByr6TiIs"
  },
  {
   "id": "m0121",
@@ -1070,7 +1388,11 @@
   ],
   "characterIds": [
    "chr-04012"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=xnX8Lk-iSCo"
  },
  {
   "id": "m0074",
@@ -1085,7 +1407,11 @@
   ],
   "characterIds": [
    "chr-00013"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=V4nwy5IUMdg"
  },
  {
   "id": "m0100",
@@ -1100,7 +1426,11 @@
   ],
   "characterIds": [
    "chr-00034"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=UpoysjZfWrU"
  },
  {
   "id": "m0101",
@@ -1115,7 +1445,11 @@
   ],
   "characterIds": [
    "chr-00035"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=yTb_AvLchgY"
  },
  {
   "id": "m0109",
@@ -1130,7 +1464,11 @@
   ],
   "characterIds": [
    "chr-04001"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=6ydgEipkUEU"
  },
  {
   "id": "m0116",
@@ -1145,7 +1483,11 @@
   ],
   "characterIds": [
    "chr-03006"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=dYvQcVG_dVg"
  },
  {
   "id": "m0122",
@@ -1160,7 +1502,11 @@
   ],
   "characterIds": [
    "chr-03007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=WDueRRGIKzw"
  },
  {
   "id": "m0127",
@@ -1175,7 +1521,11 @@
   ],
   "characterIds": [
    "chr-04013"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=zKWksk3wBqM"
  },
  {
   "id": "m0066",
@@ -1190,7 +1540,11 @@
   ],
   "characterIds": [
    "chr-04015"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=x_fkTc7Hlp0"
  },
  {
   "id": "m0128",
@@ -1205,7 +1559,11 @@
   ],
   "characterIds": [
    "chr-04014"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Akn_Gdi05Ys"
  },
  {
   "id": "m0123",
@@ -1220,7 +1578,11 @@
   ],
   "characterIds": [
    "chr-03008"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=w2BRM44B8tE"
  },
  {
   "id": "m0090",
@@ -1235,7 +1597,11 @@
   ],
   "characterIds": [
    "chr-00023"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=KfZR9jVP6tw"
  },
  {
   "id": "m0139",
@@ -1252,7 +1618,14 @@
    "chr-04001",
    "chr-04002",
    "chr-04003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=VupT9JCJaOY"
  },
  {
   "id": "m0141",
@@ -1268,7 +1641,14 @@
   "characterIds": [
    "chr-00001",
    "chr-00013"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=tiTnyZ5QLao"
  },
  {
   "id": "m0142",
@@ -1285,7 +1665,14 @@
    "chr-00002",
    "chr-00004",
    "chr-00010"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=6sHk3CYD-IA"
  },
  {
   "id": "m0144",
@@ -1304,7 +1691,14 @@
    "chr-00021",
    "chr-00022",
    "chr-00034"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=ESsV1gDBqYI"
  },
  {
   "id": "m0149",
@@ -1320,7 +1714,14 @@
   "characterIds": [
    "chr-00023",
    "chr-03009"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=lUDPjyfmJrs"
  },
  {
   "id": "m0150",
@@ -1336,7 +1737,14 @@
   "characterIds": [
    "chr-00026",
    "chr-00032"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=fsPSaFbonGo"
  },
  {
   "id": "m0104",
@@ -1351,7 +1759,11 @@
   ],
   "characterIds": [
    "chr-00036"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=5t60NWXXkQI"
  },
  {
   "id": "m0134",
@@ -1366,7 +1778,11 @@
   ],
   "characterIds": [
    "chr-06005"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=YcRCAQ0DHPo"
  },
  {
   "id": "m0129",
@@ -1381,7 +1797,11 @@
   ],
   "characterIds": [
    "chr-04015"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=SPWsptIhKkM"
  },
  {
   "id": "m0131",
@@ -1396,7 +1816,11 @@
   ],
   "characterIds": [
    "chr-06002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=VT1on_WaMzw"
  },
  {
   "id": "m0136",
@@ -1409,7 +1833,11 @@
    96.28,
    121.4
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0115",
@@ -1424,7 +1852,11 @@
   ],
   "characterIds": [
    "chr-03005"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=2UP3DO56dh4"
  },
  {
   "id": "m0156",
@@ -1440,7 +1872,14 @@
   "characterIds": [
    "chr-00019",
    "chr-00023"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=UA5JjEePTwU"
  },
  {
   "id": "m0177",
@@ -1456,7 +1895,14 @@
   "characterIds": [
    "chr-00015",
    "chr-00017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=5OtgLEKKC_Y"
  },
  {
   "id": "m0184",
@@ -1471,7 +1917,11 @@
   ],
   "characterIds": [
    "chr-00006"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=0RG7iNERF4s"
  },
  {
   "id": "m0188",
@@ -1486,7 +1936,11 @@
   ],
   "characterIds": [
    "chr-00014"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=NXIDznszQhA"
  },
  {
   "id": "m0157",
@@ -1503,7 +1957,14 @@
    "chr-04007",
    "chr-04010",
    "chr-04012"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=lcVyYmVOi1U"
  },
  {
   "id": "m0161",
@@ -1520,7 +1981,14 @@
    "chr-03007",
    "chr-03008",
    "chr-03009"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=Wjkc-q4rEGI"
  },
  {
   "id": "m0108",
@@ -1535,7 +2003,11 @@
   ],
   "characterIds": [
    "chr-03003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=jaf_SBcDhFU"
  },
  {
   "id": "m0155",
@@ -1553,7 +2025,14 @@
    "chr-00036",
    "chr-00037",
    "chr-00039"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=YTXGwiWBc9k"
  },
  {
   "id": "m0198",
@@ -1569,7 +2048,14 @@
   "characterIds": [
    "chr-04002",
    "chr-04003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=R5yfM_UlucY"
  },
  {
   "id": "m0301",
@@ -1582,7 +2068,11 @@
    110.37,
    131.23
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0303",
@@ -1598,7 +2088,14 @@
   "characterIds": [
    "chr-00001",
    "chr-00013"
-  ]
+  ],
+  "releaseDate": "2026-07-24",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=FPBmQaq4IeU"
  },
  {
   "id": "m0300",
@@ -1611,7 +2108,11 @@
    116.46,
    139.54
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0330",
@@ -1626,7 +2127,14 @@
   ],
   "characterIds": [
    "chr-03009"
-  ]
+  ],
+  "releaseDate": "2026-07-25",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=50Ura_ZcSvY"
  },
  {
   "id": "m0337",
@@ -1641,7 +2149,14 @@
   ],
   "characterIds": [
    "chr-00007"
-  ]
+  ],
+  "releaseDate": "2026-07-25",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": null
  },
  {
   "id": "m0318",
@@ -1656,7 +2171,14 @@
   ],
   "characterIds": [
    "chr-00014"
-  ]
+  ],
+  "releaseDate": "2026-07-27",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=pKpWdttxPQk"
  },
  {
   "id": "m0158",
@@ -1675,7 +2197,14 @@
    "chr-04015",
    "chr-04016",
    "chr-04017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=pYNYhSsR8EE"
  },
  {
   "id": "m0159",
@@ -1692,7 +2221,14 @@
    "chr-03001",
    "chr-03002",
    "chr-03003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=XSZNNbbVuho"
  },
  {
   "id": "m0160",
@@ -1709,7 +2245,14 @@
    "chr-03004",
    "chr-03005",
    "chr-03006"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=cZ4Yex_x6ZQ"
  },
  {
   "id": "m0307",
@@ -1725,7 +2268,14 @@
   "characterIds": [
    "chr-00031",
    "chr-04002"
-  ]
+  ],
+  "releaseDate": "2026-07-26",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=bg9M4KTNnHY"
  },
  {
   "id": "m9999",
@@ -1735,7 +2285,11 @@
    4.42,
    20.61
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=vQOPE6kHeoU"
  },
  {
   "id": "m0176",
@@ -1751,7 +2305,14 @@
   "characterIds": [
    "chr-00021",
    "chr-04007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=CYsxFfqtFjk"
  },
  {
   "id": "m0319",
@@ -1767,7 +2328,14 @@
   "characterIds": [
    "chr-04003",
    "chr-04012"
-  ]
+  ],
+  "releaseDate": "2026-07-24",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=B3kE_zxORik"
  },
  {
   "id": "m0326",
@@ -1782,7 +2350,14 @@
   ],
   "characterIds": [
    "chr-04007"
-  ]
+  ],
+  "releaseDate": "2026-07-26",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=dFZ1oTSFuIE"
  },
  {
   "id": "m0007",
@@ -1795,7 +2370,11 @@
    64.62,
    80.44
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0031",
@@ -1810,7 +2389,11 @@
   ],
   "characterIds": [
    "chr-00011"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=X8DuimcnAVA"
  },
  {
   "id": "m0004",
@@ -1823,7 +2406,11 @@
    63.3,
    79.12
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0005",
@@ -1836,7 +2423,14 @@
    68.57,
    85.71
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=vyUYybXWtak"
  },
  {
   "id": "m0006",
@@ -1849,7 +2443,14 @@
    76.48,
    92.31
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=UYyzAlbcw8w"
  },
  {
   "id": "m0008",
@@ -1862,7 +2463,11 @@
    91.0,
    111.43
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0009",
@@ -1877,7 +2482,11 @@
   ],
   "characterIds": [
    "chr-00018"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=a51VH9BYzZA"
  },
  {
   "id": "m0017",
@@ -1892,7 +2501,11 @@
   ],
   "characterIds": [
    "chr-00016"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=j6P_m6adkgc"
  },
  {
   "id": "m0077",
@@ -1907,7 +2520,11 @@
   ],
   "characterIds": [
    "chr-00006"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=dPX0_IEXVRo"
  },
  {
   "id": "m0037",
@@ -1922,7 +2539,11 @@
   ],
   "characterIds": [
    "chr-00026"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=6VGkeUaX-zk"
  },
  {
   "id": "m0050",
@@ -1937,7 +2558,11 @@
   ],
   "characterIds": [
    "chr-04003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=8ZdLXELdF9Q"
  },
  {
   "id": "m0078",
@@ -1952,7 +2577,11 @@
   ],
   "characterIds": [
    "chr-00004"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=MSX8QbJR0eQ"
  },
  {
   "id": "m0080",
@@ -1967,7 +2596,11 @@
   ],
   "characterIds": [
    "chr-00007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=0iYcUlX9p18"
  },
  {
   "id": "m0091",
@@ -1982,7 +2615,11 @@
   ],
   "characterIds": [
    "chr-00021"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=u5r8B1fDB8g"
  },
  {
   "id": "m0073",
@@ -1997,7 +2634,11 @@
   ],
   "characterIds": [
    "chr-00002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=zZtIOlu0ZQM"
  },
  {
   "id": "m0068",
@@ -2012,7 +2653,11 @@
   ],
   "characterIds": [
    "chr-06002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0105",
@@ -2027,7 +2672,11 @@
   ],
   "characterIds": [
    "chr-00039"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=lnlyZlIRO1U"
  },
  {
   "id": "m0079",
@@ -2042,7 +2691,11 @@
   ],
   "characterIds": [
    "chr-00005"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=GozEv0IruEE"
  },
  {
   "id": "m0095",
@@ -2057,7 +2710,11 @@
   ],
   "characterIds": [
    "chr-00027"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=3UV8OZj2olg"
  },
  {
   "id": "m0114",
@@ -2072,7 +2729,11 @@
   ],
   "characterIds": [
    "chr-03004"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=oLOSu6ocgUU"
  },
  {
   "id": "m0117",
@@ -2087,7 +2748,11 @@
   ],
   "characterIds": [
    "chr-04007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=UpbpwXAEJl4"
  },
  {
   "id": "m0120",
@@ -2102,7 +2767,11 @@
   ],
   "characterIds": [
    "chr-04010"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=iEr1aBephZ8"
  },
  {
   "id": "m0010",
@@ -2117,7 +2786,11 @@
   ],
   "characterIds": [
    "chr-00023"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=e7VK3pne8N4"
  },
  {
   "id": "m0012",
@@ -2132,7 +2805,11 @@
   ],
   "characterIds": [
    "chr-04001"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=5y3xh8gs24c"
  },
  {
   "id": "m0102",
@@ -2147,7 +2824,11 @@
   ],
   "characterIds": [
    "chr-00037"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=3T0wEUW1THE"
  },
  {
   "id": "m0098",
@@ -2162,7 +2843,11 @@
   ],
   "characterIds": [
    "chr-00032"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=vvGvqbAxp6s"
  },
  {
   "id": "m0107",
@@ -2177,7 +2862,11 @@
   ],
   "characterIds": [
    "chr-03001"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=uw9SUSvWBN0"
  },
  {
   "id": "m0085",
@@ -2192,7 +2881,11 @@
   ],
   "characterIds": [
    "chr-00012"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=qrZtEACCwIU"
  },
  {
   "id": "m0106",
@@ -2207,7 +2900,11 @@
   ],
   "characterIds": [
    "chr-03002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=GQKR0APNFKs"
  },
  {
   "id": "m0002",
@@ -2220,7 +2917,14 @@
    67.62,
    83.54
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=YzQCNmk3YYA"
  },
  {
   "id": "m0182",
@@ -2235,7 +2939,11 @@
   ],
   "characterIds": [
    "chr-04012"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=oCOGTtxq24k"
  },
  {
   "id": "m0003",
@@ -2248,7 +2956,14 @@
    68.0,
    84.0
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": null
  },
  {
   "id": "m0135",
@@ -2261,7 +2976,11 @@
    72.56,
    94.88
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
  },
  {
   "id": "m0001",
@@ -2274,7 +2993,11 @@
    64.79,
    80.98
   ],
-  "characterIds": []
+  "characterIds": [],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=vQOPE6kHeoU"
  },
  {
   "id": "m0070",
@@ -2289,7 +3012,11 @@
   ],
   "characterIds": [
    "chr-06004"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=VTzlMR5YYEg"
  },
  {
   "id": "m0111",
@@ -2304,7 +3031,11 @@
   ],
   "characterIds": [
    "chr-04002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=2x86wabH-Qs"
  },
  {
   "id": "m0145",
@@ -2320,7 +3051,14 @@
   "characterIds": [
    "chr-00018",
    "chr-04001"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": null
  },
  {
   "id": "m0148",
@@ -2336,7 +3074,14 @@
   "characterIds": [
    "chr-00016",
    "chr-00017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": null
  },
  {
   "id": "m0163",
@@ -2353,7 +3098,14 @@
    "chr-00006",
    "chr-00013",
    "chr-00023"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=zWskZx7Lp2Q"
  },
  {
   "id": "m0165",
@@ -2369,7 +3121,14 @@
   "characterIds": [
    "chr-00026",
    "chr-03006"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=VAffx0WO9do"
  },
  {
   "id": "m0167",
@@ -2388,7 +3147,14 @@
    "chr-04015",
    "chr-04016",
    "chr-04017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=OffTXFgbn7A"
  },
  {
   "id": "m0087",
@@ -2403,7 +3169,11 @@
   ],
   "characterIds": [
    "chr-00016"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=HOmS6Kn0bn8"
  },
  {
   "id": "m0084",
@@ -2418,7 +3188,11 @@
   ],
   "characterIds": [
    "chr-00011"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=n9DqvVNBdVI"
  },
  {
   "id": "m0168",
@@ -2434,7 +3208,14 @@
   "characterIds": [
    "chr-00016",
    "chr-00017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=MiuFIzr8bR0"
  },
  {
   "id": "m0166",
@@ -2453,7 +3234,14 @@
    "chr-03003",
    "chr-04016",
    "chr-04017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=A4W8K7g4Ujg"
  },
  {
   "id": "m0179",
@@ -2468,7 +3256,11 @@
   ],
   "characterIds": [
    "chr-03008"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=XG0WLXP1qLA"
  },
  {
   "id": "m0180",
@@ -2483,7 +3275,11 @@
   ],
   "characterIds": [
    "chr-00010"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=z1W4c7ym49Y"
  },
  {
   "id": "m0181",
@@ -2498,7 +3294,11 @@
   ],
   "characterIds": [
    "chr-00028"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=6YrsEak8Ju4"
  },
  {
   "id": "m0183",
@@ -2513,7 +3313,11 @@
   ],
   "characterIds": [
    "chr-04007"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=DjNNpw2x2dU"
  },
  {
   "id": "m0133",
@@ -2528,7 +3332,11 @@
   ],
   "characterIds": [
    "chr-06004"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=2J3lEm2TJWA"
  },
  {
   "id": "m0187",
@@ -2543,7 +3351,11 @@
   ],
   "characterIds": [
    "chr-06003"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=GdOjkBz6E2U"
  },
  {
   "id": "m0191",
@@ -2559,7 +3371,11 @@
   "characterIds": [
    "chr-04016",
    "chr-04017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=XYmZUh_YAq0"
  },
  {
   "id": "m0189",
@@ -2574,7 +3390,11 @@
   ],
   "characterIds": [
    "chr-00013"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=hQ3rYiaUsUY"
  },
  {
   "id": "m0164",
@@ -2590,7 +3410,14 @@
   "characterIds": [
    "chr-00013",
    "chr-00039"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=ox3mOwzEBWo"
  },
  {
   "id": "m0190",
@@ -2605,7 +3432,11 @@
   ],
   "characterIds": [
    "chr-00005"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=sPVnvaBjQI0"
  },
  {
   "id": "m0192",
@@ -2621,7 +3452,11 @@
   "characterIds": [
    "chr-04016",
    "chr-04017"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=aThUfmKQgaY"
  },
  {
   "id": "m0197",
@@ -2638,7 +3473,14 @@
    "chr-00011",
    "chr-00012",
    "chr-00028"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=MQ-QnXZR4mc"
  },
  {
   "id": "m0185",
@@ -2653,7 +3495,11 @@
   ],
   "characterIds": [
    "chr-00035"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Reward",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=JaD7H9kavNE"
  },
  {
   "id": "m0186",
@@ -2668,7 +3514,11 @@
   ],
   "characterIds": [
    "chr-00022"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=K7r8CD8k_Ho"
  },
  {
   "id": "m0196",
@@ -2684,7 +3534,14 @@
   "characterIds": [
    "chr-00018",
    "chr-03002"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=NKQvH78Jv04"
  },
  {
   "id": "m0201",
@@ -2700,7 +3557,14 @@
   "characterIds": [
    "chr-04007",
    "chr-04012"
-  ]
+  ],
+  "releaseDate": "2022-12-31",
+  "releaseType": "Shop",
+  "unlockCost": {
+   "item": "Music Disc",
+   "quantity": 1
+  },
+  "mvUrl": "https://www.youtube.com/watch?v=3pzh6AaXi9s"
  },
  {
   "id": "m0323",
@@ -2715,7 +3579,11 @@
   ],
   "characterIds": [
    "chr-00015"
-  ]
+  ],
+  "releaseDate": "2026-08-07",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=WIZSYTAeoF4"
  },
  {
   "id": "m0324",
@@ -2730,7 +3598,11 @@
   ],
   "characterIds": [
    "chr-00018"
-  ]
+  ],
+  "releaseDate": "2026-08-07",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=IKKar5SS29E"
  },
  {
   "id": "m0325",
@@ -2746,7 +3618,11 @@
   "characterIds": [
    "chr-00015",
    "chr-00018"
-  ]
+  ],
+  "releaseDate": "2026-08-07",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=gtgME6MJpk4"
  },
  {
   "id": "m0346",
@@ -2761,7 +3637,11 @@
   ],
   "characterIds": [
    "chr-00027"
-  ]
+  ],
+  "releaseDate": "2026-08-07",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=Zc05le75CfI"
  },
  {
   "id": "m0347",
@@ -2776,6 +3656,10 @@
   ],
   "characterIds": [
    "chr-00005"
-  ]
+  ],
+  "releaseDate": "2026-08-09",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=9mj2QJE-UOI"
  }
 ]
