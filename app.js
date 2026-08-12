@@ -3109,12 +3109,14 @@ function cardMatchesAllFilters(d, f) {
 
 const MUSIC_VIEWER_STATE = {
   search: '',
+  sort: { column: null, direction: 1 },
   filters: {
     releaseTypes: new Set(),
     durationMin: null,
     durationMax: null,
     releaseDateAfter: null,
     releaseDateBefore: null,
+    atLaunchOnly: false,
     hasUnlockCost: null,
     hasMvUrl: null,
     singers: new Set(),
@@ -3124,8 +3126,12 @@ const MUSIC_VIEWER_STATE = {
 function songMatchesFilters(song, f, singerNamesById) {
   if (f.releaseTypes.size && !f.releaseTypes.has(song.releaseType)) return false;
   if (!inRange(song.playingSeconds, f.durationMin, f.durationMax)) return false;
-  if (f.releaseDateAfter && (!song.releaseDate || song.releaseDate < f.releaseDateAfter)) return false;
-  if (f.releaseDateBefore && (!song.releaseDate || song.releaseDate > f.releaseDateBefore)) return false;
+  if (f.atLaunchOnly) {
+    if (song.releaseDate !== '2022-12-31') return false;
+  } else {
+    if (f.releaseDateAfter && (!song.releaseDate || song.releaseDate < f.releaseDateAfter)) return false;
+    if (f.releaseDateBefore && (!song.releaseDate || song.releaseDate > f.releaseDateBefore)) return false;
+  }
   if (f.hasUnlockCost != null && !!song.unlockCost !== f.hasUnlockCost) return false;
   if (f.hasMvUrl != null && !!song.mvUrl !== f.hasMvUrl) return false;
   if (f.singers.size && !song.characterIds.some((cid) => f.singers.has(cid))) return false;
@@ -3289,6 +3295,7 @@ function openMusicViewer() {
     const dateAfter = document.createElement('input');
     dateAfter.type = 'date';
     dateAfter.value = mv.filters.releaseDateAfter || '';
+    dateAfter.disabled = mv.filters.atLaunchOnly;
     dateAfter.onchange = () => {
       mv.filters.releaseDateAfter = dateAfter.value || null;
       renderMain();
@@ -3301,12 +3308,27 @@ function openMusicViewer() {
     const dateBefore = document.createElement('input');
     dateBefore.type = 'date';
     dateBefore.value = mv.filters.releaseDateBefore || '';
+    dateBefore.disabled = mv.filters.atLaunchOnly;
     dateBefore.onchange = () => {
       mv.filters.releaseDateBefore = dateBefore.value || null;
       renderMain();
     };
     dateRow2.appendChild(dateBefore);
     dateGroup.appendChild(dateRow2);
+    const atLaunchChip = document.createElement('label');
+    atLaunchChip.className = 'filter-checkbox';
+    atLaunchChip.style.marginTop = '8px';
+    const atLaunchCb = document.createElement('input');
+    atLaunchCb.type = 'checkbox';
+    atLaunchCb.checked = mv.filters.atLaunchOnly;
+    atLaunchCb.onchange = () => {
+      mv.filters.atLaunchOnly = atLaunchCb.checked;
+      renderMain();
+      renderSidebar();
+    };
+    atLaunchChip.appendChild(atLaunchCb);
+    atLaunchChip.appendChild(document.createTextNode('At Launch only'));
+    dateGroup.appendChild(atLaunchChip);
     sidebar.appendChild(dateGroup);
 
     makeCheckboxGroup(
@@ -3327,6 +3349,7 @@ function openMusicViewer() {
       mv.filters.durationMax = null;
       mv.filters.releaseDateAfter = null;
       mv.filters.releaseDateBefore = null;
+      mv.filters.atLaunchOnly = false;
       mv.filters.hasUnlockCost = null;
       mv.filters.hasMvUrl = null;
       mv.filters.singers.clear();
@@ -3354,11 +3377,47 @@ function openMusicViewer() {
     });
     countEl.textContent = `${filtered.length} of ${DATA.songs.length} songs`;
 
+    const SORT_COLUMNS = [
+      { key: 'title', label: 'Title', getValue: (s) => s.title.toLowerCase() },
+      { key: 'duration', label: 'Duration', getValue: (s) => s.playingSeconds },
+      { key: 'singers', label: 'Singers', getValue: (s) => s.characterIds.map((cid) => charNameById[cid] || cid).join(', ').toLowerCase() },
+      { key: 'releaseDate', label: 'Release Date', getValue: (s) => s.releaseDate || '' },
+      { key: 'releaseType', label: 'Type', getValue: (s) => s.releaseType || '' },
+      { key: 'unlockCost', label: 'Unlock Cost', getValue: (s) => s.unlockCost?.quantity ?? -1 },
+      { key: 'mv', label: 'MV', getValue: (s) => (s.mvUrl ? 1 : 0) },
+    ];
+
+    if (mv.sort.column) {
+      const col = SORT_COLUMNS.find((c) => c.key === mv.sort.column);
+      filtered.sort((a, b) => {
+        const av = col.getValue(a);
+        const bv = col.getValue(b);
+        if (av < bv) return -1 * mv.sort.direction;
+        if (av > bv) return 1 * mv.sort.direction;
+        return 0;
+      });
+    }
+
     const list = document.createElement('div');
     list.className = 'mv-list';
     const headerRow = document.createElement('div');
     headerRow.className = 'mv-list-row mv-list-header';
-    headerRow.innerHTML = `<span>Title</span><span>Duration</span><span>Singers</span><span>Release Date</span><span>Type</span><span>Unlock Cost</span><span>MV</span>`;
+    for (const col of SORT_COLUMNS) {
+      const span = document.createElement('span');
+      span.className = 'mv-sortable-header';
+      const isActive = mv.sort.column === col.key;
+      span.textContent = col.label + (isActive ? (mv.sort.direction === 1 ? ' \u25b2' : ' \u25bc') : '');
+      span.onclick = () => {
+        if (mv.sort.column === col.key) {
+          mv.sort.direction *= -1;
+        } else {
+          mv.sort.column = col.key;
+          mv.sort.direction = 1;
+        }
+        renderMain();
+      };
+      headerRow.appendChild(span);
+    }
     list.appendChild(headerRow);
 
     for (const s of filtered) {
@@ -3367,11 +3426,12 @@ function openMusicViewer() {
       const mins = Math.floor(s.playingSeconds / 60);
       const secs = s.playingSeconds % 60;
       const singerNames = s.characterIds.map((cid) => charNameById[cid] || cid).join(', ');
+      const releaseDateDisplay = s.releaseDate === '2022-12-31' ? 'At Launch' : s.releaseDate || '\u2014';
       row.innerHTML = `
         <span class="mv-title">${s.title}</span>
         <span>${mins}:${String(secs).padStart(2, '0')}</span>
         <span>${singerNames}</span>
-        <span>${s.releaseDate || '\u2014'}</span>
+        <span>${releaseDateDisplay}</span>
         <span>${s.releaseType || '\u2014'}</span>
         <span>${s.unlockCost ? `${s.unlockCost.quantity}x ${s.unlockCost.item}` : '\u2014'}</span>
         <span>${s.mvUrl ? `<a href="${s.mvUrl}" target="_blank" rel="noopener" class="mv-yt-link">Watch</a>` : '\u2014'}</span>

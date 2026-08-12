@@ -709,6 +709,13 @@ header.masthead {
   color: var(--text-faint);
   border-bottom: 1px solid var(--line);
 }
+.mv-list-header { cursor: default; }
+.mv-sortable-header {
+  cursor: pointer;
+  user-select: none;
+}
+.mv-sortable-header:hover { color: var(--text); }
+
 .mv-title { font-weight: 600; }
 .mv-yt-link {
   color: var(--orange);
