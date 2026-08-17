@@ -3661,5 +3661,119 @@
   "releaseType": "Preset (default unlocked)",
   "unlockCost": null,
   "mvUrl": "https://www.youtube.com/watch?v=9mj2QJE-UOI"
+ },
+ {
+  "id": "m0332",
+  "title": "BANZAI☆MANKAI",
+  "playingSeconds": 136,
+  "feverSeconds": [
+   18.03,
+   37.46,
+   57.23,
+   79.42,
+   98.84
+  ],
+  "characterIds": [
+   "chr-00010"
+  ],
+  "releaseDate": "2026-08-19",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
+ },
+ {
+  "id": "m0333",
+  "title": "Takoyaki Gazing",
+  "playingSeconds": 131,
+  "feverSeconds": [
+   17.6,
+   36.8,
+   56.0,
+   91.2,
+   110.4
+  ],
+  "characterIds": [
+   "chr-00028"
+  ],
+  "releaseDate": "2026-08-23",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
+ },
+ {
+  "id": "m0334",
+  "title": "NIGHTBREAK",
+  "playingSeconds": 126,
+  "feverSeconds": [
+   21.6,
+   40.8,
+   60.0,
+   79.2,
+   98.4
+  ],
+  "characterIds": [
+   "chr-04001"
+  ],
+  "releaseDate": "2026-08-17",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
+ },
+ {
+  "id": "m0335",
+  "title": "Oshi Mode ON",
+  "playingSeconds": 129,
+  "feverSeconds": [
+   17.6,
+   33.6,
+   62.4,
+   88.0,
+   115.2
+  ],
+  "characterIds": [
+   "chr-03004"
+  ],
+  "releaseDate": "2026-08-21",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
+ },
+ {
+  "id": "m0336",
+  "title": "Stardust Capsule",
+  "playingSeconds": 117,
+  "feverSeconds": [
+   18.05,
+   31.59,
+   64.51,
+   81.5,
+   101.68
+  ],
+  "characterIds": [
+   "chr-04003"
+  ],
+  "releaseDate": "2026-08-25",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": null
+ },
+ {
+  "id": "m0353",
+  "title": "Night Loop",
+  "playingSeconds": 134,
+  "feverSeconds": [
+   24.35,
+   46.96,
+   64.35,
+   90.43,
+   111.3
+  ],
+  "characterIds": [
+   "chr-00014"
+  ],
+  "releaseDate": "2026-08-19",
+  "releaseType": "Preset (default unlocked)",
+  "unlockCost": null,
+  "mvUrl": "https://www.youtube.com/watch?v=sHA7CXeRKis"
  }
 ]

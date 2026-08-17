@@ -3196,5 +3196,171 @@
   ],
   "boostPermilLevel1": 2000,
   "boostPermilLevel2": 2500
+ },
+ "card-00010-5-uniq-0069-00": {
+  "characterId": "chr-00010",
+  "area": "member",
+  "supported": true,
+  "nodeCount": 6,
+  "pattern": [
+   {
+    "x": -1,
+    "y": -1
+   },
+   {
+    "x": -1,
+    "y": null
+   },
+   {
+    "x": -1,
+    "y": 1
+   },
+   {
+    "x": null,
+    "y": -1
+   },
+   {
+    "x": null,
+    "y": 1
+   },
+   {
+    "x": 1,
+    "y": null
+   }
+  ],
+  "boostPermilLevel1": 1100,
+  "boostPermilLevel2": 1600
+ },
+ "card-03004-5-uniq-0073-00": {
+  "characterId": "chr-03004",
+  "area": "member",
+  "supported": true,
+  "nodeCount": 4,
+  "pattern": [
+   {
+    "x": -1,
+    "y": null
+   },
+   {
+    "x": -2,
+    "y": null
+   },
+   {
+    "x": null,
+    "y": 1
+   },
+   {
+    "x": null,
+    "y": 2
+   }
+  ],
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
+ },
+ "card-04003-5-uniq-0072-00": {
+  "characterId": "chr-04003",
+  "area": "content",
+  "supported": false,
+  "nodeCount": 8,
+  "pattern": [
+   {
+    "x": null,
+    "y": -1
+   },
+   {
+    "x": null,
+    "y": -2
+   },
+   {
+    "x": null,
+    "y": 1
+   },
+   {
+    "x": null,
+    "y": 2
+   },
+   {
+    "x": 1,
+    "y": -1
+   },
+   {
+    "x": 1,
+    "y": null
+   },
+   {
+    "x": 1,
+    "y": 1
+   },
+   {
+    "x": 2,
+    "y": null
+   }
+  ],
+  "boostPermilLevel1": 850,
+  "boostPermilLevel2": 1350
+ },
+ "card-04001-5-uniq-0071-00": {
+  "characterId": "chr-04001",
+  "area": "content",
+  "supported": false,
+  "nodeCount": 6,
+  "pattern": [
+   {
+    "x": -1,
+    "y": null
+   },
+   {
+    "x": null,
+    "y": -1
+   },
+   {
+    "x": null,
+    "y": 1
+   },
+   {
+    "x": 1,
+    "y": -1
+   },
+   {
+    "x": 1,
+    "y": null
+   },
+   {
+    "x": 1,
+    "y": 1
+   }
+  ],
+  "boostPermilLevel1": 1100,
+  "boostPermilLevel2": 1600
+ },
+ "card-00028-5-uniq-0070-00": {
+  "characterId": "chr-00028",
+  "area": "center",
+  "supported": true,
+  "nodeCount": 5,
+  "pattern": [
+   {
+    "x": -1,
+    "y": -2
+   },
+   {
+    "x": null,
+    "y": -1
+   },
+   {
+    "x": null,
+    "y": -2
+   },
+   {
+    "x": null,
+    "y": -3
+   },
+   {
+    "x": 1,
+    "y": -2
+   }
+  ],
+  "boostPermilLevel1": 1500,
+  "boostPermilLevel2": 2000
  }
 }

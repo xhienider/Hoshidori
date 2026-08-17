@@ -75615,5 +75615,2458 @@
     ]
    }
   }
+ },
+ {
+  "cardId": "card-00010-5-uniq-0069-00",
+  "characterId": "chr-00010",
+  "characterName": "Nakiri Ayame",
+  "shortName": "Ayame",
+  "generation": "hololive 2nd Generation",
+  "cardSubtitle": "Oni Way: Breezy Resort",
+  "rarity": "CardRarity_CARD_RARITY_RARITY_5",
+  "attributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+  "cardPotentialGroupId": "card_potential_grp-rarity_5",
+  "performancePermilMultiply": 302,
+  "techniquePermilMultiply": 430,
+  "sensePermilMultiply": 268,
+  "levelCurve": {
+   "1": {
+    "parameterBaseValue": "5236",
+    "exp": null
+   },
+   "2": {
+    "parameterBaseValue": "5447",
+    "exp": "40"
+   },
+   "3": {
+    "parameterBaseValue": "5658",
+    "exp": "100"
+   },
+   "4": {
+    "parameterBaseValue": "5869",
+    "exp": "190"
+   },
+   "5": {
+    "parameterBaseValue": "6080",
+    "exp": "310"
+   },
+   "6": {
+    "parameterBaseValue": "6291",
+    "exp": "460"
+   },
+   "7": {
+    "parameterBaseValue": "6502",
+    "exp": "650"
+   },
+   "8": {
+    "parameterBaseValue": "6713",
+    "exp": "880"
+   },
+   "9": {
+    "parameterBaseValue": "6924",
+    "exp": "1160"
+   },
+   "10": {
+    "parameterBaseValue": "7135",
+    "exp": "1500"
+   },
+   "11": {
+    "parameterBaseValue": "7346",
+    "exp": "1900"
+   },
+   "12": {
+    "parameterBaseValue": "7557",
+    "exp": "2400"
+   },
+   "13": {
+    "parameterBaseValue": "7768",
+    "exp": "3000"
+   },
+   "14": {
+    "parameterBaseValue": "7979",
+    "exp": "3700"
+   },
+   "15": {
+    "parameterBaseValue": "8190",
+    "exp": "4550"
+   },
+   "16": {
+    "parameterBaseValue": "8401",
+    "exp": "5550"
+   },
+   "17": {
+    "parameterBaseValue": "8612",
+    "exp": "6700"
+   },
+   "18": {
+    "parameterBaseValue": "8823",
+    "exp": "8050"
+   },
+   "19": {
+    "parameterBaseValue": "9034",
+    "exp": "9600"
+   },
+   "20": {
+    "parameterBaseValue": "9245",
+    "exp": "11400"
+   },
+   "21": {
+    "parameterBaseValue": "9456",
+    "exp": "13500"
+   },
+   "22": {
+    "parameterBaseValue": "9667",
+    "exp": "15900"
+   },
+   "23": {
+    "parameterBaseValue": "9879",
+    "exp": "18600"
+   },
+   "24": {
+    "parameterBaseValue": "10091",
+    "exp": "21600"
+   },
+   "25": {
+    "parameterBaseValue": "10303",
+    "exp": "24900"
+   },
+   "26": {
+    "parameterBaseValue": "10515",
+    "exp": "28550"
+   },
+   "27": {
+    "parameterBaseValue": "10727",
+    "exp": "32550"
+   },
+   "28": {
+    "parameterBaseValue": "10939",
+    "exp": "36900"
+   },
+   "29": {
+    "parameterBaseValue": "11151",
+    "exp": "41600"
+   },
+   "30": {
+    "parameterBaseValue": "11363",
+    "exp": "46650"
+   },
+   "31": {
+    "parameterBaseValue": "11575",
+    "exp": "52050"
+   },
+   "32": {
+    "parameterBaseValue": "11787",
+    "exp": "57850"
+   },
+   "33": {
+    "parameterBaseValue": "11999",
+    "exp": "64050"
+   },
+   "34": {
+    "parameterBaseValue": "12211",
+    "exp": "70650"
+   },
+   "35": {
+    "parameterBaseValue": "12423",
+    "exp": "77650"
+   },
+   "36": {
+    "parameterBaseValue": "12635",
+    "exp": "85050"
+   },
+   "37": {
+    "parameterBaseValue": "12847",
+    "exp": "92850"
+   },
+   "38": {
+    "parameterBaseValue": "13059",
+    "exp": "101050"
+   },
+   "39": {
+    "parameterBaseValue": "13271",
+    "exp": "109650"
+   },
+   "40": {
+    "parameterBaseValue": "13483",
+    "exp": "118650"
+   },
+   "41": {
+    "parameterBaseValue": "13734",
+    "exp": "128150"
+   },
+   "42": {
+    "parameterBaseValue": "13986",
+    "exp": "138150"
+   },
+   "43": {
+    "parameterBaseValue": "14238",
+    "exp": "148650"
+   },
+   "44": {
+    "parameterBaseValue": "14490",
+    "exp": "159650"
+   },
+   "45": {
+    "parameterBaseValue": "14742",
+    "exp": "171150"
+   },
+   "46": {
+    "parameterBaseValue": "14994",
+    "exp": "183150"
+   },
+   "47": {
+    "parameterBaseValue": "15246",
+    "exp": "195650"
+   },
+   "48": {
+    "parameterBaseValue": "15498",
+    "exp": "208650"
+   },
+   "49": {
+    "parameterBaseValue": "15750",
+    "exp": "222150"
+   },
+   "50": {
+    "parameterBaseValue": "16002",
+    "exp": "236150"
+   },
+   "51": {
+    "parameterBaseValue": "16254",
+    "exp": "250650"
+   },
+   "52": {
+    "parameterBaseValue": "16506",
+    "exp": "265650"
+   },
+   "53": {
+    "parameterBaseValue": "16758",
+    "exp": "281150"
+   },
+   "54": {
+    "parameterBaseValue": "17010",
+    "exp": "297150"
+   },
+   "55": {
+    "parameterBaseValue": "17262",
+    "exp": "313650"
+   },
+   "56": {
+    "parameterBaseValue": "17514",
+    "exp": "330650"
+   },
+   "57": {
+    "parameterBaseValue": "17766",
+    "exp": "348150"
+   },
+   "58": {
+    "parameterBaseValue": "18018",
+    "exp": "366150"
+   },
+   "59": {
+    "parameterBaseValue": "18270",
+    "exp": "384650"
+   },
+   "60": {
+    "parameterBaseValue": "18522",
+    "exp": "404150"
+   },
+   "61": {
+    "parameterBaseValue": "18774",
+    "exp": "424650"
+   },
+   "62": {
+    "parameterBaseValue": "19026",
+    "exp": "446150"
+   },
+   "63": {
+    "parameterBaseValue": "19278",
+    "exp": "468650"
+   },
+   "64": {
+    "parameterBaseValue": "19530",
+    "exp": "492150"
+   },
+   "65": {
+    "parameterBaseValue": "19782",
+    "exp": "516650"
+   },
+   "66": {
+    "parameterBaseValue": "20034",
+    "exp": "542650"
+   },
+   "67": {
+    "parameterBaseValue": "20286",
+    "exp": "570150"
+   },
+   "68": {
+    "parameterBaseValue": "20538",
+    "exp": "599150"
+   },
+   "69": {
+    "parameterBaseValue": "20790",
+    "exp": "629650"
+   },
+   "70": {
+    "parameterBaseValue": "21042",
+    "exp": "661650"
+   },
+   "71": {
+    "parameterBaseValue": "21294",
+    "exp": "695650"
+   },
+   "72": {
+    "parameterBaseValue": "21546",
+    "exp": "731650"
+   },
+   "73": {
+    "parameterBaseValue": "21798",
+    "exp": "769650"
+   },
+   "74": {
+    "parameterBaseValue": "22050",
+    "exp": "810150"
+   },
+   "75": {
+    "parameterBaseValue": "22302",
+    "exp": "853150"
+   },
+   "76": {
+    "parameterBaseValue": "22554",
+    "exp": "899150"
+   },
+   "77": {
+    "parameterBaseValue": "22806",
+    "exp": "948650"
+   },
+   "78": {
+    "parameterBaseValue": "23058",
+    "exp": "1001650"
+   },
+   "79": {
+    "parameterBaseValue": "23310",
+    "exp": "1059650"
+   },
+   "80": {
+    "parameterBaseValue": "23562",
+    "exp": "1122650"
+   }
+  },
+  "levelLimits": [
+   {
+    "limitBreakCount": null,
+    "levelLimit": 40
+   },
+   {
+    "limitBreakCount": 1,
+    "levelLimit": 50
+   },
+   {
+    "limitBreakCount": 2,
+    "levelLimit": 60
+   },
+   {
+    "limitBreakCount": 3,
+    "levelLimit": 70
+   },
+   {
+    "limitBreakCount": 4,
+    "levelLimit": 80
+   }
+  ],
+  "costumeId": "cos-00010-uniq-0069-00",
+  "activeSkill": {
+   "1": {
+    "coolTimeMs": 27000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 10000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "950"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   },
+   "2": {
+    "coolTimeMs": 27000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 10000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "1150"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   }
+  },
+  "passiveSkill": {
+   "1": {
+    "condition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_2",
+     "characterIds": null
+    },
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP",
+      "value": "90",
+      "target": {
+       "id": "live_skill_effect_target-character_grouping-grp-gen_2-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING",
+       "targetCount": 2,
+       "cardAttributeType": null,
+       "characterGroupingId": "grp-gen_2"
+      }
+     }
+    ]
+   },
+   "2": {
+    "condition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_2",
+     "characterIds": null
+    },
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP",
+      "value": "120",
+      "target": {
+       "id": "live_skill_effect_target-character_grouping-grp-gen_2-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING",
+       "targetCount": 2,
+       "cardAttributeType": null,
+       "characterGroupingId": "grp-gen_2"
+      }
+     }
+    ]
+   }
+  },
+  "specialSkill": {
+   "1": {
+    "effectDurationMs": 12000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1000",
+      "target": null
+     }
+    ],
+    "additionalEffects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
+      "value": "400",
+      "target": null
+     }
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_2",
+     "characterIds": null
+    }
+   },
+   "2": {
+    "effectDurationMs": 12000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1200",
+      "target": null
+     }
+    ],
+    "additionalEffects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
+      "value": "450",
+      "target": null
+     }
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_2",
+     "characterIds": null
+    }
+   }
+  },
+  "leaderSkill": {
+   "condition": {
+    "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+    "threshold": "2",
+    "cardAttributeType": null,
+    "characterGroupingId": "grp-gen_2",
+    "characterIds": null
+   },
+   "effects": [
+    {
+     "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP",
+     "value": "1350",
+     "target": {
+      "id": "live_skill_effect_target-all",
+      "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL",
+      "targetCount": null,
+      "cardAttributeType": null,
+      "characterGroupingId": null
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cardId": "card-03004-5-uniq-0073-00",
+  "characterId": "chr-03004",
+  "characterName": "Kureiji Ollie",
+  "shortName": "Ollie",
+  "generation": "hololive ID 2nd Generation",
+  "cardSubtitle": "Crazy Summer Dive",
+  "rarity": "CardRarity_CARD_RARITY_RARITY_5",
+  "attributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+  "cardPotentialGroupId": "card_potential_grp-rarity_5",
+  "performancePermilMultiply": 268,
+  "techniquePermilMultiply": 302,
+  "sensePermilMultiply": 430,
+  "levelCurve": {
+   "1": {
+    "parameterBaseValue": "5236",
+    "exp": null
+   },
+   "2": {
+    "parameterBaseValue": "5447",
+    "exp": "40"
+   },
+   "3": {
+    "parameterBaseValue": "5658",
+    "exp": "100"
+   },
+   "4": {
+    "parameterBaseValue": "5869",
+    "exp": "190"
+   },
+   "5": {
+    "parameterBaseValue": "6080",
+    "exp": "310"
+   },
+   "6": {
+    "parameterBaseValue": "6291",
+    "exp": "460"
+   },
+   "7": {
+    "parameterBaseValue": "6502",
+    "exp": "650"
+   },
+   "8": {
+    "parameterBaseValue": "6713",
+    "exp": "880"
+   },
+   "9": {
+    "parameterBaseValue": "6924",
+    "exp": "1160"
+   },
+   "10": {
+    "parameterBaseValue": "7135",
+    "exp": "1500"
+   },
+   "11": {
+    "parameterBaseValue": "7346",
+    "exp": "1900"
+   },
+   "12": {
+    "parameterBaseValue": "7557",
+    "exp": "2400"
+   },
+   "13": {
+    "parameterBaseValue": "7768",
+    "exp": "3000"
+   },
+   "14": {
+    "parameterBaseValue": "7979",
+    "exp": "3700"
+   },
+   "15": {
+    "parameterBaseValue": "8190",
+    "exp": "4550"
+   },
+   "16": {
+    "parameterBaseValue": "8401",
+    "exp": "5550"
+   },
+   "17": {
+    "parameterBaseValue": "8612",
+    "exp": "6700"
+   },
+   "18": {
+    "parameterBaseValue": "8823",
+    "exp": "8050"
+   },
+   "19": {
+    "parameterBaseValue": "9034",
+    "exp": "9600"
+   },
+   "20": {
+    "parameterBaseValue": "9245",
+    "exp": "11400"
+   },
+   "21": {
+    "parameterBaseValue": "9456",
+    "exp": "13500"
+   },
+   "22": {
+    "parameterBaseValue": "9667",
+    "exp": "15900"
+   },
+   "23": {
+    "parameterBaseValue": "9879",
+    "exp": "18600"
+   },
+   "24": {
+    "parameterBaseValue": "10091",
+    "exp": "21600"
+   },
+   "25": {
+    "parameterBaseValue": "10303",
+    "exp": "24900"
+   },
+   "26": {
+    "parameterBaseValue": "10515",
+    "exp": "28550"
+   },
+   "27": {
+    "parameterBaseValue": "10727",
+    "exp": "32550"
+   },
+   "28": {
+    "parameterBaseValue": "10939",
+    "exp": "36900"
+   },
+   "29": {
+    "parameterBaseValue": "11151",
+    "exp": "41600"
+   },
+   "30": {
+    "parameterBaseValue": "11363",
+    "exp": "46650"
+   },
+   "31": {
+    "parameterBaseValue": "11575",
+    "exp": "52050"
+   },
+   "32": {
+    "parameterBaseValue": "11787",
+    "exp": "57850"
+   },
+   "33": {
+    "parameterBaseValue": "11999",
+    "exp": "64050"
+   },
+   "34": {
+    "parameterBaseValue": "12211",
+    "exp": "70650"
+   },
+   "35": {
+    "parameterBaseValue": "12423",
+    "exp": "77650"
+   },
+   "36": {
+    "parameterBaseValue": "12635",
+    "exp": "85050"
+   },
+   "37": {
+    "parameterBaseValue": "12847",
+    "exp": "92850"
+   },
+   "38": {
+    "parameterBaseValue": "13059",
+    "exp": "101050"
+   },
+   "39": {
+    "parameterBaseValue": "13271",
+    "exp": "109650"
+   },
+   "40": {
+    "parameterBaseValue": "13483",
+    "exp": "118650"
+   },
+   "41": {
+    "parameterBaseValue": "13734",
+    "exp": "128150"
+   },
+   "42": {
+    "parameterBaseValue": "13986",
+    "exp": "138150"
+   },
+   "43": {
+    "parameterBaseValue": "14238",
+    "exp": "148650"
+   },
+   "44": {
+    "parameterBaseValue": "14490",
+    "exp": "159650"
+   },
+   "45": {
+    "parameterBaseValue": "14742",
+    "exp": "171150"
+   },
+   "46": {
+    "parameterBaseValue": "14994",
+    "exp": "183150"
+   },
+   "47": {
+    "parameterBaseValue": "15246",
+    "exp": "195650"
+   },
+   "48": {
+    "parameterBaseValue": "15498",
+    "exp": "208650"
+   },
+   "49": {
+    "parameterBaseValue": "15750",
+    "exp": "222150"
+   },
+   "50": {
+    "parameterBaseValue": "16002",
+    "exp": "236150"
+   },
+   "51": {
+    "parameterBaseValue": "16254",
+    "exp": "250650"
+   },
+   "52": {
+    "parameterBaseValue": "16506",
+    "exp": "265650"
+   },
+   "53": {
+    "parameterBaseValue": "16758",
+    "exp": "281150"
+   },
+   "54": {
+    "parameterBaseValue": "17010",
+    "exp": "297150"
+   },
+   "55": {
+    "parameterBaseValue": "17262",
+    "exp": "313650"
+   },
+   "56": {
+    "parameterBaseValue": "17514",
+    "exp": "330650"
+   },
+   "57": {
+    "parameterBaseValue": "17766",
+    "exp": "348150"
+   },
+   "58": {
+    "parameterBaseValue": "18018",
+    "exp": "366150"
+   },
+   "59": {
+    "parameterBaseValue": "18270",
+    "exp": "384650"
+   },
+   "60": {
+    "parameterBaseValue": "18522",
+    "exp": "404150"
+   },
+   "61": {
+    "parameterBaseValue": "18774",
+    "exp": "424650"
+   },
+   "62": {
+    "parameterBaseValue": "19026",
+    "exp": "446150"
+   },
+   "63": {
+    "parameterBaseValue": "19278",
+    "exp": "468650"
+   },
+   "64": {
+    "parameterBaseValue": "19530",
+    "exp": "492150"
+   },
+   "65": {
+    "parameterBaseValue": "19782",
+    "exp": "516650"
+   },
+   "66": {
+    "parameterBaseValue": "20034",
+    "exp": "542650"
+   },
+   "67": {
+    "parameterBaseValue": "20286",
+    "exp": "570150"
+   },
+   "68": {
+    "parameterBaseValue": "20538",
+    "exp": "599150"
+   },
+   "69": {
+    "parameterBaseValue": "20790",
+    "exp": "629650"
+   },
+   "70": {
+    "parameterBaseValue": "21042",
+    "exp": "661650"
+   },
+   "71": {
+    "parameterBaseValue": "21294",
+    "exp": "695650"
+   },
+   "72": {
+    "parameterBaseValue": "21546",
+    "exp": "731650"
+   },
+   "73": {
+    "parameterBaseValue": "21798",
+    "exp": "769650"
+   },
+   "74": {
+    "parameterBaseValue": "22050",
+    "exp": "810150"
+   },
+   "75": {
+    "parameterBaseValue": "22302",
+    "exp": "853150"
+   },
+   "76": {
+    "parameterBaseValue": "22554",
+    "exp": "899150"
+   },
+   "77": {
+    "parameterBaseValue": "22806",
+    "exp": "948650"
+   },
+   "78": {
+    "parameterBaseValue": "23058",
+    "exp": "1001650"
+   },
+   "79": {
+    "parameterBaseValue": "23310",
+    "exp": "1059650"
+   },
+   "80": {
+    "parameterBaseValue": "23562",
+    "exp": "1122650"
+   }
+  },
+  "levelLimits": [
+   {
+    "limitBreakCount": null,
+    "levelLimit": 40
+   },
+   {
+    "limitBreakCount": 1,
+    "levelLimit": 50
+   },
+   {
+    "limitBreakCount": 2,
+    "levelLimit": 60
+   },
+   {
+    "limitBreakCount": 3,
+    "levelLimit": 70
+   },
+   {
+    "limitBreakCount": 4,
+    "levelLimit": 80
+   }
+  ],
+  "costumeId": "cos-03004-uniq-0073-00",
+  "activeSkill": {
+   "1": {
+    "coolTimeMs": 19000,
+    "activationProbabilityPermil": 550,
+    "effectDurationMs": 7000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "900"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   },
+   "2": {
+    "coolTimeMs": 19000,
+    "activationProbabilityPermil": 550,
+    "effectDurationMs": 7000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "1100"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   }
+  },
+  "passiveSkill": {
+   "1": {
+    "condition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    },
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+      "value": "320",
+      "target": {
+       "id": "live_skill_effect_target-attribute-attribute_3-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE",
+       "targetCount": 2,
+       "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+       "characterGroupingId": null
+      }
+     }
+    ]
+   },
+   "2": {
+    "condition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+     "characterGroupingId": null,
+     "characterIds": null
+    },
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+      "value": "430",
+      "target": {
+       "id": "live_skill_effect_target-attribute-attribute_3-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE",
+       "targetCount": 2,
+       "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+       "characterGroupingId": null
+      }
+     }
+    ]
+   }
+  },
+  "specialSkill": {
+   "1": {
+    "effectDurationMs": 10000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1350",
+      "target": null
+     }
+    ],
+    "additionalEffects": [],
+    "additionalCondition": null
+   },
+   "2": {
+    "effectDurationMs": 10000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1600",
+      "target": null
+     }
+    ],
+    "additionalEffects": [],
+    "additionalCondition": null
+   }
+  },
+  "leaderSkill": {
+   "condition": {
+    "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+    "threshold": "2",
+    "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+    "characterGroupingId": null,
+    "characterIds": null
+   },
+   "effects": [
+    {
+     "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+     "value": "800",
+     "target": {
+      "id": "live_skill_effect_target-all",
+      "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL",
+      "targetCount": null,
+      "cardAttributeType": null,
+      "characterGroupingId": null
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cardId": "card-04003-5-uniq-0072-00",
+  "characterId": "chr-04003",
+  "characterName": "Ninomae Ina'nis",
+  "shortName": "Ina'nis",
+  "generation": "hololive EN Myth",
+  "cardSubtitle": "Tracing Tide Memories",
+  "rarity": "CardRarity_CARD_RARITY_RARITY_5",
+  "attributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_3",
+  "cardPotentialGroupId": "card_potential_grp-rarity_5",
+  "performancePermilMultiply": 302,
+  "techniquePermilMultiply": 268,
+  "sensePermilMultiply": 430,
+  "levelCurve": {
+   "1": {
+    "parameterBaseValue": "5236",
+    "exp": null
+   },
+   "2": {
+    "parameterBaseValue": "5447",
+    "exp": "40"
+   },
+   "3": {
+    "parameterBaseValue": "5658",
+    "exp": "100"
+   },
+   "4": {
+    "parameterBaseValue": "5869",
+    "exp": "190"
+   },
+   "5": {
+    "parameterBaseValue": "6080",
+    "exp": "310"
+   },
+   "6": {
+    "parameterBaseValue": "6291",
+    "exp": "460"
+   },
+   "7": {
+    "parameterBaseValue": "6502",
+    "exp": "650"
+   },
+   "8": {
+    "parameterBaseValue": "6713",
+    "exp": "880"
+   },
+   "9": {
+    "parameterBaseValue": "6924",
+    "exp": "1160"
+   },
+   "10": {
+    "parameterBaseValue": "7135",
+    "exp": "1500"
+   },
+   "11": {
+    "parameterBaseValue": "7346",
+    "exp": "1900"
+   },
+   "12": {
+    "parameterBaseValue": "7557",
+    "exp": "2400"
+   },
+   "13": {
+    "parameterBaseValue": "7768",
+    "exp": "3000"
+   },
+   "14": {
+    "parameterBaseValue": "7979",
+    "exp": "3700"
+   },
+   "15": {
+    "parameterBaseValue": "8190",
+    "exp": "4550"
+   },
+   "16": {
+    "parameterBaseValue": "8401",
+    "exp": "5550"
+   },
+   "17": {
+    "parameterBaseValue": "8612",
+    "exp": "6700"
+   },
+   "18": {
+    "parameterBaseValue": "8823",
+    "exp": "8050"
+   },
+   "19": {
+    "parameterBaseValue": "9034",
+    "exp": "9600"
+   },
+   "20": {
+    "parameterBaseValue": "9245",
+    "exp": "11400"
+   },
+   "21": {
+    "parameterBaseValue": "9456",
+    "exp": "13500"
+   },
+   "22": {
+    "parameterBaseValue": "9667",
+    "exp": "15900"
+   },
+   "23": {
+    "parameterBaseValue": "9879",
+    "exp": "18600"
+   },
+   "24": {
+    "parameterBaseValue": "10091",
+    "exp": "21600"
+   },
+   "25": {
+    "parameterBaseValue": "10303",
+    "exp": "24900"
+   },
+   "26": {
+    "parameterBaseValue": "10515",
+    "exp": "28550"
+   },
+   "27": {
+    "parameterBaseValue": "10727",
+    "exp": "32550"
+   },
+   "28": {
+    "parameterBaseValue": "10939",
+    "exp": "36900"
+   },
+   "29": {
+    "parameterBaseValue": "11151",
+    "exp": "41600"
+   },
+   "30": {
+    "parameterBaseValue": "11363",
+    "exp": "46650"
+   },
+   "31": {
+    "parameterBaseValue": "11575",
+    "exp": "52050"
+   },
+   "32": {
+    "parameterBaseValue": "11787",
+    "exp": "57850"
+   },
+   "33": {
+    "parameterBaseValue": "11999",
+    "exp": "64050"
+   },
+   "34": {
+    "parameterBaseValue": "12211",
+    "exp": "70650"
+   },
+   "35": {
+    "parameterBaseValue": "12423",
+    "exp": "77650"
+   },
+   "36": {
+    "parameterBaseValue": "12635",
+    "exp": "85050"
+   },
+   "37": {
+    "parameterBaseValue": "12847",
+    "exp": "92850"
+   },
+   "38": {
+    "parameterBaseValue": "13059",
+    "exp": "101050"
+   },
+   "39": {
+    "parameterBaseValue": "13271",
+    "exp": "109650"
+   },
+   "40": {
+    "parameterBaseValue": "13483",
+    "exp": "118650"
+   },
+   "41": {
+    "parameterBaseValue": "13734",
+    "exp": "128150"
+   },
+   "42": {
+    "parameterBaseValue": "13986",
+    "exp": "138150"
+   },
+   "43": {
+    "parameterBaseValue": "14238",
+    "exp": "148650"
+   },
+   "44": {
+    "parameterBaseValue": "14490",
+    "exp": "159650"
+   },
+   "45": {
+    "parameterBaseValue": "14742",
+    "exp": "171150"
+   },
+   "46": {
+    "parameterBaseValue": "14994",
+    "exp": "183150"
+   },
+   "47": {
+    "parameterBaseValue": "15246",
+    "exp": "195650"
+   },
+   "48": {
+    "parameterBaseValue": "15498",
+    "exp": "208650"
+   },
+   "49": {
+    "parameterBaseValue": "15750",
+    "exp": "222150"
+   },
+   "50": {
+    "parameterBaseValue": "16002",
+    "exp": "236150"
+   },
+   "51": {
+    "parameterBaseValue": "16254",
+    "exp": "250650"
+   },
+   "52": {
+    "parameterBaseValue": "16506",
+    "exp": "265650"
+   },
+   "53": {
+    "parameterBaseValue": "16758",
+    "exp": "281150"
+   },
+   "54": {
+    "parameterBaseValue": "17010",
+    "exp": "297150"
+   },
+   "55": {
+    "parameterBaseValue": "17262",
+    "exp": "313650"
+   },
+   "56": {
+    "parameterBaseValue": "17514",
+    "exp": "330650"
+   },
+   "57": {
+    "parameterBaseValue": "17766",
+    "exp": "348150"
+   },
+   "58": {
+    "parameterBaseValue": "18018",
+    "exp": "366150"
+   },
+   "59": {
+    "parameterBaseValue": "18270",
+    "exp": "384650"
+   },
+   "60": {
+    "parameterBaseValue": "18522",
+    "exp": "404150"
+   },
+   "61": {
+    "parameterBaseValue": "18774",
+    "exp": "424650"
+   },
+   "62": {
+    "parameterBaseValue": "19026",
+    "exp": "446150"
+   },
+   "63": {
+    "parameterBaseValue": "19278",
+    "exp": "468650"
+   },
+   "64": {
+    "parameterBaseValue": "19530",
+    "exp": "492150"
+   },
+   "65": {
+    "parameterBaseValue": "19782",
+    "exp": "516650"
+   },
+   "66": {
+    "parameterBaseValue": "20034",
+    "exp": "542650"
+   },
+   "67": {
+    "parameterBaseValue": "20286",
+    "exp": "570150"
+   },
+   "68": {
+    "parameterBaseValue": "20538",
+    "exp": "599150"
+   },
+   "69": {
+    "parameterBaseValue": "20790",
+    "exp": "629650"
+   },
+   "70": {
+    "parameterBaseValue": "21042",
+    "exp": "661650"
+   },
+   "71": {
+    "parameterBaseValue": "21294",
+    "exp": "695650"
+   },
+   "72": {
+    "parameterBaseValue": "21546",
+    "exp": "731650"
+   },
+   "73": {
+    "parameterBaseValue": "21798",
+    "exp": "769650"
+   },
+   "74": {
+    "parameterBaseValue": "22050",
+    "exp": "810150"
+   },
+   "75": {
+    "parameterBaseValue": "22302",
+    "exp": "853150"
+   },
+   "76": {
+    "parameterBaseValue": "22554",
+    "exp": "899150"
+   },
+   "77": {
+    "parameterBaseValue": "22806",
+    "exp": "948650"
+   },
+   "78": {
+    "parameterBaseValue": "23058",
+    "exp": "1001650"
+   },
+   "79": {
+    "parameterBaseValue": "23310",
+    "exp": "1059650"
+   },
+   "80": {
+    "parameterBaseValue": "23562",
+    "exp": "1122650"
+   }
+  },
+  "levelLimits": [
+   {
+    "limitBreakCount": null,
+    "levelLimit": 40
+   },
+   {
+    "limitBreakCount": 1,
+    "levelLimit": 50
+   },
+   {
+    "limitBreakCount": 2,
+    "levelLimit": 60
+   },
+   {
+    "limitBreakCount": 3,
+    "levelLimit": 70
+   },
+   {
+    "limitBreakCount": 4,
+    "levelLimit": 80
+   }
+  ],
+  "costumeId": "cos-04003-uniq-0072-00",
+  "activeSkill": {
+   "1": {
+    "coolTimeMs": 24000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 10000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "850"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   },
+   "2": {
+    "coolTimeMs": 24000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 10000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "1000"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   }
+  },
+  "passiveSkill": {
+   "1": {
+    "condition": null,
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+      "value": "320",
+      "target": {
+       "id": "live_skill_effect_target-character_grouping-grp-myth-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING",
+       "targetCount": 2,
+       "cardAttributeType": null,
+       "characterGroupingId": "grp-myth"
+      }
+     }
+    ]
+   },
+   "2": {
+    "condition": null,
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+      "value": "430",
+      "target": {
+       "id": "live_skill_effect_target-character_grouping-grp-myth-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING",
+       "targetCount": 2,
+       "cardAttributeType": null,
+       "characterGroupingId": "grp-myth"
+      }
+     }
+    ]
+   }
+  },
+  "specialSkill": {
+   "1": {
+    "effectDurationMs": 12000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1000",
+      "target": null
+     }
+    ],
+    "additionalEffects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
+      "value": "400",
+      "target": null
+     }
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-myth",
+     "characterIds": null
+    }
+   },
+   "2": {
+    "effectDurationMs": 12000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1200",
+      "target": null
+     }
+    ],
+    "additionalEffects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
+      "value": "450",
+      "target": null
+     }
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-myth",
+     "characterIds": null
+    }
+   }
+  },
+  "leaderSkill": {
+   "condition": {
+    "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+    "threshold": "2",
+    "cardAttributeType": null,
+    "characterGroupingId": "grp-myth",
+    "characterIds": null
+   },
+   "effects": [
+    {
+     "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+     "value": "1350",
+     "target": {
+      "id": "live_skill_effect_target-all",
+      "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL",
+      "targetCount": null,
+      "cardAttributeType": null,
+      "characterGroupingId": null
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cardId": "card-04001-5-uniq-0071-00",
+  "characterId": "chr-04001",
+  "characterName": "Mori Calliope",
+  "shortName": "Calliope",
+  "generation": "hololive EN Myth",
+  "cardSubtitle": "Beach Reaper's Spike",
+  "rarity": "CardRarity_CARD_RARITY_RARITY_5",
+  "attributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+  "cardPotentialGroupId": "card_potential_grp-rarity_5",
+  "performancePermilMultiply": 268,
+  "techniquePermilMultiply": 302,
+  "sensePermilMultiply": 430,
+  "levelCurve": {
+   "1": {
+    "parameterBaseValue": "5236",
+    "exp": null
+   },
+   "2": {
+    "parameterBaseValue": "5447",
+    "exp": "40"
+   },
+   "3": {
+    "parameterBaseValue": "5658",
+    "exp": "100"
+   },
+   "4": {
+    "parameterBaseValue": "5869",
+    "exp": "190"
+   },
+   "5": {
+    "parameterBaseValue": "6080",
+    "exp": "310"
+   },
+   "6": {
+    "parameterBaseValue": "6291",
+    "exp": "460"
+   },
+   "7": {
+    "parameterBaseValue": "6502",
+    "exp": "650"
+   },
+   "8": {
+    "parameterBaseValue": "6713",
+    "exp": "880"
+   },
+   "9": {
+    "parameterBaseValue": "6924",
+    "exp": "1160"
+   },
+   "10": {
+    "parameterBaseValue": "7135",
+    "exp": "1500"
+   },
+   "11": {
+    "parameterBaseValue": "7346",
+    "exp": "1900"
+   },
+   "12": {
+    "parameterBaseValue": "7557",
+    "exp": "2400"
+   },
+   "13": {
+    "parameterBaseValue": "7768",
+    "exp": "3000"
+   },
+   "14": {
+    "parameterBaseValue": "7979",
+    "exp": "3700"
+   },
+   "15": {
+    "parameterBaseValue": "8190",
+    "exp": "4550"
+   },
+   "16": {
+    "parameterBaseValue": "8401",
+    "exp": "5550"
+   },
+   "17": {
+    "parameterBaseValue": "8612",
+    "exp": "6700"
+   },
+   "18": {
+    "parameterBaseValue": "8823",
+    "exp": "8050"
+   },
+   "19": {
+    "parameterBaseValue": "9034",
+    "exp": "9600"
+   },
+   "20": {
+    "parameterBaseValue": "9245",
+    "exp": "11400"
+   },
+   "21": {
+    "parameterBaseValue": "9456",
+    "exp": "13500"
+   },
+   "22": {
+    "parameterBaseValue": "9667",
+    "exp": "15900"
+   },
+   "23": {
+    "parameterBaseValue": "9879",
+    "exp": "18600"
+   },
+   "24": {
+    "parameterBaseValue": "10091",
+    "exp": "21600"
+   },
+   "25": {
+    "parameterBaseValue": "10303",
+    "exp": "24900"
+   },
+   "26": {
+    "parameterBaseValue": "10515",
+    "exp": "28550"
+   },
+   "27": {
+    "parameterBaseValue": "10727",
+    "exp": "32550"
+   },
+   "28": {
+    "parameterBaseValue": "10939",
+    "exp": "36900"
+   },
+   "29": {
+    "parameterBaseValue": "11151",
+    "exp": "41600"
+   },
+   "30": {
+    "parameterBaseValue": "11363",
+    "exp": "46650"
+   },
+   "31": {
+    "parameterBaseValue": "11575",
+    "exp": "52050"
+   },
+   "32": {
+    "parameterBaseValue": "11787",
+    "exp": "57850"
+   },
+   "33": {
+    "parameterBaseValue": "11999",
+    "exp": "64050"
+   },
+   "34": {
+    "parameterBaseValue": "12211",
+    "exp": "70650"
+   },
+   "35": {
+    "parameterBaseValue": "12423",
+    "exp": "77650"
+   },
+   "36": {
+    "parameterBaseValue": "12635",
+    "exp": "85050"
+   },
+   "37": {
+    "parameterBaseValue": "12847",
+    "exp": "92850"
+   },
+   "38": {
+    "parameterBaseValue": "13059",
+    "exp": "101050"
+   },
+   "39": {
+    "parameterBaseValue": "13271",
+    "exp": "109650"
+   },
+   "40": {
+    "parameterBaseValue": "13483",
+    "exp": "118650"
+   },
+   "41": {
+    "parameterBaseValue": "13734",
+    "exp": "128150"
+   },
+   "42": {
+    "parameterBaseValue": "13986",
+    "exp": "138150"
+   },
+   "43": {
+    "parameterBaseValue": "14238",
+    "exp": "148650"
+   },
+   "44": {
+    "parameterBaseValue": "14490",
+    "exp": "159650"
+   },
+   "45": {
+    "parameterBaseValue": "14742",
+    "exp": "171150"
+   },
+   "46": {
+    "parameterBaseValue": "14994",
+    "exp": "183150"
+   },
+   "47": {
+    "parameterBaseValue": "15246",
+    "exp": "195650"
+   },
+   "48": {
+    "parameterBaseValue": "15498",
+    "exp": "208650"
+   },
+   "49": {
+    "parameterBaseValue": "15750",
+    "exp": "222150"
+   },
+   "50": {
+    "parameterBaseValue": "16002",
+    "exp": "236150"
+   },
+   "51": {
+    "parameterBaseValue": "16254",
+    "exp": "250650"
+   },
+   "52": {
+    "parameterBaseValue": "16506",
+    "exp": "265650"
+   },
+   "53": {
+    "parameterBaseValue": "16758",
+    "exp": "281150"
+   },
+   "54": {
+    "parameterBaseValue": "17010",
+    "exp": "297150"
+   },
+   "55": {
+    "parameterBaseValue": "17262",
+    "exp": "313650"
+   },
+   "56": {
+    "parameterBaseValue": "17514",
+    "exp": "330650"
+   },
+   "57": {
+    "parameterBaseValue": "17766",
+    "exp": "348150"
+   },
+   "58": {
+    "parameterBaseValue": "18018",
+    "exp": "366150"
+   },
+   "59": {
+    "parameterBaseValue": "18270",
+    "exp": "384650"
+   },
+   "60": {
+    "parameterBaseValue": "18522",
+    "exp": "404150"
+   },
+   "61": {
+    "parameterBaseValue": "18774",
+    "exp": "424650"
+   },
+   "62": {
+    "parameterBaseValue": "19026",
+    "exp": "446150"
+   },
+   "63": {
+    "parameterBaseValue": "19278",
+    "exp": "468650"
+   },
+   "64": {
+    "parameterBaseValue": "19530",
+    "exp": "492150"
+   },
+   "65": {
+    "parameterBaseValue": "19782",
+    "exp": "516650"
+   },
+   "66": {
+    "parameterBaseValue": "20034",
+    "exp": "542650"
+   },
+   "67": {
+    "parameterBaseValue": "20286",
+    "exp": "570150"
+   },
+   "68": {
+    "parameterBaseValue": "20538",
+    "exp": "599150"
+   },
+   "69": {
+    "parameterBaseValue": "20790",
+    "exp": "629650"
+   },
+   "70": {
+    "parameterBaseValue": "21042",
+    "exp": "661650"
+   },
+   "71": {
+    "parameterBaseValue": "21294",
+    "exp": "695650"
+   },
+   "72": {
+    "parameterBaseValue": "21546",
+    "exp": "731650"
+   },
+   "73": {
+    "parameterBaseValue": "21798",
+    "exp": "769650"
+   },
+   "74": {
+    "parameterBaseValue": "22050",
+    "exp": "810150"
+   },
+   "75": {
+    "parameterBaseValue": "22302",
+    "exp": "853150"
+   },
+   "76": {
+    "parameterBaseValue": "22554",
+    "exp": "899150"
+   },
+   "77": {
+    "parameterBaseValue": "22806",
+    "exp": "948650"
+   },
+   "78": {
+    "parameterBaseValue": "23058",
+    "exp": "1001650"
+   },
+   "79": {
+    "parameterBaseValue": "23310",
+    "exp": "1059650"
+   },
+   "80": {
+    "parameterBaseValue": "23562",
+    "exp": "1122650"
+   }
+  },
+  "levelLimits": [
+   {
+    "limitBreakCount": null,
+    "levelLimit": 40
+   },
+   {
+    "limitBreakCount": 1,
+    "levelLimit": 50
+   },
+   {
+    "limitBreakCount": 2,
+    "levelLimit": 60
+   },
+   {
+    "limitBreakCount": 3,
+    "levelLimit": 70
+   },
+   {
+    "limitBreakCount": 4,
+    "levelLimit": 80
+   }
+  ],
+  "costumeId": "cos-04001-uniq-0071-00",
+  "activeSkill": {
+   "1": {
+    "coolTimeMs": 31000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 12000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "900"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   },
+   "2": {
+    "coolTimeMs": 31000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 12000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "1100"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   }
+  },
+  "passiveSkill": {
+   "1": {
+    "condition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    },
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+      "value": "320",
+      "target": {
+       "id": "live_skill_effect_target-attribute-attribute_1-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE",
+       "targetCount": 2,
+       "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+       "characterGroupingId": null
+      }
+     }
+    ]
+   },
+   "2": {
+    "condition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+     "threshold": "2",
+     "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+     "characterGroupingId": null,
+     "characterIds": null
+    },
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+      "value": "430",
+      "target": {
+       "id": "live_skill_effect_target-attribute-attribute_1-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ATTRIBUTE",
+       "targetCount": 2,
+       "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+       "characterGroupingId": null
+      }
+     }
+    ]
+   }
+  },
+  "specialSkill": {
+   "1": {
+    "effectDurationMs": 14000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "950",
+      "target": null
+     }
+    ],
+    "additionalEffects": [],
+    "additionalCondition": null
+   },
+   "2": {
+    "effectDurationMs": 14000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1150",
+      "target": null
+     }
+    ],
+    "additionalEffects": [],
+    "additionalCondition": null
+   }
+  },
+  "leaderSkill": {
+   "condition": {
+    "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_ATTRIBUTE",
+    "threshold": "2",
+    "cardAttributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_1",
+    "characterGroupingId": null,
+    "characterIds": null
+   },
+   "effects": [
+    {
+     "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
+     "value": "800",
+     "target": {
+      "id": "live_skill_effect_target-all",
+      "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL",
+      "targetCount": null,
+      "cardAttributeType": null,
+      "characterGroupingId": null
+     }
+    }
+   ]
+  }
+ },
+ {
+  "cardId": "card-00028-5-uniq-0070-00",
+  "characterId": "chr-00028",
+  "characterName": "Himemori Luna",
+  "shortName": "Luna",
+  "generation": "hololive 4th Generation",
+  "cardSubtitle": "Spoiled Beach Princess",
+  "rarity": "CardRarity_CARD_RARITY_RARITY_5",
+  "attributeType": "CardAttributeType_CARD_ATTRIBUTE_TYPE_ATTRIBUTE_2",
+  "cardPotentialGroupId": "card_potential_grp-rarity_5",
+  "performancePermilMultiply": 430,
+  "techniquePermilMultiply": 268,
+  "sensePermilMultiply": 302,
+  "levelCurve": {
+   "1": {
+    "parameterBaseValue": "5236",
+    "exp": null
+   },
+   "2": {
+    "parameterBaseValue": "5447",
+    "exp": "40"
+   },
+   "3": {
+    "parameterBaseValue": "5658",
+    "exp": "100"
+   },
+   "4": {
+    "parameterBaseValue": "5869",
+    "exp": "190"
+   },
+   "5": {
+    "parameterBaseValue": "6080",
+    "exp": "310"
+   },
+   "6": {
+    "parameterBaseValue": "6291",
+    "exp": "460"
+   },
+   "7": {
+    "parameterBaseValue": "6502",
+    "exp": "650"
+   },
+   "8": {
+    "parameterBaseValue": "6713",
+    "exp": "880"
+   },
+   "9": {
+    "parameterBaseValue": "6924",
+    "exp": "1160"
+   },
+   "10": {
+    "parameterBaseValue": "7135",
+    "exp": "1500"
+   },
+   "11": {
+    "parameterBaseValue": "7346",
+    "exp": "1900"
+   },
+   "12": {
+    "parameterBaseValue": "7557",
+    "exp": "2400"
+   },
+   "13": {
+    "parameterBaseValue": "7768",
+    "exp": "3000"
+   },
+   "14": {
+    "parameterBaseValue": "7979",
+    "exp": "3700"
+   },
+   "15": {
+    "parameterBaseValue": "8190",
+    "exp": "4550"
+   },
+   "16": {
+    "parameterBaseValue": "8401",
+    "exp": "5550"
+   },
+   "17": {
+    "parameterBaseValue": "8612",
+    "exp": "6700"
+   },
+   "18": {
+    "parameterBaseValue": "8823",
+    "exp": "8050"
+   },
+   "19": {
+    "parameterBaseValue": "9034",
+    "exp": "9600"
+   },
+   "20": {
+    "parameterBaseValue": "9245",
+    "exp": "11400"
+   },
+   "21": {
+    "parameterBaseValue": "9456",
+    "exp": "13500"
+   },
+   "22": {
+    "parameterBaseValue": "9667",
+    "exp": "15900"
+   },
+   "23": {
+    "parameterBaseValue": "9879",
+    "exp": "18600"
+   },
+   "24": {
+    "parameterBaseValue": "10091",
+    "exp": "21600"
+   },
+   "25": {
+    "parameterBaseValue": "10303",
+    "exp": "24900"
+   },
+   "26": {
+    "parameterBaseValue": "10515",
+    "exp": "28550"
+   },
+   "27": {
+    "parameterBaseValue": "10727",
+    "exp": "32550"
+   },
+   "28": {
+    "parameterBaseValue": "10939",
+    "exp": "36900"
+   },
+   "29": {
+    "parameterBaseValue": "11151",
+    "exp": "41600"
+   },
+   "30": {
+    "parameterBaseValue": "11363",
+    "exp": "46650"
+   },
+   "31": {
+    "parameterBaseValue": "11575",
+    "exp": "52050"
+   },
+   "32": {
+    "parameterBaseValue": "11787",
+    "exp": "57850"
+   },
+   "33": {
+    "parameterBaseValue": "11999",
+    "exp": "64050"
+   },
+   "34": {
+    "parameterBaseValue": "12211",
+    "exp": "70650"
+   },
+   "35": {
+    "parameterBaseValue": "12423",
+    "exp": "77650"
+   },
+   "36": {
+    "parameterBaseValue": "12635",
+    "exp": "85050"
+   },
+   "37": {
+    "parameterBaseValue": "12847",
+    "exp": "92850"
+   },
+   "38": {
+    "parameterBaseValue": "13059",
+    "exp": "101050"
+   },
+   "39": {
+    "parameterBaseValue": "13271",
+    "exp": "109650"
+   },
+   "40": {
+    "parameterBaseValue": "13483",
+    "exp": "118650"
+   },
+   "41": {
+    "parameterBaseValue": "13734",
+    "exp": "128150"
+   },
+   "42": {
+    "parameterBaseValue": "13986",
+    "exp": "138150"
+   },
+   "43": {
+    "parameterBaseValue": "14238",
+    "exp": "148650"
+   },
+   "44": {
+    "parameterBaseValue": "14490",
+    "exp": "159650"
+   },
+   "45": {
+    "parameterBaseValue": "14742",
+    "exp": "171150"
+   },
+   "46": {
+    "parameterBaseValue": "14994",
+    "exp": "183150"
+   },
+   "47": {
+    "parameterBaseValue": "15246",
+    "exp": "195650"
+   },
+   "48": {
+    "parameterBaseValue": "15498",
+    "exp": "208650"
+   },
+   "49": {
+    "parameterBaseValue": "15750",
+    "exp": "222150"
+   },
+   "50": {
+    "parameterBaseValue": "16002",
+    "exp": "236150"
+   },
+   "51": {
+    "parameterBaseValue": "16254",
+    "exp": "250650"
+   },
+   "52": {
+    "parameterBaseValue": "16506",
+    "exp": "265650"
+   },
+   "53": {
+    "parameterBaseValue": "16758",
+    "exp": "281150"
+   },
+   "54": {
+    "parameterBaseValue": "17010",
+    "exp": "297150"
+   },
+   "55": {
+    "parameterBaseValue": "17262",
+    "exp": "313650"
+   },
+   "56": {
+    "parameterBaseValue": "17514",
+    "exp": "330650"
+   },
+   "57": {
+    "parameterBaseValue": "17766",
+    "exp": "348150"
+   },
+   "58": {
+    "parameterBaseValue": "18018",
+    "exp": "366150"
+   },
+   "59": {
+    "parameterBaseValue": "18270",
+    "exp": "384650"
+   },
+   "60": {
+    "parameterBaseValue": "18522",
+    "exp": "404150"
+   },
+   "61": {
+    "parameterBaseValue": "18774",
+    "exp": "424650"
+   },
+   "62": {
+    "parameterBaseValue": "19026",
+    "exp": "446150"
+   },
+   "63": {
+    "parameterBaseValue": "19278",
+    "exp": "468650"
+   },
+   "64": {
+    "parameterBaseValue": "19530",
+    "exp": "492150"
+   },
+   "65": {
+    "parameterBaseValue": "19782",
+    "exp": "516650"
+   },
+   "66": {
+    "parameterBaseValue": "20034",
+    "exp": "542650"
+   },
+   "67": {
+    "parameterBaseValue": "20286",
+    "exp": "570150"
+   },
+   "68": {
+    "parameterBaseValue": "20538",
+    "exp": "599150"
+   },
+   "69": {
+    "parameterBaseValue": "20790",
+    "exp": "629650"
+   },
+   "70": {
+    "parameterBaseValue": "21042",
+    "exp": "661650"
+   },
+   "71": {
+    "parameterBaseValue": "21294",
+    "exp": "695650"
+   },
+   "72": {
+    "parameterBaseValue": "21546",
+    "exp": "731650"
+   },
+   "73": {
+    "parameterBaseValue": "21798",
+    "exp": "769650"
+   },
+   "74": {
+    "parameterBaseValue": "22050",
+    "exp": "810150"
+   },
+   "75": {
+    "parameterBaseValue": "22302",
+    "exp": "853150"
+   },
+   "76": {
+    "parameterBaseValue": "22554",
+    "exp": "899150"
+   },
+   "77": {
+    "parameterBaseValue": "22806",
+    "exp": "948650"
+   },
+   "78": {
+    "parameterBaseValue": "23058",
+    "exp": "1001650"
+   },
+   "79": {
+    "parameterBaseValue": "23310",
+    "exp": "1059650"
+   },
+   "80": {
+    "parameterBaseValue": "23562",
+    "exp": "1122650"
+   }
+  },
+  "levelLimits": [
+   {
+    "limitBreakCount": null,
+    "levelLimit": 40
+   },
+   {
+    "limitBreakCount": 1,
+    "levelLimit": 50
+   },
+   {
+    "limitBreakCount": 2,
+    "levelLimit": 60
+   },
+   {
+    "limitBreakCount": 3,
+    "levelLimit": 70
+   },
+   {
+    "limitBreakCount": 4,
+    "levelLimit": 80
+   }
+  ],
+  "costumeId": "cos-00028-uniq-0070-00",
+  "activeSkill": {
+   "1": {
+    "coolTimeMs": 21000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 7000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "1050"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   },
+   "2": {
+    "coolTimeMs": 21000,
+    "activationProbabilityPermil": 460,
+    "effectDurationMs": 8000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_PERMIL_UP",
+      "value": "1100"
+     }
+    ],
+    "enhancedEffects": [],
+    "enhancedCondition": null
+   }
+  },
+  "passiveSkill": {
+   "1": {
+    "condition": null,
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP",
+      "value": "320",
+      "target": {
+       "id": "live_skill_effect_target-character_grouping-grp-gen_4-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING",
+       "targetCount": 2,
+       "cardAttributeType": null,
+       "characterGroupingId": "grp-gen_4"
+      }
+     }
+    ]
+   },
+   "2": {
+    "condition": null,
+    "effects": [
+     {
+      "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP",
+      "value": "430",
+      "target": {
+       "id": "live_skill_effect_target-character_grouping-grp-gen_4-2",
+       "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_CHARACTER_GROUPING",
+       "targetCount": 2,
+       "cardAttributeType": null,
+       "characterGroupingId": "grp-gen_4"
+      }
+     }
+    ]
+   }
+  },
+  "specialSkill": {
+   "1": {
+    "effectDurationMs": 11000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1100",
+      "target": null
+     }
+    ],
+    "additionalEffects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
+      "value": "400",
+      "target": null
+     }
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_4",
+     "characterIds": null
+    }
+   },
+   "2": {
+    "effectDurationMs": 11000,
+    "effects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_SCORE_UP_EFFECT_UP_PERMIL_UP",
+      "value": "1300",
+      "target": null
+     }
+    ],
+    "additionalEffects": [
+     {
+      "type": "LiveActiveSkillEffectType_LIVE_ACTIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
+      "value": "500",
+      "target": null
+     }
+    ],
+    "additionalCondition": {
+     "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+     "threshold": "2",
+     "cardAttributeType": null,
+     "characterGroupingId": "grp-gen_4",
+     "characterIds": null
+    }
+   }
+  },
+  "leaderSkill": {
+   "condition": {
+    "type": "LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_DECK_CARD_CHARACTER_GROUPING",
+    "threshold": "2",
+    "cardAttributeType": null,
+    "characterGroupingId": "grp-gen_4",
+    "characterIds": null
+   },
+   "effects": [
+    {
+     "type": "LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP",
+     "value": "1350",
+     "target": {
+      "id": "live_skill_effect_target-all",
+      "type": "LiveSkillEffectTargetType_LIVE_SKILL_EFFECT_TARGET_TYPE_ALL",
+      "targetCount": null,
+      "cardAttributeType": null,
+      "characterGroupingId": null
+     }
+    }
+   ]
+  }
  }
 ]
