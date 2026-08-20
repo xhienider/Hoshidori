@@ -250,6 +250,46 @@ export function canUnlock(unlockedSet, x, y) {
   return false;
 }
 
+/** Finds the shortest chain of nodes (by posKey, "x,y") from the center out
+ *  to the node at (x,y), walking only through positions that actually exist
+ *  in `boardIndex` (real board nodes/connectors). Returns an array of posKeys
+ *  in order from nearest-the-center to the target (target included, center
+ *  excluded) - i.e. exactly the set of nodes that need to become unlocked for
+ *  the target to be reachable, on top of whatever's already unlocked. Returns
+ *  null if (x,y) isn't a valid node or there's no path back to the center. */
+export function findUnlockPath(boardIndex, x, y) {
+  const targetKey = `${x},${y}`;
+  if (targetKey === '0,0') return [];
+  if (!boardIndex.has(targetKey)) return null;
+
+  const visited = new Set(['0,0']);
+  const parent = new Map();
+  const queue = ['0,0'];
+  while (queue.length) {
+    const cur = queue.shift();
+    if (cur === targetKey) break;
+    const [cx, cy] = cur.split(',').map(Number);
+    for (const [dx, dy] of NEIGHBOR_OFFSETS) {
+      const nKey = `${cx + dx},${cy + dy}`;
+      if (visited.has(nKey)) continue;
+      if (!boardIndex.has(nKey)) continue; // only real nodes carry the path (center already visited)
+      visited.add(nKey);
+      parent.set(nKey, cur);
+      queue.push(nKey);
+    }
+  }
+  if (!visited.has(targetKey)) return null;
+
+  const path = [];
+  let cur = targetKey;
+  while (cur !== '0,0') {
+    path.push(cur);
+    cur = parent.get(cur);
+  }
+  path.reverse();
+  return path;
+}
+
 /** Re-computes which nodes in `unlockedSet` are still reachable from the
  *  center via other unlocked nodes, and returns a trimmed set with any now-
  *  disconnected nodes removed (cascading lock after removing a node). */
