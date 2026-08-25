@@ -3334,10 +3334,10 @@ function openCharacterActivityView() {
   const disclaimer = document.createElement('div');
   disclaimer.className = 'ca-disclaimer';
   disclaimer.innerHTML = `
-    <strong>Just for fun \u{1F52E}</strong> \u2014 this is a made-up heuristic guessing which characters are
+    <strong>Just for fun \u{1F52E}</strong> - this is a made-up heuristic guessing which characters are
     "due" for a new card or song, based on how recently they've gotten one (plus a bit of
     generation peer pressure). It's not based on real dev plans or any historical accuracy check.
-    Drag the sliders and watch the ranking shuffle \u2014 that's the whole point.
+    Drag the sliders and watch the ranking shuffle - that's the whole point.
   `;
   overlay.appendChild(disclaimer);
 
