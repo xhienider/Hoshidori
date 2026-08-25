@@ -472,22 +472,44 @@ export function findOptimalFrequencyNodes(activeSkills, songDurationSeconds, fev
   };
 }
 
+/** All k-element subsets of `arr`, for small arrays (k, arr.length <= ~4 in
+ *  practice here - at most 3 frequency nodes exist per board). */
+function combinations(arr, k) {
+  if (k === 0) return [[]];
+  if (arr.length < k) return [];
+  const [first, ...rest] = arr;
+  const withFirst = combinations(rest, k - 1).map((c) => [first, ...c]);
+  const withoutFirst = combinations(rest, k);
+  return [...withFirst, ...withoutFirst];
+}
+
 /**
- * Finds the cheapest (fewest board points) way to reach at least
+ * Finds the cheapest (fewest board points) way to reach exactly
  * `targetCount` of a character's 3 shared "Activation Frequency UP" (blue
- * Member-area) nodes unlocked, reusing findUnlockPath so any connector nodes
- * needed en route are included in both the cost and the returned position
- * list. Greedy - at each step adds whichever still-needed frequency node has
- * the cheapest incremental path given what's already (hypothetically)
- * unlocked so far. Not a guaranteed global optimum if two of the three nodes
- * share part of their path, but the 3 frequency nodes sit on separate
- * branches on every character's board, so greedy is exact in practice.
+ * Member-area) nodes unlocked - unlocking more if under target, or LOCKING
+ * some back down if over target, reusing findUnlockPath / pruneDisconnected
+ * so the result matches exactly what a manual click on the board would do
+ * (including any connector nodes pulled in en route when unlocking, or
+ * freed up when a lock cascades to now-disconnected nodes).
+ *
+ * Unlocking: greedy - at each step adds whichever still-needed frequency
+ * node has the cheapest incremental path given what's already
+ * (hypothetically) unlocked so far. Not a guaranteed global optimum if two
+ * of the three nodes shared part of their path, but the 3 frequency nodes
+ * sit on separate branches on every character's board, so greedy is exact
+ * in practice.
+ *
+ * Locking: with at most 3 frequency nodes there are at most 3 choices of
+ * which one(s) to lock, so this brute-forces every combination and picks
+ * whichever locks free the most total board points after cascading
+ * pruneDisconnected - not just count-optimal but point-optimal too.
  *
  * @param {Map<string,object>} boardIndex - from buildBoardIndex()
  * @param {Set<string>} currentUnlockedSet - this character's current unlocks
  * @param {number} targetCount - 0-3, how many frequency nodes should end up unlocked
  * @returns {{targetCount:number, currentCount:number, nodesToUnlock:string[],
- *            additionalPointCost:number, alreadySufficient:boolean}}
+ *            nodesToLock:string[], additionalPointCost:number,
+ *            pointsRefunded:number, alreadySufficient:boolean}}
  */
 export function planFrequencyNodeUnlock(boardIndex, currentUnlockedSet, targetCount) {
   const freqNodePositions = [];
@@ -499,12 +521,48 @@ export function planFrequencyNodeUnlock(boardIndex, currentUnlockedSet, targetCo
 
   const alreadyUnlocked = freqNodePositions.filter((p) => currentUnlockedSet.has(p));
   const target = Math.max(0, Math.min(targetCount, freqNodePositions.length));
-  const stillNeeded = target - alreadyUnlocked.length;
+  const diff = target - alreadyUnlocked.length;
 
-  if (stillNeeded <= 0) {
-    return { targetCount: target, currentCount: alreadyUnlocked.length, nodesToUnlock: [], additionalPointCost: 0, alreadySufficient: true };
+  if (diff === 0) {
+    return {
+      targetCount: target,
+      currentCount: alreadyUnlocked.length,
+      nodesToUnlock: [],
+      nodesToLock: [],
+      additionalPointCost: 0,
+      pointsRefunded: 0,
+      alreadySufficient: true,
+    };
   }
 
+  if (diff < 0) {
+    // Need to lock (-diff) of the currently-unlocked frequency nodes. Try
+    // every combination (cheap - at most 3 choose up to 3) and keep the
+    // one whose cascade frees the most points.
+    const numToLock = -diff;
+    let best = null;
+    for (const combo of combinations(alreadyUnlocked, numToLock)) {
+      const working = new Set(currentUnlockedSet);
+      for (const p of combo) working.delete(p);
+      const pruned = pruneDisconnected(working);
+      const removedPositions = [...currentUnlockedSet].filter((p) => !pruned.has(p));
+      const pointsFreed = removedPositions.reduce((sum, p) => sum + (boardIndex.get(p)?.cost || 0), 0);
+      if (!best || pointsFreed > best.pointsFreed) {
+        best = { removedPositions, pointsFreed };
+      }
+    }
+    return {
+      targetCount: target,
+      currentCount: alreadyUnlocked.length,
+      nodesToUnlock: [],
+      nodesToLock: best.removedPositions,
+      additionalPointCost: 0,
+      pointsRefunded: best.pointsFreed,
+      alreadySufficient: false,
+    };
+  }
+
+  const stillNeeded = diff;
   const working = new Set(currentUnlockedSet);
   const allNewPositions = [];
   let totalCost = 0;
@@ -536,7 +594,9 @@ export function planFrequencyNodeUnlock(boardIndex, currentUnlockedSet, targetCo
     targetCount: target,
     currentCount: alreadyUnlocked.length,
     nodesToUnlock: allNewPositions,
+    nodesToLock: [],
     additionalPointCost: totalCost,
+    pointsRefunded: 0,
     alreadySufficient: false,
   };
 }

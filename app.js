@@ -1844,12 +1844,13 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
       const currentSet = state.boardSelections[characterId] || new Set();
       const plan = boardIndex
         ? planFrequencyNodeUnlock(boardIndex, currentSet, rec.tiers[i])
-        : { targetCount: rec.tiers[i], currentCount: 0, nodesToUnlock: [], additionalPointCost: 0, alreadySufficient: true };
+        : { targetCount: rec.tiers[i], currentCount: 0, nodesToUnlock: [], nodesToLock: [], additionalPointCost: 0, pointsRefunded: 0, alreadySufficient: true };
       return { u, characterId, plan };
     });
 
     const totalAdditionalCost = perMember.reduce((sum, m) => sum + m.plan.additionalPointCost, 0);
-    const anyChanges = perMember.some((m) => m.plan.nodesToUnlock.length > 0);
+    const totalRefunded = perMember.reduce((sum, m) => sum + m.plan.pointsRefunded, 0);
+    const anyChanges = perMember.some((m) => m.plan.nodesToUnlock.length > 0 || m.plan.nodesToLock.length > 0);
 
     const rows = perMember
       .map(({ u, plan }) => {
@@ -1857,7 +1858,11 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
           plan.currentCount === plan.targetCount
             ? `${plan.targetCount}/3 (no change)`
             : `${plan.currentCount}/3 \u2192 ${plan.targetCount}/3`;
-        const costCell = plan.additionalPointCost ? `+${plan.additionalPointCost} pts` : '\u2014';
+        const costCell = plan.additionalPointCost
+          ? `+${plan.additionalPointCost} pts`
+          : plan.pointsRefunded
+          ? `\u2212${plan.pointsRefunded} pts`
+          : '\u2014';
         return `<tr><td>${u.card.shortName}</td><td>${changeCell}</td><td class="qty">${costCell}</td></tr>`;
       })
       .join('');
@@ -1872,10 +1877,17 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
     let feverLine = '';
     if (feverWindows.length) {
       const feverPill = rec.isFullFeverCoverage
-        ? '<span class="pill met">100% FEVER COVERAGE</span>'
-        : `<span class="pill unmet">${rec.feverCoveragePercent.toFixed(1)}% FEVER COVERAGE</span>`;
+        ? '<span class="pill met">100% SPECIAL SKILL COVERAGE</span>'
+        : `<span class="pill unmet">${rec.feverCoveragePercent.toFixed(1)}% SPECIAL SKILL COVERAGE</span>`;
       feverLine = `<div class="effect-detail" style="margin-bottom:4px;">${feverPill} <span style="margin-left:8px;">across the song's 5 fever windows (${rec.feverTotalSeconds.toFixed(1)}s total) \u2014 prioritized ahead of overall coverage.</span></div>`;
     }
+
+    const costSummary = [
+      totalAdditionalCost ? `<strong>${totalAdditionalCost}</strong> additional board points` : null,
+      totalRefunded ? `<strong>${totalRefunded}</strong> points refunded from locking unneeded nodes` : null,
+    ]
+      .filter(Boolean)
+      .join(' \u00b7 ') || 'no board point changes needed';
 
     resultBox.innerHTML = `
       ${feverLine}
@@ -1884,7 +1896,7 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
         <thead><tr><th>Member</th><th>Nodes</th><th>Cost</th></tr></thead>
         <tbody>${rows}</tbody>
       </table>
-      <div class="effect-detail" style="margin-top:8px;">Total additional board points: <strong>${totalAdditionalCost}</strong></div>
+      <div class="effect-detail" style="margin-top:8px;">${costSummary}</div>
     `;
 
     if (anyChanges) {
@@ -1895,9 +1907,10 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
       applyBtn.textContent = 'Apply to Boards';
       applyBtn.addEventListener('click', () => {
         for (const { characterId, plan } of perMember) {
-          if (!plan.nodesToUnlock.length) continue;
+          if (!plan.nodesToUnlock.length && !plan.nodesToLock.length) continue;
           if (!state.boardSelections[characterId]) state.boardSelections[characterId] = new Set();
           for (const posKey of plan.nodesToUnlock) state.boardSelections[characterId].add(posKey);
+          for (const posKey of plan.nodesToLock) state.boardSelections[characterId].delete(posKey);
         }
         recompute();
         renderSelectionRow();
