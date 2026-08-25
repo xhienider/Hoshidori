@@ -17,6 +17,13 @@
 
 const MS_PER_DAY = 86400000;
 
+// Cards with `order` <= this were all part of the game's initial launch
+// content, not staggered releases - order only carries genuine recency
+// signal ABOVE this threshold. Mirrors the same pattern already handled for
+// songs (many share a generic "2022-12-31 At Launch" releaseDate rather than
+// individual dates).
+export const LAUNCH_ORDER_THRESHOLD = 162;
+
 /** Splits a (possibly compound, e.g. "hololive 1st Generation / Gamers")
  *  generation string into its individual group keys, so dual-affiliation
  *  characters count toward contagion in BOTH of their groups. */
@@ -79,7 +86,13 @@ export function computeCharacterActivityScores(members, songs, options = {}) {
   const songRecencyScore = new Map();
   for (const cid of charInfo.keys()) {
     const order = lastCardOrder.get(cid) ?? 0;
-    const cardScore = order / maxOrder;
+    // Only order values past the launch batch carry real recency signal -
+    // everything at/below the threshold is treated as tied at "launch"
+    // (score 0), same as a character with no post-launch card at all.
+    const cardScore =
+      order > LAUNCH_ORDER_THRESHOLD && maxOrder > LAUNCH_ORDER_THRESHOLD
+        ? (order - LAUNCH_ORDER_THRESHOLD) / (maxOrder - LAUNCH_ORDER_THRESHOLD)
+        : 0;
     const songMs = lastSongDateMs.get(cid);
     const daysSince = songMs == null ? Infinity : (nowMs - songMs) / MS_PER_DAY;
     const songScore = Number.isFinite(daysSince) ? Math.pow(0.5, daysSince / halfLifeDays) : 0;
