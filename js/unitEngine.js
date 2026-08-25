@@ -320,6 +320,43 @@ export function boardPointsSpentFromSet(boardIndex, unlockedSet) {
   return total;
 }
 
+/** Merges a list of [start,end) windows into their non-overlapping union,
+ *  sorted by start. Shared helper for coverage measurement below. */
+function mergeWindows(windows) {
+  const sorted = windows.slice().sort((a, b) => a[0] - b[0]);
+  const merged = [];
+  for (const [s, e] of sorted) {
+    if (e <= s) continue;
+    if (merged.length && s <= merged[merged.length - 1][1]) {
+      merged[merged.length - 1][1] = Math.max(merged[merged.length - 1][1], e);
+    } else {
+      merged.push([s, e]);
+    }
+  }
+  return merged;
+}
+
+/** How much of the union of `targetWindows` is covered by `windows`. Used to
+ *  score fever-window coverage separately from overall coverage. */
+function coverageWithinTargets(windows, targetWindows) {
+  if (!targetWindows.length) return 0;
+  const merged = mergeWindows(windows);
+  let covered = 0;
+  for (const [ts, te] of targetWindows) {
+    let cur = ts;
+    for (const [s, e] of merged) {
+      const os = Math.max(s, cur);
+      const oe = Math.min(e, te);
+      if (oe > os) {
+        covered += oe - os;
+        cur = Math.max(cur, oe);
+      }
+      if (cur >= te) break;
+    }
+  }
+  return covered;
+}
+
 /** Merges a list of [start,end) windows (seconds) and measures how much of
  *  [lo,hi) they cover, returning both the covered total and the list of
  *  remaining gaps. Shared helper for the frequency-node optimizer below. */
@@ -347,8 +384,15 @@ function measureCoverage(windows, lo, hi) {
  * Brute-forces all 4^5 = 1024 possible "Activation Frequency UP" node-tier
  * assignments (0-3 of the 3 shared blue Member-area nodes per character,
  * each +4% permil) for a 5-member unit against a given song length, and
- * returns whichever assignment maximizes total active-skill coverage of
- * [0, songDurationSeconds] - ties broken by fewest total nodes spent.
+ * returns whichever assignment maximizes active-skill coverage - ties broken
+ * by fewest total nodes spent.
+ *
+ * If `feverWindows` is given (a list of [start,end) second ranges - e.g. this
+ * song's 5 fever/Special-Skill windows), coverage is scored LEXICOGRAPHICALLY:
+ * fever-window coverage is maximized first, and only among tier assignments
+ * that tie on that is overall song coverage then maximized, with fewest
+ * nodes as the final tiebreak. Pass an empty array (or omit) to just optimize
+ * total coverage with no fever priority.
  *
  * Uses the SAME formula as applyBoardBonuses (division, not a flat cooldown
  * cut): newCooldown = baseCooldown / (1 + tier * 0.04), since "Activation
@@ -358,14 +402,22 @@ function measureCoverage(windows, lo, hi) {
  *        - base (pre-board-bonus) cooldown/duration for each of the 5 members,
  *          at their current Bloom-resolved skill level.
  * @param {number} songDurationSeconds
+ * @param {number[][]} [feverWindows] - optional [start,end) ranges to prioritize
  * @returns {{tiers:number[], nodesUsed:number, coveredSeconds:number,
  *            totalSeconds:number, coveragePercent:number, gaps:number[][],
- *            isFullCoverage:boolean}|null}
+ *            isFullCoverage:boolean, feverTotalSeconds:number,
+ *            feverCoveredSeconds:number, feverCoveragePercent:number|null,
+ *            isFullFeverCoverage:boolean|null}|null}
  */
-export function findOptimalFrequencyNodes(activeSkills, songDurationSeconds) {
+export function findOptimalFrequencyNodes(activeSkills, songDurationSeconds, feverWindows) {
   if (!Array.isArray(activeSkills) || activeSkills.length !== 5) return null;
   if (!songDurationSeconds || songDurationSeconds <= 0) return null;
   const EPS = 1e-6;
+
+  const mergedFeverWindows = mergeWindows(
+    (feverWindows || []).map(([s, e]) => [Math.max(0, s), Math.min(songDurationSeconds, e)]).filter(([s, e]) => e > s)
+  );
+  const feverTotal = mergedFeverWindows.reduce((sum, [s, e]) => sum + (e - s), 0);
 
   let best = null;
   const TIERS = [0, 1, 2, 3];
@@ -389,13 +441,19 @@ export function findOptimalFrequencyNodes(activeSkills, songDurationSeconds) {
               }
             }
             const { coveredSeconds, gaps } = measureCoverage(windows, 0, songDurationSeconds);
+            const coveredFever = feverTotal > 0 ? coverageWithinTargets(windows, mergedFeverWindows) : 0;
             const nodesUsed = tiers.reduce((a, b) => a + b, 0);
-            if (
+
+            const better =
               !best ||
-              coveredSeconds > best.coveredSeconds + EPS ||
-              (Math.abs(coveredSeconds - best.coveredSeconds) <= EPS && nodesUsed < best.nodesUsed)
-            ) {
-              best = { tiers, coveredSeconds, gaps, nodesUsed };
+              coveredFever > best.coveredFever + EPS ||
+              (Math.abs(coveredFever - best.coveredFever) <= EPS && coveredSeconds > best.coveredSeconds + EPS) ||
+              (Math.abs(coveredFever - best.coveredFever) <= EPS &&
+                Math.abs(coveredSeconds - best.coveredSeconds) <= EPS &&
+                nodesUsed < best.nodesUsed);
+
+            if (better) {
+              best = { tiers, coveredSeconds, coveredFever, gaps, nodesUsed };
             }
           }
 
@@ -407,6 +465,10 @@ export function findOptimalFrequencyNodes(activeSkills, songDurationSeconds) {
     coveragePercent: (best.coveredSeconds / songDurationSeconds) * 100,
     gaps: best.gaps,
     isFullCoverage: best.coveredSeconds >= songDurationSeconds - EPS,
+    feverTotalSeconds: feverTotal,
+    feverCoveredSeconds: best.coveredFever,
+    feverCoveragePercent: feverTotal > 0 ? (best.coveredFever / feverTotal) * 100 : null,
+    isFullFeverCoverage: feverTotal > 0 ? best.coveredFever >= feverTotal - EPS : null,
   };
 }
 

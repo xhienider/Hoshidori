@@ -20,6 +20,7 @@ import {
   findOptimalFrequencyNodes,
   planFrequencyNodeUnlock,
 } from './js/unitEngine.js';
+import { computeCharacterActivityScores } from './js/activityModel.js';
 
 const COST_CALC_DATA = {"expTables": {"rarity_3": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150}, "rarity_4": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150, "61": 424650, "62": 446150, "63": 468650, "64": 492150, "65": 516650, "66": 542650, "67": 570150, "68": 599150, "69": 629650, "70": 661650}, "rarity_5": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150, "61": 424650, "62": 446150, "63": 468650, "64": 492150, "65": 516650, "66": 542650, "67": 570150, "68": 599150, "69": 629650, "70": 661650, "71": 695650, "72": 731650, "73": 769650, "74": 810150, "75": 853150, "76": 899150, "77": 948650, "78": 1001650, "79": 1059650, "80": 1122650}}, "spTraining": {"rarity_3_attribute_1": [{"newCap": 30, "materials": [{"name": "Cute Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Cute Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 400}, {"name": "Cute Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_3_attribute_2": [{"newCap": 30, "materials": [{"name": "Pure Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Pure Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 400}, {"name": "Pure Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_3_attribute_3": [{"newCap": 30, "materials": [{"name": "Happy Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Happy Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 400}, {"name": "Happy Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_4_attribute_1": [{"newCap": 40, "materials": [{"name": "Cute Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 400}, {"name": "Cute Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Cute Beads", "qty": 800}, {"name": "Cute Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_4_attribute_2": [{"newCap": 40, "materials": [{"name": "Pure Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 400}, {"name": "Pure Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Pure Beads", "qty": 800}, {"name": "Pure Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_4_attribute_3": [{"newCap": 40, "materials": [{"name": "Happy Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 400}, {"name": "Happy Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Happy Beads", "qty": 800}, {"name": "Happy Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_5_attribute_1": [{"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Cute Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Cute Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}], "rarity_5_attribute_2": [{"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Pure Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Pure Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}], "rarity_5_attribute_3": [{"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Happy Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Happy Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}]}};
 
@@ -1768,8 +1769,14 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls) {
  *  recommended node counts and the board-point cost to get there, and lets
  *  the user apply it in one click - reusing the same unlock-path logic a
  *  manual board click would use, just automated across all 5 boards at once.
- *  Nothing is changed until "Apply to Boards" is pressed. */
-function renderFrequencyNodePanel(unit, song, duration) {
+ *  Nothing is changed until "Apply to Boards" is pressed.
+ *
+ *  An optional "Prioritize fever windows" checkbox switches the optimizer to
+ *  lexicographic mode: fully cover the song's 5 fever/Special-Skill windows
+ *  first, and only maximize the rest of the song's coverage as a tiebreak -
+ *  same fever-window definition buildCoverageTable already uses elsewhere
+ *  (each fever timestamp + that slot's Special Skill effect duration). */
+function renderFrequencyNodePanel(unit, song, duration, specialResults) {
   const wrap = document.createElement('div');
   wrap.className = 'panel-sm';
   wrap.style.marginTop = '16px';
@@ -1778,6 +1785,20 @@ function renderFrequencyNodePanel(unit, song, duration) {
   label.className = 'panel-label';
   label.textContent = 'Activation Frequency Nodes';
   wrap.appendChild(label);
+
+  const feverRow = document.createElement('label');
+  feverRow.style.display = 'flex';
+  feverRow.style.alignItems = 'center';
+  feverRow.style.gap = '6px';
+  feverRow.style.margin = '4px 0 10px';
+  feverRow.style.fontSize = '13px';
+  feverRow.style.color = 'var(--text-dim)';
+  const feverCheckbox = document.createElement('input');
+  feverCheckbox.type = 'checkbox';
+  feverCheckbox.checked = true;
+  feverRow.appendChild(feverCheckbox);
+  feverRow.appendChild(document.createTextNode('Prioritize fever windows (cover those first, then the rest of the song)'));
+  wrap.appendChild(feverRow);
 
   const btn = document.createElement('button');
   btn.type = 'button';
@@ -1799,7 +1820,18 @@ function renderFrequencyNodePanel(unit, song, duration) {
     });
 
     const songDuration = song.playingSeconds || duration;
-    const rec = findOptimalFrequencyNodes(activeSkills, songDuration);
+
+    // Fever windows: each of the song's 5 fever timestamps paired with that
+    // slot's Special Skill effect duration - identical definition to
+    // buildCoverageTable's own specialWindows, so "fever" means the same
+    // thing everywhere in the app.
+    const feverWindows = feverCheckbox.checked
+      ? (song.feverSeconds || [])
+          .map((start, i) => [start, start + (specialResults?.[i]?.effectDurationSeconds || 0)])
+          .filter(([s, e]) => e > s)
+      : [];
+
+    const rec = findOptimalFrequencyNodes(activeSkills, songDuration, feverWindows);
     if (!rec) {
       resultBox.innerHTML = '<div class="empty-state">Could not compute a recommendation for this team.</div>';
       return;
@@ -1837,7 +1869,16 @@ function renderFrequencyNodePanel(unit, song, duration) {
       ? 'No gaps across the full track.'
       : `${rec.gaps.length} gap${rec.gaps.length === 1 ? '' : 's'} remain \u2014 this is the best achievable ceiling for this exact team at these skill levels.`;
 
+    let feverLine = '';
+    if (feverWindows.length) {
+      const feverPill = rec.isFullFeverCoverage
+        ? '<span class="pill met">100% FEVER COVERAGE</span>'
+        : `<span class="pill unmet">${rec.feverCoveragePercent.toFixed(1)}% FEVER COVERAGE</span>`;
+      feverLine = `<div class="effect-detail" style="margin-bottom:4px;">${feverPill} <span style="margin-left:8px;">across the song's 5 fever windows (${rec.feverTotalSeconds.toFixed(1)}s total) \u2014 prioritized ahead of overall coverage.</span></div>`;
+    }
+
     resultBox.innerHTML = `
+      ${feverLine}
       <div class="effect-detail" style="margin-bottom:8px;">${gapPill} <span style="margin-left:8px;">${gapNote}</span></div>
       <table class="cost-calc-mat-table">
         <thead><tr><th>Member</th><th>Nodes</th><th>Cost</th></tr></thead>
@@ -1929,7 +1970,7 @@ function renderCoverageRow(result, unit, scoreSupport) {
   `;
   coverageRowEl.appendChild(summary);
 
-  coverageRowEl.appendChild(renderFrequencyNodePanel(unit, song, duration));
+  coverageRowEl.appendChild(renderFrequencyNodePanel(unit, song, duration, result.specials));
 
   // Per-member stats: how much of the song each member's skill was actually
   // up, how often that uptime got suppressed by someone else's bigger bonus,
@@ -3259,6 +3300,213 @@ function songMatchesFilters(song, f, singerNamesById) {
   return true;
 }
 
+const CHARACTER_ACTIVITY_STATE = {
+  search: '',
+  sort: { column: 'final', direction: 1 }, // ascending by default = most "due" first
+  weights: { wCard: 0.59, wGen: 0.15, halfLifeDays: 30 }, // wSong derived as 1 - wCard
+};
+
+/** "Character Activity" - a just-for-fun heuristic guessing which characters
+ *  are most "due" for a new card/song, from card-release recency, song
+ *  recency, and a generation-mate contagion effect. NOT a validated
+ *  prediction - weights are exposed as sliders specifically so it reads as
+ *  the toy it is, not a forecast. See js/activityModel.js for the model. */
+function openCharacterActivityView() {
+  const overlay = document.createElement('div');
+  overlay.className = 'compare-page-overlay';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  const header = document.createElement('div');
+  header.className = 'compare-page-header';
+  header.innerHTML = `<div class="board-editor-title">Character Activity \u{1F52E}</div>`;
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'compare-page-close';
+  closeBtn.textContent = '\u2715 Back to Builder';
+  closeBtn.onclick = () => {
+    overlay.remove();
+    document.body.style.overflow = '';
+  };
+  header.appendChild(closeBtn);
+  overlay.appendChild(header);
+
+  const disclaimer = document.createElement('div');
+  disclaimer.className = 'ca-disclaimer';
+  disclaimer.innerHTML = `
+    <strong>Just for fun \u{1F52E}</strong> \u2014 this is a made-up heuristic guessing which characters are
+    "due" for a new card or song, based on how recently they've gotten one (plus a bit of
+    generation peer pressure). It's not based on real dev plans or any historical accuracy check.
+    Drag the sliders and watch the ranking shuffle \u2014 that's the whole point.
+  `;
+  overlay.appendChild(disclaimer);
+
+  const controls = document.createElement('div');
+  controls.className = 'ca-controls';
+  overlay.appendChild(controls);
+
+  const main = document.createElement('div');
+  main.className = 'ca-main';
+  overlay.appendChild(main);
+
+  const ca = CHARACTER_ACTIVITY_STATE;
+  const NOW = Date.now();
+
+  function makeSlider(labelText, min, max, step, value, onInput, formatValue) {
+    const group = document.createElement('div');
+    group.className = 'ca-control-group';
+    const labelRow = document.createElement('div');
+    labelRow.className = 'ca-control-label';
+    const valueSpan = document.createElement('span');
+    valueSpan.textContent = formatValue(value);
+    labelRow.innerHTML = `<span>${labelText}</span>`;
+    labelRow.appendChild(valueSpan);
+    group.appendChild(labelRow);
+    const input = document.createElement('input');
+    input.type = 'range';
+    input.min = min;
+    input.max = max;
+    input.step = step;
+    input.value = value;
+    input.oninput = () => {
+      const v = Number(input.value);
+      valueSpan.textContent = formatValue(v);
+      onInput(v);
+      renderMain();
+    };
+    group.appendChild(input);
+    return group;
+  }
+
+  const resetBtn = document.createElement('button');
+  resetBtn.type = 'button';
+  resetBtn.className = 'board-btn';
+  resetBtn.textContent = 'Reset weights';
+  resetBtn.onclick = () => {
+    ca.weights = { wCard: 0.59, wGen: 0.15, halfLifeDays: 30 };
+    renderControls();
+    renderMain();
+  };
+
+  function renderControls() {
+    controls.innerHTML = '';
+    controls.appendChild(
+      makeSlider('Card \u2194 Song emphasis', 0, 1, 0.01, ca.weights.wCard, (v) => (ca.weights.wCard = v), (v) => `${Math.round(v * 100)}% card / ${Math.round((1 - v) * 100)}% song`)
+    );
+    controls.appendChild(
+      makeSlider('Generation peer pressure', 0, 0.6, 0.01, ca.weights.wGen, (v) => (ca.weights.wGen = v), (v) => `${Math.round(v * 100)}%`)
+    );
+    controls.appendChild(
+      makeSlider('Song recency half-life', 7, 180, 1, ca.weights.halfLifeDays, (v) => (ca.weights.halfLifeDays = v), (v) => `${v} days`)
+    );
+    controls.appendChild(resetBtn);
+  }
+
+  function renderMain() {
+    main.innerHTML = '';
+
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'cv-search-wrap';
+    const searchInput = document.createElement('input');
+    searchInput.placeholder = 'Search character\u2026';
+    searchInput.value = ca.search;
+    searchInput.oninput = () => {
+      ca.search = searchInput.value;
+      renderMain();
+    };
+    searchWrap.appendChild(searchInput);
+    main.appendChild(searchWrap);
+
+    const scores = computeCharacterActivityScores(DATA.members, DATA.songs, {
+      wCard: ca.weights.wCard,
+      wSong: 1 - ca.weights.wCard,
+      wGen: ca.weights.wGen,
+      halfLifeDays: ca.weights.halfLifeDays,
+      nowMs: NOW,
+    });
+
+    const q = ca.search.trim().toLowerCase();
+    const filtered = q ? scores.filter((r) => r.name.toLowerCase().includes(q)) : scores;
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'cv-toolbar';
+    const countEl = document.createElement('div');
+    countEl.className = 'cv-count';
+    countEl.textContent = `${filtered.length} of ${scores.length} characters`;
+    toolbar.appendChild(countEl);
+    main.appendChild(toolbar);
+
+    const SORT_COLUMNS = [
+      { key: 'name', label: 'Character', getValue: (r) => r.name.toLowerCase() },
+      { key: 'generation', label: 'Generation', getValue: (r) => r.generation },
+      { key: 'card', label: 'Last Card', getValue: (r) => r.lastCardOrder },
+      { key: 'song', label: 'Last Song', getValue: (r) => r.lastSongDateMs ?? -1 },
+      { key: 'final', label: 'Saturation', getValue: (r) => r.finalScore },
+    ];
+
+    filtered.sort((a, b) => {
+      const col = SORT_COLUMNS.find((c) => c.key === ca.sort.column);
+      const av = col.getValue(a);
+      const bv = col.getValue(b);
+      if (av < bv) return -1 * ca.sort.direction;
+      if (av > bv) return 1 * ca.sort.direction;
+      return 0;
+    });
+
+    const list = document.createElement('div');
+    list.className = 'ca-list';
+    const headerRow = document.createElement('div');
+    headerRow.className = 'ca-list-row ca-list-header';
+    headerRow.appendChild(document.createElement('span')); // rank column, no header text
+    for (const col of SORT_COLUMNS) {
+      const span = document.createElement('span');
+      span.className = 'mv-sortable-header';
+      const isActive = ca.sort.column === col.key;
+      span.textContent = col.label + (isActive ? (ca.sort.direction === 1 ? ' \u25b2' : ' \u25bc') : '');
+      span.onclick = () => {
+        if (ca.sort.column === col.key) {
+          ca.sort.direction *= -1;
+        } else {
+          ca.sort.column = col.key;
+          ca.sort.direction = 1;
+        }
+        renderMain();
+      };
+      headerRow.appendChild(span);
+    }
+    list.appendChild(headerRow);
+
+    filtered.forEach((r, i) => {
+      const row = document.createElement('div');
+      row.className = 'ca-list-row';
+      const cardDisplay = r.lastCardOrder ? `#${r.lastCardOrder}` : '\u2014';
+      let songDisplay = '\u2014';
+      if (r.lastSongDateMs != null) {
+        const iso = new Date(r.lastSongDateMs).toISOString().slice(0, 10);
+        songDisplay = iso === '2022-12-31' ? 'At Launch' : iso;
+      }
+      const satPercent = Math.round(r.finalScore * 100);
+      const hue = Math.round(120 - r.finalScore * 120); // 120=green (due) -> 0=red (recently covered)
+      row.innerHTML = `
+        <span class="ca-rank">${i + 1}</span>
+        <span class="ca-name">${r.name}</span>
+        <span>${r.generation}</span>
+        <span>${cardDisplay}</span>
+        <span>${songDisplay}</span>
+        <span class="ca-sat-cell">
+          <span class="ca-sat-bar-track"><span class="ca-sat-bar-fill" style="width:${satPercent}%; background:hsl(${hue},65%,45%);"></span></span>
+          <span class="ca-sat-num">${satPercent}%</span>
+        </span>
+      `;
+      list.appendChild(row);
+    });
+    main.appendChild(list);
+  }
+
+  renderControls();
+  renderMain();
+}
+
 function openMusicViewer() {
   const overlay = document.createElement('div');
   overlay.className = 'compare-page-overlay';
@@ -4117,6 +4365,7 @@ async function main() {
   document.getElementById('cost-calc-btn').addEventListener('click', openCostCalculator);
   document.getElementById('card-viewer-btn').addEventListener('click', openCardViewer);
   document.getElementById('music-viewer-btn').addEventListener('click', openMusicViewer);
+  document.getElementById('activity-btn').addEventListener('click', openCharacterActivityView);
 
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.

@@ -878,6 +878,73 @@ header.masthead {
   font-size: 12px;
   color: var(--text-dim);
 }
+
+/* --- Character Activity view --- */
+.ca-disclaimer {
+  margin: 16px 24px 0;
+  padding: 12px 16px;
+  border: 1px solid var(--orange-dim);
+  border-radius: 8px;
+  background: rgba(225, 90, 36, 0.08);
+  color: var(--text-dim);
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.ca-disclaimer strong { color: var(--orange); }
+.ca-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 24px;
+  align-items: flex-end;
+  margin: 16px 24px 0;
+  padding: 14px 16px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  background: var(--panel-raised);
+}
+.ca-control-group { min-width: 200px; flex: 1; }
+.ca-control-label {
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.ca-control-label span:last-child { color: var(--orange); font-weight: 600; }
+.ca-control-group input[type='range'] { width: 100%; accent-color: var(--orange); }
+.ca-main { padding: 16px 24px 24px; min-width: 0; }
+.ca-list { display: flex; flex-direction: column; }
+.ca-list-row {
+  display: grid;
+  grid-template-columns: 40px 1.6fr 1.6fr 0.9fr 1fr 1.6fr;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-bottom: 1px solid var(--line);
+  font-size: 12.5px;
+}
+.ca-list-header {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--text-faint);
+  border-bottom: 1px solid var(--line);
+  cursor: default;
+}
+.ca-rank { color: var(--text-faint); font-family: var(--font-mono); }
+.ca-name { font-weight: 600; }
+.ca-sat-cell { display: flex; align-items: center; gap: 8px; }
+.ca-sat-bar-track {
+  flex: 1;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--line);
+  overflow: hidden;
+}
+.ca-sat-bar-fill { display: block; height: 100%; border-radius: 3px; }
+.ca-sat-num { font-family: var(--font-mono); font-size: 11px; color: var(--text-dim); min-width: 32px; text-align: right; }
 .cv-view-toggle { display: flex; gap: 8px; }
 .cv-view-btn {
   background: var(--panel-raised);
