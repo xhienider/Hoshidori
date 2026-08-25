@@ -320,6 +320,165 @@ export function boardPointsSpentFromSet(boardIndex, unlockedSet) {
   return total;
 }
 
+/** Merges a list of [start,end) windows (seconds) and measures how much of
+ *  [lo,hi) they cover, returning both the covered total and the list of
+ *  remaining gaps. Shared helper for the frequency-node optimizer below. */
+function measureCoverage(windows, lo, hi) {
+  const sorted = windows.slice().sort((a, b) => a[0] - b[0]);
+  let cur = lo;
+  let covered = 0;
+  const gaps = [];
+  for (const [s, e] of sorted) {
+    const start = Math.max(s, lo);
+    if (start > cur) {
+      gaps.push([cur, start]);
+      cur = start;
+    }
+    if (e > cur) {
+      covered += e - cur;
+      cur = e;
+    }
+  }
+  if (cur < hi) gaps.push([cur, hi]);
+  return { coveredSeconds: covered, gaps };
+}
+
+/**
+ * Brute-forces all 4^5 = 1024 possible "Activation Frequency UP" node-tier
+ * assignments (0-3 of the 3 shared blue Member-area nodes per character,
+ * each +4% permil) for a 5-member unit against a given song length, and
+ * returns whichever assignment maximizes total active-skill coverage of
+ * [0, songDurationSeconds] - ties broken by fewest total nodes spent.
+ *
+ * Uses the SAME formula as applyBoardBonuses (division, not a flat cooldown
+ * cut): newCooldown = baseCooldown / (1 + tier * 0.04), since "Activation
+ * Frequency UP X%" boosts 1/cooldown, not cooldown itself.
+ *
+ * @param {{coolTimeSeconds:number, effectDurationSeconds:number}[]} activeSkills
+ *        - base (pre-board-bonus) cooldown/duration for each of the 5 members,
+ *          at their current Bloom-resolved skill level.
+ * @param {number} songDurationSeconds
+ * @returns {{tiers:number[], nodesUsed:number, coveredSeconds:number,
+ *            totalSeconds:number, coveragePercent:number, gaps:number[][],
+ *            isFullCoverage:boolean}|null}
+ */
+export function findOptimalFrequencyNodes(activeSkills, songDurationSeconds) {
+  if (!Array.isArray(activeSkills) || activeSkills.length !== 5) return null;
+  if (!songDurationSeconds || songDurationSeconds <= 0) return null;
+  const EPS = 1e-6;
+
+  let best = null;
+  const TIERS = [0, 1, 2, 3];
+  for (const t0 of TIERS)
+    for (const t1 of TIERS)
+      for (const t2 of TIERS)
+        for (const t3 of TIERS)
+          for (const t4 of TIERS) {
+            const tiers = [t0, t1, t2, t3, t4];
+            const windows = [];
+            for (let i = 0; i < 5; i++) {
+              const skill = activeSkills[i];
+              if (!skill || skill.coolTimeSeconds == null || skill.effectDurationSeconds == null) continue;
+              const effCool = skill.coolTimeSeconds / (1 + tiers[i] * 0.04);
+              if (effCool <= 0) continue;
+              let t = effCool;
+              while (t < songDurationSeconds - EPS) {
+                const end = Math.min(t + skill.effectDurationSeconds, songDurationSeconds);
+                windows.push([t, end]);
+                t += effCool;
+              }
+            }
+            const { coveredSeconds, gaps } = measureCoverage(windows, 0, songDurationSeconds);
+            const nodesUsed = tiers.reduce((a, b) => a + b, 0);
+            if (
+              !best ||
+              coveredSeconds > best.coveredSeconds + EPS ||
+              (Math.abs(coveredSeconds - best.coveredSeconds) <= EPS && nodesUsed < best.nodesUsed)
+            ) {
+              best = { tiers, coveredSeconds, gaps, nodesUsed };
+            }
+          }
+
+  return {
+    tiers: best.tiers,
+    nodesUsed: best.nodesUsed,
+    coveredSeconds: best.coveredSeconds,
+    totalSeconds: songDurationSeconds,
+    coveragePercent: (best.coveredSeconds / songDurationSeconds) * 100,
+    gaps: best.gaps,
+    isFullCoverage: best.coveredSeconds >= songDurationSeconds - EPS,
+  };
+}
+
+/**
+ * Finds the cheapest (fewest board points) way to reach at least
+ * `targetCount` of a character's 3 shared "Activation Frequency UP" (blue
+ * Member-area) nodes unlocked, reusing findUnlockPath so any connector nodes
+ * needed en route are included in both the cost and the returned position
+ * list. Greedy - at each step adds whichever still-needed frequency node has
+ * the cheapest incremental path given what's already (hypothetically)
+ * unlocked so far. Not a guaranteed global optimum if two of the three nodes
+ * share part of their path, but the 3 frequency nodes sit on separate
+ * branches on every character's board, so greedy is exact in practice.
+ *
+ * @param {Map<string,object>} boardIndex - from buildBoardIndex()
+ * @param {Set<string>} currentUnlockedSet - this character's current unlocks
+ * @param {number} targetCount - 0-3, how many frequency nodes should end up unlocked
+ * @returns {{targetCount:number, currentCount:number, nodesToUnlock:string[],
+ *            additionalPointCost:number, alreadySufficient:boolean}}
+ */
+export function planFrequencyNodeUnlock(boardIndex, currentUnlockedSet, targetCount) {
+  const freqNodePositions = [];
+  for (const [posKey, node] of boardIndex.entries()) {
+    if (node.kind === 'effect' && node.area === 'member' && node.type === 'LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP') {
+      freqNodePositions.push(posKey);
+    }
+  }
+
+  const alreadyUnlocked = freqNodePositions.filter((p) => currentUnlockedSet.has(p));
+  const target = Math.max(0, Math.min(targetCount, freqNodePositions.length));
+  const stillNeeded = target - alreadyUnlocked.length;
+
+  if (stillNeeded <= 0) {
+    return { targetCount: target, currentCount: alreadyUnlocked.length, nodesToUnlock: [], additionalPointCost: 0, alreadySufficient: true };
+  }
+
+  const working = new Set(currentUnlockedSet);
+  const allNewPositions = [];
+  let totalCost = 0;
+
+  for (let i = 0; i < stillNeeded; i++) {
+    let bestCand = null;
+    let bestPath = null;
+    let bestCost = Infinity;
+    for (const cand of freqNodePositions) {
+      if (working.has(cand)) continue;
+      const [x, y] = cand.split(',').map(Number);
+      const path = findUnlockPath(boardIndex, x, y);
+      if (!path) continue;
+      const newSteps = path.filter((p) => !working.has(p));
+      const cost = newSteps.reduce((sum, p) => sum + (boardIndex.get(p)?.cost || 0), 0);
+      if (cost < bestCost) {
+        bestCost = cost;
+        bestCand = cand;
+        bestPath = newSteps;
+      }
+    }
+    if (bestCand == null) break; // shouldn't happen on real board data
+    for (const p of bestPath) working.add(p);
+    allNewPositions.push(...bestPath);
+    totalCost += bestCost;
+  }
+
+  return {
+    targetCount: target,
+    currentCount: alreadyUnlocked.length,
+    nodesToUnlock: allNewPositions,
+    additionalPointCost: totalCost,
+    alreadySufficient: false,
+  };
+}
+
 /**
  * @param {Record<string, Set<string>>} unlockedPositions - characterId -> Set of "x,y" unlocked position keys
  * @param {Record<string, object>} boardCategoriesData - board_categories.json

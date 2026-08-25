@@ -17,6 +17,8 @@ import {
   canUnlock,
   pruneDisconnected,
   findUnlockPath,
+  findOptimalFrequencyNodes,
+  planFrequencyNodeUnlock,
 } from './js/unitEngine.js';
 
 const COST_CALC_DATA = {"expTables": {"rarity_3": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150}, "rarity_4": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150, "61": 424650, "62": 446150, "63": 468650, "64": 492150, "65": 516650, "66": 542650, "67": 570150, "68": 599150, "69": 629650, "70": 661650}, "rarity_5": {"1": 0, "2": 40, "3": 100, "4": 190, "5": 310, "6": 460, "7": 650, "8": 880, "9": 1160, "10": 1500, "11": 1900, "12": 2400, "13": 3000, "14": 3700, "15": 4550, "16": 5550, "17": 6700, "18": 8050, "19": 9600, "20": 11400, "21": 13500, "22": 15900, "23": 18600, "24": 21600, "25": 24900, "26": 28550, "27": 32550, "28": 36900, "29": 41600, "30": 46650, "31": 52050, "32": 57850, "33": 64050, "34": 70650, "35": 77650, "36": 85050, "37": 92850, "38": 101050, "39": 109650, "40": 118650, "41": 128150, "42": 138150, "43": 148650, "44": 159650, "45": 171150, "46": 183150, "47": 195650, "48": 208650, "49": 222150, "50": 236150, "51": 250650, "52": 265650, "53": 281150, "54": 297150, "55": 313650, "56": 330650, "57": 348150, "58": 366150, "59": 384650, "60": 404150, "61": 424650, "62": 446150, "63": 468650, "64": 492150, "65": 516650, "66": 542650, "67": 570150, "68": 599150, "69": 629650, "70": 661650, "71": 695650, "72": 731650, "73": 769650, "74": 810150, "75": 853150, "76": 899150, "77": 948650, "78": 1001650, "79": 1059650, "80": 1122650}}, "spTraining": {"rarity_3_attribute_1": [{"newCap": 30, "materials": [{"name": "Cute Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Cute Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 400}, {"name": "Cute Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_3_attribute_2": [{"newCap": 30, "materials": [{"name": "Pure Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Pure Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 400}, {"name": "Pure Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_3_attribute_3": [{"newCap": 30, "materials": [{"name": "Happy Beads", "qty": 100}, {"name": "Hologold", "qty": 20000}]}, {"newCap": 40, "materials": [{"name": "Happy Beads", "qty": 200}, {"name": "Hologold", "qty": 60000}]}, {"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 400}, {"name": "Happy Crystals", "qty": 100}, {"name": "Hologold", "qty": 120000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 200}, {"name": "Hologold", "qty": 200000}]}], "rarity_4_attribute_1": [{"newCap": 40, "materials": [{"name": "Cute Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 400}, {"name": "Cute Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Cute Beads", "qty": 800}, {"name": "Cute Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_4_attribute_2": [{"newCap": 40, "materials": [{"name": "Pure Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 400}, {"name": "Pure Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Pure Beads", "qty": 800}, {"name": "Pure Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_4_attribute_3": [{"newCap": 40, "materials": [{"name": "Happy Beads", "qty": 200}, {"name": "Hologold", "qty": 35000}]}, {"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 400}, {"name": "Happy Crystals", "qty": 100}, {"name": "Hologold", "qty": 105000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 200}, {"name": "Hologold", "qty": 210000}]}, {"newCap": 70, "materials": [{"name": "Happy Beads", "qty": 800}, {"name": "Happy Crystals", "qty": 400}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 350000}]}], "rarity_5_attribute_1": [{"newCap": 50, "materials": [{"name": "Cute Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Cute Beads", "qty": 600}, {"name": "Cute Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Cute Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Cute Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}], "rarity_5_attribute_2": [{"newCap": 50, "materials": [{"name": "Pure Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Pure Beads", "qty": 600}, {"name": "Pure Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Pure Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Pure Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}], "rarity_5_attribute_3": [{"newCap": 50, "materials": [{"name": "Happy Beads", "qty": 300}, {"name": "Hologold", "qty": 75000}]}, {"newCap": 60, "materials": [{"name": "Happy Beads", "qty": 600}, {"name": "Happy Crystals", "qty": 150}, {"name": "Hologold", "qty": 225000}]}, {"newCap": 70, "materials": [{"name": "Happy Crystals", "qty": 600}, {"name": "Hololium", "qty": 1}, {"name": "Hologold", "qty": 450000}]}, {"newCap": 80, "materials": [{"name": "Happy Crystals", "qty": 1200}, {"name": "Hololium", "qty": 3}, {"name": "Hologold", "qty": 750000}]}]}};
@@ -1760,6 +1762,118 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls) {
   return wrap;
 }
 
+/** "Recommend Frequency Nodes" panel: on click, brute-forces the 0-3-per-
+ *  member "Activation Frequency UP" node tiers that maximize this team's
+ *  active-skill coverage of the selected song, previews current-vs-
+ *  recommended node counts and the board-point cost to get there, and lets
+ *  the user apply it in one click - reusing the same unlock-path logic a
+ *  manual board click would use, just automated across all 5 boards at once.
+ *  Nothing is changed until "Apply to Boards" is pressed. */
+function renderFrequencyNodePanel(unit, song, duration) {
+  const wrap = document.createElement('div');
+  wrap.className = 'panel-sm';
+  wrap.style.marginTop = '16px';
+
+  const label = document.createElement('div');
+  label.className = 'panel-label';
+  label.textContent = 'Activation Frequency Nodes';
+  wrap.appendChild(label);
+
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'board-btn';
+  btn.textContent = 'Recommend Frequency Nodes';
+  wrap.appendChild(btn);
+
+  const resultBox = document.createElement('div');
+  resultBox.style.marginTop = '10px';
+  wrap.appendChild(resultBox);
+
+  btn.addEventListener('click', () => {
+    const activeSkills = unit.map((u) => {
+      const level = getSkillLevel(u.card, u.bloom, DATA.cardPotentials, SKILL_LEVEL_TYPES.ACTIVE);
+      const levelData = u.card.activeSkill?.[String(level)];
+      return levelData
+        ? { coolTimeSeconds: levelData.coolTimeMs / 1000, effectDurationSeconds: levelData.effectDurationMs / 1000 }
+        : { coolTimeSeconds: null, effectDurationSeconds: null };
+    });
+
+    const songDuration = song.playingSeconds || duration;
+    const rec = findOptimalFrequencyNodes(activeSkills, songDuration);
+    if (!rec) {
+      resultBox.innerHTML = '<div class="empty-state">Could not compute a recommendation for this team.</div>';
+      return;
+    }
+
+    const perMember = unit.map((u, i) => {
+      const characterId = u.card.characterId;
+      const charData = DATA.boardCategories[characterId];
+      const boardIndex = charData ? buildBoardIndex(charData) : null;
+      const currentSet = state.boardSelections[characterId] || new Set();
+      const plan = boardIndex
+        ? planFrequencyNodeUnlock(boardIndex, currentSet, rec.tiers[i])
+        : { targetCount: rec.tiers[i], currentCount: 0, nodesToUnlock: [], additionalPointCost: 0, alreadySufficient: true };
+      return { u, characterId, plan };
+    });
+
+    const totalAdditionalCost = perMember.reduce((sum, m) => sum + m.plan.additionalPointCost, 0);
+    const anyChanges = perMember.some((m) => m.plan.nodesToUnlock.length > 0);
+
+    const rows = perMember
+      .map(({ u, plan }) => {
+        const changeCell =
+          plan.currentCount === plan.targetCount
+            ? `${plan.targetCount}/3 (no change)`
+            : `${plan.currentCount}/3 \u2192 ${plan.targetCount}/3`;
+        const costCell = plan.additionalPointCost ? `+${plan.additionalPointCost} pts` : '\u2014';
+        return `<tr><td>${u.card.shortName}</td><td>${changeCell}</td><td class="qty">${costCell}</td></tr>`;
+      })
+      .join('');
+
+    const gapPill = rec.isFullCoverage
+      ? '<span class="pill met">100% COVERAGE</span>'
+      : `<span class="pill situational">${rec.coveragePercent.toFixed(1)}% COVERAGE</span>`;
+    const gapNote = rec.isFullCoverage
+      ? 'No gaps across the full track.'
+      : `${rec.gaps.length} gap${rec.gaps.length === 1 ? '' : 's'} remain \u2014 this is the best achievable ceiling for this exact team at these skill levels.`;
+
+    resultBox.innerHTML = `
+      <div class="effect-detail" style="margin-bottom:8px;">${gapPill} <span style="margin-left:8px;">${gapNote}</span></div>
+      <table class="cost-calc-mat-table">
+        <thead><tr><th>Member</th><th>Nodes</th><th>Cost</th></tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+      <div class="effect-detail" style="margin-top:8px;">Total additional board points: <strong>${totalAdditionalCost}</strong></div>
+    `;
+
+    if (anyChanges) {
+      const applyBtn = document.createElement('button');
+      applyBtn.type = 'button';
+      applyBtn.className = 'board-btn';
+      applyBtn.style.marginTop = '10px';
+      applyBtn.textContent = 'Apply to Boards';
+      applyBtn.addEventListener('click', () => {
+        for (const { characterId, plan } of perMember) {
+          if (!plan.nodesToUnlock.length) continue;
+          if (!state.boardSelections[characterId]) state.boardSelections[characterId] = new Set();
+          for (const posKey of plan.nodesToUnlock) state.boardSelections[characterId].add(posKey);
+        }
+        recompute();
+        renderSelectionRow();
+      });
+      resultBox.appendChild(applyBtn);
+    } else {
+      const note = document.createElement('div');
+      note.className = 'effect-detail';
+      note.style.marginTop = '6px';
+      note.textContent = 'Boards are already at the recommended configuration \u2014 nothing to apply.';
+      resultBox.appendChild(note);
+    }
+  });
+
+  return wrap;
+}
+
 function renderCoverageRow(result, unit, scoreSupport) {
   coverageRowEl.innerHTML = '';
   coverageRowEl.className = 'panel';
@@ -1814,6 +1928,8 @@ function renderCoverageRow(result, unit, scoreSupport) {
     <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
   `;
   coverageRowEl.appendChild(summary);
+
+  coverageRowEl.appendChild(renderFrequencyNodePanel(unit, song, duration));
 
   // Per-member stats: how much of the song each member's skill was actually
   // up, how often that uptime got suppressed by someone else's bigger bonus,
@@ -4014,3 +4130,8 @@ main().catch((err) => {
   coverageRowEl.innerHTML = `<div class="empty-state">Failed to load data: ${err.message}</div>`;
   console.error(err);
 });
+
+// Exposed for headless smoke-testing only (see /tmp/smoke_test.mjs) - harmless
+// in production since this file is the page's root module and nothing else
+// imports it.
+export { state, DATA, recompute, renderSelectionRow, computeFullResult };
