@@ -229,6 +229,31 @@ async function loadData() {
 }
 
 // ---------------------------------------------------------------------------
+// Note density (notes-per-second per song/difficulty) - lazy-loaded per song
+// rather than bundled upfront, since the full set is ~1.4MB across all songs
+// but a typical single-song file is only ~5-15KB. Not every song has data
+// (only songs with a .sus chart available at data-build time do); missing
+// entries cache as `null` so we don't refetch a 404 repeatedly.
+// ---------------------------------------------------------------------------
+const NOTE_DENSITY_CACHE = {}; // songId -> {easy:[...], normal:[...], hard:[...], expert:[...]} | null
+
+/** Returns cached note-density data for a song if already loaded (sync), or
+ *  kicks off a fetch and returns undefined - `onLoaded` (defaults to the
+ *  global recompute()) runs once the fetch resolves, so callers with their
+ *  own local render function (e.g. the Compare page) can pass that instead. */
+function getNoteDensity(songId, onLoaded = recompute) {
+  if (songId in NOTE_DENSITY_CACHE) return NOTE_DENSITY_CACHE[songId];
+  fetch(`data/note_density/${songId}.json`)
+    .then((r) => (r.ok ? r.json() : null))
+    .catch(() => null)
+    .then((data) => {
+      NOTE_DENSITY_CACHE[songId] = data;
+      onLoaded(); // re-renders are cheap/idempotent; simplest to always refresh rather than track staleness
+    });
+  return undefined; // still loading
+}
+
+// ---------------------------------------------------------------------------
 // App state
 // ---------------------------------------------------------------------------
 
@@ -242,6 +267,7 @@ const state = {
     { cardId: null, level: 80, bloom: 0 },
   ],
   songId: null,
+  difficulty: 'expert', // 'easy' | 'normal' | 'hard' | 'expert' - drives the note-density column in the coverage table
   boardSelections: {}, // characterId -> { "leader|EFFECT_TYPE" | "member|EFFECT_TYPE": countUnlocked }
   connectSelections: {}, // characterId -> { center?, leader?, member?: { connectorCardId, connectorBloom, allocations } }
   pickerFilters: {
@@ -1692,7 +1718,51 @@ function renderMemberActiveCard(activeResult, card, scoreSupport) {
  *  `referenceColEls`, if given, are used to match column widths to the
  *  selection cards above (main page only); omitted entirely falls back to
  *  sensible defaults, which is what Compare's tabbed view uses. */
-function buildCoverageTable(timeline, unitCards, song, referenceColEls) {
+const DIFFICULTIES = ['easy', 'normal', 'hard', 'expert'];
+
+/** Small Easy/Normal/Hard/Expert toggle driving the coverage table's note-
+ *  density column. Global (state.difficulty), not per-song - shared by the
+ *  main builder and the Compare page since both read the same state field. */
+function renderDifficultyPicker(container, onChange) {
+  const row = document.createElement('div');
+  row.className = 'difficulty-picker';
+  for (const diff of DIFFICULTIES) {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.className = 'difficulty-btn' + (state.difficulty === diff ? ' active' : '');
+    btn.textContent = diff[0].toUpperCase() + diff.slice(1);
+    btn.onclick = () => {
+      if (state.difficulty === diff) return;
+      state.difficulty = diff;
+      onChange();
+    };
+    row.appendChild(btn);
+  }
+  container.appendChild(row);
+}
+
+const NOTE_TYPE_LABELS = {
+  T: 'tap',
+  F: 'flick',
+  LS: 'long start',
+  LE: 'long end',
+  LFE: 'long flick end',
+  LR: 'long relay',
+  LC: 'long hold',
+};
+function decodeNoteTypeBreakdown(typesObj) {
+  if (!typesObj) return '';
+  return Object.entries(typesObj)
+    .map(([code, count]) => {
+      const critical = code.endsWith('!');
+      const base = critical ? code.slice(0, -1) : code;
+      const label = NOTE_TYPE_LABELS[base] || base;
+      return `${count} ${critical ? 'critical ' : ''}${label}`;
+    })
+    .join(', ');
+}
+
+function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDensityEntries) {
   const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
   const specialWindows = song.feverSeconds
     .map((start, i) => ({ start, end: start + (timeline._specials?.[i]?.effectDurationSeconds || 0) }))
@@ -1718,6 +1788,12 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls) {
   const maxCol = document.createElement('col');
   maxCol.style.width = Math.round(leaderColWidth * 0.45) + 'px';
   colgroup.appendChild(maxCol);
+  const showNotesColumn = noteDensityEntries !== null;
+  if (showNotesColumn) {
+    const notesCol = document.createElement('col');
+    notesCol.style.width = Math.round(leaderColWidth * 0.4) + 'px';
+    colgroup.appendChild(notesCol);
+  }
   memberColWidths.forEach((w) => {
     const c = document.createElement('col');
     c.style.width = w + 'px';
@@ -1727,7 +1803,8 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls) {
 
   const thead = document.createElement('thead');
   const headRow = document.createElement('tr');
-  headRow.innerHTML = '<th>Time</th><th>Max</th>' + unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
+  const notesHeader = showNotesColumn ? '<th title="Notes this second (hover a value for the type breakdown)">Notes</th>' : '';
+  headRow.innerHTML = '<th>Time</th><th>Max</th>' + notesHeader + unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
   thead.appendChild(headRow);
   table.appendChild(thead);
 
@@ -1743,6 +1820,19 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls) {
     const ss = String(point.t % 60).padStart(2, '0');
     let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
     rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
+
+    if (showNotesColumn) {
+      const entry = noteDensityEntries === undefined ? undefined : noteDensityEntries[point.t];
+      if (noteDensityEntries === undefined) {
+        rowHtml += '<td class="cell-notes-loading">\u2026</td>';
+      } else if (!entry || entry[0] === 0) {
+        rowHtml += '<td class="cell-notes"></td>';
+      } else {
+        const breakdown = decodeNoteTypeBreakdown(entry[1]);
+        const title = breakdown ? `${entry[0]} notes: ${breakdown}` : `${entry[0]} notes`;
+        rowHtml += `<td class="cell-notes" title="${title}">${entry[0]}</td>`;
+      }
+    }
 
     for (const m of point.perMember) {
       if (m.active) {
@@ -1947,6 +2037,8 @@ function renderCoverageRow(result, unit, scoreSupport) {
     return;
   }
 
+  renderDifficultyPicker(coverageRowEl, recompute);
+
   const unitCards = unit.map((u) => u.card);
   const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
 
@@ -1960,8 +2052,11 @@ function renderCoverageRow(result, unit, scoreSupport) {
   });
   timeline._specials = result.specials; // stashed for buildCoverageTable's special-window highlighting
 
+  const noteDensityBySong = getNoteDensity(song.id);
+  const noteDensityEntries = noteDensityBySong === undefined ? undefined : noteDensityBySong === null ? null : noteDensityBySong[state.difficulty] ?? null;
+
   const cardCols = document.querySelectorAll('#selection-row .member-col');
-  coverageRowEl.appendChild(buildCoverageTable(timeline, unitCards, song, cardCols));
+  coverageRowEl.appendChild(buildCoverageTable(timeline, unitCards, song, cardCols, noteDensityEntries));
 
   // Full-width horizontal summary, below the table.
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
@@ -2709,7 +2804,13 @@ function openComparePage() {
       durationSeconds: duration,
     });
     timeline._specials = computed.result.specials;
-    secBySecSection.appendChild(buildCoverageTable(timeline, unitCards, song));
+
+    renderDifficultyPicker(secBySecSection, () => renderSecBySec(computedA, computedB));
+    const noteDensityBySong = getNoteDensity(song.id, () => renderSecBySec(computedA, computedB));
+    const noteDensityEntries =
+      noteDensityBySong === undefined ? undefined : noteDensityBySong === null ? null : noteDensityBySong[state.difficulty] ?? null;
+
+    secBySecSection.appendChild(buildCoverageTable(timeline, unitCards, song, undefined, noteDensityEntries));
   }
 
   function openSongSubPicker(side, onPicked) {

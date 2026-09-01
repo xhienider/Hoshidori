@@ -2005,6 +2005,38 @@ header.masthead {
   opacity: 0.65;
 }
 
+.coverage-table td.cell-notes {
+  color: var(--text-dim);
+  font-weight: 600;
+}
+.coverage-table td.cell-notes-loading {
+  color: var(--text-faint);
+  opacity: 0.5;
+}
+
+.difficulty-picker {
+  display: flex;
+  gap: 6px;
+  margin: 4px 0 12px;
+}
+.difficulty-btn {
+  background: var(--bg);
+  border: 1px solid var(--line);
+  color: var(--text-dim);
+  border-radius: 4px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  padding: 4px 10px;
+  cursor: pointer;
+}
+.difficulty-btn:hover { border-color: var(--orange-dim); color: var(--orange); }
+.difficulty-btn.active {
+  border-color: var(--orange);
+  color: var(--orange);
+  background: rgba(225, 90, 36, 0.1);
+  font-weight: 700;
+}
+
 .coverage-table tr.fever-row td:first-child {
   color: var(--orange);
   font-weight: 700;
