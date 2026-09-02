@@ -1006,10 +1006,19 @@ export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseSt
   const baseByCardId = Object.fromEntries(baseStats.map((m) => [m.cardId, m.stats]));
   const memberOnlyByCardId = memberOnlyBaseStats ? Object.fromEntries(memberOnlyBaseStats.map((m) => [m.cardId, m.stats])) : null;
 
+  // Per-member accumulators, keyed by cardId - needed so Member Power-Up
+  // Bonus can be computed per member (per member parameter + outfit skill +
+  // passive skill + red/blue board bonus, summed, times the power-up %) then
+  // summed across the unit, rather than applying the % to one team-wide total.
+  const perMember = {};
+  const ensure = (cardId) => (perMember[cardId] ??= { cardId, memberParameter: 0, outfitSkill: 0, passiveSkill: 0, redBonus: 0, blueBonus: 0 });
+
   // Member Parameter: base (level + bloom, no board) stats, summed.
   let memberParameter = 0;
   for (const m of baseStats) {
-    memberParameter += m.stats.performance + m.stats.technique + m.stats.sense;
+    const total = m.stats.performance + m.stats.technique + m.stats.sense;
+    memberParameter += total;
+    ensure(m.cardId).memberParameter = total;
   }
 
   // Blue Bonus: member-area board nodes + member-portion of connect patterns
@@ -1025,38 +1034,61 @@ export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseSt
     const full = m.stats.performance + m.stats.technique + m.stats.sense;
     const pure = base.performance + base.technique + base.sense;
     const memberOnly = memberOnlyByCardId?.[m.cardId];
+    let memberBlue, memberRed;
     if (memberOnly) {
       const memberOnlyTotal = memberOnly.performance + memberOnly.technique + memberOnly.sense;
-      blueBonus += memberOnlyTotal - pure;
-      redBonus += full - memberOnlyTotal;
+      memberBlue = memberOnlyTotal - pure;
+      memberRed = full - memberOnlyTotal;
     } else {
-      blueBonus += full - pure; // no split possible - lump it all as before
+      memberBlue = full - pure; // no split possible - lump it all as before
+      memberRed = 0;
     }
+    blueBonus += memberBlue;
+    redBonus += memberRed;
+    const acc = ensure(m.cardId);
+    acc.blueBonus = memberBlue;
+    acc.redBonus = memberRed;
   }
   const holomemBoardBonus = blueBonus + redBonus;
 
-  // Outfit Skill: the leader's own leader-skill stat buff, applied to the
-  // relevant BASE stat total across the unit (not the board-buffed total).
+  // Outfit Skill: the leader's own leader-skill stat buff. Sum of
+  // roundup(affected stat * bonus), per member per stat - not one roundup of
+  // the aggregated total, since ceil(a)+ceil(b) generally != ceil(a+b).
   let outfitSkill = 0;
   const leaderEffect = result.leader?.effects?.[0];
   if (leaderEffect && result.leader.conditionMet === true) {
     const permil = Number(leaderEffect.valuePermil ?? leaderEffect.value ?? 0);
-    let relevantBase = 0;
-    if (leaderEffect.type?.includes('ALL_PARAMETER')) {
-      relevantBase = memberParameter;
-    } else if (leaderEffect.type?.includes('PERFORMANCE')) {
-      relevantBase = baseStats.reduce((s, m) => s + m.stats.performance, 0);
-    } else if (leaderEffect.type?.includes('TECHNIQUE')) {
-      relevantBase = baseStats.reduce((s, m) => s + m.stats.technique, 0);
-    } else if (leaderEffect.type?.includes('SENSE')) {
-      relevantBase = baseStats.reduce((s, m) => s + m.stats.sense, 0);
+    const bonus = permil / 1000;
+    const isAllParam = leaderEffect.type?.includes('ALL_PARAMETER');
+    const statKey = isAllParam
+      ? null
+      : leaderEffect.type?.includes('PERFORMANCE')
+      ? 'performance'
+      : leaderEffect.type?.includes('TECHNIQUE')
+      ? 'technique'
+      : leaderEffect.type?.includes('SENSE')
+      ? 'sense'
+      : null;
+    if (isAllParam || statKey) {
+      for (const m of baseStats) {
+        let contribution = 0;
+        if (isAllParam) {
+          contribution += Math.ceil(m.stats.performance * bonus);
+          contribution += Math.ceil(m.stats.technique * bonus);
+          contribution += Math.ceil(m.stats.sense * bonus);
+        } else {
+          contribution += Math.ceil(m.stats[statKey] * bonus);
+        }
+        outfitSkill += contribution;
+        ensure(m.cardId).outfitSkill = contribution;
+      }
     }
-    outfitSkill = Math.round(relevantBase * (permil / 1000));
   }
 
   // Passive Skill: only the stat-boosting passive effect types (ALL/PERF/
   // TECH/SENSE _UP_PERMIL_UP) - Score Support is a different mechanic and
-  // belongs to the Score Bonus side, not Overall Power.
+  // belongs to the Score Bonus side, not Overall Power. Same roundup-per-
+  // member-per-stat rule as Outfit Skill.
   const STAT_KEY_BY_TYPE = {
     LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP: 'performance',
     LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP: 'technique',
@@ -1070,17 +1102,25 @@ export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseSt
       const statKey = STAT_KEY_BY_TYPE[effect.type];
       const isAllParam = effect.type === ALL_PARAM_TYPE;
       if (!statKey && !isAllParam) continue;
+      const bonus = effect.valuePermil / 1000;
       for (const recipientId of effect.recipients) {
         const base = baseByCardId[recipientId];
         if (!base) continue;
-        const relevantBase = isAllParam ? base.performance + base.technique + base.sense : base[statKey];
-        passiveSkill += relevantBase * (effect.valuePermil / 1000);
+        let contribution = 0;
+        if (isAllParam) {
+          contribution += Math.ceil(base.performance * bonus);
+          contribution += Math.ceil(base.technique * bonus);
+          contribution += Math.ceil(base.sense * bonus);
+        } else {
+          contribution += Math.ceil(base[statKey] * bonus);
+        }
+        passiveSkill += contribution;
+        ensure(recipientId).passiveSkill += contribution;
       }
     }
   }
-  passiveSkill = Math.round(passiveSkill);
 
-  return { memberParameter, outfitSkill, holomemBoardBonus, redBonus, blueBonus, passiveSkill };
+  return { memberParameter, outfitSkill, holomemBoardBonus, redBonus, blueBonus, passiveSkill, perMember: Object.values(perMember) };
 }
 
 export function estimatePassivePower(passiveResults, memberStats) {

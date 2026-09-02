@@ -1896,6 +1896,15 @@ header.masthead {
   margin-top: 10px;
 }
 .power-breakdown .num { text-align: right; }
+.power-row-indent {
+  padding-left: 16px;
+  color: var(--text-faint);
+  font-size: 10.5px;
+}
+.power-row-header-value {
+  font-weight: 700;
+  color: var(--text);
+}
 
 .power-percent-wrap {
   display: flex;
