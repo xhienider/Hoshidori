@@ -1287,23 +1287,23 @@ function strippedTypeCode(code) {
  * crosses a 100-combo threshold mid-second, exact otherwise (per-second data
  * doesn't preserve note-by-note order within a second).
  *
+ * totalChartWeight is passed in rather than derived from noteDensityEntries -
+ * it must include chart-wide notes that the per-second display data omits
+ * (slide relay points with critical=None, which don't independently earn
+ * combo but still occupy a slot in the PERFECT_PLUS coefficient pool -
+ * confirmed against a real in-game score discrepancy, see note_density
+ * generation script). Summing noteDensityEntries directly under-counts.
+ *
  * @param {object[]} timeline - simulateActiveTimeline() output (gives maxBonus per second)
- * @param {(number[]|undefined)[]} noteDensityEntries - per-second [count, {code:count}] from note_density/{musicId}.json, for the chosen difficulty
+ * @param {(number[]|undefined)[]} noteDensityEntries - per-second [count, {code:count}] from note_density/{musicId}.json's perSecond array, for the chosen difficulty
  * @param {number} deckPower - Overall Power total (memberParameter+outfitSkill+passiveSkill+holomemBoardBonus+memoryBonus+powerUpBonus)
  * @param {number} liveScoreCoefficientPermil - song's own coefficient (Music.json)
  * @param {number} difficultyLevel - numeric difficulty rating for the chosen difficulty
+ * @param {number} totalChartWeight - from note_density/{musicId}.json's totalChartWeight field, for the chosen difficulty
  * @returns {{perSecond:{t:number,score:number}[], totalChartWeight:number, musicCoefficient:number, grandTotal:number}}
  */
-export function computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel) {
+export function computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel, totalChartWeight) {
   const musicCoefficient = 1 + (liveScoreCoefficientPermil / 1000) * (difficultyLevel - 5);
-
-  let totalChartWeight = 0;
-  for (const entry of noteDensityEntries) {
-    if (!entry || !entry[0] || !entry[1]) continue;
-    for (const [code, count] of Object.entries(entry[1])) {
-      totalChartWeight += (NOTE_WEIGHTS_PERFECT_PLUS[strippedTypeCode(code)] || 0) * count;
-    }
-  }
 
   const baseFactor = totalChartWeight > 0 ? (deckPower * 2.3 * musicCoefficient) / totalChartWeight : 0;
 

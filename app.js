@@ -2132,7 +2132,9 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats) {
   timeline._specials = result.specials; // stashed for buildCoverageTable's special-window highlighting
 
   const noteDensityBySong = getNoteDensity(song.id);
-  const noteDensityEntries = noteDensityBySong === undefined ? undefined : noteDensityBySong === null ? null : noteDensityBySong[state.difficulty] ?? null;
+  const noteDensityForDiff =
+    noteDensityBySong === undefined ? undefined : noteDensityBySong === null ? null : noteDensityBySong[state.difficulty] ?? null;
+  const noteDensityEntries = noteDensityForDiff == null ? noteDensityForDiff : noteDensityForDiff.perSecond;
 
   // Theoretical-max (all-PERFECT_PLUS) score timeline - only computable once
   // note density has actually loaded for this song/difficulty, and the song
@@ -2143,7 +2145,14 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats) {
     const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
     if (difficultyLevel != null && liveScoreCoefficientPermil != null) {
       const deckPower = computeOverallPowerTotal(result, pureBaseStats);
-      scoreData = computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel);
+      scoreData = computeScoreTimeline(
+        timeline,
+        noteDensityEntries,
+        deckPower,
+        liveScoreCoefficientPermil,
+        difficultyLevel,
+        noteDensityForDiff.totalChartWeight
+      );
     }
   }
 
@@ -2337,7 +2346,8 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
     'Holomem Board Bonus',
     makeIngameValueInput(breakdown.holomemBoardBonus, state.manualHolomemBoardBonusIngame, (v) => (state.manualHolomemBoardBonusIngame = v)),
     createInfoIcon(
-      'This site only counts blue Member-area board nodes here - Green/Content-area nodes spread across your whole roster aren\u2019t visible to it. Enter the Holomem Board Bonus value shown in-game and the difference will be used as your Green node contribution.'
+      'This site only counts blue Member-area board nodes here - Green/Content-area nodes spread across your whole roster aren\u2019t visible to it. Enter the Holomem Board Bonus shown in the Unit Score after the Song Selection screen, and the difference will be used as your Green node contribution.',
+      'images/help/holomem_board_bonus_reference.webp'
     )
   );
 
@@ -2974,8 +2984,9 @@ function openComparePage() {
 
     renderDifficultyPicker(secBySecSection, () => renderSecBySec(computedA, computedB));
     const noteDensityBySong = getNoteDensity(song.id, () => renderSecBySec(computedA, computedB));
-    const noteDensityEntries =
+    const noteDensityForDiff =
       noteDensityBySong === undefined ? undefined : noteDensityBySong === null ? null : noteDensityBySong[state.difficulty] ?? null;
+    const noteDensityEntries = noteDensityForDiff == null ? noteDensityForDiff : noteDensityForDiff.perSecond;
 
     let scoreData = null;
     if (Array.isArray(noteDensityEntries)) {
@@ -2983,7 +2994,14 @@ function openComparePage() {
       const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
       if (difficultyLevel != null && liveScoreCoefficientPermil != null) {
         const deckPower = computeOverallPowerTotal(computed.result, computed.pureBaseStats);
-        scoreData = computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel);
+        scoreData = computeScoreTimeline(
+          timeline,
+          noteDensityEntries,
+          deckPower,
+          liveScoreCoefficientPermil,
+          difficultyLevel,
+          noteDensityForDiff.totalChartWeight
+        );
       }
     }
 
