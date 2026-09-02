@@ -1750,6 +1750,15 @@ const NOTE_TYPE_LABELS = {
   LR: 'long relay',
   LC: 'long hold',
 };
+const NOTE_TYPE_COLORS = {
+  T: 'var(--blue-bright)',
+  F: 'var(--orange)',
+  LS: 'var(--blue-mid)',
+  LE: '#9b6fd6',
+  LFE: 'var(--attr-cute)',
+  LR: 'var(--attr-pure)',
+  LC: 'var(--attr-happy)',
+};
 function decodeNoteTypeBreakdown(typesObj) {
   if (!typesObj) return '';
   return Object.entries(typesObj)
@@ -1760,6 +1769,31 @@ function decodeNoteTypeBreakdown(typesObj) {
       return `${count} ${critical ? 'critical ' : ''}${label}`;
     })
     .join(', ');
+}
+
+/** A compact stacked-bar glyph for one second's notes: fixed total width,
+ *  segments proportional to each note type's share (critical variants share
+ *  their base type's color, just slightly brighter, rather than getting a
+ *  whole separate color - keeps the palette legible at this size). */
+function buildNoteGlyph(typesObj, total) {
+  if (!typesObj || !total) return '';
+  const byBase = {};
+  for (const [code, count] of Object.entries(typesObj)) {
+    const critical = code.endsWith('!');
+    const base = critical ? code.slice(0, -1) : code;
+    byBase[base] = byBase[base] || { count: 0, criticalCount: 0 };
+    byBase[base].count += count;
+    if (critical) byBase[base].criticalCount += count;
+  }
+  const segments = Object.entries(byBase)
+    .map(([base, { count, criticalCount }]) => {
+      const color = NOTE_TYPE_COLORS[base] || 'var(--text-faint)';
+      const widthPct = (count / total) * 100;
+      const opacity = criticalCount === count ? 1 : criticalCount > 0 ? 0.85 : 0.6;
+      return `<span style="width:${widthPct}%;background:${color};opacity:${opacity};"></span>`;
+    })
+    .join('');
+  return `<span class="note-glyph">${segments}</span>`;
 }
 
 function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDensityEntries) {
@@ -1839,7 +1873,8 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
       } else {
         const breakdown = decodeNoteTypeBreakdown(entry[1]);
         const title = breakdown ? `${entry[0]} notes: ${breakdown}` : `${entry[0]} notes`;
-        rowHtml += `<td class="cell-notes" title="${title}">${entry[0]}</td>`;
+        const glyph = buildNoteGlyph(entry[1], entry[0]);
+        rowHtml += `<td class="cell-notes" title="${title}"><span class="note-count">${entry[0]}</span>${glyph}</td>`;
       }
     }
 

@@ -2013,6 +2013,20 @@ header.masthead {
   color: var(--text-faint);
   opacity: 0.5;
 }
+.note-count {
+  display: inline-block;
+  min-width: 14px;
+}
+.note-glyph {
+  display: flex;
+  width: 32px;
+  height: 6px;
+  margin: 3px auto 0;
+  border-radius: 2px;
+  overflow: hidden;
+  background: var(--bg);
+}
+.note-glyph span { display: block; height: 100%; }
 
 .difficulty-picker {
   display: flex;
