@@ -19,6 +19,7 @@ import {
   findUnlockPath,
   findOptimalFrequencyNodes,
   planFrequencyNodeUnlock,
+  computeScoreTimeline,
 } from './js/unitEngine.js';
 import { computeCharacterActivityScores, LAUNCH_ORDER_THRESHOLD } from './js/activityModel.js';
 
@@ -1377,7 +1378,7 @@ function recompute() {
 
   const { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats } = computed;
   renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats);
-  renderCoverageRow(result, unit, scoreSupport);
+  renderCoverageRow(result, unit, scoreSupport, pureBaseStats);
   renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats);
 }
 
@@ -1796,7 +1797,7 @@ function buildNoteGlyph(typesObj, total) {
   return `<span class="note-glyph">${segments}</span>`;
 }
 
-function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDensityEntries) {
+function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDensityEntries, scoreData) {
   const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
   const specialWindows = song.feverSeconds
     .map((start, i) => ({ start, end: start + (timeline._specials?.[i]?.effectDurationSeconds || 0) }))
@@ -1807,6 +1808,11 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
   wrap.className = 'coverage-table-wrap';
 
   const showNotesColumn = noteDensityEntries !== null;
+  // Score/Cumulative reserve their column space whenever Notes does (so the
+  // table doesn't reflow when scoreData finishes computing a moment later),
+  // even though scoreData itself may still be null while that math resolves.
+  const showScoreColumn = showNotesColumn;
+  const scoreByT = scoreData ? new Map(scoreData.perSecond.map((p) => [p.t, p.score])) : null;
 
   const table = document.createElement('table');
   table.className = showNotesColumn ? 'coverage-table has-notes-column' : 'coverage-table';
@@ -1820,22 +1826,33 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
   const colgroup = document.createElement('colgroup');
   const timeCol = document.createElement('col');
   const maxCol = document.createElement('col');
-  // Time+Max (and Notes, when shown) must sum to exactly leaderColWidth so the
-  // member columns that follow stay pixel-aligned with the member panels
-  // above - splitting into 3 parts when Notes is present, not just adding it
-  // on top (which pushes every later column out of alignment).
+  // Time+Max(+Cumulative+Notes, when shown) must sum to exactly leaderColWidth
+  // so the member columns that follow stay pixel-aligned with the member
+  // panels above. Rounding each share independently can be off by a px or two
+  // (e.g. 90*0.2 + 90*0.25 + 90*0.25 + 90*0.3, each rounded, summed to 91 not
+  // 90 in testing) - so only Time/Max/Cumulative are rounded independently,
+  // and Notes (the last piece) absorbs whatever's left, guaranteeing the sum
+  // is always exact regardless of rounding.
+  let usedWidth = 0;
   if (showNotesColumn) {
-    timeCol.style.width = Math.round(leaderColWidth * 0.3) + 'px';
-    maxCol.style.width = Math.round(leaderColWidth * 0.3) + 'px';
+    timeCol.style.width = Math.round(leaderColWidth * 0.2) + 'px';
+    maxCol.style.width = Math.round(leaderColWidth * 0.25) + 'px';
   } else {
     timeCol.style.width = Math.round(leaderColWidth * 0.55) + 'px';
     maxCol.style.width = Math.round(leaderColWidth * 0.45) + 'px';
   }
+  usedWidth += parseFloat(timeCol.style.width) + parseFloat(maxCol.style.width);
   colgroup.appendChild(timeCol);
   colgroup.appendChild(maxCol);
+  if (showScoreColumn) {
+    const cumulativeCol = document.createElement('col');
+    cumulativeCol.style.width = Math.round(leaderColWidth * 0.25) + 'px';
+    usedWidth += parseFloat(cumulativeCol.style.width);
+    colgroup.appendChild(cumulativeCol);
+  }
   if (showNotesColumn) {
     const notesCol = document.createElement('col');
-    notesCol.style.width = Math.round(leaderColWidth * 0.4) + 'px';
+    notesCol.style.width = Math.max(0, Math.round(leaderColWidth) - usedWidth) + 'px';
     colgroup.appendChild(notesCol);
   }
   memberColWidths.forEach((w) => {
@@ -1847,12 +1864,14 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
 
   const thead = document.createElement('thead');
   const headRow = document.createElement('tr');
+  const cumulativeHeader = showScoreColumn ? '<th title="Running total of the theoretical max score up to and including this second">Total Score</th>' : '';
   const notesHeader = showNotesColumn ? '<th title="Notes this second (hover a value for the type breakdown)">Notes</th>' : '';
-  headRow.innerHTML = '<th>Time</th><th>Max</th>' + notesHeader + unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
+  headRow.innerHTML = '<th>Time</th><th>Max</th>' + cumulativeHeader + notesHeader + unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
   thead.appendChild(headRow);
   table.appendChild(thead);
 
   const tbody = document.createElement('tbody');
+  let cumulativeScore = 0;
   for (const point of timeline) {
     const tr = document.createElement('tr');
     const isFeverStart = feverSecondsRounded.has(point.t);
@@ -1863,7 +1882,29 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
     const mm = Math.floor(point.t / 60);
     const ss = String(point.t % 60).padStart(2, '0');
     let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
-    rowHtml += `<td class="cell-max">${point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014'}</td>`;
+
+    const maxPercentHtml = point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014';
+    if (showScoreColumn) {
+      const secondScore = scoreByT ? scoreByT.get(point.t) : undefined;
+      const scoreSubHtml =
+        scoreByT === null
+          ? '<span class="cell-max-score cell-max-score-loading">\u2026</span>'
+          : secondScore
+          ? `<span class="cell-max-score">${secondScore.toLocaleString()}</span>`
+          : '';
+      rowHtml += `<td class="cell-max">${maxPercentHtml}${scoreSubHtml}</td>`;
+    } else {
+      rowHtml += `<td class="cell-max">${maxPercentHtml}</td>`;
+    }
+
+    if (showScoreColumn) {
+      if (scoreByT === null) {
+        rowHtml += '<td class="cell-cumulative-loading">\u2026</td>';
+      } else {
+        cumulativeScore += scoreByT.get(point.t) || 0;
+        rowHtml += `<td class="cell-cumulative">${cumulativeScore.toLocaleString()}</td>`;
+      }
+    }
 
     if (showNotesColumn) {
       const entry = noteDensityEntries === undefined ? undefined : noteDensityEntries[point.t];
@@ -2063,7 +2104,7 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
   return wrap;
 }
 
-function renderCoverageRow(result, unit, scoreSupport) {
+function renderCoverageRow(result, unit, scoreSupport, pureBaseStats) {
   coverageRowEl.innerHTML = '';
   coverageRowEl.className = 'panel';
 
@@ -2100,14 +2141,25 @@ function renderCoverageRow(result, unit, scoreSupport) {
   const noteDensityBySong = getNoteDensity(song.id);
   const noteDensityEntries = noteDensityBySong === undefined ? undefined : noteDensityBySong === null ? null : noteDensityBySong[state.difficulty] ?? null;
 
+  // Theoretical-max (all-PERFECT_PLUS) score timeline - only computable once
+  // note density has actually loaded for this song/difficulty, and the song
+  // carries both a difficulty rating and its own score coefficient.
+  let scoreData = null;
+  if (Array.isArray(noteDensityEntries)) {
+    const difficultyLevel = song.difficultyLevels?.[state.difficulty];
+    const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
+    if (difficultyLevel != null && liveScoreCoefficientPermil != null) {
+      const deckPower = computeOverallPowerTotal(result, pureBaseStats);
+      scoreData = computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel);
+    }
+  }
+
   const cardCols = document.querySelectorAll('#selection-row .member-col');
-  coverageRowEl.appendChild(buildCoverageTable(timeline, unitCards, song, cardCols, noteDensityEntries));
+  coverageRowEl.appendChild(buildCoverageTable(timeline, unitCards, song, cardCols, noteDensityEntries, scoreData));
 
   // Full-width horizontal summary, below the table.
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
   const noBonusDuringSpecial = timeline.filter((p) => p.noBonusDuringSpecial).length;
-  const peakBonus = Math.max(...timeline.map((p) => p.maxBonus));
-  const avgBonus = timeline.reduce((sum, p) => sum + p.maxBonus, 0) / timeline.length;
   const noBonusPercent = (noBonusSeconds / duration) * 100;
   const noBonusDuringSpecialPercent = (noBonusDuringSpecial / duration) * 100;
 
@@ -2118,10 +2170,29 @@ function renderCoverageRow(result, unit, scoreSupport) {
   summary.innerHTML = `
     <div class="coverage-stat"><div class="stat-num">${noBonusSeconds} <span class="stat-num-sub">(${noBonusPercent.toFixed(0)}%)</span></div><div class="stat-label">Secs with no bonus (&gt;20s in)</div></div>
     <div class="coverage-stat"><div class="stat-num">${noBonusDuringSpecial} <span class="stat-num-sub">(${noBonusDuringSpecialPercent.toFixed(0)}%)</span></div><div class="stat-label">Special skill secs w/ no bonus</div></div>
-    <div class="coverage-stat"><div class="stat-num">${peakBonus.toFixed(0)}%</div><div class="stat-label">Peak score bonus</div></div>
-    <div class="coverage-stat"><div class="stat-num">${avgBonus.toFixed(0)}%</div><div class="stat-label">Average score bonus</div></div>
   `;
   coverageRowEl.appendChild(summary);
+
+  if (scoreData) {
+    const specialWindows = song.feverSeconds
+      .map((start, i) => ({ start, end: start + (result.specials?.[i]?.effectDurationSeconds || 0) }))
+      .filter((w) => w.end > w.start);
+
+    const windowScoreEl = document.createElement('div');
+    windowScoreEl.className = 'coverage-summary';
+    windowScoreEl.style.marginTop = '10px';
+    windowScoreEl.style.marginBottom = '0';
+    const windowStats = specialWindows
+      .map((w, i) => {
+        const total = scoreData.perSecond.filter((p) => p.t >= w.start && p.t < w.end).reduce((sum, p) => sum + p.score, 0);
+        return `<div class="coverage-stat"><div class="stat-num">${total.toLocaleString()}</div><div class="stat-label">Special skill ${i + 1} window score</div></div>`;
+      })
+      .join('');
+    const maxTotal = scoreData.grandTotal;
+    windowScoreEl.innerHTML =
+      windowStats + `<div class="coverage-stat"><div class="stat-num">${maxTotal.toLocaleString()}</div><div class="stat-label">Max total score</div></div>`;
+    coverageRowEl.appendChild(windowScoreEl);
+  }
 
   coverageRowEl.appendChild(renderFrequencyNodePanel(unit, song, duration, result.specials));
 
@@ -2170,6 +2241,18 @@ function renderCoverageRow(result, unit, scoreSupport) {
     memberStatsWrap.appendChild(card);
   }
   coverageRowEl.appendChild(memberStatsWrap);
+}
+
+/** The scalar "Overall Power" total shown in the Power panel, factored out so
+ *  the score calculator (deckPower) can reuse the exact same formula instead
+ *  of risking the two drifting apart. */
+function computeOverallPowerTotal(result, baseStats) {
+  const breakdown = computeOverallPowerBreakdown(result, baseStats);
+  const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
+  const subtotalBeforePowerUp =
+    breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
+  const powerUpBonus = Math.round(subtotalBeforePowerUp * (state.manualPowerUpBonusPercent / 100));
+  return subtotalBeforePowerUp + powerUpBonus;
 }
 
 function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
@@ -2855,7 +2938,17 @@ function openComparePage() {
     const noteDensityEntries =
       noteDensityBySong === undefined ? undefined : noteDensityBySong === null ? null : noteDensityBySong[state.difficulty] ?? null;
 
-    secBySecSection.appendChild(buildCoverageTable(timeline, unitCards, song, undefined, noteDensityEntries));
+    let scoreData = null;
+    if (Array.isArray(noteDensityEntries)) {
+      const difficultyLevel = song.difficultyLevels?.[state.difficulty];
+      const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
+      if (difficultyLevel != null && liveScoreCoefficientPermil != null) {
+        const deckPower = computeOverallPowerTotal(computed.result, computed.pureBaseStats);
+        scoreData = computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel);
+      }
+    }
+
+    secBySecSection.appendChild(buildCoverageTable(timeline, unitCards, song, undefined, noteDensityEntries, scoreData));
   }
 
   function openSongSubPicker(side, onPicked) {

@@ -1229,6 +1229,107 @@ export function resolveWinner(perMember) {
   return winner.cardId;
 }
 
+// ---------------------------------------------------------------------------
+// Theoretical max score (all-PERFECT_PLUS) per-second calculation
+// ---------------------------------------------------------------------------
+
+/** PERFECT_PLUS scoreCoefficientPermilMultiply per note type, from LiveNote.json.
+ *  Same value regardless of critical/non-critical - the game's note-scoring
+ *  table has no separate critical dimension, only note type x judgement. */
+export const NOTE_WEIGHTS_PERFECT_PLUS = {
+  T: 1000, // tap
+  F: 1050, // flick
+  LS: 1000, // long start
+  LE: 1000, // long end
+  LFE: 1000, // long flick end
+  LR: 100, // long relay
+  LC: 100, // long hold/continuation
+};
+
+// LiveCombo.json's live_combo-1 curve (used by every song): +1% per 100 combo, capped at +10% from 1000+.
+const COMBO_BONUS_BREAKPOINTS = [
+  [1000, 0.1],
+  [900, 0.09],
+  [800, 0.08],
+  [700, 0.07],
+  [600, 0.06],
+  [500, 0.05],
+  [400, 0.04],
+  [300, 0.03],
+  [200, 0.02],
+  [100, 0.01],
+  [0, 0],
+];
+export function comboBonusAt(cumulativeCombo) {
+  for (const [threshold, bonus] of COMBO_BONUS_BREAKPOINTS) {
+    if (cumulativeCombo >= threshold) return bonus;
+  }
+  return 0;
+}
+
+// Fixed per product decision - the Content(Yellow)-area "song/singer-specific"
+// board bonus is assumed maxed rather than computed from real node selections.
+export const SKILL_TREE_BONUS = 0.1;
+
+function strippedTypeCode(code) {
+  return code.endsWith('!') ? code.slice(0, -1) : code;
+}
+
+/**
+ * Theoretical-maximum (every note PERFECT_PLUS) per-second score:
+ *   NoteScore = ceil(deckPower * 2.3 * musicCoefficient / totalChartWeight
+ *                     * judgementCoefficient[type] * (1+comboBonus) * (1+skillBonus) * (1+skillTreeBonus))
+ *   musicCoefficient = 1 + (liveScoreCoefficientPermil/1000) * (difficultyLevel - 5)
+ * skillBonus is read straight from the coverage timeline's maxBonus (already
+ * "strongest active skill wins", already includes score support multiplicatively).
+ * comboBonus uses the cumulative note count at the START of each second for
+ * every note in that second - an approximation on the rare second that
+ * crosses a 100-combo threshold mid-second, exact otherwise (per-second data
+ * doesn't preserve note-by-note order within a second).
+ *
+ * @param {object[]} timeline - simulateActiveTimeline() output (gives maxBonus per second)
+ * @param {(number[]|undefined)[]} noteDensityEntries - per-second [count, {code:count}] from note_density/{musicId}.json, for the chosen difficulty
+ * @param {number} deckPower - Overall Power total (memberParameter+outfitSkill+passiveSkill+holomemBoardBonus+memoryBonus+powerUpBonus)
+ * @param {number} liveScoreCoefficientPermil - song's own coefficient (Music.json)
+ * @param {number} difficultyLevel - numeric difficulty rating for the chosen difficulty
+ * @returns {{perSecond:{t:number,score:number}[], totalChartWeight:number, musicCoefficient:number, grandTotal:number}}
+ */
+export function computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel) {
+  const musicCoefficient = 1 + (liveScoreCoefficientPermil / 1000) * (difficultyLevel - 5);
+
+  let totalChartWeight = 0;
+  for (const entry of noteDensityEntries) {
+    if (!entry || !entry[0] || !entry[1]) continue;
+    for (const [code, count] of Object.entries(entry[1])) {
+      totalChartWeight += (NOTE_WEIGHTS_PERFECT_PLUS[strippedTypeCode(code)] || 0) * count;
+    }
+  }
+
+  const baseFactor = totalChartWeight > 0 ? (deckPower * 2.3 * musicCoefficient) / totalChartWeight : 0;
+
+  let cumulativeCombo = 0;
+  let grandTotal = 0;
+  const perSecond = [];
+  for (const point of timeline) {
+    const entry = noteDensityEntries[point.t];
+    const comboBonus = comboBonusAt(cumulativeCombo);
+    const skillBonus = (point.maxBonus || 0) / 100;
+    let secondScore = 0;
+    if (entry && entry[0] > 0 && entry[1]) {
+      for (const [code, count] of Object.entries(entry[1])) {
+        const weight = NOTE_WEIGHTS_PERFECT_PLUS[strippedTypeCode(code)] || 0;
+        const noteScore = Math.ceil(baseFactor * weight * (1 + comboBonus) * (1 + skillBonus) * (1 + SKILL_TREE_BONUS));
+        secondScore += noteScore * count;
+      }
+      cumulativeCombo += entry[0];
+    }
+    grandTotal += secondScore;
+    perSecond.push({ t: point.t, score: secondScore });
+  }
+
+  return { perSecond, totalChartWeight, musicCoefficient, grandTotal };
+}
+
 /**
  * @param {object} statTotals - {performance, technique, sense} summed across the unit
  * @param {{buffStat:string, buffScorePercent:number, conditionMet:boolean}} leaderBuff
