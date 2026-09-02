@@ -280,6 +280,7 @@ const state = {
   mobileAccordionExpanded: new Set(['leader']), // which slot keys are open on mobile
   manualMemoryBonusPercent: 0, // "Unit Stats X%" from the Memory Stand screen - % of Member Parameter only
   manualPowerUpBonusPercent: 0, // "Upgrade Bonus X%" from the Member training screen - % of (Member Parameter + Outfit Skill + Passive Skill + Memory Bonus)
+  manualHolomemBoardBonusIngame: null, // player's real in-game Holomem Board Bonus stat (includes Green/Content-area nodes across their WHOLE roster, which this site can't see) - null means "not entered", fall back to the site's blue-nodes-only computed value
 };
 
 const MOBILE_BREAKPOINT = '(max-width: 700px)';
@@ -2235,14 +2236,24 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats) {
   coverageRowEl.appendChild(memberStatsWrap);
 }
 
+/** The Holomem Board Bonus the site can actually compute only accounts for
+ *  blue Member-area nodes on the 5 selected cards - Green/Content-area nodes
+ *  are spread across the player's WHOLE roster (any card, not just the team),
+ *  which this site has no way to see. When the player has entered their real
+ *  in-game value, use that (it already includes Green nodes); otherwise fall
+ *  back to the blue-only computed figure, same as before this field existed. */
+function effectiveHolomemBoardBonus(breakdown, manualIngameValue) {
+  return manualIngameValue ?? breakdown.holomemBoardBonus;
+}
+
 /** The scalar "Overall Power" total shown in the Power panel, factored out so
  *  the score calculator (deckPower) can reuse the exact same formula instead
  *  of risking the two drifting apart. */
 function computeOverallPowerTotal(result, baseStats) {
   const breakdown = computeOverallPowerBreakdown(result, baseStats);
   const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
-  const subtotalBeforePowerUp =
-    breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualHolomemBoardBonusIngame);
+  const subtotalBeforePowerUp = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus;
   const powerUpBonus = Math.round(subtotalBeforePowerUp * (state.manualPowerUpBonusPercent / 100));
   return subtotalBeforePowerUp + powerUpBonus;
 }
@@ -2260,11 +2271,11 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   // Memory Bonus ("Unit Stats X%" on the Memory Stand screen) - a % of
   // Member Parameter only, not the whole subtotal.
   const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualHolomemBoardBonusIngame);
   // Member Power-Up Bonus ("Upgrade Bonus X%" on the Member training screen)
   // - a % of Member Parameter + Outfit Skill + Passive Skill + Holomem Board
   // Bonus + Memory Bonus (everything else computed so far).
-  const subtotalBeforePowerUp =
-    breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
+  const subtotalBeforePowerUp = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus;
   const powerUpBonus = Math.round(subtotalBeforePowerUp * (state.manualPowerUpBonusPercent / 100));
 
   const total = subtotalBeforePowerUp + powerUpBonus;
@@ -2294,7 +2305,41 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   addRow('Member Parameter', makeNum(breakdown.memberParameter));
   addRow('Outfit Skill', makeNum(breakdown.outfitSkill));
   addRow('Passive Skill', makeNum(breakdown.passiveSkill));
-  addRow('Holomem Board Bonus', makeNum(breakdown.holomemBoardBonus));
+
+  const makeIngameValueInput = (blueOnlyValue, manualValue, onChange) => {
+    const wrap = document.createElement('span');
+    wrap.className = 'power-percent-wrap';
+    const el = document.createElement('input');
+    el.type = 'number';
+    el.className = 'mini-input power-manual-input';
+    el.placeholder = blueOnlyValue.toLocaleString();
+    el.step = 1;
+    el.value = manualValue ?? '';
+    el.onclick = (e) => e.stopPropagation();
+    el.onchange = () => {
+      const raw = el.value.trim();
+      onChange(raw === '' ? null : Math.round(Number(raw) || 0));
+      recompute();
+    };
+    wrap.appendChild(el);
+    const computed = document.createElement('span');
+    computed.className = 'num power-percent-computed';
+    if (manualValue != null) {
+      const green = manualValue - blueOnlyValue;
+      computed.textContent = `blue ${blueOnlyValue.toLocaleString()} + green ${green >= 0 ? '+' : ''}${green.toLocaleString()}`;
+    } else {
+      computed.textContent = `blue-only ${blueOnlyValue.toLocaleString()} \u2014 enter your in-game value`;
+    }
+    wrap.appendChild(computed);
+    return wrap;
+  };
+  addRow(
+    'Holomem Board Bonus',
+    makeIngameValueInput(breakdown.holomemBoardBonus, state.manualHolomemBoardBonusIngame, (v) => (state.manualHolomemBoardBonusIngame = v)),
+    createInfoIcon(
+      'This site only counts blue Member-area board nodes here - Green/Content-area nodes spread across your whole roster aren\u2019t visible to it. Enter the Holomem Board Bonus value shown in-game and the difference will be used as your Green node contribution.'
+    )
+  );
 
   const makePercentInput = (value, computedValue, onChange) => {
     const wrap = document.createElement('span');
@@ -2402,6 +2447,7 @@ function buildPresetFromCurrentState(name) {
     songId: state.songId,
     manualMemoryBonusPercent: state.manualMemoryBonusPercent,
     manualPowerUpBonusPercent: state.manualPowerUpBonusPercent,
+    manualHolomemBoardBonusIngame: state.manualHolomemBoardBonusIngame,
     characterData,
   };
 }
@@ -2412,6 +2458,7 @@ function applyPreset(preset) {
   state.songId = preset.songId ?? null;
   state.manualMemoryBonusPercent = preset.manualMemoryBonusPercent ?? 0;
   state.manualPowerUpBonusPercent = preset.manualPowerUpBonusPercent ?? 0;
+  state.manualHolomemBoardBonusIngame = preset.manualHolomemBoardBonusIngame ?? null;
   for (const [characterId, data] of Object.entries(preset.characterData || {})) {
     state.boardSelections[characterId] = new Set(data.boardSelections || []);
     if (data.connectSelections) state.connectSelections[characterId] = data.connectSelections;
@@ -2644,11 +2691,11 @@ function renderCompareTeamColumn(side, preset, computed, onChoosePreset) {
 function computeComparePower(preset, computed) {
   const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats);
   const memoryBonus = Math.round(breakdown.memberParameter * ((preset.manualMemoryBonusPercent || 0) / 100));
-  const subtotal =
-    breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + breakdown.holomemBoardBonus + memoryBonus;
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, preset.manualHolomemBoardBonusIngame ?? null);
+  const subtotal = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus;
   const powerUpBonus = Math.round(subtotal * ((preset.manualPowerUpBonusPercent || 0) / 100));
   const total = subtotal + powerUpBonus;
-  return { ...breakdown, memoryBonus, powerUpBonus, total };
+  return { ...breakdown, holomemBoardBonus, memoryBonus, powerUpBonus, total };
 }
 
 function computeCompareCoverage(computed, song) {
