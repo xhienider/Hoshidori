@@ -920,6 +920,49 @@ header.masthead {
 .ca-control-label span:last-child { color: var(--orange); font-weight: 600; }
 .ca-control-group input[type='range'] { width: 100%; accent-color: var(--orange); }
 .ca-main { padding: 16px 24px 24px; min-width: 0; }
+
+.song-ranking-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 12.5px;
+}
+.song-ranking-table thead th {
+  position: sticky;
+  top: 0;
+  background: var(--panel-raised);
+  text-align: left;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--text-dim);
+  padding: 8px 10px;
+  border-bottom: 1px solid var(--line);
+}
+.song-ranking-table thead th:first-child { width: 40px; }
+.song-ranking-table tbody td {
+  padding: 7px 10px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-dim);
+}
+.song-ranking-table tbody tr:hover { background: var(--panel-raised); }
+.song-ranking-table td.num {
+  text-align: right;
+  font-family: var(--font-mono);
+  font-weight: 700;
+  color: var(--text);
+}
+.song-rank-diff-expert, .song-rank-diff-hard {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 2px 8px;
+  border-radius: 4px;
+}
+.song-rank-diff-expert { background: rgba(225, 90, 36, 0.15); color: var(--orange); }
+.song-rank-diff-hard { background: rgba(46, 111, 189, 0.15); color: var(--blue-bright); }
+
 .ca-list { display: flex; flex-direction: column; }
 .ca-list-row {
   display: grid;

@@ -254,6 +254,23 @@ function getNoteDensity(songId, onLoaded = recompute) {
   return undefined; // still loading
 }
 
+/** Bulk-loads note density for a list of songs in parallel, bypassing the
+ *  single-song lazy/retry pattern above (which would otherwise mean one
+ *  recompute() cycle per song for a ranking spanning the whole catalog). */
+async function ensureNoteDensityLoaded(songs) {
+  const toFetch = songs.filter((s) => !(s.id in NOTE_DENSITY_CACHE));
+  await Promise.all(
+    toFetch.map(async (s) => {
+      try {
+        const r = await fetch(`data/note_density/${s.id}.json`);
+        NOTE_DENSITY_CACHE[s.id] = r.ok ? await r.json() : null;
+      } catch {
+        NOTE_DENSITY_CACHE[s.id] = null;
+      }
+    })
+  );
+}
+
 // ---------------------------------------------------------------------------
 // App state
 // ---------------------------------------------------------------------------
@@ -2815,6 +2832,63 @@ function computeComparePower(preset, computed) {
   return { ...breakdown, holomemBoardBonus, memoryBonus, powerUpBonus, total };
 }
 
+/**
+ * Ranks songs by theoretical max score (Expert + Hard only) for the CURRENT
+ * team, restricted to songs the current leader actually sings on - only
+ * those count toward that leader's scoring ranking. Recomputes per-song
+ * (not just per-song fever/duration) since singer-conditional leader-area
+ * board nodes can make deckPower itself vary by song.
+ * @returns {{song:object, difficulty:string, maxTotalScore:number}[]} sorted descending
+ */
+async function computeSongRankings() {
+  const leaderCard = state.leader.cardId ? DATA.byId[state.leader.cardId] : null;
+  if (!leaderCard) return [];
+  const eligibleSongs = DATA.songs.filter((s) => s.characterIds?.includes(leaderCard.characterId));
+  if (!eligibleSongs.length) return [];
+
+  await ensureNoteDensityLoaded(eligibleSongs);
+
+  const results = [];
+  for (const song of eligibleSongs) {
+    const computed = computeFullResult(state, song);
+    if (!computed) continue;
+    const noteDensityBySong = NOTE_DENSITY_CACHE[song.id];
+    if (!noteDensityBySong) continue;
+
+    const deckPower = computeOverallPowerTotal(computed.result, computed.pureBaseStats, computed.baseStats);
+    const unitCards = computed.unit.map((u) => u.card);
+    const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
+    const timeline = simulateActiveTimeline({
+      activeResults: computed.result.actives,
+      specialResults: computed.result.specials,
+      unitCards,
+      scoreSupport: computed.scoreSupport,
+      feverSeconds: song.feverSeconds,
+      durationSeconds: duration,
+    });
+
+    for (const difficulty of ['expert', 'hard']) {
+      const noteDensityForDiff = noteDensityBySong[difficulty];
+      if (!noteDensityForDiff) continue;
+      const difficultyLevel = song.difficultyLevels?.[difficulty];
+      const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
+      if (difficultyLevel == null || liveScoreCoefficientPermil == null) continue;
+      const scoreData = computeScoreTimeline(
+        timeline,
+        noteDensityForDiff.perSecond,
+        deckPower,
+        liveScoreCoefficientPermil,
+        difficultyLevel,
+        noteDensityForDiff.totalChartWeight
+      );
+      results.push({ song, difficulty, maxTotalScore: scoreData.grandTotal });
+    }
+  }
+
+  results.sort((a, b) => b.maxTotalScore - a.maxTotalScore);
+  return results;
+}
+
 function computeCompareCoverage(computed, song) {
   if (!song) return null;
   const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
@@ -3283,6 +3357,90 @@ const COST_CALC_ATTRS = [
   { key: 'attribute_2', label: 'Pure', cls: 'attr-pure' },
   { key: 'attribute_3', label: 'Happy', cls: 'attr-happy' },
 ];
+
+function openSongRankingView() {
+  const overlay = document.createElement('div');
+  overlay.className = 'compare-page-overlay';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
+
+  const header = document.createElement('div');
+  header.className = 'compare-page-header';
+  header.innerHTML = `<div class="board-editor-title">Song Ranking</div>`;
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'compare-page-close';
+  closeBtn.textContent = '\u2715 Back to Builder';
+  closeBtn.onclick = () => {
+    overlay.remove();
+    document.body.style.overflow = '';
+  };
+  header.appendChild(closeBtn);
+  overlay.appendChild(header);
+
+  const disclaimer = document.createElement('div');
+  disclaimer.className = 'ca-disclaimer';
+  disclaimer.innerHTML = `
+    Ranks songs by theoretical max score (Expert and Hard only) for your <strong>current team</strong>,
+    limited to songs your <strong>leader</strong> actually sings on \u2014 only those count toward
+    their scoring ranking. Recomputed fresh each time you open this (singer-conditional leader
+    board nodes mean deckPower itself can vary by song).
+  `;
+  overlay.appendChild(disclaimer);
+
+  const main = document.createElement('div');
+  main.className = 'ca-main';
+  overlay.appendChild(main);
+
+  const leaderCard = state.leader.cardId ? DATA.byId[state.leader.cardId] : null;
+  const unitFilled = state.unit.every((u) => u.cardId);
+
+  if (!leaderCard || !unitFilled) {
+    const empty = document.createElement('div');
+    empty.className = 'empty-state';
+    empty.textContent = 'Select a leader and all 5 unit members in the builder first.';
+    main.appendChild(empty);
+    return;
+  }
+
+  const loading = document.createElement('div');
+  loading.className = 'empty-state';
+  loading.textContent = `Computing scores for every song ${leaderCard.characterName} sings on\u2026`;
+  main.appendChild(loading);
+
+  computeSongRankings().then((results) => {
+    if (!overlay.isConnected) return; // closed before this resolved
+    main.innerHTML = '';
+
+    if (!results.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = `${leaderCard.characterName} doesn't sing on any song with usable chart data yet.`;
+      main.appendChild(empty);
+      return;
+    }
+
+    const table = document.createElement('table');
+    table.className = 'song-ranking-table';
+    const thead = document.createElement('thead');
+    thead.innerHTML = '<tr><th>#</th><th>Song</th><th>Difficulty</th><th>Max Total Score</th></tr>';
+    table.appendChild(thead);
+    const tbody = document.createElement('tbody');
+    results.forEach((r, i) => {
+      const tr = document.createElement('tr');
+      const diffClass = r.difficulty === 'expert' ? 'song-rank-diff-expert' : 'song-rank-diff-hard';
+      tr.innerHTML = `
+        <td>${i + 1}</td>
+        <td>${r.song.title}</td>
+        <td><span class="${diffClass}">${r.difficulty[0].toUpperCase() + r.difficulty.slice(1)}</span></td>
+        <td class="num">${r.maxTotalScore.toLocaleString()}</td>
+      `;
+      tbody.appendChild(tr);
+    });
+    table.appendChild(tbody);
+    main.appendChild(table);
+  });
+}
 
 function openCostCalculator() {
   const overlay = document.createElement('div');
@@ -4786,6 +4944,7 @@ async function main() {
   document.getElementById('card-viewer-btn').addEventListener('click', openCardViewer);
   document.getElementById('music-viewer-btn').addEventListener('click', openMusicViewer);
   document.getElementById('activity-btn').addEventListener('click', openCharacterActivityView);
+  document.getElementById('song-ranking-btn').addEventListener('click', openSongRankingView);
 
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.
