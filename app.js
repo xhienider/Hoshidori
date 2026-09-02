@@ -1825,8 +1825,8 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
   // above - splitting into 3 parts when Notes is present, not just adding it
   // on top (which pushes every later column out of alignment).
   if (showNotesColumn) {
-    timeCol.style.width = Math.round(leaderColWidth * 0.4) + 'px';
-    maxCol.style.width = Math.round(leaderColWidth * 0.35) + 'px';
+    timeCol.style.width = Math.round(leaderColWidth * 0.3) + 'px';
+    maxCol.style.width = Math.round(leaderColWidth * 0.3) + 'px';
   } else {
     timeCol.style.width = Math.round(leaderColWidth * 0.55) + 'px';
     maxCol.style.width = Math.round(leaderColWidth * 0.45) + 'px';
@@ -1835,7 +1835,7 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
   colgroup.appendChild(maxCol);
   if (showNotesColumn) {
     const notesCol = document.createElement('col');
-    notesCol.style.width = Math.round(leaderColWidth * 0.25) + 'px';
+    notesCol.style.width = Math.round(leaderColWidth * 0.4) + 'px';
     colgroup.appendChild(notesCol);
   }
   memberColWidths.forEach((w) => {
