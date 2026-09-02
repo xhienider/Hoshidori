@@ -187,15 +187,17 @@ header.masthead {
   .selection-header-label.leader { flex: 0 0 78vw; max-width: 300px; }
   .selection-header-label.members { flex: 1; }
 
-  /* Coverage table scrolls horizontally with Time+Max+Notes frozen on the
-     left, since the per-second detail table can't meaningfully reflow. */
+  /* Coverage table scrolls horizontally with Time(+Total Score+Notes, when
+     present) frozen on the left, since the per-second detail table can't
+     meaningfully reflow. Column 2 is Total Score when those columns exist,
+     but the first MEMBER column when they don't - every rule below must be
+     scoped to .has-notes-column so it never mis-targets a member column. */
   .coverage-table-wrap { overflow-x: auto; }
   .coverage-table { table-layout: auto; }
   .coverage-table col { width: auto !important; min-width: 90px; }
   .coverage-table col:first-child { min-width: 64px; }
-  .coverage-table col:nth-child(2) { min-width: 56px; }
-  .coverage-table.has-notes-column col:nth-child(3) { min-width: 68px; } /* Total Score (cumulative) - room for large numbers */
-  .coverage-table.has-notes-column col:nth-child(4) { min-width: 48px; } /* Notes */
+  .coverage-table.has-notes-column col:nth-child(2) { min-width: 68px; } /* Total Score (cumulative) - room for large numbers */
+  .coverage-table.has-notes-column col:nth-child(3) { min-width: 48px; } /* Notes */
   .coverage-table th:nth-child(1),
   .coverage-table td:nth-child(1) {
     position: sticky;
@@ -203,17 +205,19 @@ header.masthead {
     background: var(--panel);
     z-index: 2;
   }
-  .coverage-table th:nth-child(2),
-  .coverage-table td:nth-child(2) {
+  .coverage-table.has-notes-column th:nth-child(2),
+  .coverage-table.has-notes-column td:nth-child(2) {
     position: sticky;
     left: 64px;
     background: var(--panel);
     z-index: 2;
   }
   .coverage-table tr.fever-row td:nth-child(1),
-  .coverage-table tr.fever-row td:nth-child(2),
-  .coverage-table tr.fever-window td:nth-child(1),
-  .coverage-table tr.fever-window td:nth-child(2) {
+  .coverage-table tr.fever-window td:nth-child(1) {
+    background: #2a1810;
+  }
+  .coverage-table.has-notes-column tr.fever-row td:nth-child(2),
+  .coverage-table.has-notes-column tr.fever-window td:nth-child(2) {
     background: #2a1810;
   }
 }
@@ -2015,14 +2019,14 @@ header.masthead {
   color: var(--text-faint);
   opacity: 0.5;
 }
-.cell-max-score {
+.cell-member-score {
   display: block;
   font-size: 9.5px;
   font-weight: 400;
   color: var(--text-faint);
   margin-top: 2px;
 }
-.cell-max-score-loading { opacity: 0.5; }
+.cell-member-score-loading { opacity: 0.5; }
 .coverage-table td.cell-cumulative {
   color: var(--text-dim);
   font-weight: 600;
@@ -2083,7 +2087,7 @@ header.masthead {
   color: var(--orange);
 }
 
-.coverage-table tr.no-bonus-row td.cell-max {
+.coverage-table tr.no-bonus-row td.cell-cumulative {
   color: var(--red);
 }
 

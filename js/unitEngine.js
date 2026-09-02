@@ -1307,27 +1307,42 @@ export function computeScoreTimeline(timeline, noteDensityEntries, deckPower, li
 
   const baseFactor = totalChartWeight > 0 ? (deckPower * 2.3 * musicCoefficient) / totalChartWeight : 0;
 
+  /** Score for one second at a given skillBonus (0-100 scale, i.e. 60 = +60%),
+   *  summed across every note-type in that second - shared by both the
+   *  winner-based total and each member's own hypothetical score. */
+  function secondScoreAt(entry, comboBonus, skillBonusPercent) {
+    if (!entry || !entry[0] || !entry[1]) return 0;
+    const skillBonus = (skillBonusPercent || 0) / 100;
+    let total = 0;
+    for (const [code, count] of Object.entries(entry[1])) {
+      const weight = NOTE_WEIGHTS_PERFECT_PLUS[strippedTypeCode(code)] || 0;
+      const noteScore = Math.ceil(baseFactor * weight * (1 + comboBonus) * (1 + skillBonus) * (1 + SKILL_TREE_BONUS));
+      total += noteScore * count;
+    }
+    return total;
+  }
+
   let cumulativeCombo = 0;
   let grandTotal = 0;
   const perSecond = [];
+  const perMemberScores = {}; // cardId -> [{t, score}], using that member's OWN effectiveBonus (0 if inactive that second)
   for (const point of timeline) {
     const entry = noteDensityEntries[point.t];
     const comboBonus = comboBonusAt(cumulativeCombo);
-    const skillBonus = (point.maxBonus || 0) / 100;
-    let secondScore = 0;
-    if (entry && entry[0] > 0 && entry[1]) {
-      for (const [code, count] of Object.entries(entry[1])) {
-        const weight = NOTE_WEIGHTS_PERFECT_PLUS[strippedTypeCode(code)] || 0;
-        const noteScore = Math.ceil(baseFactor * weight * (1 + comboBonus) * (1 + skillBonus) * (1 + SKILL_TREE_BONUS));
-        secondScore += noteScore * count;
-      }
-      cumulativeCombo += entry[0];
+
+    const secondScore = secondScoreAt(entry, comboBonus, point.maxBonus);
+
+    for (const m of point.perMember) {
+      const memberScore = secondScoreAt(entry, comboBonus, m.effectiveBonus);
+      (perMemberScores[m.cardId] ??= []).push({ t: point.t, score: memberScore });
     }
+
+    if (entry && entry[0] > 0) cumulativeCombo += entry[0];
     grandTotal += secondScore;
     perSecond.push({ t: point.t, score: secondScore });
   }
 
-  return { perSecond, totalChartWeight, musicCoefficient, grandTotal };
+  return { perSecond, totalChartWeight, musicCoefficient, grandTotal, perMemberScores };
 }
 
 /**

@@ -1808,11 +1808,14 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
   wrap.className = 'coverage-table-wrap';
 
   const showNotesColumn = noteDensityEntries !== null;
-  // Score/Cumulative reserve their column space whenever Notes does (so the
-  // table doesn't reflow when scoreData finishes computing a moment later),
-  // even though scoreData itself may still be null while that math resolves.
+  // Cumulative reserves its column space whenever Notes does (so the table
+  // doesn't reflow when scoreData finishes computing a moment later), even
+  // though scoreData itself may still be null while that math resolves.
   const showScoreColumn = showNotesColumn;
   const scoreByT = scoreData ? new Map(scoreData.perSecond.map((p) => [p.t, p.score])) : null;
+  const memberScoreMaps = scoreData
+    ? new Map(Object.entries(scoreData.perMemberScores).map(([cardId, arr]) => [cardId, new Map(arr.map((p) => [p.t, p.score]))]))
+    : null;
 
   const table = document.createElement('table');
   table.className = showNotesColumn ? 'coverage-table has-notes-column' : 'coverage-table';
@@ -1825,28 +1828,22 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
 
   const colgroup = document.createElement('colgroup');
   const timeCol = document.createElement('col');
-  const maxCol = document.createElement('col');
-  // Time+Max(+Cumulative+Notes, when shown) must sum to exactly leaderColWidth
-  // so the member columns that follow stay pixel-aligned with the member
-  // panels above. Rounding each share independently can be off by a px or two
-  // (e.g. 90*0.2 + 90*0.25 + 90*0.25 + 90*0.3, each rounded, summed to 91 not
-  // 90 in testing) - so only Time/Max/Cumulative are rounded independently,
-  // and Notes (the last piece) absorbs whatever's left, guaranteeing the sum
-  // is always exact regardless of rounding.
+  // Time(+Cumulative+Notes, when shown) must sum to exactly leaderColWidth so
+  // the member columns that follow stay pixel-aligned with the member panels
+  // above. Rounding each share independently can drift a px or two, so only
+  // Time/Cumulative are rounded independently and Notes (the last piece)
+  // absorbs whatever's left, guaranteeing the sum is always exact.
   let usedWidth = 0;
   if (showNotesColumn) {
-    timeCol.style.width = Math.round(leaderColWidth * 0.2) + 'px';
-    maxCol.style.width = Math.round(leaderColWidth * 0.25) + 'px';
+    timeCol.style.width = Math.round(leaderColWidth * 0.25) + 'px';
   } else {
-    timeCol.style.width = Math.round(leaderColWidth * 0.55) + 'px';
-    maxCol.style.width = Math.round(leaderColWidth * 0.45) + 'px';
+    timeCol.style.width = Math.round(leaderColWidth) + 'px';
   }
-  usedWidth += parseFloat(timeCol.style.width) + parseFloat(maxCol.style.width);
+  usedWidth += parseFloat(timeCol.style.width);
   colgroup.appendChild(timeCol);
-  colgroup.appendChild(maxCol);
   if (showScoreColumn) {
     const cumulativeCol = document.createElement('col');
-    cumulativeCol.style.width = Math.round(leaderColWidth * 0.25) + 'px';
+    cumulativeCol.style.width = Math.round(leaderColWidth * 0.35) + 'px';
     usedWidth += parseFloat(cumulativeCol.style.width);
     colgroup.appendChild(cumulativeCol);
   }
@@ -1866,7 +1863,7 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
   const headRow = document.createElement('tr');
   const cumulativeHeader = showScoreColumn ? '<th title="Running total of the theoretical max score up to and including this second">Total Score</th>' : '';
   const notesHeader = showNotesColumn ? '<th title="Notes this second (hover a value for the type breakdown)">Notes</th>' : '';
-  headRow.innerHTML = '<th>Time</th><th>Max</th>' + cumulativeHeader + notesHeader + unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
+  headRow.innerHTML = '<th>Time</th>' + cumulativeHeader + notesHeader + unitCards.map((c) => `<th>${c.shortName}</th>`).join('');
   thead.appendChild(headRow);
   table.appendChild(thead);
 
@@ -1882,20 +1879,6 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
     const mm = Math.floor(point.t / 60);
     const ss = String(point.t % 60).padStart(2, '0');
     let rowHtml = `<td>${mm}:${ss}${isFeverStart ? ' \u2605' : ''}</td>`;
-
-    const maxPercentHtml = point.maxBonus > 0 ? point.maxBonus.toFixed(1) + '%' : '\u2014';
-    if (showScoreColumn) {
-      const secondScore = scoreByT ? scoreByT.get(point.t) : undefined;
-      const scoreSubHtml =
-        scoreByT === null
-          ? '<span class="cell-max-score cell-max-score-loading">\u2026</span>'
-          : secondScore
-          ? `<span class="cell-max-score">${secondScore.toLocaleString()}</span>`
-          : '';
-      rowHtml += `<td class="cell-max">${maxPercentHtml}${scoreSubHtml}</td>`;
-    } else {
-      rowHtml += `<td class="cell-max">${maxPercentHtml}</td>`;
-    }
 
     if (showScoreColumn) {
       if (scoreByT === null) {
@@ -1921,14 +1904,23 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
     }
 
     for (const m of point.perMember) {
+      let scoreSubHtml = '';
+      if (showScoreColumn) {
+        if (scoreByT === null) {
+          scoreSubHtml = '<span class="cell-member-score cell-member-score-loading">\u2026</span>';
+        } else {
+          const memberScore = memberScoreMaps?.get(m.cardId)?.get(point.t);
+          if (memberScore) scoreSubHtml = `<span class="cell-member-score">${memberScore.toLocaleString()}</span>`;
+        }
+      }
       if (m.active) {
         const isWinner = m.cardId === point.winnerCardId;
         const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
         const borderColor = activationChanceColor(m.activationChance);
         const title = `${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% score support @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
-        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% @ ${m.activationChance}%</td>`;
+        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% @ ${m.activationChance}%${scoreSubHtml}</td>`;
       } else {
-        rowHtml += '<td>\u2014</td>';
+        rowHtml += `<td>\u2014${scoreSubHtml}</td>`;
       }
     }
     tr.innerHTML = rowHtml;
