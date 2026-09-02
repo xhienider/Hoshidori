@@ -1689,6 +1689,54 @@ header.masthead {
 }
 .picker-close:hover { color: var(--text); }
 
+.green-bonus-box {
+  padding: 18px;
+  gap: 12px;
+  max-width: 420px;
+}
+.green-bonus-title {
+  font-weight: 700;
+  font-size: 15px;
+  color: var(--text);
+}
+.green-bonus-reference-image {
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid var(--line);
+}
+.green-bonus-desc {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.4;
+}
+.green-bonus-current {
+  font-size: 11px;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+}
+.green-bonus-input {
+  width: 100%;
+  box-sizing: border-box;
+  background: var(--bg);
+  border: 1px solid var(--line);
+  border-radius: 6px;
+  color: var(--text);
+  font-family: var(--font-mono);
+  font-size: 13px;
+  padding: 8px 10px;
+}
+.green-bonus-input:focus { outline: 1px solid var(--orange); border-color: var(--orange); }
+.green-bonus-btn-row {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+}
+.green-bonus-ok {
+  border-color: var(--orange);
+  color: var(--orange);
+}
+.green-bonus-ok:hover { background: rgba(225, 90, 36, 0.1); }
+
 /* ---------- Stat meters ---------- */
 
 .stat-table { width: 100%; border-collapse: collapse; font-size: 12.5px; }

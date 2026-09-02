@@ -280,7 +280,8 @@ const state = {
   mobileAccordionExpanded: new Set(['leader']), // which slot keys are open on mobile
   manualMemoryBonusPercent: 0, // "Unit Stats X%" from the Memory Stand screen - % of Member Parameter only
   manualPowerUpBonusPercent: 0, // "Upgrade Bonus X%" from the Member training screen - % of (Member Parameter + Outfit Skill + Passive Skill + Memory Bonus)
-  manualHolomemBoardBonusIngame: null, // player's real in-game Holomem Board Bonus stat (includes Green/Content-area nodes across their WHOLE roster, which this site can't see) - null means "not entered", fall back to the site's blue-nodes-only computed value
+  manualHolomemBoardBonusIngame: null, // deprecated - superseded by manualGreenBonus (recalculated via the Green Bonus popup, not a locked-in raw total)
+  manualGreenBonus: null, // Green/Content-area board bonus (delta only), computed by subtracting the site's live Red+Blue total from a player-entered in-game figure via the "Calculate Green Bonus" popup. null = not yet calculated.
 };
 
 const MOBILE_BREAKPOINT = '(max-width: 700px)';
@@ -906,6 +907,79 @@ function openBoardEditor(card, isLeaderSlotContext) {
 // Picker overlay
 // ---------------------------------------------------------------------------
 
+/** Small popup for the "Calculate Green Bonus" flow: player enters the
+ *  Holomem Board Bonus total shown in-game, this subtracts the site's own
+ *  live Red+Blue total (passed in fresh at click time) and hands the
+ *  remainder back as the Green delta - never a raw locked-in total, so
+ *  future red/blue board edits keep affecting the overall total correctly. */
+function openGreenBonusCalculator(currentRedBonus, currentBlueBonus, onCalculated) {
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+
+  const box = document.createElement('div');
+  box.className = 'picker-box green-bonus-box';
+
+  const title = document.createElement('div');
+  title.className = 'green-bonus-title';
+  title.textContent = 'Calculate Green Bonus';
+  box.appendChild(title);
+
+  const img = document.createElement('img');
+  img.className = 'green-bonus-reference-image';
+  img.src = 'images/help/holomem_board_bonus_reference.webp';
+  img.alt = 'Unit Score Details reference';
+  box.appendChild(img);
+
+  const desc = document.createElement('div');
+  desc.className = 'green-bonus-desc';
+  desc.textContent = 'Enter the Holomem Board Bonus shown in the Unit Score after the Song Selection screen.';
+  box.appendChild(desc);
+
+  const currentLine = document.createElement('div');
+  currentLine.className = 'green-bonus-current';
+  currentLine.textContent = `This site's current Red + Blue total: ${(currentRedBonus + currentBlueBonus).toLocaleString()}`;
+  box.appendChild(currentLine);
+
+  const input = document.createElement('input');
+  input.type = 'number';
+  input.step = 1;
+  input.className = 'green-bonus-input';
+  input.placeholder = 'Holomem Board Bonus (in-game)';
+  box.appendChild(input);
+
+  const btnRow = document.createElement('div');
+  btnRow.className = 'green-bonus-btn-row';
+
+  const cancelBtn = document.createElement('button');
+  cancelBtn.type = 'button';
+  cancelBtn.className = 'board-btn';
+  cancelBtn.textContent = 'Cancel';
+  cancelBtn.onclick = () => overlay.remove();
+  btnRow.appendChild(cancelBtn);
+
+  const okBtn = document.createElement('button');
+  okBtn.type = 'button';
+  okBtn.className = 'board-btn green-bonus-ok';
+  okBtn.textContent = 'OK';
+  okBtn.onclick = () => {
+    const raw = input.value.trim();
+    if (raw === '') return;
+    const ingameTotal = Math.round(Number(raw) || 0);
+    const green = ingameTotal - (currentRedBonus + currentBlueBonus);
+    onCalculated(green);
+    overlay.remove();
+  };
+  btnRow.appendChild(okBtn);
+  box.appendChild(btnRow);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+  input.focus();
+}
+
 function openPicker(slotState, isLeader) {
   const overlay = document.createElement('div');
   overlay.className = 'picker-overlay';
@@ -1379,8 +1453,8 @@ function recompute() {
 
   const { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats } = computed;
   renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats);
-  renderCoverageRow(result, unit, scoreSupport, pureBaseStats);
-  renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats);
+  renderCoverageRow(result, unit, scoreSupport, pureBaseStats, baseStats);
+  renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, baseStats);
 }
 
 /** Leader column content when the team isn't complete yet - song picking and a
@@ -2097,7 +2171,7 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
   return wrap;
 }
 
-function renderCoverageRow(result, unit, scoreSupport, pureBaseStats) {
+function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnlyBaseStats) {
   coverageRowEl.innerHTML = '';
   coverageRowEl.className = 'panel';
 
@@ -2144,7 +2218,7 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats) {
     const difficultyLevel = song.difficultyLevels?.[state.difficulty];
     const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
     if (difficultyLevel != null && liveScoreCoefficientPermil != null) {
-      const deckPower = computeOverallPowerTotal(result, pureBaseStats);
+      const deckPower = computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats);
       scoreData = computeScoreTimeline(
         timeline,
         noteDensityEntries,
@@ -2245,29 +2319,31 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats) {
   coverageRowEl.appendChild(memberStatsWrap);
 }
 
-/** The Holomem Board Bonus the site can actually compute only accounts for
- *  blue Member-area nodes on the 5 selected cards - Green/Content-area nodes
- *  are spread across the player's WHOLE roster (any card, not just the team),
- *  which this site has no way to see. When the player has entered their real
- *  in-game value, use that (it already includes Green nodes); otherwise fall
- *  back to the blue-only computed figure, same as before this field existed. */
-function effectiveHolomemBoardBonus(breakdown, manualIngameValue) {
-  return manualIngameValue ?? breakdown.holomemBoardBonus;
+/** Red+Blue are always the site's own live board computation (recomputes
+ *  automatically whenever the player edits either board) - only Green is a
+ *  player-entered figure, and even that is just a delta (see
+ *  openGreenBonusCalculator), not a value that locks out board edits.
+ *  greenBonus is passed explicitly (not read from state directly) so this
+ *  works the same for the live team (state.manualGreenBonus) and for a saved
+ *  preset being compared (preset.manualGreenBonus) - same pattern as memory/
+ *  power-up bonus, which are also per-preset rather than global. */
+function effectiveHolomemBoardBonus(breakdown, greenBonus) {
+  return breakdown.redBonus + breakdown.blueBonus + (greenBonus || 0);
 }
 
 /** The scalar "Overall Power" total shown in the Power panel, factored out so
  *  the score calculator (deckPower) can reuse the exact same formula instead
  *  of risking the two drifting apart. */
-function computeOverallPowerTotal(result, baseStats) {
-  const breakdown = computeOverallPowerBreakdown(result, baseStats);
+function computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats) {
+  const breakdown = computeOverallPowerBreakdown(result, pureBaseStats, memberOnlyBaseStats);
   const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
-  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualHolomemBoardBonusIngame);
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualGreenBonus);
   const subtotalBeforePowerUp = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus;
   const powerUpBonus = Math.round(subtotalBeforePowerUp * (state.manualPowerUpBonusPercent / 100));
   return subtotalBeforePowerUp + powerUpBonus;
 }
 
-function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
+function renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, memberOnlyBaseStats) {
   powerRowEl.innerHTML = '';
   const panel = document.createElement('div');
   panel.className = 'panel';
@@ -2276,11 +2352,11 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   label.textContent = 'Overall Power';
   panel.appendChild(label);
 
-  const breakdown = computeOverallPowerBreakdown(result, baseStats);
+  const breakdown = computeOverallPowerBreakdown(result, pureBaseStats, memberOnlyBaseStats);
   // Memory Bonus ("Unit Stats X%" on the Memory Stand screen) - a % of
   // Member Parameter only, not the whole subtotal.
   const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
-  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualHolomemBoardBonusIngame);
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualGreenBonus);
   // Member Power-Up Bonus ("Upgrade Bonus X%" on the Member training screen)
   // - a % of Member Parameter + Outfit Skill + Passive Skill + Holomem Board
   // Bonus + Memory Bonus (everything else computed so far).
@@ -2315,38 +2391,40 @@ function renderPowerRow(result, leaderCard, scoreSupport, baseStats) {
   addRow('Outfit Skill', makeNum(breakdown.outfitSkill));
   addRow('Passive Skill', makeNum(breakdown.passiveSkill));
 
-  const makeIngameValueInput = (blueOnlyValue, manualValue, onChange) => {
-    const wrap = document.createElement('span');
-    wrap.className = 'power-percent-wrap';
-    const el = document.createElement('input');
-    el.type = 'number';
-    el.className = 'mini-input power-manual-input';
-    el.placeholder = blueOnlyValue.toLocaleString();
-    el.step = 1;
-    el.value = manualValue ?? '';
-    el.onclick = (e) => e.stopPropagation();
-    el.onchange = () => {
-      const raw = el.value.trim();
-      onChange(raw === '' ? null : Math.round(Number(raw) || 0));
-      recompute();
-    };
-    wrap.appendChild(el);
-    const computed = document.createElement('span');
-    computed.className = 'num power-percent-computed';
-    if (manualValue != null) {
-      const green = manualValue - blueOnlyValue;
-      computed.textContent = `blue ${blueOnlyValue.toLocaleString()} + green ${green >= 0 ? '+' : ''}${green.toLocaleString()}`;
-    } else {
-      computed.textContent = `blue-only ${blueOnlyValue.toLocaleString()} \u2014 enter your in-game value`;
-    }
-    wrap.appendChild(computed);
-    return wrap;
-  };
   addRow(
-    'Holomem Board Bonus',
-    makeIngameValueInput(breakdown.holomemBoardBonus, state.manualHolomemBoardBonusIngame, (v) => (state.manualHolomemBoardBonusIngame = v)),
+    'Red Bonus',
+    makeNum(breakdown.redBonus),
+    createInfoIcon('Leader-area board nodes plus the leader-portion of connect patterns. Always live - updates automatically when you edit the red board.')
+  );
+  addRow(
+    'Blue Bonus',
+    makeNum(breakdown.blueBonus),
+    createInfoIcon('Member-area board nodes plus the member-portion of connect patterns. Always live - updates automatically when you edit the blue board.')
+  );
+
+  const greenWrap = document.createElement('span');
+  greenWrap.className = 'power-percent-wrap';
+  const greenNum = document.createElement('span');
+  greenNum.className = 'num';
+  greenNum.textContent = state.manualGreenBonus != null ? state.manualGreenBonus.toLocaleString() : '\u2014';
+  greenWrap.appendChild(greenNum);
+  const greenBtn = document.createElement('button');
+  greenBtn.type = 'button';
+  greenBtn.className = 'board-btn';
+  greenBtn.textContent = state.manualGreenBonus != null ? 'Recalculate' : 'Calculate Green Bonus';
+  greenBtn.onclick = (e) => {
+    e.stopPropagation();
+    openGreenBonusCalculator(breakdown.redBonus, breakdown.blueBonus, (green) => {
+      state.manualGreenBonus = green;
+      recompute();
+    });
+  };
+  greenWrap.appendChild(greenBtn);
+  addRow(
+    'Green Bonus',
+    greenWrap,
     createInfoIcon(
-      'This site only counts blue Member-area board nodes here - Green/Content-area nodes spread across your whole roster aren\u2019t visible to it. Enter the Holomem Board Bonus shown in the Unit Score after the Song Selection screen, and the difference will be used as your Green node contribution.',
+      'Content-area board nodes are spread across your whole roster, which this site can\u2019t see. Click Calculate, enter the Holomem Board Bonus shown in the Unit Score after the Song Selection screen, and the difference from this site\u2019s live Red+Blue total is used as your Green contribution. Stays fixed until you recalculate - editing the red or blue board only updates those two, not Green.',
       'images/help/holomem_board_bonus_reference.webp'
     )
   );
@@ -2457,7 +2535,7 @@ function buildPresetFromCurrentState(name) {
     songId: state.songId,
     manualMemoryBonusPercent: state.manualMemoryBonusPercent,
     manualPowerUpBonusPercent: state.manualPowerUpBonusPercent,
-    manualHolomemBoardBonusIngame: state.manualHolomemBoardBonusIngame,
+    manualGreenBonus: state.manualGreenBonus,
     characterData,
   };
 }
@@ -2468,7 +2546,7 @@ function applyPreset(preset) {
   state.songId = preset.songId ?? null;
   state.manualMemoryBonusPercent = preset.manualMemoryBonusPercent ?? 0;
   state.manualPowerUpBonusPercent = preset.manualPowerUpBonusPercent ?? 0;
-  state.manualHolomemBoardBonusIngame = preset.manualHolomemBoardBonusIngame ?? null;
+  state.manualGreenBonus = preset.manualGreenBonus ?? null;
   for (const [characterId, data] of Object.entries(preset.characterData || {})) {
     state.boardSelections[characterId] = new Set(data.boardSelections || []);
     if (data.connectSelections) state.connectSelections[characterId] = data.connectSelections;
@@ -2699,9 +2777,9 @@ function renderCompareTeamColumn(side, preset, computed, onChoosePreset) {
 }
 
 function computeComparePower(preset, computed) {
-  const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats);
+  const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats, computed.baseStats);
   const memoryBonus = Math.round(breakdown.memberParameter * ((preset.manualMemoryBonusPercent || 0) / 100));
-  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, preset.manualHolomemBoardBonusIngame ?? null);
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, preset.manualGreenBonus ?? null);
   const subtotal = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus;
   const powerUpBonus = Math.round(subtotal * ((preset.manualPowerUpBonusPercent || 0) / 100));
   const total = subtotal + powerUpBonus;
@@ -2993,7 +3071,7 @@ function openComparePage() {
       const difficultyLevel = song.difficultyLevels?.[state.difficulty];
       const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
       if (difficultyLevel != null && liveScoreCoefficientPermil != null) {
-        const deckPower = computeOverallPowerTotal(computed.result, computed.pureBaseStats);
+        const deckPower = computeOverallPowerTotal(computed.result, computed.pureBaseStats, computed.baseStats);
         scoreData = computeScoreTimeline(
           timeline,
           noteDensityEntries,

@@ -992,9 +992,19 @@ export const SCORE_SUPPORT_TYPE =
  * @param {{cardId:string, stats:{performance,technique,sense}}[]} baseStats
  *        - the pre-board snapshot (level + bloom only) for the same 5 unit
  *        members, in the same order as result.memberStats.
+ * @param {{cardId:string, stats:{performance,technique,sense}}[]} [memberOnlyBaseStats]
+ *        - optional: a snapshot with ONLY member-area (blue) board nodes and
+ *        the member-portion of connect patterns applied (no leader-area/red).
+ *        When given, holomemBoardBonus splits into redBonus (leader-area
+ *        nodes + leader-portion of connects - the delta between this and the
+ *        fully-buffed result.memberStats) and blueBonus (member-area nodes +
+ *        member-portion of connects - the delta between this and baseStats).
+ *        Without it, holomemBoardBonus is still returned as their sum, but
+ *        redBonus/blueBonus individually aren't meaningful (both 0/lumped).
  */
-export function computeOverallPowerBreakdown(result, baseStats) {
+export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseStats) {
   const baseByCardId = Object.fromEntries(baseStats.map((m) => [m.cardId, m.stats]));
+  const memberOnlyByCardId = memberOnlyBaseStats ? Object.fromEntries(memberOnlyBaseStats.map((m) => [m.cardId, m.stats])) : null;
 
   // Member Parameter: base (level + bloom, no board) stats, summed.
   let memberParameter = 0;
@@ -1002,14 +1012,28 @@ export function computeOverallPowerBreakdown(result, baseStats) {
     memberParameter += m.stats.performance + m.stats.technique + m.stats.sense;
   }
 
-  // Holomem Board Bonus: the delta board+connect bonuses added on top of base.
-  let holomemBoardBonus = 0;
+  // Blue Bonus: member-area board nodes + member-portion of connect patterns
+  // (isolated via the memberOnly snapshot vs the pure base).
+  // Red Bonus: leader-area nodes + leader-portion of connect patterns -
+  // whatever's left when the fully-buffed result is diffed against the
+  // blue-only snapshot instead of the pure base.
+  let blueBonus = 0;
+  let redBonus = 0;
   for (const m of result.memberStats) {
     const base = baseByCardId[m.cardId];
     if (!base) continue;
-    holomemBoardBonus += m.stats.performance + m.stats.technique + m.stats.sense;
-    holomemBoardBonus -= base.performance + base.technique + base.sense;
+    const full = m.stats.performance + m.stats.technique + m.stats.sense;
+    const pure = base.performance + base.technique + base.sense;
+    const memberOnly = memberOnlyByCardId?.[m.cardId];
+    if (memberOnly) {
+      const memberOnlyTotal = memberOnly.performance + memberOnly.technique + memberOnly.sense;
+      blueBonus += memberOnlyTotal - pure;
+      redBonus += full - memberOnlyTotal;
+    } else {
+      blueBonus += full - pure; // no split possible - lump it all as before
+    }
   }
+  const holomemBoardBonus = blueBonus + redBonus;
 
   // Outfit Skill: the leader's own leader-skill stat buff, applied to the
   // relevant BASE stat total across the unit (not the board-buffed total).
@@ -1056,7 +1080,7 @@ export function computeOverallPowerBreakdown(result, baseStats) {
   }
   passiveSkill = Math.round(passiveSkill);
 
-  return { memberParameter, outfitSkill, holomemBoardBonus, passiveSkill };
+  return { memberParameter, outfitSkill, holomemBoardBonus, redBonus, blueBonus, passiveSkill };
 }
 
 export function estimatePassivePower(passiveResults, memberStats) {
