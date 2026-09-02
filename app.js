@@ -1806,8 +1806,10 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
   const wrap = document.createElement('div');
   wrap.className = 'coverage-table-wrap';
 
+  const showNotesColumn = noteDensityEntries !== null;
+
   const table = document.createElement('table');
-  table.className = 'coverage-table';
+  table.className = showNotesColumn ? 'coverage-table has-notes-column' : 'coverage-table';
   table.style.tableLayout = 'fixed';
 
   const leaderColWidth = referenceColEls?.[0]?.getBoundingClientRect().width || 90;
@@ -1816,7 +1818,6 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
     : unitCards.map(() => 110);
 
   const colgroup = document.createElement('colgroup');
-  const showNotesColumn = noteDensityEntries !== null;
   const timeCol = document.createElement('col');
   const maxCol = document.createElement('col');
   // Time+Max (and Notes, when shown) must sum to exactly leaderColWidth so the

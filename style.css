@@ -187,13 +187,14 @@ header.masthead {
   .selection-header-label.leader { flex: 0 0 78vw; max-width: 300px; }
   .selection-header-label.members { flex: 1; }
 
-  /* Coverage table scrolls horizontally with Time+Max frozen on the left,
-     since the per-second detail table can't meaningfully reflow. */
+  /* Coverage table scrolls horizontally with Time+Max+Notes frozen on the
+     left, since the per-second detail table can't meaningfully reflow. */
   .coverage-table-wrap { overflow-x: auto; }
   .coverage-table { table-layout: auto; }
   .coverage-table col { width: auto !important; min-width: 90px; }
   .coverage-table col:first-child { min-width: 64px; }
   .coverage-table col:nth-child(2) { min-width: 56px; }
+  .coverage-table.has-notes-column col:nth-child(3) { min-width: 48px; }
   .coverage-table th:nth-child(1),
   .coverage-table td:nth-child(1) {
     position: sticky;
