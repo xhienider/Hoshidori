@@ -1277,26 +1277,51 @@ export function computeLeaderScoreSupport(leaderResult) {
 
 const UNIT_SCORE_TIMELINE_SECONDS = 200;
 const ACTIVE_SCORE_UP_TYPE_SUFFIX = '_TYPE_SCORE_UP_PERMIL_UP';
+const COMBO_GTE_TYPE = 'LiveSkillTriggerType_LIVE_SKILL_TRIGGER_TYPE_COMBO_GTE';
 
 /**
  * Per-card inputs for the Unit Score simulator, extracted from
  * computeUnit()'s activeResults - magnitude and probability converted to
  * PERMIL (the doc's convention: 95% = 950), matching the worked-example
  * numbers exactly (e.g. Lui: mag=950, prob=460, cooldown=21, duration=8).
+ *
+ * COMBO-GATE ONSET: a card whose enhanced magnitude sits behind a "Combo >=
+ * N" condition doesn't use it for the whole timeline - only from t0 onward
+ * (t0 = N/2, assuming 2 combo/sec; confirmed exactly at N=40 -> t0=20 against
+ * real deck data, extrapolated for other N since the doc flags those as
+ * untested). LIFE-gated and static deck-composition conditions are NOT
+ * time-gated - life starts full (t=0) and composition is either true for the
+ * whole run or not, matching computeUnit()'s existing effects resolution, so
+ * only combo-gated cards get comboOnsetT/enhancedMagPermil set here; every
+ * other card's magPermil is already the single correct value from
+ * activeResults[i].effects, unchanged from before.
+ *
  * @param {object[]} activeResults - computeUnit(...).actives, in unit order
  * @param {object[]} unitCards - the 5 unit member cards, same order
- * @returns {{cardId:string, magPermil:number, probPermil:number, cooldown:number, duration:number}[]}
+ * @returns {{cardId:string, magPermil:number, probPermil:number, cooldown:number, duration:number, comboOnsetT?:number, enhancedMagPermil?:number}[]}
  */
 export function extractActiveSkillInputs(activeResults, unitCards) {
   return activeResults.map((a, i) => {
+    const isComboGated = a.enhancedCondition?.type === COMBO_GTE_TYPE && a.enhancedConditionMet === 'assumed';
+    const baseEffect = a.baseEffects?.find((e) => e.type.endsWith(ACTIVE_SCORE_UP_TYPE_SUFFIX));
     const scoreEffect = a.effects?.find((e) => e.type.endsWith(ACTIVE_SCORE_UP_TYPE_SUFFIX));
-    return {
+
+    const card = {
       cardId: unitCards[i].cardId,
       magPermil: scoreEffect ? Math.round(scoreEffect.valuePercent * 10) : 0,
       probPermil: Math.round((a.activationProbabilityPercent || 0) * 10),
       cooldown: a.coolTimeSeconds,
       duration: a.effectDurationSeconds,
     };
+
+    if (isComboGated && baseEffect) {
+      const enhancedEffect = a.enhancedEffects?.find((e) => e.type.endsWith(ACTIVE_SCORE_UP_TYPE_SUFFIX));
+      card.magPermil = Math.round(baseEffect.valuePercent * 10); // base magnitude for t < onset
+      card.enhancedMagPermil = enhancedEffect ? Math.round(enhancedEffect.valuePercent * 10) : card.magPermil;
+      card.comboOnsetT = Number(a.enhancedCondition.threshold) / 2;
+    }
+
+    return card;
   });
 }
 
@@ -1317,13 +1342,17 @@ function isActiveOnAt(card, t) {
   return false;
 }
 
+/** The magnitude a card contributes at second t, applying the combo-gate
+ *  onset law when the card is combo-gated (see extractActiveSkillInputs). */
+function magAt(card, t) {
+  if (card.comboOnsetT != null && t >= card.comboOnsetT) return card.enhancedMagPermil;
+  return card.magPermil;
+}
+
 /**
  * Base-pass Active Skill % - the doc's core formula:
- *   v(t) = Σ_ON(mag*prob) / max(1000, Σ_ON prob), per second
+ *   v(t) = Σ_ON(mag(t)*prob) / max(1000, Σ_ON prob), per second
  *   Active = ceil(mean of v(1..200))
- * Combo-gate onset (t<20 uses base magnitude even for a combo-gated
- * override) is NOT implemented - deferred as a minor accuracy gap, per
- * product decision.
  * @param {ReturnType<typeof extractActiveSkillInputs>} cards
  * @returns {{activePercent:number, perSecond:{t:number, v:number}[], meanRaw:number}}
  */
@@ -1343,7 +1372,7 @@ function meanOfTimeline(cards) {
     let sumProb = 0;
     for (const c of cards) {
       if (!isActiveOnAt(c, t)) continue;
-      sumMagProb += c.magPermil * c.probPermil;
+      sumMagProb += magAt(c, t) * c.probPermil;
       sumProb += c.probPermil;
     }
     const v = sumMagProb / Math.max(1000, sumProb);
@@ -1378,7 +1407,7 @@ export function computeBoostedActiveSkillPercent(baseCards, scoreSupportPercent,
     const E = Math.round((scoreSupportPercent[c.cardId] || 0) * 10); // percent -> permil
     const probUp = probUpPermil[c.cardId] || 0;
     const shorten = shortenPermil[c.cardId] || 0;
-    return {
+    const boosted = {
       cardId: c.cardId,
       // integer-numerator arithmetic throughout - "mag * (1 + E/1000)" as
       // written accumulates floating-point noise (1200*(1+680/1000) comes
@@ -1391,6 +1420,14 @@ export function computeBoostedActiveSkillPercent(baseCards, scoreSupportPercent,
       cooldown: (c.cooldown * 1000) / (1000 + shorten),
       duration: c.duration,
     };
+    // "the same time-gated magnitude feeds the boosted pass" - the combo-gate
+    // onset still applies here, with E boosting whichever of base/enhanced is
+    // active at that second.
+    if (c.comboOnsetT != null) {
+      boosted.comboOnsetT = c.comboOnsetT;
+      boosted.enhancedMagPermil = Math.ceil((c.enhancedMagPermil * (1000 + E)) / 1000);
+    }
+    return boosted;
   });
   const { perSecond, meanRaw } = meanOfTimeline(boostedCards);
   const boostedPermil = Math.ceil(meanRaw);
@@ -1466,7 +1503,13 @@ export function computeBoostQuotas(baseCards, boostedCards, outfitPercent, passi
     for (let t = 1; t <= UNIT_SCORE_TIMELINE_SECONDS; t++) {
       if (isActiveOnAt({ cooldown: boosted.cooldown, duration: boosted.duration }, t)) onCount++;
     }
-    w[c.cardId] = c.magPermil * c.probPermil * onCount;
+    // w(card) uses a single "mag" per the doc, but a combo-gated card's
+    // magnitude is time-varying - not addressed by either worked example.
+    // Using the enhanced value here (applies for 180 of the 200 seconds,
+    // vs 20 at base) as the more representative single figure; genuinely
+    // untested against real data for this specific combination.
+    const cardMag = c.comboOnsetT != null ? c.enhancedMagPermil : c.magPermil;
+    w[c.cardId] = cardMag * c.probPermil * onCount;
     W += w[c.cardId];
   }
 

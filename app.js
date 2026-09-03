@@ -2754,7 +2754,7 @@ function buildScoreBonusPanel(unitScoreData) {
   const note = document.createElement('div');
   note.className = 'estimate-note';
   note.textContent =
-    'Matches the in-game Unit Score Details screen\u2019s formula: a fixed 200-second synthetic timeline (not any real song), with Outfit/Passive/Board split via Adams\u2019 divisor apportionment. The combo-gate onset law and the special-skill gate-rider law are not yet modeled - a small, occasional accuracy gap on decks that rely on either.';
+    'Matches the in-game Unit Score Details screen\u2019s formula: a fixed 200-second synthetic timeline (not any real song), with Outfit/Passive/Board split via Adams\u2019 divisor apportionment. The special-skill gate-rider law is not yet modeled - a small, occasional accuracy gap on decks whose special skill has an unmet deck-composition condition.';
   panel.appendChild(note);
 
   return panel;
