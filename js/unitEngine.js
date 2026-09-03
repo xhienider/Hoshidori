@@ -1267,6 +1267,275 @@ export function computeLeaderScoreSupport(leaderResult) {
   return support;
 }
 
+// ---------------------------------------------------------------------------
+// UNIT SCORE - "Active Skill %" line of the in-game Unit Score Details panel.
+// A completely separate simulator from simulateActiveTimeline() above: fixed
+// synthetic 200-second timeline (not any real song's duration/fever seconds),
+// probability-weighted MEAN per second (not "strongest wins"), no combo-gate
+// onset handling yet (deferred, per product decision - see chat).
+// ---------------------------------------------------------------------------
+
+const UNIT_SCORE_TIMELINE_SECONDS = 200;
+const ACTIVE_SCORE_UP_TYPE_SUFFIX = '_TYPE_SCORE_UP_PERMIL_UP';
+
+/**
+ * Per-card inputs for the Unit Score simulator, extracted from
+ * computeUnit()'s activeResults - magnitude and probability converted to
+ * PERMIL (the doc's convention: 95% = 950), matching the worked-example
+ * numbers exactly (e.g. Lui: mag=950, prob=460, cooldown=21, duration=8).
+ * @param {object[]} activeResults - computeUnit(...).actives, in unit order
+ * @param {object[]} unitCards - the 5 unit member cards, same order
+ * @returns {{cardId:string, magPermil:number, probPermil:number, cooldown:number, duration:number}[]}
+ */
+export function extractActiveSkillInputs(activeResults, unitCards) {
+  return activeResults.map((a, i) => {
+    const scoreEffect = a.effects?.find((e) => e.type.endsWith(ACTIVE_SCORE_UP_TYPE_SUFFIX));
+    return {
+      cardId: unitCards[i].cardId,
+      magPermil: scoreEffect ? Math.round(scoreEffect.valuePercent * 10) : 0,
+      probPermil: Math.round((a.activationProbabilityPercent || 0) * 10),
+      cooldown: a.coolTimeSeconds,
+      duration: a.effectDurationSeconds,
+    };
+  });
+}
+
+/**
+ * Whether a card's active skill is ON at integer second t, per the doc's
+ * definition: ON(card) = seconds t with k*cooldown <= t < k*cooldown+duration
+ * for some integer k >= 1 (first activation at t=cooldown, not t=0 - matches
+ * the coverage table's existing convention elsewhere in this file).
+ */
+function isActiveOnAt(card, t) {
+  if (!card.cooldown || !card.duration) return false;
+  const k = Math.floor(t / card.cooldown);
+  for (const kk of [k, k + 1]) {
+    if (kk < 1) continue;
+    const start = kk * card.cooldown;
+    if (t >= start && t < start + card.duration) return true;
+  }
+  return false;
+}
+
+/**
+ * Base-pass Active Skill % - the doc's core formula:
+ *   v(t) = Σ_ON(mag*prob) / max(1000, Σ_ON prob), per second
+ *   Active = ceil(mean of v(1..200))
+ * Combo-gate onset (t<20 uses base magnitude even for a combo-gated
+ * override) is NOT implemented - deferred as a minor accuracy gap, per
+ * product decision.
+ * @param {ReturnType<typeof extractActiveSkillInputs>} cards
+ * @returns {{activePercent:number, perSecond:{t:number, v:number}[], meanRaw:number}}
+ */
+export function computeBaseActiveSkillPercent(cards) {
+  const { perSecond, meanRaw } = meanOfTimeline(cards);
+  const activePermil = Math.ceil(meanRaw);
+  return { activePermil, activePercent: activePermil / 10, perSecond, meanRaw };
+}
+
+/** Shared v(t)-over-200-seconds core, used by both the base and boosted
+ *  passes - identical formula, just fed different (mag,prob,cooldown) sets. */
+function meanOfTimeline(cards) {
+  const perSecond = [];
+  let sum = 0;
+  for (let t = 1; t <= UNIT_SCORE_TIMELINE_SECONDS; t++) {
+    let sumMagProb = 0;
+    let sumProb = 0;
+    for (const c of cards) {
+      if (!isActiveOnAt(c, t)) continue;
+      sumMagProb += c.magPermil * c.probPermil;
+      sumProb += c.probPermil;
+    }
+    const v = sumMagProb / Math.max(1000, sumProb);
+    perSecond.push({ t, v });
+    sum += v;
+  }
+  return { perSecond, meanRaw: sum / UNIT_SCORE_TIMELINE_SECONDS };
+}
+
+/**
+ * Boosted pass (doc section 6): rerun the same 200s timeline with boosted
+ * per-card parameters reflecting Outfit+Passive+Board Score Support (E),
+ * board activation-probability nodes (probUp), and board cooldown-shorten
+ * nodes (shorten):
+ *   mag' = ceil(mag * (1 + E/1000))
+ *   prob' = ceil(prob * (1 + probUp/1000))
+ *   cd' = cooldown / (1 + shorten/1000)
+ * E is exactly the site's existing merged `scoreSupport` map (mergeScoreSupport
+ * already combines leader/passive/board Score Support into one number per
+ * card) - no new resolution needed, confirmed against the datamine that
+ * LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP board nodes are exclusively
+ * SET_LIVE_LEADER-triggered, matching the doc's "leader-scope only" E_board.
+ *
+ * @param {ReturnType<typeof extractActiveSkillInputs>} baseCards
+ * @param {Record<string, number>} scoreSupportPercent - E(card), percent (not permil)
+ * @param {Record<string, number>} probUpPermil - board activation-probability-up nodes, per cardId
+ * @param {Record<string, number>} shortenPermil - board cooldown-shorten nodes, per cardId
+ * @returns {{boostedPermil:number, boostedPercent:number, perSecond:{t:number,v:number}[], meanRaw:number, boostedCards:object[]}}
+ */
+export function computeBoostedActiveSkillPercent(baseCards, scoreSupportPercent, probUpPermil, shortenPermil) {
+  const boostedCards = baseCards.map((c) => {
+    const E = Math.round((scoreSupportPercent[c.cardId] || 0) * 10); // percent -> permil
+    const probUp = probUpPermil[c.cardId] || 0;
+    const shorten = shortenPermil[c.cardId] || 0;
+    return {
+      cardId: c.cardId,
+      // integer-numerator arithmetic throughout - "mag * (1 + E/1000)" as
+      // written accumulates floating-point noise (1200*(1+680/1000) comes
+      // out 2016.0000000000002 in JS, one ULP over the exact integer 2016,
+      // which then wrongly ceils to 2017). "(mag*(1000+E))/1000" does the
+      // same math with a single division at the end and lands exactly on
+      // 2016 - confirmed against the doc's worked example after this fix.
+      magPermil: Math.ceil((c.magPermil * (1000 + E)) / 1000),
+      probPermil: Math.ceil((c.probPermil * (1000 + probUp)) / 1000),
+      cooldown: (c.cooldown * 1000) / (1000 + shorten),
+      duration: c.duration,
+    };
+  });
+  const { perSecond, meanRaw } = meanOfTimeline(boostedCards);
+  const boostedPermil = Math.ceil(meanRaw);
+  return { boostedPermil, boostedPercent: boostedPermil / 10, perSecond, meanRaw, boostedCards };
+}
+
+/**
+ * Adams' divisor apportionment (doc section 6): allocates an integer target
+ * total across N quotas such that every nonzero-quota line gets ceil(quota/D)
+ * for a single shared divisor D, chosen so the lines sum EXACTLY to the
+ * target. Guarantees every nonzero line is allocated >= 1 (Adams' defining
+ * property - it rounds UP, unlike Hamilton/Jefferson's methods). Zero-quota
+ * lines are excluded entirely (not "visible") and always get 0.
+ *
+ * Implementation: sum(ceil(q_i/D)) is a non-increasing step function of D,
+ * so binary-search D until the sum matches the target exactly.
+ *
+ * @param {number[]} quotas - one per line (0 for a line that doesn't apply)
+ * @param {number} target - the integer total the lines must sum to (Boost)
+ * @returns {number[]} integer allocation per line, same order/length as quotas, summing to target
+ */
+export function adamsApportionment(quotas, target) {
+  const result = quotas.map(() => 0);
+  const nonzero = quotas.map((q, i) => ({ q, i })).filter((x) => x.q > 0);
+  if (nonzero.length === 0 || target <= 0) return result;
+
+  let lo = 0;
+  let hi = Math.max(...nonzero.map((x) => x.q)); // at D=hi, the largest quota's line gets ceil(1)=1
+  const sumAt = (D) => nonzero.reduce((s, x) => s + Math.ceil(x.q / D), 0);
+
+  // sumAt(lo=0) is +Infinity (division by 0), sumAt(hi) = however many lines
+  // that is (each >=1). If target is below that floor, clamp - can't go
+  // lower than 1 per visible line (matches "every visible line >= 1").
+  const floor = sumAt(hi);
+  if (target <= floor) {
+    for (const x of nonzero) result[x.i] = 1;
+    return result;
+  }
+
+  for (let iter = 0; iter < 200; iter++) {
+    const mid = (lo + hi) / 2;
+    if (mid === lo || mid === hi) break; // float precision floor reached
+    if (sumAt(mid) > target) lo = mid;
+    else hi = mid;
+  }
+  for (const x of nonzero) result[x.i] = Math.ceil(x.q / hi);
+  return result;
+}
+
+/**
+ * Computes the three Outfit/Passive/Board quotas (doc section 6) from raw
+ * per-card inputs, ready to feed into adamsApportionment() alongside Boost.
+ * w(card) uses BASE mag/prob but the BOOSTED cooldown's ON-count ("the
+ * shortened lattice") - this mixed base/boosted convention is explicit in
+ * the doc and easy to get wrong.
+ *
+ * @param {ReturnType<typeof extractActiveSkillInputs>} baseCards
+ * @param {object[]} boostedCards - from computeBoostedActiveSkillPercent(...).boostedCards
+ * @param {Record<string,number>} outfitPercent - E_outfit per card, PERCENT (computeLeaderScoreSupport() output)
+ * @param {Record<string,number>} passivePercent - E_passive per card, PERCENT (computeScoreSupport() output)
+ * @param {Record<string,number>} boardPermil - E_board per card, PERMIL (computeBoardBonuses(...).scoreSupportPermil)
+ * @param {Record<string,number>} probUpPermil
+ * @param {Record<string,number>} shortenPermil
+ * @returns {{qOutfit:number, qPassive:number, qBoard:number, W:number}}
+ */
+export function computeBoostQuotas(baseCards, boostedCards, outfitPercent, passivePercent, boardPermil, probUpPermil, shortenPermil) {
+  const boostedByCardId = Object.fromEntries(boostedCards.map((c) => [c.cardId, c]));
+  const w = {};
+  let W = 0;
+  for (const c of baseCards) {
+    const boosted = boostedByCardId[c.cardId];
+    let onCount = 0;
+    for (let t = 1; t <= UNIT_SCORE_TIMELINE_SECONDS; t++) {
+      if (isActiveOnAt({ cooldown: boosted.cooldown, duration: boosted.duration }, t)) onCount++;
+    }
+    w[c.cardId] = c.magPermil * c.probPermil * onCount;
+    W += w[c.cardId];
+  }
+
+  // E_outfit is uniform across the whole team when it applies at all - any
+  // nonzero entry gives the right value.
+  const eOutfitPercent = Math.max(0, ...Object.values(outfitPercent).map((v) => v || 0));
+  const qOutfit = eOutfitPercent * 10 * W; // percent -> permil to match doc's permil quotas
+
+  let qPassive = 0;
+  let weightedBoard = 0;
+  let weightedProbUp = 0;
+  let weightedShorten = 0;
+  for (const c of baseCards) {
+    const cardW = w[c.cardId];
+    qPassive += (passivePercent[c.cardId] || 0) * 10 * cardW; // percent -> permil
+    weightedBoard += (boardPermil[c.cardId] || 0) * cardW;
+    weightedProbUp += (probUpPermil[c.cardId] || 0) * cardW;
+    weightedShorten += (shortenPermil[c.cardId] || 0) * cardW;
+  }
+  const eBar = W > 0 ? weightedBoard / W : 0;
+  const pBar = W > 0 ? weightedProbUp / W : 0;
+  const sBar = W > 0 ? weightedShorten / W : 0;
+  const qBoard = 1000 * W * ((1 + eBar / 1000) * (1 + pBar / 1000) * (1 + sBar / 1000) - 1);
+
+  return { qOutfit, qPassive, qBoard, W };
+}
+
+/**
+ * Bridges computeUnit()'s specialResults into computeSpecialSkillLine()'s
+ * input shape (percent -> permil, field renames). A member with no special
+ * skill contributes magPermil=0, correctly skipped by computeSpecialSkillLine.
+ * @param {object[]} specialResults - computeUnit(...).specials, in unit order
+ */
+export function extractSpecialSkillInputs(specialResults) {
+  return specialResults.map((s) => ({
+    magPermil: s.supportBonusPercent ? Math.round(s.supportBonusPercent * 10) : 0,
+    durationSeconds: s.effectDurationSeconds || 0,
+    riderPermil: s.activationRateUpPercent ? Math.round(s.activationRateUpPercent * 10) : 0,
+  }));
+}
+
+/**
+ * Special Skill line (doc section 5):
+ *   pool = Σ specials(magS * durS * (1 + riderS/2000))
+ *   Special = ceil(Active * pool / 120,000)
+ * riderS (the special's own activation-rate-up bonus, from
+ * additionalEffects) counts at HALF value (divide by 2000, not 1000).
+ * Special multiplies the ACTIVE line, not the boosted one.
+ *
+ * The SPECIAL GATE-RIDER law (a special loses its rider, but keeps its
+ * magnitude, when its own deck-composition condition isn't met) is NOT
+ * implemented - deferred as a minor accuracy gap, per product decision.
+ * Every special's rider is included in full regardless of its condition.
+ *
+ * @param {number} activePermil - the base-pass Active Skill line, in PERMIL (computeBaseActiveSkillPercent(...).activePermil)
+ * @param {{magPermil:number, durationSeconds:number, riderPermil:number}[]} specials - one entry per unit member's special skill (magPermil=0 or entry omitted if the card has none)
+ * @returns {{specialPermil:number, specialPercent:number, pool:number}}
+ */
+export function computeSpecialSkillLine(activePermil, specials) {
+  let pool = 0;
+  for (const s of specials) {
+    if (!s.magPermil || !s.durationSeconds) continue;
+    const rider = s.riderPermil || 0;
+    pool += (s.magPermil * s.durationSeconds * (2000 + rider)) / 2000; // integer-numerator form of magS*durS*(1+riderS/2000)
+  }
+  const specialPermil = Math.ceil((activePermil * pool) / 120000);
+  return { specialPermil, specialPercent: specialPermil / 10, pool };
+}
+
 /**
  * Second-by-second simulation of Active Skill coverage across a song, mirroring
  * the original sheet's model (rows 60-241): each member's active skill is assumed

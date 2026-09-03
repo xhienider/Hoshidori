@@ -21,6 +21,13 @@ import {
   findOptimalFrequencyNodes,
   planFrequencyNodeUnlock,
   computeScoreTimeline,
+  extractActiveSkillInputs,
+  computeBaseActiveSkillPercent,
+  computeBoostedActiveSkillPercent,
+  computeBoostQuotas,
+  adamsApportionment,
+  extractSpecialSkillInputs,
+  computeSpecialSkillLine,
 } from './js/unitEngine.js';
 import { computeCharacterActivityScores, LAUNCH_ORDER_THRESHOLD } from './js/activityModel.js';
 
@@ -1455,7 +1462,7 @@ function computeFullResult(team, songOverride) {
 
   const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil, computeLeaderScoreSupport(result.leader));
 
-  return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong };
+  return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong, combinedBonuses };
 }
 
 function recompute() {
@@ -1472,7 +1479,7 @@ function recompute() {
   const { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats } = computed;
   renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats);
   renderCoverageRow(result, unit, scoreSupport, pureBaseStats, baseStats);
-  renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, baseStats);
+  renderPowerRow(computed);
 }
 
 /** Leader column content when the team isn't complete yet - song picking and a
@@ -2392,8 +2399,121 @@ function computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats) {
   return breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus + powerUpBonus;
 }
 
-function renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, memberOnlyBaseStats) {
+// UnitScore = 101,867/50,000 exactly, per the reverse-engineering doc's
+// explicit correction - NOT the longer 2.0373445 in community circulation,
+// which the doc identifies as a float-fitting artifact outside the
+// admissible interval.
+const UNIT_SCORE_CONSTANT = 101867 / 50000;
+
+/**
+ * Full Unit Score pipeline (Overall Power x constant x (1+ScoreBonus/1000)),
+ * assembling every piece built across the last several steps. Returns null
+ * if the team has no leader/active-skill data to work with.
+ * @param {ReturnType<typeof computeFullResult>} computed
+ */
+function computeUnitScoreBreakdown(computed) {
+  const { result, unit, pureBaseStats, baseStats: memberOnlyBaseStats, combinedBonuses } = computed;
+  const unitCards = unit.map((u) => u.card);
+
+  const overallPower = computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats);
+
+  const eOutfit = computeLeaderScoreSupport(result.leader); // percent
+  const ePassive = computeScoreSupport(result.passives); // percent
+  const eBoard = combinedBonuses.scoreSupportPermil; // permil (per computeBoardBonuses)
+  const probUp = combinedBonuses.activationProbabilityPermil;
+  const shorten = combinedBonuses.cooldownShortenPermil;
+
+  const baseCards = extractActiveSkillInputs(result.actives, unitCards);
+  const activeResult = computeBaseActiveSkillPercent(baseCards);
+
+  // the merged E (percent) for the boosted pass is exactly computed.scoreSupport
+  const boostedResult = computeBoostedActiveSkillPercent(baseCards, computed.scoreSupport, probUp, shorten);
+
+  const quotas = computeBoostQuotas(baseCards, boostedResult.boostedCards, eOutfit, ePassive, eBoard, probUp, shorten);
+  const N = [quotas.qOutfit > 0, quotas.qPassive > 0, quotas.qBoard > 0].filter(Boolean).length;
+
+  let outfitPermil = 0;
+  let passivePermil = 0;
+  let boardPermil = 0;
+  if (N > 0) {
+    const nonSpecialTotal = boostedResult.boostedPermil + (N - 1);
+    const boost = Math.max(0, nonSpecialTotal - activeResult.activePermil);
+    [outfitPermil, passivePermil, boardPermil] = adamsApportionment([quotas.qOutfit, quotas.qPassive, quotas.qBoard], boost);
+  }
+
+  const specialInputs = extractSpecialSkillInputs(result.specials);
+  const specialResult = computeSpecialSkillLine(activeResult.activePermil, specialInputs);
+
+  const scoreBonusPermil = activeResult.activePermil + outfitPermil + passivePermil + boardPermil + specialResult.specialPermil;
+  const unitScore = Math.ceil(overallPower * UNIT_SCORE_CONSTANT * (1 + scoreBonusPermil / 1000));
+
+  return {
+    overallPower,
+    scoreBonusPermil,
+    unitScore,
+    lines: {
+      active: activeResult.activePermil,
+      outfit: outfitPermil,
+      passive: passivePermil,
+      board: boardPermil,
+      special: specialResult.specialPermil,
+    },
+  };
+}
+
+/** Small horizontal proportional bar (matches the in-game panel's style):
+ *  one colored segment per nonzero line, width proportional to its share. */
+function buildProportionalBar(segments) {
+  const bar = document.createElement('div');
+  bar.className = 'power-bar';
+  const total = segments.reduce((s, seg) => s + Math.max(0, seg.value), 0);
+  if (total <= 0) return bar;
+  for (const seg of segments) {
+    if (seg.value <= 0) continue;
+    const piece = document.createElement('div');
+    piece.className = 'power-bar-segment';
+    piece.style.width = `${(seg.value / total) * 100}%`;
+    piece.style.background = seg.color;
+    piece.title = `${seg.label}: ${seg.value.toLocaleString()}`;
+    bar.appendChild(piece);
+  }
+  return bar;
+}
+
+const POWER_LINE_COLORS = {
+  memberParameter: '#4ade80',
+  outfit: '#e1801a',
+  holomemBoard: '#4fa8e8',
+  passive: '#ff6f91',
+  memory: '#7ee0c0',
+  powerUp: '#a78bfa',
+};
+const SCORE_BONUS_LINE_COLORS = {
+  active: '#f2cf4a',
+  outfit: '#e1801a',
+  passive: '#ff6f91',
+  board: '#4fa8e8',
+  special: '#5fd0d6',
+};
+
+function renderPowerRow(computed) {
   powerRowEl.innerHTML = '';
+  const { result, pureBaseStats, baseStats: memberOnlyBaseStats } = computed;
+
+  const wrap = document.createElement('div');
+  wrap.className = 'unit-score-wrap';
+
+  const unitScoreData = computeUnitScoreBreakdown(computed);
+
+  const hero = document.createElement('div');
+  hero.className = 'unit-score-hero';
+  hero.innerHTML = `<div class="unit-score-hero-label">Unit Score</div><div class="unit-score-hero-value">${unitScoreData.unitScore.toLocaleString()}</div>`;
+  wrap.appendChild(hero);
+
+  const panelsRow = document.createElement('div');
+  panelsRow.className = 'unit-score-panels';
+  wrap.appendChild(panelsRow);
+
   const panel = document.createElement('div');
   panel.className = 'panel';
   const label = document.createElement('div');
@@ -2419,6 +2539,17 @@ function renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, memberO
   totalEl.className = 'power-total';
   totalEl.textContent = total.toLocaleString();
   panel.appendChild(totalEl);
+
+  panel.appendChild(
+    buildProportionalBar([
+      { value: breakdown.memberParameter, color: POWER_LINE_COLORS.memberParameter, label: 'Member Parameter' },
+      { value: breakdown.outfitSkill, color: POWER_LINE_COLORS.outfit, label: 'Outfit Skill' },
+      { value: holomemBoardBonus, color: POWER_LINE_COLORS.holomemBoard, label: 'Holomem Board Bonus' },
+      { value: breakdown.passiveSkill, color: POWER_LINE_COLORS.passive, label: 'Passive Skill' },
+      { value: memoryBonus, color: POWER_LINE_COLORS.memory, label: 'Memory Bonus' },
+      { value: powerUpBonus, color: POWER_LINE_COLORS.powerUp, label: 'Member Power-Up Bonus' },
+    ])
+  );
 
   const grid = document.createElement('div');
   grid.className = 'power-breakdown';
@@ -2512,10 +2643,10 @@ function renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, memberO
     pct.className = 'power-percent-sign';
     pct.textContent = '%';
     wrap.appendChild(pct);
-    const computed = document.createElement('span');
-    computed.className = 'num power-percent-computed';
-    computed.textContent = `= +${computedValue.toLocaleString()}`;
-    wrap.appendChild(computed);
+    const computedEl = document.createElement('span');
+    computedEl.className = 'num power-percent-computed';
+    computedEl.textContent = `= +${computedValue.toLocaleString()}`;
+    wrap.appendChild(computedEl);
     return wrap;
   };
   addRow(
@@ -2543,7 +2674,78 @@ function renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, memberO
     'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green (support) board bonuses aren\u2019t included in Holomem Board Bonus yet. Memory Bonus is the "Unit Stats %" from the Memory Stand screen, applied to Member Parameter only. Member Power-Up Bonus is the "Upgrade Bonus %" from the Member training screen, applied to Member Parameter + Outfit Skill + Passive Skill + Holomem Board Bonus + Memory Bonus. Enter both manually above.';
   panel.appendChild(note);
 
-  powerRowEl.appendChild(panel);
+  panelsRow.appendChild(panel);
+  panelsRow.appendChild(buildScoreBonusPanel(unitScoreData));
+  powerRowEl.appendChild(wrap);
+}
+
+/** Score Bonus panel - same listed-item shape as Overall Power, per the
+ *  in-game "Unit Score Details" screen using one consistent UI language for
+ *  both panels rather than mixing list/box styles. */
+function buildScoreBonusPanel(unitScoreData) {
+  const panel = document.createElement('div');
+  panel.className = 'panel';
+  const label = document.createElement('div');
+  label.className = 'panel-label';
+  label.textContent = 'Score Bonus';
+  panel.appendChild(label);
+
+  const { lines, scoreBonusPermil } = unitScoreData;
+  const totalEl = document.createElement('div');
+  totalEl.className = 'power-total';
+  totalEl.textContent = `${(scoreBonusPermil / 10).toFixed(1)}%`;
+  panel.appendChild(totalEl);
+
+  panel.appendChild(
+    buildProportionalBar([
+      { value: lines.active, color: SCORE_BONUS_LINE_COLORS.active, label: 'Active Skill' },
+      { value: lines.outfit, color: SCORE_BONUS_LINE_COLORS.outfit, label: 'Outfit Skill' },
+      { value: lines.passive, color: SCORE_BONUS_LINE_COLORS.passive, label: 'Passive Skill' },
+      { value: lines.board, color: SCORE_BONUS_LINE_COLORS.board, label: 'Holomem Board Bonus' },
+      { value: lines.special, color: SCORE_BONUS_LINE_COLORS.special, label: 'Special Skill' },
+    ])
+  );
+
+  const grid = document.createElement('div');
+  grid.className = 'power-breakdown';
+  const addRow = (rowLabel, permilValue, infoIcon) => {
+    const labelEl = document.createElement('span');
+    labelEl.textContent = rowLabel;
+    if (infoIcon) labelEl.appendChild(infoIcon);
+    const valueEl = document.createElement('span');
+    valueEl.className = 'num';
+    valueEl.textContent = `${(permilValue / 10).toFixed(1)}%`;
+    grid.appendChild(labelEl);
+    grid.appendChild(valueEl);
+  };
+  addRow(
+    'Active Skill',
+    lines.active,
+    createInfoIcon(
+      'Probability-weighted expected value of every unit member\u2019s active skill across a standardized 200-second timeline - not the same calculation as the per-song coverage table\u2019s "strongest active wins" rule.'
+    )
+  );
+  addRow(
+    'Outfit Skill',
+    lines.outfit,
+    createInfoIcon('Only SCORE-type leader outfits contribute here (stat-type outfits feed Overall Power instead and leave this at 0).')
+  );
+  addRow('Passive Skill', lines.passive, createInfoIcon('Score Support passives, apportioned by their share of the boosted timeline.'));
+  addRow(
+    'Holomem Board Bonus',
+    lines.board,
+    createInfoIcon('Leader-scope Score Support board nodes, plus activation-probability and cooldown-shorten board nodes, apportioned by their combined effect.')
+  );
+  addRow('Special Skill', lines.special, createInfoIcon('Scales with the Active Skill line and each equipped special\u2019s own magnitude/duration/rider.'));
+  panel.appendChild(grid);
+
+  const note = document.createElement('div');
+  note.className = 'estimate-note';
+  note.textContent =
+    'Matches the in-game Unit Score Details screen\u2019s formula: a fixed 200-second synthetic timeline (not any real song), with Outfit/Passive/Board split via Adams\u2019 divisor apportionment. The combo-gate onset law and the special-skill gate-rider law are not yet modeled - a small, occasional accuracy gap on decks that rely on either.';
+  panel.appendChild(note);
+
+  return panel;
 }
 
 // ---------------------------------------------------------------------------

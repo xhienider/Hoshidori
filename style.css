@@ -1929,6 +1929,51 @@ header.masthead {
   letter-spacing: 0.01em;
 }
 
+.unit-score-wrap { display: flex; flex-direction: column; gap: 16px; }
+
+.unit-score-hero {
+  align-self: center;
+  text-align: center;
+  padding: 16px 32px;
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  background: var(--panel-raised);
+}
+.unit-score-hero-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-dim);
+  margin-bottom: 4px;
+}
+.unit-score-hero-value {
+  font-family: var(--font-display);
+  font-size: 48px;
+  font-weight: 700;
+  color: var(--orange);
+  letter-spacing: 0.01em;
+}
+
+.unit-score-panels {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+@media (max-width: 720px) {
+  .unit-score-panels { grid-template-columns: 1fr; }
+}
+
+.power-bar {
+  display: flex;
+  height: 8px;
+  border-radius: 4px;
+  overflow: hidden;
+  background: var(--bg);
+  margin: 10px 0 4px;
+}
+.power-bar-segment { height: 100%; }
+
 .power-breakdown {
   display: grid;
   grid-template-columns: 1fr auto;
