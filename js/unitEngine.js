@@ -57,10 +57,57 @@ export function computeUnit(input, data) {
       unitCards,
       characterGroupings
     );
+    // Main leader-skill effects are usually a stat buff, but 10 cards in the
+    // datamine have Score Support as their ONLY (main) effect instead - no
+    // stat buff at all. Resolved with target-based recipients the same way
+    // passive effects are, so computeLeaderScoreSupport() below can pick up
+    // score-support-type entries here regardless of whether they're the
+    // main effect or the additional one (see below).
+    const rawEffects = conditionMet === false ? [] : leaderCard.leaderSkill.effects || [];
+    const effects = rawEffects.map((effect) => {
+      const recipients = conditionMet ? resolveEffectRecipients(effect.target, leaderCard, unitCards, characterGroupings) : [];
+      return {
+        type: effect.type,
+        valuePermil: Number(effect.value),
+        recipients: recipients.map((c) => c.cardId),
+        applies: recipients.length > 0,
+      };
+    });
+
+    // Some leader skills carry a SECOND effect (seen so far: always a Score
+    // Support boost) gated by its own additional condition - same pattern as
+    // Active Skill's enhancedEffects and Special Skill's additionalEffects,
+    // just not previously extracted for leader skills. In every case checked
+    // in the datamine, the additional condition is identical to the main
+    // one, but it's evaluated separately here rather than assumed, in case a
+    // future card differs.
+    let additionalConditionMet = null;
+    let additionalEffects = [];
+    if (leaderCard.leaderSkill.additionalCondition) {
+      additionalConditionMet = evaluateLeaderCondition(
+        leaderCard.leaderSkill.additionalCondition,
+        leaderCard,
+        unitCards,
+        characterGroupings
+      );
+      const rawAdditionalEffects = additionalConditionMet === false ? [] : leaderCard.leaderSkill.additionalEffects || [];
+      additionalEffects = rawAdditionalEffects.map((effect) => {
+        const recipients = additionalConditionMet ? resolveEffectRecipients(effect.target, leaderCard, unitCards, characterGroupings) : [];
+        return {
+          type: effect.type,
+          valuePermil: Number(effect.value),
+          recipients: recipients.map((c) => c.cardId),
+          applies: recipients.length > 0,
+        };
+      });
+    }
     leaderResult = {
       condition: leaderCard.leaderSkill.condition,
       conditionMet, // true / false / 'situational' (combo/life-based, can't pre-evaluate)
-      effects: conditionMet === false ? [] : leaderCard.leaderSkill.effects,
+      effects,
+      additionalCondition: leaderCard.leaderSkill.additionalCondition ?? null,
+      additionalConditionMet,
+      additionalEffects,
     };
   }
 
@@ -781,11 +828,19 @@ export function applyBoardBonuses(result, boardBonuses) {
   return result;
 }
 
-/** Merges board-sourced Score Support (percent) into the passive-derived Score Support map. */
-export function mergeScoreSupport(passiveScoreSupport, boardScoreSupportPermil) {
+/** Merges board-sourced (permil) and leader-sourced (percent, already
+ *  resolved via computeLeaderScoreSupport) Score Support into the passive-
+ *  derived Score Support map. leaderScoreSupportPercent is optional so
+ *  existing callers that haven't been updated yet still work. */
+export function mergeScoreSupport(passiveScoreSupport, boardScoreSupportPermil, leaderScoreSupportPercent) {
   const merged = { ...passiveScoreSupport };
   for (const [cardId, permil] of Object.entries(boardScoreSupportPermil)) {
     merged[cardId] = (merged[cardId] || 0) + permil / 10;
+  }
+  if (leaderScoreSupportPercent) {
+    for (const [cardId, percent] of Object.entries(leaderScoreSupportPercent)) {
+      merged[cardId] = (merged[cardId] || 0) + percent;
+    }
   }
   return merged;
 }
@@ -1051,25 +1106,28 @@ export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseSt
   }
   const holomemBoardBonus = blueBonus + redBonus;
 
-  // Outfit Skill: the leader's own leader-skill stat buff. Sum of
-  // roundup(affected stat * bonus), per member per stat - not one roundup of
-  // the aggregated total, since ceil(a)+ceil(b) generally != ceil(a+b).
+  // Outfit Skill: the leader's own leader-skill stat buff (if any - some
+  // leader skills are Score Support only, contributing 0 here but picked up
+  // by computeLeaderScoreSupport() instead). Sum of roundup(affected stat *
+  // bonus), per member per stat - not one roundup of the aggregated total,
+  // since ceil(a)+ceil(b) generally != ceil(a+b). Iterates every leader
+  // effect, not just the first, in case a future card has more than one.
   let outfitSkill = 0;
-  const leaderEffect = result.leader?.effects?.[0];
-  if (leaderEffect && result.leader.conditionMet === true) {
-    const permil = Number(leaderEffect.valuePermil ?? leaderEffect.value ?? 0);
-    const bonus = permil / 1000;
-    const isAllParam = leaderEffect.type?.includes('ALL_PARAMETER');
-    const statKey = isAllParam
-      ? null
-      : leaderEffect.type?.includes('PERFORMANCE')
-      ? 'performance'
-      : leaderEffect.type?.includes('TECHNIQUE')
-      ? 'technique'
-      : leaderEffect.type?.includes('SENSE')
-      ? 'sense'
-      : null;
-    if (isAllParam || statKey) {
+  if (result.leader?.conditionMet === true) {
+    for (const leaderEffect of result.leader.effects || []) {
+      const permil = Number(leaderEffect.valuePermil ?? 0);
+      const bonus = permil / 1000;
+      const isAllParam = leaderEffect.type?.includes('ALL_PARAMETER');
+      const statKey = isAllParam
+        ? null
+        : leaderEffect.type?.includes('PERFORMANCE')
+        ? 'performance'
+        : leaderEffect.type?.includes('TECHNIQUE')
+        ? 'technique'
+        : leaderEffect.type?.includes('SENSE')
+        ? 'sense'
+        : null;
+      if (!isAllParam && !statKey) continue; // not a stat-buff type (e.g. Score Support) - doesn't belong here
       for (const m of baseStats) {
         let contribution = 0;
         if (isAllParam) {
@@ -1080,7 +1138,7 @@ export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseSt
           contribution += Math.ceil(m.stats[statKey] * bonus);
         }
         outfitSkill += contribution;
-        ensure(m.cardId).outfitSkill = contribution;
+        ensure(m.cardId).outfitSkill += contribution;
       }
     }
   }
@@ -1169,6 +1227,25 @@ export function computeScoreSupport(passiveResults) {
       for (const recipientId of effect.recipients) {
         support[recipientId] = (support[recipientId] || 0) + effect.valuePermil / 10;
       }
+    }
+  }
+  return support;
+}
+
+/** Same idea as computeScoreSupport(), but for the leader's OWN leader-skill
+ *  effects - checks both the main effect (10 cards have Score Support as
+ *  their entire leader skill, e.g. Oozora Subaru's Vibrant Sun Splash!: +60%
+ *  to the whole team, unconditional, no stat buff at all) and the additional
+ *  effect (12 cards, e.g. Watame's Floatie Float Time: +25% once 2+
+ *  Attribute-3 cards are in the deck, stacked on top of a stat buff). Most
+ *  leader skills have neither and this returns {}. */
+export function computeLeaderScoreSupport(leaderResult) {
+  const support = {};
+  if (!leaderResult) return support;
+  for (const effect of [...(leaderResult.effects || []), ...(leaderResult.additionalEffects || [])]) {
+    if (!effect.applies || effect.type !== SCORE_SUPPORT_TYPE) continue;
+    for (const recipientId of effect.recipients) {
+      support[recipientId] = (support[recipientId] || 0) + effect.valuePermil / 10;
     }
   }
   return support;

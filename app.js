@@ -5,6 +5,7 @@ import {
   mapSpecialSkillsToSong,
   computeOverallPowerBreakdown,
   computeScoreSupport,
+  computeLeaderScoreSupport,
   simulateActiveTimeline,
   computeBoardBonuses,
   applyBoardBonuses,
@@ -1452,7 +1453,7 @@ function computeFullResult(team, songOverride) {
 
   applyBoardBonuses(result, combinedBonuses);
 
-  const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil);
+  const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil, computeLeaderScoreSupport(result.leader));
 
   return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong };
 }
