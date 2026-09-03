@@ -1458,11 +1458,19 @@ function computeFullResult(team, songOverride) {
     return { cardId: m.cardId, stats };
   });
 
+  // applyBoardBonuses mutates result.actives' cooldown/activation-probability
+  // IN PLACE (correct and needed for the per-song coverage table, which
+  // deliberately simulates the board-boosted schedule) - but the Unit Score
+  // base pass needs the TRUELY unboosted mag/prob/cooldown/duration, since
+  // board effects belong only in its own separate boosted pass. Snapshot
+  // before the mutation so both are available.
+  const pureActives = result.actives.map((a) => ({ ...a }));
+
   applyBoardBonuses(result, combinedBonuses);
 
   const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil, computeLeaderScoreSupport(result.leader));
 
-  return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong, combinedBonuses };
+  return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong, combinedBonuses, pureActives };
 }
 
 function recompute() {
@@ -2412,7 +2420,7 @@ const UNIT_SCORE_CONSTANT = 101867 / 50000;
  * @param {ReturnType<typeof computeFullResult>} computed
  */
 function computeUnitScoreBreakdown(computed) {
-  const { result, unit, pureBaseStats, baseStats: memberOnlyBaseStats, combinedBonuses } = computed;
+  const { result, unit, pureBaseStats, baseStats: memberOnlyBaseStats, combinedBonuses, pureActives } = computed;
   const unitCards = unit.map((u) => u.card);
 
   const overallPower = computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats);
@@ -2423,7 +2431,11 @@ function computeUnitScoreBreakdown(computed) {
   const probUp = combinedBonuses.activationProbabilityPermil;
   const shorten = combinedBonuses.cooldownShortenPermil;
 
-  const baseCards = extractActiveSkillInputs(result.actives, unitCards);
+  // pureActives (not result.actives) - applyBoardBonuses mutates result.actives'
+  // cooldown/probability in place for the coverage table's own purposes, which
+  // would otherwise double-apply board effects into what's supposed to be the
+  // fully unboosted base pass.
+  const baseCards = extractActiveSkillInputs(pureActives, unitCards);
   const activeResult = computeBaseActiveSkillPercent(baseCards);
 
   // the merged E (percent) for the boosted pass is exactly computed.scoreSupport
