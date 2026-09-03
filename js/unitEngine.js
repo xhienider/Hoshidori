@@ -1068,12 +1068,19 @@ export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseSt
   const perMember = {};
   const ensure = (cardId) => (perMember[cardId] ??= { cardId, memberParameter: 0, outfitSkill: 0, passiveSkill: 0, redBonus: 0, blueBonus: 0 });
 
-  // Member Parameter: base (level + bloom, no board) stats, summed.
+  // Member Parameter: base (level + bloom, no board) stats, summed. Also
+  // exposes each member's raw P/T/S individually (not just the summed
+  // total) - Memory Bonus needs per-member-PER-STAT ceiling, matching the
+  // Outfit/Passive Skill rounding rule, confirmed against the reverse-
+  // engineering doc's worked example (112,960 x 5.6% ceil'd per-stat = 6,336,
+  // vs 6,326 from a single aggregate round).
   let memberParameter = 0;
+  const perMemberStats = [];
   for (const m of baseStats) {
     const total = m.stats.performance + m.stats.technique + m.stats.sense;
     memberParameter += total;
     ensure(m.cardId).memberParameter = total;
+    perMemberStats.push({ cardId: m.cardId, performance: m.stats.performance, technique: m.stats.technique, sense: m.stats.sense });
   }
 
   // Blue Bonus: member-area board nodes + member-portion of connect patterns
@@ -1178,7 +1185,16 @@ export function computeOverallPowerBreakdown(result, baseStats, memberOnlyBaseSt
     }
   }
 
-  return { memberParameter, outfitSkill, holomemBoardBonus, redBonus, blueBonus, passiveSkill, perMember: Object.values(perMember) };
+  return {
+    memberParameter,
+    outfitSkill,
+    holomemBoardBonus,
+    redBonus,
+    blueBonus,
+    passiveSkill,
+    perMember: Object.values(perMember),
+    perMemberStats,
+  };
 }
 
 export function estimatePassivePower(passiveResults, memberStats) {

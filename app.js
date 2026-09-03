@@ -2354,23 +2354,39 @@ function effectiveHolomemBoardBonus(breakdown, greenBonus) {
  *  of risking the two drifting apart. */
 /** Member Power-Up Bonus = sum over members of powerUpPercent% * (their own
  *  memberParameter + outfitSkill + passiveSkill + redBonus + blueBonus),
- *  each member's contribution rounded individually before summing (not the
- *  aggregate total) - deliberately excludes Memory Bonus, per spec. Green
- *  isn't a per-member value (it's a single roster-wide delta), so its own
- *  share is added once rather than distributed across members. */
+ *  each member's contribution CEILED individually before summing (not the
+ *  aggregate total, and not a plain round) - deliberately excludes Memory
+ *  Bonus, per spec. Green isn't a per-member value (it's a single roster-
+ *  wide delta), so its own share is added once rather than distributed
+ *  across members. Ceiling (not round) confirmed against the reverse-
+ *  engineering doc's worked example ("per-slot ceilings"). */
 function computeMemberPowerUpBonus(breakdown, greenBonus, powerUpPercent) {
   let total = 0;
   for (const m of breakdown.perMember) {
     const subtotal = m.memberParameter + m.outfitSkill + m.passiveSkill + m.redBonus + m.blueBonus;
-    total += Math.round(subtotal * (powerUpPercent / 100));
+    total += Math.ceil(subtotal * (powerUpPercent / 100));
   }
-  total += Math.round((greenBonus || 0) * (powerUpPercent / 100));
+  total += Math.ceil((greenBonus || 0) * (powerUpPercent / 100));
+  return total;
+}
+
+/** Memory Bonus ("Unit Stats X%" on the Memory Stand screen) - a % of
+ *  Member Parameter, but ceiled per member PER STAT (15 separate ceilings
+ *  for a 5-member unit), not a single round of the aggregate total.
+ *  Confirmed against the reverse-engineering doc: 112,960 x 5.6% ceiled
+ *  per-stat = 6,336, vs 6,326 from Math.round(aggregate). */
+function computeMemoryBonus(perMemberStats, percent) {
+  const bonus = percent / 100;
+  let total = 0;
+  for (const m of perMemberStats) {
+    total += Math.ceil(m.performance * bonus) + Math.ceil(m.technique * bonus) + Math.ceil(m.sense * bonus);
+  }
   return total;
 }
 
 function computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats) {
   const breakdown = computeOverallPowerBreakdown(result, pureBaseStats, memberOnlyBaseStats);
-  const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
+  const memoryBonus = computeMemoryBonus(breakdown.perMemberStats, state.manualMemoryBonusPercent);
   const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualGreenBonus);
   const powerUpBonus = computeMemberPowerUpBonus(breakdown, state.manualGreenBonus, state.manualPowerUpBonusPercent);
   return breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus + powerUpBonus;
@@ -2388,7 +2404,7 @@ function renderPowerRow(result, leaderCard, scoreSupport, pureBaseStats, memberO
   const breakdown = computeOverallPowerBreakdown(result, pureBaseStats, memberOnlyBaseStats);
   // Memory Bonus ("Unit Stats X%" on the Memory Stand screen) - a % of
   // Member Parameter only, not the whole subtotal.
-  const memoryBonus = Math.round(breakdown.memberParameter * (state.manualMemoryBonusPercent / 100));
+  const memoryBonus = computeMemoryBonus(breakdown.perMemberStats, state.manualMemoryBonusPercent);
   const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualGreenBonus);
   // Member Power-Up Bonus ("Upgrade Bonus X%" on the Member training screen)
   // - per member, (their Member Parameter + Outfit Skill + Passive Skill +
@@ -2826,7 +2842,7 @@ function renderCompareTeamColumn(side, preset, computed, onChoosePreset) {
 
 function computeComparePower(preset, computed) {
   const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats, computed.baseStats);
-  const memoryBonus = Math.round(breakdown.memberParameter * ((preset.manualMemoryBonusPercent || 0) / 100));
+  const memoryBonus = computeMemoryBonus(breakdown.perMemberStats, preset.manualMemoryBonusPercent || 0);
   const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, preset.manualGreenBonus ?? null);
   const powerUpBonus = computeMemberPowerUpBonus(breakdown, preset.manualGreenBonus ?? null, preset.manualPowerUpBonusPercent || 0);
   const total = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus + powerUpBonus;
