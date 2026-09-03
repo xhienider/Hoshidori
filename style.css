@@ -132,6 +132,9 @@ header.masthead {
   overflow: hidden;
   padding: 4px;
 }
+.tools-dropdown-menu[hidden] {
+  display: none;
+}
 .tools-dropdown-item {
   background: transparent;
   border: none;
