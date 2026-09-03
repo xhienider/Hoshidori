@@ -2431,24 +2431,9 @@ function computeUnitScoreBreakdown(computed) {
 
   const eOutfit = computeLeaderScoreSupport(result.leader); // percent
   const ePassive = computeScoreSupport(result.passives); // percent
-  // Yellow/Content-area singer-conditional board contribution isn't
-  // resolvable from board data at all (it can come from any card in the
-  // player's whole roster, not just the current unit) - looked up directly
-  // from the in-game "Skill-Eligible Songs" screen instead, same spirit as
-  // Green Bonus but simpler (a direct value, not a delta), since the game
-  // already shows it pre-capped at 10% per song. Broadcasts uniformly to the
-  // whole team, matching how red-leader E_board already works.
-  const manualYellowPermil = (state.manualYellowNodePercent || 0) * 10;
-  const eBoard = { ...combinedBonuses.scoreSupportPermil }; // permil (per computeBoardBonuses)
+  const eBoard = combinedBonuses.scoreSupportPermil; // permil (per computeBoardBonuses) - red-leader nodes only, no yellow folded in
   const probUp = combinedBonuses.activationProbabilityPermil;
   const shorten = combinedBonuses.cooldownShortenPermil;
-  const mergedEWithYellow = { ...computed.scoreSupport };
-  if (manualYellowPermil > 0) {
-    for (const c of unitCards) {
-      eBoard[c.cardId] = (eBoard[c.cardId] || 0) + manualYellowPermil;
-      mergedEWithYellow[c.cardId] = (mergedEWithYellow[c.cardId] || 0) + state.manualYellowNodePercent;
-    }
-  }
 
   // pureActives (not result.actives) - applyBoardBonuses mutates result.actives'
   // cooldown/probability in place for the coverage table's own purposes, which
@@ -2458,7 +2443,7 @@ function computeUnitScoreBreakdown(computed) {
   const activeResult = computeBaseActiveSkillPercent(baseCards);
 
   // the merged E (percent) for the boosted pass is exactly computed.scoreSupport
-  const boostedResult = computeBoostedActiveSkillPercent(baseCards, mergedEWithYellow, probUp, shorten);
+  const boostedResult = computeBoostedActiveSkillPercent(baseCards, computed.scoreSupport, probUp, shorten);
 
   const quotas = computeBoostQuotas(baseCards, boostedResult.boostedCards, eOutfit, ePassive, eBoard, probUp, shorten);
   const N = [quotas.qOutfit > 0, quotas.qPassive > 0, quotas.qBoard > 0].filter(Boolean).length;
@@ -2470,6 +2455,24 @@ function computeUnitScoreBreakdown(computed) {
     const nonSpecialTotal = boostedResult.boostedPermil + (N - 1);
     const boost = Math.max(0, nonSpecialTotal - activeResult.activePermil);
     [outfitPermil, passivePermil, boardPermil] = adamsApportionment([quotas.qOutfit, quotas.qPassive, quotas.qBoard], boost);
+  }
+
+  // Yellow/Content-area singer-conditional contribution: NOT folded into
+  // E_board/the boosted-pass pool (that was the earlier, wrong approach -
+  // it perturbed Passive's apportioned share even though real data shows
+  // Passive staying flat regardless of yellow, and even scaled arbitrarily
+  // far past the real 10% cap it never lands on the correct Board value -
+  // the relationship isn't the multiplicative one E_board uses). Added
+  // directly and only to Board post-apportionment instead, matching what
+  // two real (yellow%, Board%) data points show: a close-to-linear
+  // relationship, empirically ~2.25 Board percentage-points per 1% yellow
+  // for this deck. NOT validated against a second, differently-built team -
+  // Active%/W were identical across both test points, so this could
+  // legitimately scale with either instead of being flat in yellow% alone;
+  // revisit if a very different team's data disagrees with this rate.
+  const YELLOW_TO_BOARD_PERMIL_RATE = 22.48; // permil of Board, per 1 percentage-point of yellow input
+  if (state.manualYellowNodePercent) {
+    boardPermil += Math.round(state.manualYellowNodePercent * YELLOW_TO_BOARD_PERMIL_RATE);
   }
 
   const specialInputs = extractSpecialSkillInputs(result.specials);
@@ -2792,7 +2795,7 @@ function buildScoreBonusPanel(unitScoreData) {
   boardLabelEl.textContent = 'Holomem Board Bonus';
   boardLabelEl.appendChild(
     createInfoIcon(
-      'Yellow/Content-area singer-conditional board nodes can\u2019t be computed here - they can come from any card in your whole roster, not just your current unit. Look up the value on the in-game "Skill-Eligible Songs" screen for whichever song is currently selected (already capped at 10%) and enter it. This is song-specific and resets automatically when you change songs.'
+      'Yellow/Content-area singer-conditional board nodes can\u2019t be computed here - they can come from any card in your whole roster, not just your current unit. Look up the value on the in-game "Skill-Eligible Songs" screen for whichever song is currently selected (already capped at 10%, same value shown to every credited singer - no need to check more than one) and enter it. Added directly to this line only (Active/Passive/Special are unaffected) using an empirically-fit rate, not a value derived from documented game data - it matched two real test points from one deck, but hasn\u2019t been checked against a differently-built team. This is song-specific and resets automatically when you change songs.'
     )
   );
   grid.appendChild(boardLabelEl);
@@ -5232,17 +5235,17 @@ async function main() {
   // "Tools" dropdown: click to toggle, click anywhere outside (or click any
   // item inside, since every item opens a full-screen overlay anyway) closes
   // it. No search/filtering - a flat list of 5 items doesn't need it.
+  // Single unified listener (not separate button/menu/document handlers
+  // coordinated via stopPropagation) - simpler and not dependent on event
+  // ordering between multiple listeners on overlapping elements.
   const toolsBtn = document.getElementById('tools-dropdown-btn');
   const toolsMenu = document.getElementById('tools-dropdown-menu');
-  toolsBtn.addEventListener('click', (e) => {
-    e.stopPropagation();
-    toolsMenu.hidden = !toolsMenu.hidden;
-  });
-  toolsMenu.addEventListener('click', () => {
-    toolsMenu.hidden = true;
-  });
   document.addEventListener('click', (e) => {
-    if (!toolsMenu.hidden && !toolsMenu.contains(e.target) && e.target !== toolsBtn) {
+    if (toolsBtn.contains(e.target)) {
+      toolsMenu.hidden = !toolsMenu.hidden;
+      return;
+    }
+    if (!toolsMenu.hidden) {
       toolsMenu.hidden = true;
     }
   });
