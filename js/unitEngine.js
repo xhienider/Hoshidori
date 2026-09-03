@@ -893,8 +893,10 @@ export function computeConnectBonuses(
   cardConnectInfo,
   cardsById,
   cardPotentials,
-  slots
+  slots,
+  songSingerCharacterIds
 ) {
+  const singerIds = songSingerCharacterIds || [];
   const statFlat = {};
   const statPermil = {};
   const activationProbabilityPermil = {};
@@ -966,7 +968,7 @@ export function computeConnectBonuses(
       nodes.forEach((n, index) => {
         const x = n.x || 0;
         const y = n.y || 0;
-        byPosition.set(`${x},${y}`, { key, area, type, index, value: n.value });
+        byPosition.set(`${x},${y}`, { key, area, type, index, value: n.value, requiresSinger: !!n.requiresSinger });
       });
     }
 
@@ -1002,6 +1004,7 @@ export function computeConnectBonuses(
         // this slot is actually the leader, regardless of which connect slot
         // the connector was assigned to - same rule as plain board nodes.
         if (node.area === 'leader' && !slot.isLeaderSlot) continue;
+        if (node.requiresSinger && !singerIds.includes(slot.characterId)) continue;
         if (!recipients[node.area]) continue; // e.g. content-area - not modeled/reachable, but guard anyway
 
         const extraValue = Math.ceil(node.value * (connectorInfo.boostPermil / 1000));

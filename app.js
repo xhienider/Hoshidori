@@ -1424,7 +1424,8 @@ function computeFullResult(team, songOverride) {
     DATA.cardConnectInfo,
     DATA.byId,
     DATA.cardPotentials,
-    slots
+    slots,
+    songSingerCharacterIds
   );
   const combinedBonuses = mergeBoardBonuses(boardBonuses, connectBonuses);
 
@@ -1437,7 +1438,8 @@ function computeFullResult(team, songOverride) {
     DATA.cardConnectInfo,
     DATA.byId,
     DATA.cardPotentials,
-    memberOnlySlots
+    memberOnlySlots,
+    songSingerCharacterIds
   );
   const memberOnlyCombined = mergeBoardBonuses(memberOnlyBoardBonuses, memberOnlyConnectBonuses);
   const pureBaseStats = result.memberStats.map((m) => ({ cardId: m.cardId, stats: { ...m.stats } }));
@@ -2451,23 +2453,6 @@ function computeUnitScoreBreakdown(computed) {
     const nonSpecialTotal = boostedResult.boostedPermil + (N - 1);
     const boost = Math.max(0, nonSpecialTotal - activeResult.activePermil);
     [outfitPermil, passivePermil, boardPermil] = adamsApportionment([quotas.qOutfit, quotas.qPassive, quotas.qBoard], boost);
-    // TEMPORARY DEBUG - remove once the Board-line discrepancy is resolved.
-    console.log('[UnitScore debug]', {
-      eBoard,
-      probUp,
-      shorten,
-      W: quotas.W,
-      qOutfit: quotas.qOutfit,
-      qPassive: quotas.qPassive,
-      qBoard: quotas.qBoard,
-      activePermil: activeResult.activePermil,
-      boostedPermil: boostedResult.boostedPermil,
-      N,
-      nonSpecialTotal,
-      boost,
-      split: { outfitPermil, passivePermil, boardPermil },
-      boostedCards: boostedResult.boostedCards,
-    });
   }
 
   const specialInputs = extractSpecialSkillInputs(result.specials);
