@@ -5229,6 +5229,24 @@ async function main() {
   document.getElementById('activity-btn').addEventListener('click', openCharacterActivityView);
   document.getElementById('song-ranking-btn').addEventListener('click', openSongRankingView);
 
+  // "Tools" dropdown: click to toggle, click anywhere outside (or click any
+  // item inside, since every item opens a full-screen overlay anyway) closes
+  // it. No search/filtering - a flat list of 5 items doesn't need it.
+  const toolsBtn = document.getElementById('tools-dropdown-btn');
+  const toolsMenu = document.getElementById('tools-dropdown-menu');
+  toolsBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    toolsMenu.hidden = !toolsMenu.hidden;
+  });
+  toolsMenu.addEventListener('click', () => {
+    toolsMenu.hidden = true;
+  });
+  document.addEventListener('click', (e) => {
+    if (!toolsMenu.hidden && !toolsMenu.contains(e.target) && e.target !== toolsBtn) {
+      toolsMenu.hidden = true;
+    }
+  });
+
   // Re-render when crossing the mobile breakpoint (resize, orientation change,
   // or devtools responsive mode) so the layout mode always matches viewport width.
   window.matchMedia(MOBILE_BREAKPOINT).addEventListener('change', () => {
