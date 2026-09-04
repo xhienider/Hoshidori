@@ -2345,6 +2345,12 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
     windowScoreEl.innerHTML =
       windowStats + `<div class="coverage-stat"><div class="stat-num">${maxTotal.toLocaleString()}</div><div class="stat-label">Max total score</div></div>`;
     coverageRowEl.appendChild(windowScoreEl);
+
+    const scoreNote = document.createElement('div');
+    scoreNote.className = 'estimate-note';
+    scoreNote.textContent =
+      'These scores assume the yellow/Content-area singer-conditional board bonus is maxed at 10% for this song, regardless of your actual board setup - a reasonable assumption for a theoretical max, but not necessarily what you\u2019d actually score.';
+    coverageRowEl.appendChild(scoreNote);
   }
 
   coverageRowEl.appendChild(renderFrequencyNodePanel(unit, song, duration, result.specials));
