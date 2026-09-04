@@ -2255,6 +2255,22 @@ header.masthead {
   font-weight: 700;
 }
 
+.coverage-toggles {
+  display: flex;
+  gap: 16px;
+  margin: 0 0 12px;
+}
+.coverage-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.coverage-toggle input { accent-color: var(--orange); cursor: pointer; }
+
 .coverage-table tr.fever-row td:first-child {
   color: var(--orange);
   font-weight: 700;

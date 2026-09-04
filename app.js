@@ -308,6 +308,8 @@ const state = {
   manualHolomemBoardBonusIngame: null, // deprecated - superseded by manualGreenBonus (recalculated via the Green Bonus popup, not a locked-in raw total)
   manualGreenBonus: null, // Green/Content-area board bonus (delta only), computed by subtracting the site's live Red+Blue total from a player-entered in-game figure via the "Calculate Green Bonus" popup. null = not yet calculated.
   manualYellowNodePercent: null, // Score Bonus's Holomem Board line: yellow/Content-area singer-conditional contribution, looked up directly from the in-game "Skill-Eligible Songs" screen for the CURRENTLY SELECTED SONG (already capped at 10%, no delta math needed). null = not entered. Resets whenever songId changes, since the value is song-specific and a stale carry-over would silently corrupt a different song's calculation.
+  coverageShowBonusText: true, // main builder's sec-by-sec table: whether each active member's cell shows its "X% + Y% @ Z%" bonus text, or just the winner/suppressed highlight color with no text
+  coverageShowScoreNumbers: true, // main builder's sec-by-sec table: whether each active member's cell shows its small per-second theoretical-score subtext
 };
 
 const MOBILE_BREAKPOINT = '(max-width: 700px)';
@@ -1859,6 +1861,35 @@ function renderDifficultyPicker(container, onChange) {
   container.appendChild(row);
 }
 
+/** Main-builder-only toggles for the sec-by-sec table's member cells: show/hide
+ *  the "X% + Y% @ Z%" bonus text and the small per-second score subtext,
+ *  independently. With both off, active cells still show their winner/
+ *  suppressed highlight color, just with no text - a quick-glance coverage
+ *  view. Doesn't touch the Compare page, which always shows both. */
+function renderCoverageToggles(container) {
+  const row = document.createElement('div');
+  row.className = 'coverage-toggles';
+
+  const makeToggle = (labelText, checked, onChange) => {
+    const label = document.createElement('label');
+    label.className = 'coverage-toggle';
+    const input = document.createElement('input');
+    input.type = 'checkbox';
+    input.checked = checked;
+    input.onchange = () => {
+      onChange(input.checked);
+      recompute();
+    };
+    label.appendChild(input);
+    label.appendChild(document.createTextNode(labelText));
+    return label;
+  };
+
+  row.appendChild(makeToggle('Score Bonus', state.coverageShowBonusText, (v) => (state.coverageShowBonusText = v)));
+  row.appendChild(makeToggle('Scores', state.coverageShowScoreNumbers, (v) => (state.coverageShowScoreNumbers = v)));
+  container.appendChild(row);
+}
+
 const NOTE_TYPE_LABELS = {
   T: 'tap',
   F: 'flick',
@@ -1914,7 +1945,7 @@ function buildNoteGlyph(typesObj, total) {
   return `<span class="note-glyph">${segments}</span>`;
 }
 
-function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDensityEntries, scoreData) {
+function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDensityEntries, scoreData, showBonusText = true, showScoreNumbers = true) {
   const feverSecondsRounded = new Set(song.feverSeconds.map((s) => Math.round(s)));
   const specialWindows = song.feverSeconds
     .map((start, i) => ({ start, end: start + (timeline._specials?.[i]?.effectDurationSeconds || 0) }))
@@ -2022,7 +2053,7 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
 
     for (const m of point.perMember) {
       let scoreSubHtml = '';
-      if (showScoreColumn) {
+      if (showScoreColumn && showScoreNumbers) {
         if (scoreByT === null) {
           scoreSubHtml = '<span class="cell-member-score cell-member-score-loading">\u2026</span>';
         } else {
@@ -2035,9 +2066,10 @@ function buildCoverageTable(timeline, unitCards, song, referenceColEls, noteDens
         const cls = isWinner ? 'cell-active cell-winner' : 'cell-active cell-suppressed';
         const borderColor = activationChanceColor(m.activationChance);
         const title = `${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% score support @ ${m.activationChance}% activation chance${isWinner ? '' : ' \u2014 suppressed by a higher/earlier bonus this second'}`;
-        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% @ ${m.activationChance}%${scoreSubHtml}</td>`;
+        const bonusText = showBonusText ? `${m.baseBonus.toFixed(1)}% + ${m.totalSupportBonus.toFixed(1)}% @ ${m.activationChance}%` : '';
+        rowHtml += `<td class="${cls}" style="border-color:${borderColor}" title="${title}">${bonusText}${scoreSubHtml}</td>`;
       } else {
-        rowHtml += `<td>\u2014${scoreSubHtml}</td>`;
+        rowHtml += `<td>${showBonusText ? '\u2014' : ''}${scoreSubHtml}</td>`;
       }
     }
     tr.innerHTML = rowHtml;
@@ -2233,6 +2265,7 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
   }
 
   renderDifficultyPicker(coverageRowEl, recompute);
+  renderCoverageToggles(coverageRowEl);
 
   const unitCards = unit.map((u) => u.card);
   const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
@@ -2273,7 +2306,9 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
   }
 
   const cardCols = document.querySelectorAll('#selection-row .member-col');
-  coverageRowEl.appendChild(buildCoverageTable(timeline, unitCards, song, cardCols, noteDensityEntries, scoreData));
+  coverageRowEl.appendChild(
+    buildCoverageTable(timeline, unitCards, song, cardCols, noteDensityEntries, scoreData, state.coverageShowBonusText, state.coverageShowScoreNumbers)
+  );
 
   // Full-width horizontal summary, below the table.
   const noBonusSeconds = timeline.filter((p) => p.t > 20 && p.maxBonus === 0).length;
