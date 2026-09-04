@@ -1722,9 +1722,14 @@ function renderLeaderSkillCard(result, leaderCard) {
 
   let effectsHtml = '';
   for (const e of result.leader.effects) {
-    effectsHtml += `<div class="effect-head"><span class="effect-name">${effectLabel(e.type)}</span><span class="effect-value">+${(Number(e.value) / 10).toFixed(0)}%</span></div>`;
+    effectsHtml += `<div class="effect-head"><span class="effect-name">${effectLabel(e.type)}</span><span class="effect-value">+${(Number(e.valuePermil) / 10).toFixed(0)}%</span></div>`;
   }
-  if (!result.leader.effects.length) {
+  if (result.leader.additionalEffects?.length) {
+    for (const e of result.leader.additionalEffects) {
+      effectsHtml += `<div class="effect-head"><span class="effect-name">${effectLabel(e.type)}</span><span class="effect-value">+${(Number(e.valuePermil) / 10).toFixed(0)}%</span></div>`;
+    }
+  }
+  if (!result.leader.effects.length && !result.leader.additionalEffects?.length) {
     effectsHtml = '<div class="effect-detail">No effect (condition not met)</div>';
   }
 
