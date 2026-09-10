@@ -2503,26 +2503,23 @@ function computeUnitScoreBreakdown(computed) {
     [outfitPermil, passivePermil, boardPermil] = adamsApportionment([quotas.qOutfit, quotas.qPassive, quotas.qBoard], boost);
   }
 
-  // Yellow/Content-area singer-conditional contribution: NOT folded into
-  // E_board/the boosted-pass pool (that was the earlier, wrong approach -
-  // it perturbed Passive's apportioned share even though real data shows
-  // Passive staying flat regardless of yellow, and even scaled arbitrarily
-  // far past the real 10% cap it never lands on the correct Board value -
-  // the relationship isn't the multiplicative one E_board uses). Added
-  // directly and only to Board post-apportionment instead, matching what
-  // two real (yellow%, Board%) data points show: a close-to-linear
-  // relationship, empirically ~2.25 Board percentage-points per 1% yellow
-  // for this deck. NOT validated against a second, differently-built team -
-  // Active%/W were identical across both test points, so this could
-  // legitimately scale with either instead of being flat in yellow% alone;
-  // revisit if a very different team's data disagrees with this rate.
-  const YELLOW_TO_BOARD_PERMIL_RATE = 22.48; // permil of Board, per 1 percentage-point of yellow input
-  if (state.manualYellowNodePercent) {
-    boardPermil += Math.round(state.manualYellowNodePercent * YELLOW_TO_BOARD_PERMIL_RATE);
-  }
-
   const specialInputs = extractSpecialSkillInputs(result.specials);
   const specialResult = computeSpecialSkillLine(activeResult.activePermil, specialInputs);
+
+  // Yellow/Content-area singer-conditional contribution: NOT folded into
+  // E_board/the boosted-pass pool (an earlier, wrong approach - it perturbed
+  // Passive's apportioned share even though real data shows Passive staying
+  // flat regardless of yellow). Confirmed formula, added directly to Board
+  // AFTER the normal apportionment and AFTER Special is computed:
+  //   Board_song = ceil(Board_base + eff3 * (1 + (Active+Outfit+Passive+Special)/1000))
+  // where eff3 is the yellow value in PERMIL (10% -> 100). Validated bit-exact
+  // against three independent real (yellow%, Board%) data points across two
+  // differently-built teams (785, 646, and 198 - all matched precisely).
+  if (state.manualYellowNodePercent) {
+    const eff3 = state.manualYellowNodePercent * 10; // percent -> permil
+    const otherLinesSum = activeResult.activePermil + outfitPermil + passivePermil + specialResult.specialPermil;
+    boardPermil = Math.ceil(boardPermil + eff3 * (1 + otherLinesSum / 1000));
+  }
 
   const scoreBonusPermil = activeResult.activePermil + outfitPermil + passivePermil + boardPermil + specialResult.specialPermil;
   const unitScore = Math.ceil(overallPower * UNIT_SCORE_CONSTANT * (1 + scoreBonusPermil / 1000));
@@ -2841,7 +2838,7 @@ function buildScoreBonusPanel(unitScoreData) {
   boardLabelEl.textContent = 'Holomem Board Bonus';
   boardLabelEl.appendChild(
     createInfoIcon(
-      'Yellow/Content-area singer-conditional board nodes can\u2019t be computed here - they can come from any card in your whole roster, not just your current unit. Look up the value on the in-game "Skill-Eligible Songs" screen for whichever song is currently selected (already capped at 10%, same value shown to every credited singer - no need to check more than one) and enter it. Added directly to this line only (Active/Passive/Special are unaffected) using an empirically-fit rate, not a value derived from documented game data - it matched two real test points from one deck, but hasn\u2019t been checked against a differently-built team. This is song-specific and resets automatically when you change songs.'
+      'Yellow/Content-area singer-conditional board nodes can\u2019t be computed here - they can come from any card in your whole roster, not just your current unit. Look up the value on the in-game "Skill-Eligible Songs" screen for whichever song is currently selected (already capped at 10%, same value shown to every credited singer - no need to check more than one) and enter it. Formula: ceil(Board + yellow% \u00d7 10 \u00d7 (1 + (Active+Outfit+Passive+Special)/1000)), applied after the normal Board calculation. Validated bit-exact against three real (yellow%, Board%) data points across two differently-built teams. This is song-specific and resets automatically when you change songs.'
     )
   );
   grid.appendChild(boardLabelEl);
