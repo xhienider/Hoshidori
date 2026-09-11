@@ -1549,6 +1549,47 @@ header.masthead {
   border-top: 1px solid var(--line);
 }
 
+.gy-variant-card {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  margin-bottom: 12px;
+}
+.gy-variant-title {
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 600;
+  color: var(--orange);
+}
+.gy-variant-meta {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--text-dim);
+  margin: 4px 0 8px;
+}
+.gy-variant-chars {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 10px;
+  line-height: 1.5;
+}
+.gy-apply-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+  gap: 6px 12px;
+  margin: 8px 0 12px;
+}
+.gy-apply-item {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: var(--text-dim);
+  cursor: pointer;
+}
+.gy-apply-item input { accent-color: var(--orange); cursor: pointer; }
+
 .connect-slot-row {
   background: var(--panel-raised);
   border: 1px solid var(--line);

@@ -748,6 +748,110 @@ export function computeBoardBonuses(unlockedPositions, boardCategoriesData, slot
   return { statFlat, statPermil, activationProbabilityPermil, cooldownShortenPermil, scoreSupportPermil, pointsSpent };
 }
 
+const SKILL_TREE_EFFECT_PREFIX = 'SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_';
+
+/**
+ * Green (Card-area) board bonuses: flat stat boosts to a card's OWN stats.
+ * Unlike Red/Blue, Card/Content aren't bespoke per character - every
+ * character's layout is one of only 2 shared templates (confirmed via
+ * Character.json's skillTreeNodePositionGroupId - see data/green_yellow_board.json
+ * and each character's greenYellowVariant field in board_categories.json).
+ * Only relevant for characters actually in the current unit, since it boosts
+ * that card's own Member Parameter contribution - a character's green
+ * investment does nothing if they're not one of the 5 performing members
+ * (unlike yellow, which applies regardless of current unit - see
+ * computeYellowScoreBonus).
+ * @param {Record<string, Set<string>>} greenYellowSelections - state.greenYellowBoardSelections
+ * @param {object} greenYellowBoardData - the loaded data/green_yellow_board.json
+ * @param {object} boardCategoriesData - the loaded data/board_categories.json (for each character's greenYellowVariant)
+ * @param {object[]} slots - same slot shape as computeBoardBonuses/computeConnectBonuses
+ */
+export function computeGreenBoardBonuses(greenYellowSelections, greenYellowBoardData, boardCategoriesData, slots) {
+  const statFlat = {};
+  const ensureStat = (cardId) => {
+    if (!statFlat[cardId]) statFlat[cardId] = { performance: 0, technique: 0, sense: 0 };
+    return statFlat[cardId];
+  };
+
+  for (const slot of slots) {
+    if (!slot.isUnitMember) continue;
+    const variant = boardCategoriesData[slot.characterId]?.greenYellowVariant;
+    if (!variant) continue;
+    const unlockedSet = greenYellowSelections[slot.characterId];
+    if (!unlockedSet || !unlockedSet.size) continue;
+
+    const cardNodes = greenYellowBoardData.variants[variant]?.card || [];
+    const st = ensureStat(slot.cardId);
+    for (const node of cardNodes) {
+      const posKey = `${node.x},${node.y}`;
+      if (!unlockedSet.has(posKey)) continue;
+      const value = Number(node.value);
+      switch (node.effectType?.replace(SKILL_TREE_EFFECT_PREFIX, '')) {
+        case 'ALL_PARAMETER_UP':
+          st.performance += value;
+          st.technique += value;
+          st.sense += value;
+          break;
+        case 'PERFORMANCE_UP':
+          st.performance += value;
+          break;
+        case 'TECHNIQUE_UP':
+          st.technique += value;
+          break;
+        case 'SENSE_UP':
+          st.sense += value;
+          break;
+      }
+    }
+  }
+  return { statFlat };
+}
+
+/**
+ * Yellow (Content-area) Score Bonus contribution for the CURRENTLY SELECTED
+ * SONG. Checked against the credited singers' OWN unlocked yellow nodes,
+ * REGARDLESS of whether those singers are in the current 5-member unit -
+ * confirmed empirically (a credited singer's own yellow investment applies
+ * to a song even when they're not in your active team).
+ *
+ * A node's "solo"/"group"/"all" singerType is matched against the SONG's
+ * own musicSingerType (data/music.json's musicSingerType field) - NOT
+ * against any hardcoded characterId on the node itself. The one exception
+ * (FuwaMoco): their solo songs credit BOTH members jointly as "FUWAMOCO",
+ * so their solo-type nodes only apply when the song's singer list includes
+ * both chr-04016 and chr-04017 together - handled naturally here since
+ * both would independently appear in songSingerCharacterIds and each
+ * contribute their own unlocked nodes.
+ *
+ * Returns permil, capped at 100 (10%) per the in-game "Effects over the
+ * limit are not applied" rule - confirmed via the in-game tooltip.
+ *
+ * @param {Record<string, Set<string>>} greenYellowSelections - state.greenYellowBoardSelections
+ * @param {object} greenYellowBoardData - the loaded data/green_yellow_board.json
+ * @param {object} boardCategoriesData - the loaded data/board_categories.json
+ * @param {string[]} songSingerCharacterIds - the selected song's characterIds
+ * @param {string} songSingerType - the selected song's musicSingerType ('solo'|'group'|'all')
+ */
+export function computeYellowScoreBonus(greenYellowSelections, greenYellowBoardData, boardCategoriesData, songSingerCharacterIds, songSingerType) {
+  if (!songSingerCharacterIds?.length || !songSingerType) return 0;
+  let total = 0;
+  for (const characterId of songSingerCharacterIds) {
+    const variant = boardCategoriesData[characterId]?.greenYellowVariant;
+    if (!variant) continue;
+    const unlockedSet = greenYellowSelections[characterId];
+    if (!unlockedSet || !unlockedSet.size) continue;
+
+    const contentNodes = greenYellowBoardData.variants[variant]?.contentScoreBonus || [];
+    for (const node of contentNodes) {
+      if (node.singerType !== songSingerType) continue;
+      const posKey = `${node.x},${node.y}`;
+      if (!unlockedSet.has(posKey)) continue;
+      total += Number(node.value);
+    }
+  }
+  return Math.min(100, total);
+}
+
 /** Merges two board-bonus-shaped objects (e.g. base board + connect bonuses) into one. */
 export function mergeBoardBonuses(a, b) {
   const mergeStatMap = (m1, m2) => {
@@ -894,7 +998,9 @@ export function computeConnectBonuses(
   cardsById,
   cardPotentials,
   slots,
-  songSingerCharacterIds
+  songSingerCharacterIds,
+  greenYellowSelections,
+  greenYellowBoardData
 ) {
   const singerIds = songSingerCharacterIds || [];
   const statFlat = {};
@@ -971,6 +1077,19 @@ export function computeConnectBonuses(
         byPosition.set(`${x},${y}`, { key, area, type, index, value: n.value, requiresSinger: !!n.requiresSinger });
       });
     }
+    // Card(green)-area nodes too, from the shared green_yellow_board.json
+    // layout this character maps to (see greenYellowVariant). Content(yellow)
+    // score-bonus nodes are DELIBERATELY excluded here - their song-dependent
+    // singerType matching doesn't fit this function's simple "unlocked ->
+    // apply value" shape, so connector-boosted yellow score-bonus is handled
+    // separately inside computeYellowScoreBonus instead.
+    const greenYellowVariant = charData.greenYellowVariant;
+    if (greenYellowVariant && greenYellowBoardData?.variants?.[greenYellowVariant]) {
+      for (const n of greenYellowBoardData.variants[greenYellowVariant].card) {
+        const shortType = n.effectType?.replace(SKILL_TREE_EFFECT_PREFIX, '');
+        byPosition.set(`${n.x},${n.y}`, { area: 'card', type: shortType, value: Number(n.value), requiresSinger: false });
+      }
+    }
 
     for (const [slotType, setup] of Object.entries(config)) {
       if (!setup?.connectorCardId) continue;
@@ -986,9 +1105,11 @@ export function computeConnectBonuses(
       if (!anchor || anchor.x == null) continue; // e.g. no member path resolvable
 
       const unlockedSet = boardSelections[slot.characterId];
+      const greenUnlockedSet = greenYellowSelections?.[slot.characterId];
       const recipients = {
         leader: slots.filter((s) => s.isUnitMember).map((s) => s.cardId),
         member: [slot.cardId],
+        card: [slot.cardId],
       };
 
       for (const offset of connectorInfo.pattern) {
@@ -997,7 +1118,8 @@ export function computeConnectBonuses(
         const posKey = `${px},${py}`;
         const node = byPosition.get(posKey);
         if (!node) continue; // pattern cell lands on empty space - no node there
-        if (!unlockedSet?.has(posKey)) continue; // node exists but isn't unlocked - nothing to boost
+        const relevantUnlockedSet = node.area === 'card' ? greenUnlockedSet : unlockedSet;
+        if (!relevantUnlockedSet?.has(posKey)) continue; // node exists but isn't unlocked - nothing to boost
         // A connector's pattern can extend beyond its own connect-slot's
         // "native" area (e.g. a Member-slot connector's pattern reaching a
         // Leader-area position). Leader-area nodes never contribute unless

@@ -220,13 +220,14 @@ function activationChanceColor(chance) {
 const DATA = {};
 
 async function loadData() {
-  const [members, cardPotentials, characterGroupings, songs, boardCategories, cardConnectInfo] = await Promise.all([
+  const [members, cardPotentials, characterGroupings, songs, boardCategories, cardConnectInfo, greenYellowBoard] = await Promise.all([
     fetch('data/members.json').then((r) => r.json()),
     fetch('data/card_potentials.json').then((r) => r.json()),
     fetch('data/character_groupings.json').then((r) => r.json()),
     fetch('data/music.json').then((r) => r.json()),
     fetch('data/board_categories.json').then((r) => r.json()),
     fetch('data/card_connect_info.json').then((r) => r.json()),
+    fetch('data/green_yellow_board.json').then((r) => r.json()),
   ]);
   DATA.members = members;
   DATA.byId = Object.fromEntries(members.map((m) => [m.cardId, m]));
@@ -235,6 +236,7 @@ async function loadData() {
   DATA.songs = songs.filter((s) => s.feverSeconds && s.feverSeconds.length === 5);
   DATA.boardCategories = boardCategories;
   DATA.cardConnectInfo = cardConnectInfo;
+  DATA.greenYellowBoard = greenYellowBoard;
 }
 
 // ---------------------------------------------------------------------------
@@ -310,6 +312,7 @@ const state = {
   manualYellowNodePercent: null, // Score Bonus's Holomem Board line: yellow/Content-area singer-conditional contribution, looked up directly from the in-game "Skill-Eligible Songs" screen for the CURRENTLY SELECTED SONG (already capped at 10%, no delta math needed). null = not entered. Resets whenever songId changes, since the value is song-specific and a stale carry-over would silently corrupt a different song's calculation.
   coverageShowBonusText: true, // main builder's sec-by-sec table: whether each active member's cell shows its "X% + Y% @ Z%" bonus text, or just the winner/suppressed highlight color with no text
   coverageShowScoreNumbers: true, // main builder's sec-by-sec table: whether each active member's cell shows its small per-second theoretical-score subtext
+  greenYellowBoardSelections: {}, // player's unlocked Card(green)/Content(yellow) board positions, per character: { characterId: Set of "x,y" keys }. Interpreted against whichever of the 2 shared layouts (data/green_yellow_board.json) that character's board_categories.json entry maps to via greenYellowVariant.
 };
 
 const MOBILE_BREAKPOINT = '(max-width: 700px)';
@@ -932,6 +935,290 @@ function openBoardEditor(card, isLeaderSlotContext) {
 }
 
 // ---------------------------------------------------------------------------
+// Green (Card) / Yellow (Content) board manager
+// ---------------------------------------------------------------------------
+
+/** Every character whose board_categories.json entry maps to the given
+ *  shared green_yellow_board.json variant (see greenYellowVariant field). */
+function getCharactersForGYVariant(variantId) {
+  return Object.entries(DATA.boardCategories)
+    .filter(([, cdata]) => cdata.greenYellowVariant === variantId)
+    .map(([characterId, cdata]) => ({ characterId, characterName: cdata.characterName }))
+    .sort((a, b) => a.characterName.localeCompare(b.characterName));
+}
+
+const GY_SINGER_TYPE_LABELS = { solo: 'Solo', group: 'Group', all: 'All (hololive)' };
+
+function openGreenYellowBoardManager() {
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+  const box = document.createElement('div');
+  box.className = 'picker-box board-editor-box';
+
+  const header = document.createElement('div');
+  header.className = 'picker-search';
+  header.innerHTML =
+    '<div class="board-editor-title">Green &amp; Yellow Board Manager</div><div class="board-editor-subtitle">Card (green) and Content (yellow) layouts are shared templates \u2014 only 2 exist across the whole roster. Edit one pattern, then apply it to every character who uses it.</div>';
+  box.appendChild(header);
+
+  const list = document.createElement('div');
+  list.className = 'picker-list board-editor-list';
+
+  const variantIds = Object.keys(DATA.greenYellowBoard.variants);
+  variantIds.forEach((variantId, i) => {
+    const chars = getCharactersForGYVariant(variantId);
+    const configuredCount = chars.filter((c) => state.greenYellowBoardSelections[c.characterId]?.size).length;
+
+    const card = document.createElement('div');
+    card.className = 'gy-variant-card';
+    const title = document.createElement('div');
+    title.className = 'gy-variant-title';
+    title.textContent = `Layout ${String.fromCharCode(65 + i)}`;
+    card.appendChild(title);
+
+    const meta = document.createElement('div');
+    meta.className = 'gy-variant-meta';
+    meta.textContent = `${chars.length} characters use this layout \u00b7 ${configuredCount} configured so far`;
+    card.appendChild(meta);
+
+    const charList = document.createElement('div');
+    charList.className = 'gy-variant-chars';
+    charList.textContent = chars.map((c) => c.characterName).join(', ');
+    card.appendChild(charList);
+
+    const editBtn = document.createElement('button');
+    editBtn.type = 'button';
+    editBtn.className = 'board-btn';
+    editBtn.textContent = 'Edit';
+    editBtn.onclick = () => {
+      overlay.remove();
+      openGreenYellowVariantEditor(variantId);
+    };
+    card.appendChild(editBtn);
+
+    list.appendChild(card);
+  });
+  box.appendChild(list);
+
+  const close = document.createElement('div');
+  close.className = 'picker-close';
+  close.textContent = 'DONE';
+  close.onclick = () => overlay.remove();
+  box.appendChild(close);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+}
+
+function openGreenYellowVariantEditor(variantId) {
+  const variantData = DATA.greenYellowBoard.variants[variantId];
+  const chars = getCharactersForGYVariant(variantId);
+
+  const allNodes = [
+    ...variantData.card.map((n) => ({ ...n, kind: 'card' })),
+    ...variantData.contentScoreBonus.map((n) => ({ ...n, kind: 'contentScore' })),
+    ...variantData.contentOther.map((n) => ({ ...n, kind: 'contentOther' })),
+  ];
+  const boardIndex = new Map();
+  for (const n of allNodes) boardIndex.set(`${n.x},${n.y}`, n);
+
+  // Staging pattern: starts from whichever character (if any) already has
+  // one saved, else blank. Editing here doesn't save anywhere until the
+  // player explicitly applies it to one or more characters below.
+  const startingChar = chars.find((c) => state.greenYellowBoardSelections[c.characterId]?.size);
+  const staging = new Set(startingChar ? state.greenYellowBoardSelections[startingChar.characterId] : []);
+  const appliedTo = new Set(startingChar ? [startingChar.characterId] : []);
+
+  const overlay = document.createElement('div');
+  overlay.className = 'picker-overlay';
+  const box = document.createElement('div');
+  box.className = 'picker-box board-editor-box';
+
+  const header = document.createElement('div');
+  header.className = 'picker-search';
+  header.innerHTML =
+    '<div class="board-editor-title">Green (Card) &amp; Yellow (Content) Board</div><div class="board-editor-subtitle">Click a node to toggle it, then apply the pattern to characters below.</div>';
+  header.querySelector('.board-editor-subtitle').appendChild(
+    createInfoIcon(
+      'Card (green) nodes boost that card\u2019s own stats and only matter if the character is in your current unit. Content (yellow) score-bonus nodes boost the Score Bonus\u2019s Holomem Board line for songs that character sings on, REGARDLESS of whether they\u2019re in your current unit \u2014 solo/group/all match the song\u2019s own credited-singer type, not the node\u2019s. Grey nodes are a Work-Reward mechanic this site doesn\u2019t compute with, shown for visual completeness only.'
+    )
+  );
+  box.appendChild(header);
+
+  const list = document.createElement('div');
+  list.className = 'picker-list board-editor-list';
+
+  const renderDiagram = () => {
+    const xs = allNodes.map((n) => n.x).concat(0);
+    const ys = allNodes.map((n) => n.y).concat(0);
+    const minX = Math.min(...xs);
+    const maxX = Math.max(...xs);
+    const minY = Math.min(...ys);
+    const maxY = Math.max(...ys);
+    const spacing = 32;
+    const pad = 24;
+    const width = (maxX - minX) * spacing + pad * 2;
+    const height = (maxY - minY) * spacing + pad * 2;
+    const toScreenX = (x) => pad + (x - minX) * spacing;
+    const toScreenY = (y) => pad + (maxY - y) * spacing;
+
+    const svgNS = 'http://www.w3.org/2000/svg';
+    const svg = document.createElementNS(svgNS, 'svg');
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.setAttribute('width', '100%');
+    svg.classList.add('board-diagram');
+    svg.style.maxHeight = Math.min(height, 440) + 'px';
+
+    const centerCircle = document.createElementNS(svgNS, 'circle');
+    centerCircle.setAttribute('cx', toScreenX(0));
+    centerCircle.setAttribute('cy', toScreenY(0));
+    centerCircle.setAttribute('r', 8);
+    centerCircle.setAttribute('class', 'board-diagram-center');
+    svg.appendChild(centerCircle);
+
+    for (const n of allNodes) {
+      const posKey = `${n.x},${n.y}`;
+      const unlocked = staging.has(posKey);
+      const el = document.createElementNS(svgNS, 'circle');
+      const colorVar = n.kind === 'card' ? '--blue-node' : n.kind === 'contentOther' ? '--text-faint' : '--orange';
+      const radius = n.grade >= 2 ? 13 : 10;
+      el.setAttribute('cx', toScreenX(n.x));
+      el.setAttribute('cy', toScreenY(n.y));
+      el.setAttribute('r', radius);
+      el.setAttribute('class', 'board-diagram-node' + (unlocked ? ' unlocked' : ''));
+      el.style.setProperty('--node-color', `var(${colorVar})`);
+
+      const title = document.createElementNS(svgNS, 'title');
+      const shortType = (n.effectType || '').replace('SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_', '');
+      let label;
+      if (n.kind === 'card') {
+        label = `${BOARD_CATEGORY_LABELS[shortType] || shortType} \u00b7 +${n.value} pts`;
+      } else if (n.kind === 'contentScore') {
+        label = `Score Bonus \u00b7 +${(Number(n.value) / 10).toFixed(1)}% \u00b7 ${GY_SINGER_TYPE_LABELS[n.singerType] || n.singerType}`;
+      } else {
+        label = `Work Reward \u00b7 +${(Number(n.value) / 10).toFixed(1)}% (not modeled here)`;
+      }
+      title.textContent = `${label} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}`;
+      el.appendChild(title);
+
+      el.addEventListener('click', () => {
+        if (unlocked) {
+          staging.delete(posKey);
+          const pruned = pruneDisconnected(staging);
+          staging.clear();
+          for (const p of pruned) staging.add(p);
+        } else if (canUnlock(staging, n.x, n.y)) {
+          staging.add(posKey);
+        } else {
+          const path = findUnlockPath(boardIndex, n.x, n.y);
+          if (!path) return;
+          for (const p of path) staging.add(p);
+        }
+        appliedTo.clear(); // pattern changed - previous "applied to" state no longer reflects the new pattern
+        refresh();
+      });
+      svg.appendChild(el);
+
+      if (n.kind === 'card') {
+        const iconSize = radius * 1.5;
+        const img = document.createElementNS(svgNS, 'image');
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `images/board_icons/${shortType}.png`);
+        img.setAttribute('href', `images/board_icons/${shortType}.png`);
+        img.setAttribute('x', toScreenX(n.x) - iconSize / 2);
+        img.setAttribute('y', toScreenY(n.y) - iconSize / 2);
+        img.setAttribute('width', iconSize);
+        img.setAttribute('height', iconSize);
+        img.setAttribute('class', 'board-diagram-icon' + (unlocked ? ' unlocked' : ''));
+        img.style.pointerEvents = 'none';
+        svg.appendChild(img);
+      }
+    }
+    list.appendChild(svg);
+
+    const legend = document.createElement('div');
+    legend.className = 'board-diagram-legend';
+    legend.textContent = `${boardPointsSpentFromSet(boardIndex, staging)} pts in this pattern \u00b7 blue = Card (stats) \u00b7 orange = Content Score Bonus \u00b7 grey = Content Work Reward (not modeled) \u00b7 click a node to unlock/lock it`;
+    list.appendChild(legend);
+  };
+
+  const applySection = document.createElement('div');
+  applySection.className = 'connect-section';
+
+  const renderApplySection = () => {
+    applySection.innerHTML = '';
+    const heading = document.createElement('div');
+    heading.className = 'board-group-label';
+    heading.innerHTML =
+      'Apply this pattern to <span class="board-group-hint">\u2014 check every character you want this exact unlock pattern saved to. Characters not checked keep whatever they already had.</span>';
+    applySection.appendChild(heading);
+
+    const grid = document.createElement('div');
+    grid.className = 'gy-apply-grid';
+    const applyBtn = document.createElement('button');
+    applyBtn.type = 'button';
+    applyBtn.className = 'board-btn';
+    const refreshApplyBtn = () => {
+      applyBtn.textContent = `Save to ${appliedTo.size} character${appliedTo.size === 1 ? '' : 's'}`;
+      applyBtn.disabled = appliedTo.size === 0;
+    };
+    for (const c of chars) {
+      const label = document.createElement('label');
+      label.className = 'gy-apply-item';
+      const cb = document.createElement('input');
+      cb.type = 'checkbox';
+      cb.checked = appliedTo.has(c.characterId);
+      cb.onchange = () => {
+        if (cb.checked) appliedTo.add(c.characterId);
+        else appliedTo.delete(c.characterId);
+        refreshApplyBtn();
+      };
+      label.appendChild(cb);
+      const existing = state.greenYellowBoardSelections[c.characterId];
+      const existingNote = existing?.size ? ` (currently ${existing.size} nodes)` : ' (currently empty)';
+      label.appendChild(document.createTextNode(c.characterName + existingNote));
+      grid.appendChild(label);
+    }
+    applySection.appendChild(grid);
+
+    refreshApplyBtn();
+    applyBtn.onclick = () => {
+      for (const characterId of appliedTo) {
+        state.greenYellowBoardSelections[characterId] = new Set(staging);
+      }
+      recompute();
+      renderSelectionRow();
+      refresh();
+    };
+    applySection.appendChild(applyBtn);
+  };
+
+  function refresh() {
+    list.innerHTML = '';
+    renderDiagram();
+    renderApplySection();
+    list.appendChild(applySection);
+  }
+
+  refresh();
+  box.appendChild(list);
+
+  const close = document.createElement('div');
+  close.className = 'picker-close';
+  close.textContent = 'DONE';
+  close.onclick = () => overlay.remove();
+  box.appendChild(close);
+
+  overlay.appendChild(box);
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) overlay.remove();
+  });
+  document.body.appendChild(overlay);
+}
+
+// ---------------------------------------------------------------------------
 // Picker overlay
 // ---------------------------------------------------------------------------
 
@@ -1429,7 +1716,9 @@ function computeFullResult(team, songOverride) {
     DATA.byId,
     DATA.cardPotentials,
     slots,
-    songSingerCharacterIds
+    songSingerCharacterIds,
+    state.greenYellowBoardSelections,
+    DATA.greenYellowBoard
   );
   const combinedBonuses = mergeBoardBonuses(boardBonuses, connectBonuses);
 
@@ -1443,7 +1732,9 @@ function computeFullResult(team, songOverride) {
     DATA.byId,
     DATA.cardPotentials,
     memberOnlySlots,
-    songSingerCharacterIds
+    songSingerCharacterIds,
+    state.greenYellowBoardSelections,
+    DATA.greenYellowBoard
   );
   const memberOnlyCombined = mergeBoardBonuses(memberOnlyBoardBonuses, memberOnlyConnectBonuses);
   const pureBaseStats = result.memberStats.map((m) => ({ cardId: m.cardId, stats: { ...m.stats } }));
@@ -5274,6 +5565,7 @@ async function main() {
   document.getElementById('music-viewer-btn').addEventListener('click', openMusicViewer);
   document.getElementById('activity-btn').addEventListener('click', openCharacterActivityView);
   document.getElementById('song-ranking-btn').addEventListener('click', openSongRankingView);
+  document.getElementById('board-manager-btn').addEventListener('click', openGreenYellowBoardManager);
 
   // "Tools" dropdown: click to toggle, click anywhere outside (or click any
   // item inside, since every item opens a full-screen overlay anyway) closes
