@@ -1077,17 +1077,24 @@ export function computeConnectBonuses(
         byPosition.set(`${x},${y}`, { key, area, type, index, value: n.value, requiresSinger: !!n.requiresSinger });
       });
     }
-    // Card(green)-area nodes too, from the shared green_yellow_board.json
-    // layout this character maps to (see greenYellowVariant). Content(yellow)
-    // score-bonus nodes are DELIBERATELY excluded here - their song-dependent
-    // singerType matching doesn't fit this function's simple "unlocked ->
-    // apply value" shape, so connector-boosted yellow score-bonus is handled
-    // separately inside computeYellowScoreBonus instead.
+    // Card(green)-area nodes, from the shared green_yellow_board.json layout
+    // this character maps to (see greenYellowVariant) - kept in a SEPARATE
+    // map, not merged into byPosition. Card/Content positions share the same
+    // (x,y) coordinate space as Leader/Member (confirmed: all 31 of Suisei's
+    // Card positions collide with existing Leader/Member positions) - they're
+    // independent overlapping layers, not mutually exclusive slots, so a
+    // single merged map would let one silently overwrite the other (this WAS
+    // a real bug here - fixed by keeping them separate and checking both).
+    // Content(yellow) score-bonus nodes are DELIBERATELY excluded here -
+    // their song-dependent singerType matching doesn't fit this function's
+    // simple "unlocked -> apply value" shape, so connector-boosted yellow
+    // score-bonus is handled separately inside computeYellowScoreBonus instead.
+    const byPositionCard = new Map();
     const greenYellowVariant = charData.greenYellowVariant;
     if (greenYellowVariant && greenYellowBoardData?.variants?.[greenYellowVariant]) {
       for (const n of greenYellowBoardData.variants[greenYellowVariant].card) {
         const shortType = n.effectType?.replace(SKILL_TREE_EFFECT_PREFIX, '');
-        byPosition.set(`${n.x},${n.y}`, { area: 'card', type: shortType, value: Number(n.value), requiresSinger: false });
+        byPositionCard.set(`${n.x},${n.y}`, { area: 'card', type: shortType, value: Number(n.value), requiresSinger: false });
       }
     }
 
@@ -1116,22 +1123,26 @@ export function computeConnectBonuses(
         const px = anchor.x + (offset.x || 0);
         const py = anchor.y + (offset.y || 0);
         const posKey = `${px},${py}`;
-        const node = byPosition.get(posKey);
-        if (!node) continue; // pattern cell lands on empty space - no node there
-        const relevantUnlockedSet = node.area === 'card' ? greenUnlockedSet : unlockedSet;
-        if (!relevantUnlockedSet?.has(posKey)) continue; // node exists but isn't unlocked - nothing to boost
-        // A connector's pattern can extend beyond its own connect-slot's
-        // "native" area (e.g. a Member-slot connector's pattern reaching a
-        // Leader-area position). Leader-area nodes never contribute unless
-        // this slot is actually the leader, regardless of which connect slot
-        // the connector was assigned to - same rule as plain board nodes.
-        if (node.area === 'leader' && !slot.isLeaderSlot) continue;
-        if (node.requiresSinger && !singerIds.includes(slot.characterId)) continue;
-        if (!recipients[node.area]) continue; // e.g. content-area - not modeled/reachable, but guard anyway
+        // Both maps checked independently - a pattern cell can legitimately
+        // hit a Leader/Member node AND a Card node at the same (x,y), since
+        // they're separate overlapping layers, not one shared position set.
+        const candidates = [byPosition.get(posKey), byPositionCard.get(posKey)].filter(Boolean);
+        for (const node of candidates) {
+          const relevantUnlockedSet = node.area === 'card' ? greenUnlockedSet : unlockedSet;
+          if (!relevantUnlockedSet?.has(posKey)) continue; // node exists but isn't unlocked - nothing to boost
+          // A connector's pattern can extend beyond its own connect-slot's
+          // "native" area (e.g. a Member-slot connector's pattern reaching a
+          // Leader-area position). Leader-area nodes never contribute unless
+          // this slot is actually the leader, regardless of which connect slot
+          // the connector was assigned to - same rule as plain board nodes.
+          if (node.area === 'leader' && !slot.isLeaderSlot) continue;
+          if (node.requiresSinger && !singerIds.includes(slot.characterId)) continue;
+          if (!recipients[node.area]) continue; // e.g. content-area - not modeled/reachable, but guard anyway
 
-        const extraValue = Math.ceil(node.value * (connectorInfo.boostPermil / 1000));
-        for (const cardId of recipients[node.area]) {
-          applyValue(cardId, node.type, extraValue);
+          const extraValue = Math.ceil(node.value * (connectorInfo.boostPermil / 1000));
+          for (const cardId of recipients[node.area]) {
+            applyValue(cardId, node.type, extraValue);
+          }
         }
       }
     }
