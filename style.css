@@ -1553,12 +1553,15 @@ header.masthead {
 .gy-manager-box {
   max-width: 1000px;
   width: 95vw;
+  max-height: 82vh;
 }
 .gy-manager-layout {
   display: grid;
   grid-template-columns: 220px 1fr 260px;
   gap: 0;
-  min-height: 480px;
+  flex: 1;
+  min-height: 0;
+  overflow: hidden;
   border-top: 1px solid var(--line);
 }
 .gy-char-panel {
@@ -1567,16 +1570,19 @@ header.masthead {
   display: flex;
   flex-direction: column;
   gap: 8px;
-  max-height: 600px;
+  min-height: 0;
+  overflow: hidden;
 }
 .gy-char-search,
 .gy-gen-filter {
   width: 100%;
   box-sizing: border-box;
+  flex-shrink: 0;
 }
 .gy-char-list-items {
   overflow-y: auto;
   flex: 1;
+  min-height: 0;
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -1607,10 +1613,13 @@ header.masthead {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  min-height: 0;
+  overflow: hidden;
 }
 .gy-tabs {
   display: flex;
   gap: 6px;
+  flex-shrink: 0;
 }
 .gy-tab-btn {
   background: var(--bg);
@@ -1629,11 +1638,11 @@ header.masthead {
   background: rgba(225, 90, 36, 0.1);
   font-weight: 700;
 }
-.gy-diagram-container { flex: 1; overflow: auto; }
+.gy-diagram-container { flex: 1; min-height: 0; overflow: auto; }
 .gy-summary-panel {
   padding: 14px;
   overflow-y: auto;
-  max-height: 600px;
+  min-height: 0;
 }
 .gy-summary-title {
   font-family: var(--font-display);
@@ -1731,6 +1740,7 @@ header.masthead {
 .picker-search {
   padding: 14px;
   border-bottom: 1px solid var(--line);
+  flex-shrink: 0;
 }
 
 .filter-bar {
@@ -1860,6 +1870,7 @@ header.masthead {
   color: var(--text-faint);
   cursor: pointer;
   border-top: 1px solid var(--line);
+  flex-shrink: 0;
 }
 .picker-close:hover { color: var(--text); }
 
