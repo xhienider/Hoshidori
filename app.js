@@ -969,19 +969,28 @@ function openGreenYellowBoardManager() {
   let genFilter = '';
 
   const overlay = document.createElement('div');
-  overlay.className = 'picker-overlay';
-  const box = document.createElement('div');
-  box.className = 'picker-box gy-manager-box';
+  overlay.className = 'gy-manager-page';
+  document.body.appendChild(overlay);
+  document.body.style.overflow = 'hidden';
 
   const header = document.createElement('div');
-  header.className = 'picker-search';
+  header.className = 'compare-page-header';
   header.innerHTML =
-    '<div class="board-editor-title">Green &amp; Yellow Board Manager</div><div class="board-editor-subtitle">Select a character, then edit their Green (Card) or Yellow (Content) board \u2014 changes save immediately, same as the Red/Blue board editors.</div>';
-  box.appendChild(header);
+    '<div><div class="board-editor-title">Green &amp; Yellow Board Manager</div><div class="board-editor-subtitle">Select a character, then edit their Green (Card) or Yellow (Content) board \u2014 changes save immediately, same as the Red/Blue board editors.</div></div>';
+  const closeBtn = document.createElement('button');
+  closeBtn.type = 'button';
+  closeBtn.className = 'compare-page-close';
+  closeBtn.textContent = '\u2715 Back to Builder';
+  closeBtn.onclick = () => {
+    overlay.remove();
+    document.body.style.overflow = '';
+  };
+  header.appendChild(closeBtn);
+  overlay.appendChild(header);
 
   const layout = document.createElement('div');
   layout.className = 'gy-manager-layout';
-  box.appendChild(layout);
+  overlay.appendChild(layout);
 
   const leftPanel = document.createElement('div');
   leftPanel.className = 'gy-char-panel';
@@ -1300,18 +1309,6 @@ function openGreenYellowBoardManager() {
   renderLeftPanel();
   renderMiddlePanel();
   renderSummaryPanel();
-
-  const close = document.createElement('div');
-  close.className = 'picker-close';
-  close.textContent = 'DONE';
-  close.onclick = () => overlay.remove();
-  box.appendChild(close);
-
-  overlay.appendChild(box);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.remove();
-  });
-  document.body.appendChild(overlay);
 }
 
 // ---------------------------------------------------------------------------
