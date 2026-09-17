@@ -3,283 +3,144 @@
     "tree-model-001": {
       "card": [
         {
-          "nodeGroupId": "B-001",
+          "nodeGroupId": "G-001",
+          "x": 0,
+          "y": -1,
+          "grade": 1,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-002",
+          "x": 0,
+          "y": -2,
+          "grade": 1,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-003",
           "x": -1,
-          "y": 0,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-002",
-          "x": -2,
-          "y": 0,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
-          "value": "100"
-        },
-        {
-          "nodeGroupId": "B-003",
-          "x": -2,
-          "y": -1,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
-          "value": "100"
-        },
-        {
-          "nodeGroupId": "B-004",
-          "x": -2,
-          "y": 1,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
-          "value": "100"
-        },
-        {
-          "nodeGroupId": "B-005",
-          "x": -3,
-          "y": 0,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-006",
-          "x": -4,
-          "y": 0,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-007",
-          "x": -5,
-          "y": 0,
-          "grade": 2,
-          "cost": 4,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "60"
-        },
-        {
-          "nodeGroupId": "B-008",
-          "x": -6,
-          "y": 0,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-009",
-          "x": -7,
-          "y": -1,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-010",
-          "x": -7,
           "y": -2,
           "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "20"
-        },
-        {
-          "nodeGroupId": "B-011",
-          "x": -7,
-          "y": -3,
-          "grade": 1,
-          "cost": 3,
+          "cost": 1,
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
-          "value": "150"
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-012",
-          "x": -6,
-          "y": -3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-013",
-          "x": -5,
-          "y": -3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP",
-          "value": "40"
-        },
-        {
-          "nodeGroupId": "B-014",
-          "x": -8,
-          "y": -3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-015",
-          "x": -9,
-          "y": -3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-016",
-          "x": -7,
-          "y": 1,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-017",
-          "x": -7,
-          "y": 2,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "20"
-        },
-        {
-          "nodeGroupId": "B-018",
-          "x": -7,
-          "y": 3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-019",
-          "x": -6,
-          "y": 3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-020",
-          "x": -5,
-          "y": 3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP",
-          "value": "40"
-        },
-        {
-          "nodeGroupId": "B-021",
-          "x": -8,
-          "y": 3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-022",
-          "x": -9,
-          "y": 3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-023",
-          "x": -8,
-          "y": 0,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-024",
-          "x": -8,
-          "y": -1,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-025",
-          "x": -8,
-          "y": 1,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-026",
-          "x": -9,
-          "y": 0,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "20"
-        },
-        {
-          "nodeGroupId": "B-027",
-          "x": -10,
-          "y": 0,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-028",
-          "x": -10,
-          "y": -1,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-029",
-          "x": -10,
+          "nodeGroupId": "G-004",
+          "x": 1,
           "y": -2,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP",
-          "value": "50"
+          "grade": 1,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-030",
-          "x": -10,
-          "y": 1,
+          "nodeGroupId": "G-005",
+          "x": 0,
+          "y": -3,
+          "grade": 1,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-006",
+          "x": 0,
+          "y": -4,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-007",
+          "x": 0,
+          "y": -5,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-009",
+          "x": -1,
+          "y": -6,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
+          "value": "10",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-010",
+          "x": 1,
+          "y": -6,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
+          "value": "10",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-012",
+          "x": -1,
+          "y": -7,
           "grade": 1,
           "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-031",
-          "x": -10,
-          "y": 2,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP",
-          "value": "40"
+          "nodeGroupId": "G-013",
+          "x": -2,
+          "y": -7,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-015",
+          "x": 1,
+          "y": -7,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-016",
+          "x": 2,
+          "y": -7,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-018",
+          "x": 0,
+          "y": -8,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
+          "value": "10",
+          "targetId": "skill_tree_effect_target-all"
         }
       ],
       "contentScoreBonus": [
@@ -642,289 +503,252 @@
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_WORK_REWARD_QUANTITY_UP_PERMIL_UP",
           "value": "80",
           "note": "non-score-bonus content effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_WORK_REWARD_QUANTITY_UP_PERMIL_UP"
+        }
+      ],
+      "cardOther": [
+        {
+          "nodeGroupId": "G-024",
+          "x": -1,
+          "y": -10,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-008",
+          "x": 0,
+          "y": -6,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
+          "value": "75",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-011",
+          "x": 0,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
+          "value": "225",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-014",
+          "x": -3,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-017",
+          "x": 3,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_CARD_EXP_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_CARD_EXP_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-019",
+          "x": -1,
+          "y": -8,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-020",
+          "x": 1,
+          "y": -8,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-021",
+          "x": 0,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
+          "value": "150",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-022",
+          "x": -1,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-023",
+          "x": 1,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
         }
       ]
     },
     "tree-model-002": {
       "card": [
         {
-          "nodeGroupId": "B-001",
+          "nodeGroupId": "G-001",
+          "x": 0,
+          "y": -1,
+          "grade": 1,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-002",
+          "x": 0,
+          "y": -2,
+          "grade": 1,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-003",
+          "x": -1,
+          "y": -2,
+          "grade": 1,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-004",
           "x": 1,
-          "y": 0,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-002",
-          "x": 2,
-          "y": 0,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
-          "value": "100"
-        },
-        {
-          "nodeGroupId": "B-003",
-          "x": 2,
-          "y": -1,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
-          "value": "100"
-        },
-        {
-          "nodeGroupId": "B-004",
-          "x": 2,
-          "y": 1,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
-          "value": "100"
-        },
-        {
-          "nodeGroupId": "B-005",
-          "x": 3,
-          "y": 0,
-          "grade": 1,
-          "cost": 1,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-006",
-          "x": 4,
-          "y": 0,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-007",
-          "x": 5,
-          "y": 0,
-          "grade": 2,
-          "cost": 4,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "60"
-        },
-        {
-          "nodeGroupId": "B-008",
-          "x": 6,
-          "y": 0,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-009",
-          "x": 7,
-          "y": -1,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-010",
-          "x": 7,
           "y": -2,
           "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "20"
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-011",
-          "x": 7,
+          "nodeGroupId": "G-005",
+          "x": 0,
           "y": -3,
           "grade": 1,
-          "cost": 3,
+          "cost": 1,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-006",
+          "x": 0,
+          "y": -4,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-007",
+          "x": 0,
+          "y": -5,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
+        },
+        {
+          "nodeGroupId": "G-009",
+          "x": -1,
+          "y": -6,
+          "grade": 1,
+          "cost": 2,
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP",
-          "value": "150"
+          "value": "10",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-012",
-          "x": 6,
-          "y": -3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-013",
-          "x": 5,
-          "y": -3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP",
-          "value": "40"
-        },
-        {
-          "nodeGroupId": "B-014",
-          "x": 8,
-          "y": -3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-015",
-          "x": 9,
-          "y": -3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_TECHNIQUE_UP_PERMIL_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-016",
-          "x": 7,
-          "y": 1,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-017",
-          "x": 7,
-          "y": 2,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "20"
-        },
-        {
-          "nodeGroupId": "B-018",
-          "x": 7,
-          "y": 3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
-          "value": "150"
-        },
-        {
-          "nodeGroupId": "B-019",
-          "x": 6,
-          "y": 3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-020",
-          "x": 5,
-          "y": 3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP",
-          "value": "40"
-        },
-        {
-          "nodeGroupId": "B-021",
-          "x": 8,
-          "y": 3,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-022",
-          "x": 9,
-          "y": 3,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP_PERMIL_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-023",
-          "x": 8,
-          "y": 0,
+          "nodeGroupId": "G-010",
+          "x": 1,
+          "y": -6,
           "grade": 1,
           "cost": 2,
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
-          "value": "150"
+          "value": "10",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-024",
-          "x": 8,
-          "y": -1,
+          "nodeGroupId": "G-012",
+          "x": -1,
+          "y": -7,
           "grade": 1,
-          "cost": 2,
+          "cost": 3,
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-025",
-          "x": 8,
-          "y": 1,
+          "nodeGroupId": "G-013",
+          "x": -2,
+          "y": -7,
           "grade": 1,
-          "cost": 2,
+          "cost": 3,
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
-          "value": "50"
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-026",
-          "x": 9,
-          "y": 0,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "20"
-        },
-        {
-          "nodeGroupId": "B-027",
-          "x": 10,
-          "y": 0,
+          "nodeGroupId": "G-015",
+          "x": 1,
+          "y": -7,
           "grade": 1,
           "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP",
-          "value": "150"
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-028",
-          "x": 10,
-          "y": -1,
+          "nodeGroupId": "G-016",
+          "x": 2,
+          "y": -7,
           "grade": 1,
           "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP",
+          "value": "5",
+          "targetId": "skill_tree_effect_target-all"
         },
         {
-          "nodeGroupId": "B-029",
-          "x": 10,
-          "y": -2,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_PERFORMANCE_UP_PERMIL_UP",
-          "value": "50"
-        },
-        {
-          "nodeGroupId": "B-030",
-          "x": 10,
-          "y": 1,
+          "nodeGroupId": "G-018",
+          "x": 0,
+          "y": -8,
           "grade": 1,
           "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP",
-          "value": "30"
-        },
-        {
-          "nodeGroupId": "B-031",
-          "x": 10,
-          "y": 2,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_ACTIVE_SKILL_COOL_TIME_SHORTEN_PERMIL_UP",
-          "value": "40"
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_SENSE_UP",
+          "value": "10",
+          "targetId": "skill_tree_effect_target-all"
         }
       ],
       "contentScoreBonus": [
@@ -1287,6 +1111,108 @@
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_WORK_REWARD_QUANTITY_UP_PERMIL_UP",
           "value": "80",
           "note": "non-score-bonus content effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_WORK_REWARD_QUANTITY_UP_PERMIL_UP"
+        }
+      ],
+      "cardOther": [
+        {
+          "nodeGroupId": "G-024",
+          "x": -1,
+          "y": -10,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-008",
+          "x": 0,
+          "y": -6,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
+          "value": "75",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-011",
+          "x": 0,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
+          "value": "225",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-014",
+          "x": -3,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-017",
+          "x": 3,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_CARD_EXP_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_LIVE_REWARD_CARD_EXP_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-019",
+          "x": -1,
+          "y": -8,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-020",
+          "x": 1,
+          "y": -8,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-021",
+          "x": 0,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
+          "value": "150",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-022",
+          "x": -1,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        },
+        {
+          "nodeGroupId": "G-023",
+          "x": 1,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
+          "value": "5",
+          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
         }
       ]
     }

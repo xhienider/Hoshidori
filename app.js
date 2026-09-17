@@ -938,122 +938,149 @@ function openBoardEditor(card, isLeaderSlotContext) {
 // Green (Card) / Yellow (Content) board manager
 // ---------------------------------------------------------------------------
 
-/** Every character whose board_categories.json entry maps to the given
- *  shared green_yellow_board.json variant (see greenYellowVariant field). */
-function getCharactersForGYVariant(variantId) {
-  return Object.entries(DATA.boardCategories)
-    .filter(([, cdata]) => cdata.greenYellowVariant === variantId)
-    .map(([characterId, cdata]) => ({ characterId, characterName: cdata.characterName }))
-    .sort((a, b) => a.characterName.localeCompare(b.characterName));
-}
-
 const GY_SINGER_TYPE_LABELS = { solo: 'Solo', group: 'Group', all: 'All (hololive)' };
 
-function openGreenYellowBoardManager() {
-  const overlay = document.createElement('div');
-  overlay.className = 'picker-overlay';
-  const box = document.createElement('div');
-  box.className = 'picker-box board-editor-box';
-
-  const header = document.createElement('div');
-  header.className = 'picker-search';
-  header.innerHTML =
-    '<div class="board-editor-title">Green &amp; Yellow Board Manager</div><div class="board-editor-subtitle">Card (green) and Content (yellow) layouts are shared templates \u2014 only 2 exist across the whole roster. Edit one pattern, then apply it to every character who uses it.</div>';
-  box.appendChild(header);
-
-  const list = document.createElement('div');
-  list.className = 'picker-list board-editor-list';
-
-  const variantIds = Object.keys(DATA.greenYellowBoard.variants);
-  variantIds.forEach((variantId, i) => {
-    const chars = getCharactersForGYVariant(variantId);
-    const configuredCount = chars.filter((c) => state.greenYellowBoardSelections[c.characterId]?.size).length;
-
-    const card = document.createElement('div');
-    card.className = 'gy-variant-card';
-    const title = document.createElement('div');
-    title.className = 'gy-variant-title';
-    title.textContent = `Layout ${String.fromCharCode(65 + i)}`;
-    card.appendChild(title);
-
-    const meta = document.createElement('div');
-    meta.className = 'gy-variant-meta';
-    meta.textContent = `${chars.length} characters use this layout \u00b7 ${configuredCount} configured so far`;
-    card.appendChild(meta);
-
-    const charList = document.createElement('div');
-    charList.className = 'gy-variant-chars';
-    charList.textContent = chars.map((c) => c.characterName).join(', ');
-    card.appendChild(charList);
-
-    const editBtn = document.createElement('button');
-    editBtn.type = 'button';
-    editBtn.className = 'board-btn';
-    editBtn.textContent = 'Edit';
-    editBtn.onclick = () => {
-      overlay.remove();
-      openGreenYellowVariantEditor(variantId);
-    };
-    card.appendChild(editBtn);
-
-    list.appendChild(card);
-  });
-  box.appendChild(list);
-
-  const close = document.createElement('div');
-  close.className = 'picker-close';
-  close.textContent = 'DONE';
-  close.onclick = () => overlay.remove();
-  box.appendChild(close);
-
-  overlay.appendChild(box);
-  overlay.addEventListener('click', (e) => {
-    if (e.target === overlay) overlay.remove();
-  });
-  document.body.appendChild(overlay);
+/** characterId -> generation string, e.g. "hololive 0th Generation".
+ *  members.json is per-CARD (several cards per character) - just need one
+ *  representative card per character, generation doesn't vary by card. */
+function buildCharacterGenerationMap() {
+  const map = {};
+  for (const m of DATA.members) {
+    if (!map[m.characterId]) map[m.characterId] = m.generation;
+  }
+  return map;
 }
 
-function openGreenYellowVariantEditor(variantId) {
-  const variantData = DATA.greenYellowBoard.variants[variantId];
-  const chars = getCharactersForGYVariant(variantId);
+function openGreenYellowBoardManager() {
+  const genByCharacter = buildCharacterGenerationMap();
+  const allChars = Object.entries(DATA.boardCategories)
+    .map(([characterId, cdata]) => ({
+      characterId,
+      characterName: cdata.characterName,
+      greenYellowVariant: cdata.greenYellowVariant,
+      generation: genByCharacter[characterId] || '',
+    }))
+    .sort((a, b) => a.characterName.localeCompare(b.characterName));
+  const generations = [...new Set(allChars.map((c) => c.generation).filter(Boolean))].sort();
 
-  const allNodes = [
-    ...variantData.card.map((n) => ({ ...n, kind: 'card' })),
-    ...variantData.contentScoreBonus.map((n) => ({ ...n, kind: 'contentScore' })),
-    ...variantData.contentOther.map((n) => ({ ...n, kind: 'contentOther' })),
-  ];
-  const boardIndex = new Map();
-  for (const n of allNodes) boardIndex.set(`${n.x},${n.y}`, n);
-
-  // Staging pattern: starts from whichever character (if any) already has
-  // one saved, else blank. Editing here doesn't save anywhere until the
-  // player explicitly applies it to one or more characters below.
-  const startingChar = chars.find((c) => state.greenYellowBoardSelections[c.characterId]?.size);
-  const staging = new Set(startingChar ? state.greenYellowBoardSelections[startingChar.characterId] : []);
-  const appliedTo = new Set(startingChar ? [startingChar.characterId] : []);
+  let selectedCharacterId = null;
+  let activeTab = 'green';
+  let searchQuery = '';
+  let genFilter = '';
 
   const overlay = document.createElement('div');
   overlay.className = 'picker-overlay';
   const box = document.createElement('div');
-  box.className = 'picker-box board-editor-box';
+  box.className = 'picker-box gy-manager-box';
 
   const header = document.createElement('div');
   header.className = 'picker-search';
   header.innerHTML =
-    '<div class="board-editor-title">Green (Card) &amp; Yellow (Content) Board</div><div class="board-editor-subtitle">Click a node to toggle it, then apply the pattern to characters below.</div>';
-  header.querySelector('.board-editor-subtitle').appendChild(
-    createInfoIcon(
-      'Card (green) nodes boost that card\u2019s own stats and only matter if the character is in your current unit. Content (yellow) score-bonus nodes boost the Score Bonus\u2019s Holomem Board line for songs that character sings on, REGARDLESS of whether they\u2019re in your current unit \u2014 solo/group/all match the song\u2019s own credited-singer type, not the node\u2019s. Grey nodes are a Work-Reward mechanic this site doesn\u2019t compute with, shown for visual completeness only.'
-    )
-  );
+    '<div class="board-editor-title">Green &amp; Yellow Board Manager</div><div class="board-editor-subtitle">Select a character, then edit their Green (Card) or Yellow (Content) board \u2014 changes save immediately, same as the Red/Blue board editors.</div>';
   box.appendChild(header);
 
-  const list = document.createElement('div');
-  list.className = 'picker-list board-editor-list';
+  const layout = document.createElement('div');
+  layout.className = 'gy-manager-layout';
+  box.appendChild(layout);
 
-  const renderDiagram = () => {
-    const xs = allNodes.map((n) => n.x).concat(0);
-    const ys = allNodes.map((n) => n.y).concat(0);
+  const leftPanel = document.createElement('div');
+  leftPanel.className = 'gy-char-panel';
+  const midPanel = document.createElement('div');
+  midPanel.className = 'gy-diagram-panel';
+  const rightPanel = document.createElement('div');
+  rightPanel.className = 'gy-summary-panel';
+  layout.appendChild(leftPanel);
+  layout.appendChild(midPanel);
+  layout.appendChild(rightPanel);
+
+  const listItemsEl = document.createElement('div');
+  listItemsEl.className = 'gy-char-list-items';
+
+  function renderCharListItems() {
+    listItemsEl.innerHTML = '';
+    const q = searchQuery.trim().toLowerCase();
+    const filtered = allChars.filter((c) => (!q || c.characterName.toLowerCase().includes(q)) && (!genFilter || c.generation === genFilter));
+    if (!filtered.length) {
+      listItemsEl.innerHTML = '<div class="empty-state">No characters match.</div>';
+      return;
+    }
+    for (const c of filtered) {
+      const item = document.createElement('div');
+      item.className = 'gy-char-item' + (c.characterId === selectedCharacterId ? ' active' : '');
+      const configured = state.greenYellowBoardSelections[c.characterId]?.size > 0;
+      item.innerHTML = `<span>${c.characterName}</span>`;
+      if (configured) {
+        const dot = document.createElement('span');
+        dot.className = 'gy-char-configured';
+        dot.title = 'Has unlocked nodes';
+        dot.textContent = '\u25cf';
+        item.appendChild(dot);
+      }
+      item.onclick = () => {
+        selectedCharacterId = c.characterId;
+        renderCharListItems();
+        renderMiddlePanel();
+        renderSummaryPanel();
+      };
+      listItemsEl.appendChild(item);
+    }
+  }
+
+  function renderLeftPanel() {
+    leftPanel.innerHTML = '';
+    const searchInput = document.createElement('input');
+    searchInput.type = 'text';
+    searchInput.placeholder = 'Search characters\u2026';
+    searchInput.className = 'mini-input gy-char-search';
+    searchInput.value = searchQuery;
+    searchInput.oninput = () => {
+      searchQuery = searchInput.value;
+      renderCharListItems();
+    };
+    leftPanel.appendChild(searchInput);
+
+    const genSelect = document.createElement('select');
+    genSelect.className = 'mini-input gy-gen-filter';
+    genSelect.innerHTML = '<option value="">All Generations</option>' + generations.map((g) => `<option value="${g}">${g}</option>`).join('');
+    genSelect.value = genFilter;
+    genSelect.onchange = () => {
+      genFilter = genSelect.value;
+      renderCharListItems();
+    };
+    leftPanel.appendChild(genSelect);
+
+    leftPanel.appendChild(listItemsEl);
+    renderCharListItems();
+  }
+
+  /** Renders one tab's diagram (Green or Yellow) for the selected character.
+   *  Unlock/lock logic is scoped to ONLY this tab's own nodes - Green and
+   *  Yellow positions never collide in coordinate space (Card is x<0-ish,
+   *  Content is x>0-ish), but adjacency (canUnlock/findUnlockPath) is kept
+   *  strictly within one tab's own node set regardless, to avoid any risk
+   *  of cross-tab interference. Saves immediately to
+   *  state.greenYellowBoardSelections on every click - no staging. */
+  function renderDiagramTab(container, characterId, variantData, tab) {
+    const tabNodes =
+      tab === 'green'
+        ? [
+            ...variantData.card.map((n) => ({ ...n, kind: 'card' })),
+            ...(variantData.cardOther || []).map((n) => ({ ...n, kind: 'cardOther' })),
+          ]
+        : [
+            ...variantData.contentScoreBonus.map((n) => ({ ...n, kind: 'contentScore' })),
+            ...variantData.contentOther.map((n) => ({ ...n, kind: 'contentOther' })),
+          ];
+    const tabBoardIndex = new Map();
+    for (const n of tabNodes) tabBoardIndex.set(`${n.x},${n.y}`, n);
+    const tabPositions = new Set(tabBoardIndex.keys());
+
+    if (!state.greenYellowBoardSelections[characterId]) state.greenYellowBoardSelections[characterId] = new Set();
+    const fullUnlockedSet = state.greenYellowBoardSelections[characterId];
+    const tabUnlockedSet = new Set([...fullUnlockedSet].filter((p) => tabPositions.has(p)));
+
+    const xs = tabNodes.map((n) => n.x).concat(0);
+    const ys = tabNodes.map((n) => n.y).concat(0);
     const minX = Math.min(...xs);
     const maxX = Math.max(...xs);
     const minY = Math.min(...ys);
@@ -1070,20 +1097,23 @@ function openGreenYellowVariantEditor(variantId) {
     svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
     svg.setAttribute('width', '100%');
     svg.classList.add('board-diagram');
-    svg.style.maxHeight = Math.min(height, 440) + 'px';
+    svg.style.maxHeight = Math.min(height, 480) + 'px';
 
-    const centerCircle = document.createElementNS(svgNS, 'circle');
-    centerCircle.setAttribute('cx', toScreenX(0));
-    centerCircle.setAttribute('cy', toScreenY(0));
-    centerCircle.setAttribute('r', 8);
-    centerCircle.setAttribute('class', 'board-diagram-center');
-    svg.appendChild(centerCircle);
+    if (minX <= 0 && maxX >= 0 && minY <= 0 && maxY >= 0) {
+      const centerCircle = document.createElementNS(svgNS, 'circle');
+      centerCircle.setAttribute('cx', toScreenX(0));
+      centerCircle.setAttribute('cy', toScreenY(0));
+      centerCircle.setAttribute('r', 8);
+      centerCircle.setAttribute('class', 'board-diagram-center');
+      svg.appendChild(centerCircle);
+    }
 
-    for (const n of allNodes) {
+    for (const n of tabNodes) {
       const posKey = `${n.x},${n.y}`;
-      const unlocked = staging.has(posKey);
+      const unlocked = tabUnlockedSet.has(posKey);
       const el = document.createElementNS(svgNS, 'circle');
-      const colorVar = n.kind === 'card' ? '--blue-node' : n.kind === 'contentOther' ? '--text-faint' : '--orange';
+      const colorVar =
+        n.kind === 'card' ? '--green-node' : n.kind === 'cardOther' || n.kind === 'contentOther' ? '--text-faint' : '--orange';
       const radius = n.grade >= 2 ? 13 : 10;
       el.setAttribute('cx', toScreenX(n.x));
       el.setAttribute('cy', toScreenY(n.y));
@@ -1098,6 +1128,8 @@ function openGreenYellowVariantEditor(variantId) {
         label = `${BOARD_CATEGORY_LABELS[shortType] || shortType} \u00b7 +${n.value} pts`;
       } else if (n.kind === 'contentScore') {
         label = `Score Bonus \u00b7 +${(Number(n.value) / 10).toFixed(1)}% \u00b7 ${GY_SINGER_TYPE_LABELS[n.singerType] || n.singerType}`;
+      } else if (n.kind === 'cardOther') {
+        label = `${n.note || 'Other effect'} (not modeled here)`;
       } else {
         label = `Work Reward \u00b7 +${(Number(n.value) / 10).toFixed(1)}% (not modeled here)`;
       }
@@ -1106,19 +1138,25 @@ function openGreenYellowVariantEditor(variantId) {
 
       el.addEventListener('click', () => {
         if (unlocked) {
-          staging.delete(posKey);
-          const pruned = pruneDisconnected(staging);
-          staging.clear();
-          for (const p of pruned) staging.add(p);
-        } else if (canUnlock(staging, n.x, n.y)) {
-          staging.add(posKey);
+          tabUnlockedSet.delete(posKey);
+          const pruned = pruneDisconnected(tabUnlockedSet);
+          tabUnlockedSet.clear();
+          for (const p of pruned) tabUnlockedSet.add(p);
+        } else if (canUnlock(tabUnlockedSet, n.x, n.y)) {
+          tabUnlockedSet.add(posKey);
         } else {
-          const path = findUnlockPath(boardIndex, n.x, n.y);
+          const path = findUnlockPath(tabBoardIndex, n.x, n.y);
           if (!path) return;
-          for (const p of path) staging.add(p);
+          for (const p of path) tabUnlockedSet.add(p);
         }
-        appliedTo.clear(); // pattern changed - previous "applied to" state no longer reflects the new pattern
-        refresh();
+        // write back: this tab's positions in the full set are replaced by
+        // the updated tabUnlockedSet, everything outside this tab untouched
+        for (const p of tabPositions) fullUnlockedSet.delete(p);
+        for (const p of tabUnlockedSet) fullUnlockedSet.add(p);
+        recompute();
+        renderCharListItems();
+        renderDiagramTab(container, characterId, variantData, tab);
+        renderSummaryPanel();
       });
       svg.appendChild(el);
 
@@ -1136,74 +1174,132 @@ function openGreenYellowVariantEditor(variantId) {
         svg.appendChild(img);
       }
     }
-    list.appendChild(svg);
 
+    container.innerHTML = '';
+    container.appendChild(svg);
     const legend = document.createElement('div');
     legend.className = 'board-diagram-legend';
-    legend.textContent = `${boardPointsSpentFromSet(boardIndex, staging)} pts in this pattern \u00b7 blue = Card (stats) \u00b7 orange = Content Score Bonus \u00b7 grey = Content Work Reward (not modeled) \u00b7 click a node to unlock/lock it`;
-    list.appendChild(legend);
-  };
-
-  const applySection = document.createElement('div');
-  applySection.className = 'connect-section';
-
-  const renderApplySection = () => {
-    applySection.innerHTML = '';
-    const heading = document.createElement('div');
-    heading.className = 'board-group-label';
-    heading.innerHTML =
-      'Apply this pattern to <span class="board-group-hint">\u2014 check every character you want this exact unlock pattern saved to. Characters not checked keep whatever they already had.</span>';
-    applySection.appendChild(heading);
-
-    const grid = document.createElement('div');
-    grid.className = 'gy-apply-grid';
-    const applyBtn = document.createElement('button');
-    applyBtn.type = 'button';
-    applyBtn.className = 'board-btn';
-    const refreshApplyBtn = () => {
-      applyBtn.textContent = `Save to ${appliedTo.size} character${appliedTo.size === 1 ? '' : 's'}`;
-      applyBtn.disabled = appliedTo.size === 0;
-    };
-    for (const c of chars) {
-      const label = document.createElement('label');
-      label.className = 'gy-apply-item';
-      const cb = document.createElement('input');
-      cb.type = 'checkbox';
-      cb.checked = appliedTo.has(c.characterId);
-      cb.onchange = () => {
-        if (cb.checked) appliedTo.add(c.characterId);
-        else appliedTo.delete(c.characterId);
-        refreshApplyBtn();
-      };
-      label.appendChild(cb);
-      const existing = state.greenYellowBoardSelections[c.characterId];
-      const existingNote = existing?.size ? ` (currently ${existing.size} nodes)` : ' (currently empty)';
-      label.appendChild(document.createTextNode(c.characterName + existingNote));
-      grid.appendChild(label);
-    }
-    applySection.appendChild(grid);
-
-    refreshApplyBtn();
-    applyBtn.onclick = () => {
-      for (const characterId of appliedTo) {
-        state.greenYellowBoardSelections[characterId] = new Set(staging);
-      }
-      recompute();
-      renderSelectionRow();
-      refresh();
-    };
-    applySection.appendChild(applyBtn);
-  };
-
-  function refresh() {
-    list.innerHTML = '';
-    renderDiagram();
-    renderApplySection();
-    list.appendChild(applySection);
+    legend.textContent =
+      tab === 'green'
+        ? `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 green = stat boost \u00b7 grey = other (not modeled) \u00b7 click a node to unlock/lock it`
+        : `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 orange = Score Bonus \u00b7 grey = Work Reward (not modeled) \u00b7 click a node to unlock/lock it`;
+    container.appendChild(legend);
   }
 
-  refresh();
-  box.appendChild(list);
+  function renderMiddlePanel() {
+    midPanel.innerHTML = '';
+    if (!selectedCharacterId) {
+      midPanel.innerHTML = '<div class="empty-state">Select a character on the left to edit their board.</div>';
+      return;
+    }
+    const cdata = DATA.boardCategories[selectedCharacterId];
+    const variantData = DATA.greenYellowBoard.variants[cdata.greenYellowVariant];
+
+    const tabs = document.createElement('div');
+    tabs.className = 'gy-tabs';
+    for (const tab of ['green', 'yellow']) {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'gy-tab-btn' + (activeTab === tab ? ' active' : '');
+      btn.textContent = tab === 'green' ? 'Green (Card)' : 'Yellow (Content)';
+      btn.onclick = () => {
+        activeTab = tab;
+        renderMiddlePanel();
+      };
+      tabs.appendChild(btn);
+    }
+    midPanel.appendChild(tabs);
+
+    const diagramContainer = document.createElement('div');
+    diagramContainer.className = 'gy-diagram-container';
+    midPanel.appendChild(diagramContainer);
+    renderDiagramTab(diagramContainer, selectedCharacterId, variantData, activeTab);
+  }
+
+  function renderSummaryPanel() {
+    rightPanel.innerHTML = '';
+    if (!selectedCharacterId) {
+      rightPanel.innerHTML = '<div class="empty-state">No character selected.</div>';
+      return;
+    }
+    const cdata = DATA.boardCategories[selectedCharacterId];
+    const variantData = DATA.greenYellowBoard.variants[cdata.greenYellowVariant];
+    const unlockedSet = state.greenYellowBoardSelections[selectedCharacterId] || new Set();
+
+    const title = document.createElement('div');
+    title.className = 'gy-summary-title';
+    title.textContent = cdata.characterName;
+    rightPanel.appendChild(title);
+
+    // Green summary: total flat stat boosts from unlocked Card nodes
+    const greenHeading = document.createElement('div');
+    greenHeading.className = 'board-group-label';
+    greenHeading.textContent = 'Green \u2014 Stat Boosts';
+    rightPanel.appendChild(greenHeading);
+    const statTotals = { performance: 0, technique: 0, sense: 0 };
+    for (const n of variantData.card) {
+      if (!unlockedSet.has(`${n.x},${n.y}`)) continue;
+      const shortType = (n.effectType || '').replace('SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_', '');
+      const value = Number(n.value);
+      if (shortType === 'ALL_PARAMETER_UP') {
+        statTotals.performance += value;
+        statTotals.technique += value;
+        statTotals.sense += value;
+      } else if (shortType === 'PERFORMANCE_UP') statTotals.performance += value;
+      else if (shortType === 'TECHNIQUE_UP') statTotals.technique += value;
+      else if (shortType === 'SENSE_UP') statTotals.sense += value;
+    }
+    const statGrid = document.createElement('div');
+    statGrid.className = 'power-breakdown';
+    for (const [label, key] of [
+      ['Performance', 'performance'],
+      ['Technique', 'technique'],
+      ['Sense', 'sense'],
+    ]) {
+      const l = document.createElement('span');
+      l.textContent = label;
+      const v = document.createElement('span');
+      v.className = 'num';
+      v.textContent = `+${statTotals[key]}`;
+      statGrid.appendChild(l);
+      statGrid.appendChild(v);
+    }
+    rightPanel.appendChild(statGrid);
+
+    // Yellow summary: Solo/Group/All %, each independently capped at 10%
+    const yellowHeading = document.createElement('div');
+    yellowHeading.className = 'board-group-label';
+    yellowHeading.textContent = 'Yellow \u2014 Score Bonus';
+    rightPanel.appendChild(yellowHeading);
+    const bySingerType = { solo: 0, group: 0, all: 0 };
+    for (const n of variantData.contentScoreBonus) {
+      if (!unlockedSet.has(`${n.x},${n.y}`)) continue;
+      bySingerType[n.singerType] = (bySingerType[n.singerType] || 0) + Number(n.value);
+    }
+    const yellowGrid = document.createElement('div');
+    yellowGrid.className = 'power-breakdown';
+    for (const type of ['solo', 'group', 'all']) {
+      const l = document.createElement('span');
+      l.textContent = GY_SINGER_TYPE_LABELS[type];
+      const v = document.createElement('span');
+      v.className = 'num';
+      const capped = Math.min(100, bySingerType[type]);
+      v.textContent = `${(capped / 10).toFixed(1)}%` + (bySingerType[type] > 100 ? ' (capped)' : '');
+      yellowGrid.appendChild(l);
+      yellowGrid.appendChild(v);
+    }
+    rightPanel.appendChild(yellowGrid);
+
+    const note = document.createElement('div');
+    note.className = 'estimate-note';
+    note.textContent =
+      'Each Yellow type (Solo/Group/All) is capped independently at 10%, matching the in-game "effects over the limit are not applied" rule. Green totals shown here are this character\u2019s own stat boosts - they only affect Overall Power when this character is actually in your current unit.';
+    rightPanel.appendChild(note);
+  }
+
+  renderLeftPanel();
+  renderMiddlePanel();
+  renderSummaryPanel();
 
   const close = document.createElement('div');
   close.className = 'picker-close';

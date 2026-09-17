@@ -761,6 +761,41 @@ const SKILL_TREE_EFFECT_PREFIX = 'SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_';
  * investment does nothing if they're not one of the 5 performing members
  * (unlike yellow, which applies regardless of current unit - see
  * computeYellowScoreBonus).
+ *
+ * The raw ALL_MEMBER node type (confirmed as the real "green" area via a
+ * real in-game screenshot, 2026-09 - NOT SkillTreeNodeType_CARD, which is
+ * actually a duplicate of the existing Blue/member data under a different
+ * name) is a MIXED-PURPOSE area, not stat-only. green_yellow_board.json's
+ * "card" key holds only the confirmed stat-boost subset (ALL_PARAMETER_UP /
+ * PERFORMANCE_UP / SENSE_UP / TECHNIQUE_UP); "cardOther" holds everything
+ * else (mostly mini-game/economy rewards - Chase, jump rope, gold, card EXP -
+ * genuinely unrelated to anything this site computes) and is NOT read here.
+ *
+ * TWO KNOWN, UNRESOLVED GAPS in the stat-boost subset itself (deliberately
+ * NOT modeled yet - both confirmed real via real in-game screenshots,
+ * neither is a guess):
+ *   1. THREE of the 24 ALL_MEMBER nodes use effectType
+ *      *_FOR_CHARACTER_GROUPING (values 75/150/225 permil) instead of a
+ *      plain stat type. These are in "cardOther", not "card", so they're
+ *      currently invisible to this function entirely. Confirmed via
+ *      screenshot: applies to the BOARD OWNER'S OWN generation (e.g.
+ *      Suisei's node text read "Grants All Stats UP 150 to Gen 0", and
+ *      she's genuinely Gen 0) - but the raw SkillTreeEffect row's stored
+ *      target (skillTreeEffectTargetId) is a DIFFERENT, seemingly-unrelated
+ *      group ("grp-indonesia-gen_3" for Suisei's own tree-model-001,
+ *      confirmed by direct lookup) - strongly suggests the game resolves
+ *      the real target dynamically from the board owner's own
+ *      regularCharacterGroupingIds rather than using what's stored, but
+ *      this is an unverified hypothesis, not confirmed against a second
+ *      character's template.
+ *   2. A separate, cross-roster "Limit 900/900" cap exists per RECIPIENT
+ *      character (confirmed via screenshot of the in-game "Skill Target
+ *      holomem" list) - i.e. the total incoming boost any one recipient can
+ *      receive from EVERY other character's board combined is capped, not
+ *      just each individual booster's own contribution. Modeling this
+ *      correctly would need visibility into the whole roster's board state
+ *      simultaneously, not just the current unit - out of scope for now.
+ *
  * @param {Record<string, Set<string>>} greenYellowSelections - state.greenYellowBoardSelections
  * @param {object} greenYellowBoardData - the loaded data/green_yellow_board.json
  * @param {object} boardCategoriesData - the loaded data/board_categories.json (for each character's greenYellowVariant)
