@@ -1181,11 +1181,12 @@ function openGreenYellowBoardManager() {
       });
       svg.appendChild(el);
 
-      if (n.kind === 'card') {
+      if (n.kind !== 'connector') {
+        const iconType = n.kind === 'contentScore' ? `${shortType}-${n.singerType}` : shortType;
         const iconSize = radius * 1.5;
         const img = document.createElementNS(svgNS, 'image');
-        img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `images/board_icons/${shortType}.png`);
-        img.setAttribute('href', `images/board_icons/${shortType}.png`);
+        img.setAttributeNS('http://www.w3.org/1999/xlink', 'href', `images/board_icons/${iconType}.png`);
+        img.setAttribute('href', `images/board_icons/${iconType}.png`);
         img.setAttribute('x', toScreenX(n.x) - iconSize / 2);
         img.setAttribute('y', toScreenY(n.y) - iconSize / 2);
         img.setAttribute('width', iconSize);
