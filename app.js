@@ -12,6 +12,8 @@ import {
   mergeScoreSupport,
   computeConnectBonuses,
   getConnectorInfo,
+  computeGreenBoardBonuses,
+  computeYellowScoreBonus,
   mergeBoardBonuses,
   buildBoardIndex,
   boardPointsSpentFromSet,
@@ -313,6 +315,7 @@ const state = {
   coverageShowBonusText: true, // main builder's sec-by-sec table: whether each active member's cell shows its "X% + Y% @ Z%" bonus text, or just the winner/suppressed highlight color with no text
   coverageShowScoreNumbers: true, // main builder's sec-by-sec table: whether each active member's cell shows its small per-second theoretical-score subtext
   greenYellowBoardSelections: {}, // player's unlocked Card(green)/Content(yellow) board positions, per character: { characterId: Set of "x,y" keys }. Interpreted against whichever of the 2 shared layouts (data/green_yellow_board.json) that character's board_categories.json entry maps to via greenYellowVariant.
+  greenYellowConnectSelections: {}, // Yellow(Content)-only connector assignment, GLOBAL per character (not team-scoped, unlike state.connectSelections) - matches how Yellow itself applies regardless of current unit: { characterId: {connectorCardId, connectorBloom} }. Green has no connect-effect mechanic at all (confirmed: ALL_MEMBER area has no CONNECTION-type bridge node and no dedicated connect-effect-extent).
 };
 
 const MOBILE_BREAKPOINT = '(max-width: 700px)';
@@ -1079,6 +1082,7 @@ function openGreenYellowBoardManager() {
         : [
             ...variantData.contentScoreBonus.map((n) => ({ ...n, kind: 'contentScore' })),
             ...variantData.contentOther.map((n) => ({ ...n, kind: 'contentOther' })),
+            ...(variantData.contentConnector || []).map((n) => ({ ...n, kind: 'connector' })),
           ];
     const tabBoardIndex = new Map();
     for (const n of tabNodes) tabBoardIndex.set(`${n.x},${n.y}`, n);
@@ -1122,8 +1126,14 @@ function openGreenYellowBoardManager() {
       const unlocked = tabUnlockedSet.has(posKey);
       const el = document.createElementNS(svgNS, 'circle');
       const colorVar =
-        n.kind === 'card' ? '--green-node' : n.kind === 'cardOther' || n.kind === 'contentOther' ? '--text-faint' : '--orange';
-      const radius = n.grade >= 2 ? 13 : 10;
+        n.kind === 'card'
+          ? '--green-node'
+          : n.kind === 'connector'
+            ? '--blue-node'
+            : n.kind === 'cardOther' || n.kind === 'contentOther'
+              ? '--text-faint'
+              : '--orange';
+      const radius = n.kind === 'connector' ? 7 : n.grade >= 2 ? 13 : 10;
       el.setAttribute('cx', toScreenX(n.x));
       el.setAttribute('cy', toScreenY(n.y));
       el.setAttribute('r', radius);
@@ -1139,6 +1149,8 @@ function openGreenYellowBoardManager() {
         label = `Score Bonus \u00b7 +${(Number(n.value) / 10).toFixed(1)}% \u00b7 ${GY_SINGER_TYPE_LABELS[n.singerType] || n.singerType}`;
       } else if (n.kind === 'cardOther') {
         label = `${n.note || 'Other effect'} (not modeled here)`;
+      } else if (n.kind === 'connector') {
+        label = 'Connector (no effect - unlocks the path onward)';
       } else {
         label = `Work Reward \u00b7 +${(Number(n.value) / 10).toFixed(1)}% (not modeled here)`;
       }
@@ -1191,7 +1203,7 @@ function openGreenYellowBoardManager() {
     legend.textContent =
       tab === 'green'
         ? `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 green = stat boost \u00b7 grey = other (not modeled) \u00b7 click a node to unlock/lock it`
-        : `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 orange = Score Bonus \u00b7 grey = Work Reward (not modeled) \u00b7 click a node to unlock/lock it`;
+        : `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 orange = Score Bonus \u00b7 grey = Work Reward (not modeled) \u00b7 blue = Connector (no effect) \u00b7 click a node to unlock/lock it`;
     container.appendChild(legend);
   }
 
@@ -1223,6 +1235,144 @@ function openGreenYellowBoardManager() {
     diagramContainer.className = 'gy-diagram-container';
     midPanel.appendChild(diagramContainer);
     renderDiagramTab(diagramContainer, selectedCharacterId, variantData, activeTab);
+
+    if (activeTab === 'yellow') {
+      const connectSection = document.createElement('div');
+      connectSection.className = 'connect-section gy-connect-section';
+      midPanel.appendChild(connectSection);
+      renderYellowConnectSection(connectSection, selectedCharacterId);
+    }
+  }
+
+  /** Yellow's connector assignment - GLOBAL per character (state.greenYellowConnectSelections),
+   *  not team-scoped like Red/Blue's connect slots. Only Yellow has this at
+   *  all - Green (ALL_MEMBER) has no CONNECTION-type bridge node and no
+   *  dedicated connect-effect-extent, confirmed via the raw datamine. */
+  function renderYellowConnectSection(container, characterId) {
+    container.innerHTML = '';
+    const heading = document.createElement('div');
+    heading.className = 'board-group-label';
+    heading.innerHTML =
+      'Connect Effect <span class="board-group-hint">\u2014 assign a connector character; her boost applies to whichever of this character\u2019s unlocked Yellow nodes fall in her exact pattern. This is a standing assignment for this character, not tied to your current team.</span>';
+    container.appendChild(heading);
+
+    if (!state.greenYellowConnectSelections[characterId]) state.greenYellowConnectSelections[characterId] = null;
+    const setup = state.greenYellowConnectSelections[characterId];
+
+    const row = document.createElement('div');
+    row.className = 'connect-slot-row';
+    const connectorCard = setup?.connectorCardId ? DATA.byId[setup.connectorCardId] : null;
+
+    const connectorBtn = document.createElement('button');
+    connectorBtn.type = 'button';
+    connectorBtn.className = 'board-btn';
+    connectorBtn.textContent = connectorCard
+      ? `${connectorCard.characterName}${connectorCard.cardSubtitle ? ' \u00b7 ' + connectorCard.cardSubtitle : ''}`
+      : 'Choose connector';
+    connectorBtn.onclick = () => openYellowConnectorPicker(characterId);
+    row.appendChild(connectorBtn);
+
+    if (connectorCard) {
+      const connInfo = DATA.cardConnectInfo[connectorCard.cardId];
+      if (connInfo?.pattern) {
+        const patternWrap = document.createElement('span');
+        patternWrap.className = 'pattern-icon-wrap inline';
+        patternWrap.innerHTML = buildPatternIcon(connInfo.pattern, '--orange');
+        row.appendChild(patternWrap);
+      }
+      const clearBtn = document.createElement('button');
+      clearBtn.type = 'button';
+      clearBtn.className = 'board-btn';
+      clearBtn.textContent = 'Clear';
+      clearBtn.onclick = () => {
+        state.greenYellowConnectSelections[characterId] = null;
+        recompute();
+        renderMiddlePanel();
+        renderSummaryPanel();
+      };
+      row.appendChild(clearBtn);
+    }
+    container.appendChild(row);
+  }
+
+  function openYellowConnectorPicker(characterId) {
+    const pOverlay = document.createElement('div');
+    pOverlay.className = 'picker-overlay';
+    const pBox = document.createElement('div');
+    pBox.className = 'picker-box';
+    const searchWrap = document.createElement('div');
+    searchWrap.className = 'picker-search';
+    const input = document.createElement('input');
+    input.placeholder = 'Search for a connector\u2026';
+    searchWrap.appendChild(input);
+    pBox.appendChild(searchWrap);
+    const pList = document.createElement('div');
+    pList.className = 'picker-list';
+    pBox.appendChild(pList);
+    const pClose = document.createElement('div');
+    pClose.className = 'picker-close';
+    pClose.textContent = 'CLOSE';
+    pClose.onclick = () => pOverlay.remove();
+    pBox.appendChild(pClose);
+
+    function renderPList(query) {
+      pList.innerHTML = '';
+      const q = query.trim().toLowerCase();
+      // Only content/center-area connectors can geometrically reach Yellow
+      // positions at all (confirmed earlier) - leader/member-area connectors
+      // would never match anything here, so they're filtered out rather than
+      // shown as dead options.
+      const matches = DATA.members
+        .filter((m) => {
+          const info = DATA.cardConnectInfo[m.cardId];
+          if (!info || (info.area !== 'content' && info.area !== 'center')) return false;
+          if (q && !m.characterName?.toLowerCase().includes(q) && !m.cardSubtitle?.toLowerCase().includes(q)) return false;
+          return true;
+        })
+        .slice(0, 60);
+
+      if (!matches.length) {
+        const empty = document.createElement('div');
+        empty.className = 'empty-state';
+        empty.textContent = q ? `No content-eligible connector matching "${query.trim()}".` : 'No content-eligible connectors found.';
+        pList.appendChild(empty);
+        return;
+      }
+      for (const m of matches) {
+        const info = DATA.cardConnectInfo[m.cardId];
+        const item = document.createElement('div');
+        item.className = 'picker-item';
+        const portrait = document.createElement('img');
+        portrait.className = 'picker-item-portrait';
+        portrait.src = `images/cards/${m.cardId}.webp`;
+        portrait.alt = m.characterName;
+        portrait.loading = 'lazy';
+        item.appendChild(portrait);
+        const infoDiv = document.createElement('div');
+        infoDiv.innerHTML = `<div class="picker-item-name">${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span></div><div class="picker-item-sub">${m.cardSubtitle || ''}</div><div class="picker-item-sub">${info.nodeCount}-node pattern \u00b7 +${(info.boostPermilLevel1 / 10).toFixed(0)}\u2013${(info.boostPermilLevel2 / 10).toFixed(0)}%</div>`;
+        item.appendChild(infoDiv);
+        const patternWrap = document.createElement('div');
+        patternWrap.className = 'pattern-icon-wrap';
+        patternWrap.innerHTML = buildPatternIcon(info.pattern, '--orange');
+        item.appendChild(patternWrap);
+        item.onclick = () => {
+          state.greenYellowConnectSelections[characterId] = { connectorCardId: m.cardId, connectorBloom: 0 };
+          pOverlay.remove();
+          recompute();
+          renderMiddlePanel();
+          renderSummaryPanel();
+        };
+        pList.appendChild(item);
+      }
+    }
+    input.addEventListener('input', () => renderPList(input.value));
+    renderPList('');
+    pOverlay.appendChild(pBox);
+    pOverlay.addEventListener('click', (e) => {
+      if (e.target === pOverlay) pOverlay.remove();
+    });
+    document.body.appendChild(pOverlay);
+    input.focus();
   }
 
   function renderSummaryPanel() {
@@ -1281,9 +1431,18 @@ function openGreenYellowBoardManager() {
     yellowHeading.textContent = 'Yellow \u2014 Score Bonus';
     rightPanel.appendChild(yellowHeading);
     const bySingerType = { solo: 0, group: 0, all: 0 };
-    for (const n of variantData.contentScoreBonus) {
-      if (!unlockedSet.has(`${n.x},${n.y}`)) continue;
-      bySingerType[n.singerType] = (bySingerType[n.singerType] || 0) + Number(n.value);
+    for (const type of ['solo', 'group', 'all']) {
+      bySingerType[type] = computeYellowScoreBonus(
+        state.greenYellowBoardSelections,
+        DATA.greenYellowBoard,
+        DATA.boardCategories,
+        [selectedCharacterId],
+        type,
+        state.greenYellowConnectSelections,
+        DATA.cardConnectInfo,
+        DATA.byId,
+        DATA.cardPotentials
+      );
     }
     const yellowGrid = document.createElement('div');
     yellowGrid.className = 'power-breakdown';
@@ -1292,8 +1451,7 @@ function openGreenYellowBoardManager() {
       l.textContent = GY_SINGER_TYPE_LABELS[type];
       const v = document.createElement('span');
       v.className = 'num';
-      const capped = Math.min(100, bySingerType[type]);
-      v.textContent = `${(capped / 10).toFixed(1)}%` + (bySingerType[type] > 100 ? ' (capped)' : '');
+      v.textContent = `${(bySingerType[type] / 10).toFixed(1)}%`;
       yellowGrid.appendChild(l);
       yellowGrid.appendChild(v);
     }

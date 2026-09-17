@@ -606,6 +606,15 @@
           "value": "5",
           "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
         }
+      ],
+      "contentConnector": [
+        {
+          "nodeGroupId": "S-004",
+          "x": 7,
+          "y": 0,
+          "grade": 1,
+          "cost": 1
+        }
       ]
     },
     "tree-model-002": {
@@ -1213,6 +1222,15 @@
           "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP",
           "value": "5",
           "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
+        }
+      ],
+      "contentConnector": [
+        {
+          "nodeGroupId": "S-004",
+          "x": -7,
+          "y": 0,
+          "grade": 1,
+          "cost": 1
         }
       ]
     }

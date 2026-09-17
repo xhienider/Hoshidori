@@ -858,6 +858,20 @@ export function computeGreenBoardBonuses(greenYellowSelections, greenYellowBoard
  * both would independently appear in songSingerCharacterIds and each
  * contribute their own unlocked nodes.
  *
+ * Optional connect-effect support (connectorSelections/cardConnectInfo/
+ * cardsById/cardPotentials): unlike Red/Blue, this is a GLOBAL per-character
+ * assignment (state.greenYellowConnectSelections), not team-scoped - matches
+ * how the rest of Yellow already applies regardless of current unit. The
+ * connector's pattern is anchored at the shared board center (0,0), same as
+ * a "center"-type Red/Blue slot - Yellow has no separate anchor of its own.
+ * A connector only amplifies a node the character has ALREADY unlocked
+ * (same rule as Red/Blue - it boosts existing investment, doesn't grant new
+ * nodes for free). NOTE: the underlying card_connect_info.json "content"-area
+ * entries (40 of them) were extracted but never validated against a real
+ * in-game example before being wired in here - the math follows the same
+ * pattern proven correct for Red/Blue, but this specific area's connector
+ * behavior is unverified.
+ *
  * Returns permil, capped at 100 (10%) per the in-game "Effects over the
  * limit are not applied" rule - confirmed via the in-game tooltip.
  *
@@ -866,22 +880,56 @@ export function computeGreenBoardBonuses(greenYellowSelections, greenYellowBoard
  * @param {object} boardCategoriesData - the loaded data/board_categories.json
  * @param {string[]} songSingerCharacterIds - the selected song's characterIds
  * @param {string} songSingerType - the selected song's musicSingerType ('solo'|'group'|'all')
+ * @param {Record<string, {connectorCardId:string, connectorBloom:number}>} [connectorSelections] - state.greenYellowConnectSelections
+ * @param {object} [cardConnectInfo] - card_connect_info.json
+ * @param {object} [cardsById] - members.json indexed by cardId
+ * @param {object} [cardPotentials] - card_potentials.json
  */
-export function computeYellowScoreBonus(greenYellowSelections, greenYellowBoardData, boardCategoriesData, songSingerCharacterIds, songSingerType) {
+export function computeYellowScoreBonus(
+  greenYellowSelections,
+  greenYellowBoardData,
+  boardCategoriesData,
+  songSingerCharacterIds,
+  songSingerType,
+  connectorSelections,
+  cardConnectInfo,
+  cardsById,
+  cardPotentials
+) {
   if (!songSingerCharacterIds?.length || !songSingerType) return 0;
   let total = 0;
   for (const characterId of songSingerCharacterIds) {
     const variant = boardCategoriesData[characterId]?.greenYellowVariant;
     if (!variant) continue;
     const unlockedSet = greenYellowSelections[characterId];
-    if (!unlockedSet || !unlockedSet.size) continue;
-
     const contentNodes = greenYellowBoardData.variants[variant]?.contentScoreBonus || [];
-    for (const node of contentNodes) {
-      if (node.singerType !== songSingerType) continue;
-      const posKey = `${node.x},${node.y}`;
-      if (!unlockedSet.has(posKey)) continue;
-      total += Number(node.value);
+
+    if (unlockedSet?.size) {
+      for (const node of contentNodes) {
+        if (node.singerType !== songSingerType) continue;
+        const posKey = `${node.x},${node.y}`;
+        if (!unlockedSet.has(posKey)) continue;
+        total += Number(node.value);
+      }
+    }
+
+    const connectorSetup = connectorSelections?.[characterId];
+    if (connectorSetup?.connectorCardId && cardConnectInfo && cardsById && unlockedSet?.size) {
+      const connectorCard = cardsById[connectorSetup.connectorCardId];
+      if (connectorCard) {
+        const connectorInfo = getConnectorInfo(connectorCard, connectorSetup.connectorBloom || 0, cardConnectInfo, cardPotentials);
+        if (connectorInfo?.boostPermil && connectorInfo.pattern) {
+          const byPosition = new Map();
+          for (const node of contentNodes) byPosition.set(`${node.x},${node.y}`, node);
+          for (const offset of connectorInfo.pattern) {
+            const posKey = `${offset.x || 0},${offset.y || 0}`;
+            const node = byPosition.get(posKey);
+            if (!node || node.singerType !== songSingerType) continue;
+            if (!unlockedSet.has(posKey)) continue; // amplifies an already-unlocked node, same rule as Red/Blue
+            total += Math.ceil(Number(node.value) * (connectorInfo.boostPermil / 1000));
+          }
+        }
+      }
     }
   }
   return Math.min(100, total);
