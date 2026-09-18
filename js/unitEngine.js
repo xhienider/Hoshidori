@@ -901,7 +901,27 @@ export function computeGreenBoardBonuses(greenYellowSelections, greenYellowBoard
  * @param {object} [cardConnectInfo] - card_connect_info.json
  * @param {object} [cardsById] - members.json indexed by cardId
  * @param {object} [cardPotentials] - card_potentials.json
+ * @param {object} [globalConnectSelections] - state.connectSelections (the SAME data Red/Blue's team-scoped computeConnectBonuses reads for its own "center" slot, read here globally for any credited singer instead)
  */
+/** Applies one connector's pattern (anchored at `anchor`) to `contentNodes`,
+ *  adding boosted value for each already-unlocked, singer-type-matching node
+ *  it lands on. Shared helper for Yellow's two distinct connector sources -
+ *  its own Content-area bridge connector and the (global) Center slot. */
+function applyYellowConnectorPattern(contentNodes, unlockedSet, songSingerType, anchor, connectorInfo) {
+  if (!connectorInfo?.boostPermil || !connectorInfo.pattern || !anchor) return 0;
+  const byPosition = new Map();
+  for (const node of contentNodes) byPosition.set(`${node.x},${node.y}`, node);
+  let sum = 0;
+  for (const offset of connectorInfo.pattern) {
+    const posKey = `${anchor.x + (offset.x || 0)},${anchor.y + (offset.y || 0)}`;
+    const node = byPosition.get(posKey);
+    if (!node || node.singerType !== songSingerType) continue;
+    if (!unlockedSet.has(posKey)) continue; // amplifies an already-unlocked node, same rule as Red/Blue
+    sum += Math.ceil(Number(node.value) * (connectorInfo.boostPermil / 1000));
+  }
+  return sum;
+}
+
 export function computeYellowScoreBonus(
   greenYellowSelections,
   greenYellowBoardData,
@@ -911,7 +931,8 @@ export function computeYellowScoreBonus(
   connectorSelections,
   cardConnectInfo,
   cardsById,
-  cardPotentials
+  cardPotentials,
+  globalConnectSelections
 ) {
   if (!songSingerCharacterIds?.length || !songSingerType) return 0;
   let total = 0;
@@ -930,23 +951,37 @@ export function computeYellowScoreBonus(
       }
     }
 
-    const connectorSetup = connectorSelections?.[characterId];
-    if (connectorSetup?.connectorCardId && cardConnectInfo && cardsById && unlockedSet?.size) {
-      const connectorCard = cardsById[connectorSetup.connectorCardId];
+    if (!unlockedSet?.size || !cardConnectInfo || !cardsById) continue;
+
+    // Content's own dedicated bridge connector - anchored at THIS character's
+    // own Content-area CONNECTION-node position (see docstring above for how
+    // this was confirmed).
+    const bridgeSetup = connectorSelections?.[characterId];
+    if (bridgeSetup?.connectorCardId) {
+      const connectorCard = cardsById[bridgeSetup.connectorCardId];
       const anchor = greenYellowBoardData.variants[variant]?.contentConnector?.[0];
-      if (connectorCard && anchor) {
-        const connectorInfo = getConnectorInfo(connectorCard, connectorSetup.connectorBloom || 0, cardConnectInfo, cardPotentials);
-        if (connectorInfo?.boostPermil && connectorInfo.pattern) {
-          const byPosition = new Map();
-          for (const node of contentNodes) byPosition.set(`${node.x},${node.y}`, node);
-          for (const offset of connectorInfo.pattern) {
-            const posKey = `${anchor.x + (offset.x || 0)},${anchor.y + (offset.y || 0)}`;
-            const node = byPosition.get(posKey);
-            if (!node || node.singerType !== songSingerType) continue;
-            if (!unlockedSet.has(posKey)) continue; // amplifies an already-unlocked node, same rule as Red/Blue
-            total += Math.ceil(Number(node.value) * (connectorInfo.boostPermil / 1000));
-          }
-        }
+      if (connectorCard) {
+        const info = getConnectorInfo(connectorCard, bridgeSetup.connectorBloom || 0, cardConnectInfo, cardPotentials);
+        total += applyYellowConnectorPattern(contentNodes, unlockedSet, songSingerType, anchor, info);
+      }
+    }
+
+    // The Center slot - SAME underlying assignment Red/Blue's board editor
+    // already uses (state.connectSelections[characterId].center), read here
+    // globally (any credited singer, not just current unit members) rather
+    // than duplicating a second "center" assignment - a character has ONE
+    // Center connector, same as in the real game, and it contributes to
+    // Yellow regardless of current team exactly like everything else Yellow
+    // computes. This does NOT change Red/Blue's own team-scoped Overall
+    // Power calculation (computeConnectBonuses) at all - that function is
+    // untouched and still only reads this same data for current unit
+    // members, as before.
+    const centerSetup = globalConnectSelections?.[characterId]?.center;
+    if (centerSetup?.connectorCardId) {
+      const connectorCard = cardsById[centerSetup.connectorCardId];
+      if (connectorCard) {
+        const info = getConnectorInfo(connectorCard, centerSetup.connectorBloom || 0, cardConnectInfo, cardPotentials);
+        total += applyYellowConnectorPattern(contentNodes, unlockedSet, songSingerType, { x: 0, y: 0 }, info);
       }
     }
   }

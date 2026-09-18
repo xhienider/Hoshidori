@@ -1245,58 +1245,88 @@ function openGreenYellowBoardManager() {
     }
   }
 
-  /** Yellow's connector assignment - GLOBAL per character (state.greenYellowConnectSelections),
-   *  not team-scoped like Red/Blue's connect slots. Only Yellow has this at
-   *  all - Green (ALL_MEMBER) has no CONNECTION-type bridge node and no
-   *  dedicated connect-effect-extent, confirmed via the raw datamine. */
+  /** Yellow has TWO distinct connect-effect sources:
+   *  1. Its own dedicated Content-area bridge connector - GLOBAL per
+   *     character (state.greenYellowConnectSelections), unique to Yellow.
+   *  2. The Center slot - the SAME underlying assignment Red/Blue's team
+   *     builder board editor already uses (state.connectSelections[id].center).
+   *     Shown/editable here too since a character has one standing Center
+   *     connector, not a separate one per context - but this is the SAME
+   *     data, so editing it here also affects it there, and vice versa.
+   *     Read here globally (any credited singer) rather than team-scoped -
+   *     this does NOT change how Red/Blue's own Overall Power calculation
+   *     (computeConnectBonuses) reads it, which stays team-scoped exactly
+   *     as before.
+   *  Green (ALL_MEMBER) has no connect-effect mechanic at all - confirmed:
+   *  no CONNECTION-type bridge node and no dedicated connect-effect-extent. */
   function renderYellowConnectSection(container, characterId) {
     container.innerHTML = '';
     const heading = document.createElement('div');
     heading.className = 'board-group-label';
     heading.innerHTML =
-      'Connect Effect <span class="board-group-hint">\u2014 assign a connector character; her boost applies to whichever of this character\u2019s unlocked Yellow nodes fall in her exact pattern. This is a standing assignment for this character, not tied to your current team.</span>';
+      'Connect Effect <span class="board-group-hint">\u2014 assign a connector character; her boost applies to whichever of this character\u2019s unlocked Yellow nodes fall in her exact pattern. Both are standing assignments for this character, not tied to your current team. Center is shared with the team builder\u2019s board editor - the same assignment either way.</span>';
     container.appendChild(heading);
 
-    if (!state.greenYellowConnectSelections[characterId]) state.greenYellowConnectSelections[characterId] = null;
-    const setup = state.greenYellowConnectSelections[characterId];
+    const renderSlotRow = (label, getSetup, setSetup) => {
+      const setup = getSetup();
+      const row = document.createElement('div');
+      row.className = 'connect-slot-row';
+      const labelEl = document.createElement('div');
+      labelEl.className = 'connect-slot-head';
+      labelEl.textContent = label;
+      row.appendChild(labelEl);
+      const connectorCard = setup?.connectorCardId ? DATA.byId[setup.connectorCardId] : null;
 
-    const row = document.createElement('div');
-    row.className = 'connect-slot-row';
-    const connectorCard = setup?.connectorCardId ? DATA.byId[setup.connectorCardId] : null;
+      const connectorBtn = document.createElement('button');
+      connectorBtn.type = 'button';
+      connectorBtn.className = 'board-btn';
+      connectorBtn.textContent = connectorCard
+        ? `${connectorCard.characterName}${connectorCard.cardSubtitle ? ' \u00b7 ' + connectorCard.cardSubtitle : ''}`
+        : 'Choose connector';
+      connectorBtn.onclick = () => openYellowConnectorPicker(characterId, setSetup);
+      row.appendChild(connectorBtn);
 
-    const connectorBtn = document.createElement('button');
-    connectorBtn.type = 'button';
-    connectorBtn.className = 'board-btn';
-    connectorBtn.textContent = connectorCard
-      ? `${connectorCard.characterName}${connectorCard.cardSubtitle ? ' \u00b7 ' + connectorCard.cardSubtitle : ''}`
-      : 'Choose connector';
-    connectorBtn.onclick = () => openYellowConnectorPicker(characterId);
-    row.appendChild(connectorBtn);
-
-    if (connectorCard) {
-      const connInfo = DATA.cardConnectInfo[connectorCard.cardId];
-      if (connInfo?.pattern) {
-        const patternWrap = document.createElement('span');
-        patternWrap.className = 'pattern-icon-wrap inline';
-        patternWrap.innerHTML = buildPatternIcon(connInfo.pattern, '--orange');
-        row.appendChild(patternWrap);
+      if (connectorCard) {
+        const connInfo = DATA.cardConnectInfo[connectorCard.cardId];
+        if (connInfo?.pattern) {
+          const patternWrap = document.createElement('span');
+          patternWrap.className = 'pattern-icon-wrap inline';
+          patternWrap.innerHTML = buildPatternIcon(connInfo.pattern, '--orange');
+          row.appendChild(patternWrap);
+        }
+        const clearBtn = document.createElement('button');
+        clearBtn.type = 'button';
+        clearBtn.className = 'board-btn';
+        clearBtn.textContent = 'Clear';
+        clearBtn.onclick = () => {
+          setSetup(null);
+          recompute();
+          renderMiddlePanel();
+          renderSummaryPanel();
+        };
+        row.appendChild(clearBtn);
       }
-      const clearBtn = document.createElement('button');
-      clearBtn.type = 'button';
-      clearBtn.className = 'board-btn';
-      clearBtn.textContent = 'Clear';
-      clearBtn.onclick = () => {
-        state.greenYellowConnectSelections[characterId] = null;
-        recompute();
-        renderMiddlePanel();
-        renderSummaryPanel();
-      };
-      row.appendChild(clearBtn);
-    }
-    container.appendChild(row);
+      container.appendChild(row);
+    };
+
+    renderSlotRow(
+      'Content (own bridge)',
+      () => state.greenYellowConnectSelections[characterId],
+      (val) => {
+        state.greenYellowConnectSelections[characterId] = val;
+      }
+    );
+    renderSlotRow(
+      'Center (shared with team builder)',
+      () => state.connectSelections[characterId]?.center,
+      (val) => {
+        if (!state.connectSelections[characterId]) state.connectSelections[characterId] = {};
+        state.connectSelections[characterId].center = val;
+      }
+    );
   }
 
-  function openYellowConnectorPicker(characterId) {
+  function openYellowConnectorPicker(characterId, setSetup) {
     const pOverlay = document.createElement('div');
     pOverlay.className = 'picker-overlay';
     const pBox = document.createElement('div');
@@ -1359,7 +1389,7 @@ function openGreenYellowBoardManager() {
         patternWrap.innerHTML = buildPatternIcon(info.pattern, '--orange');
         item.appendChild(patternWrap);
         item.onclick = () => {
-          state.greenYellowConnectSelections[characterId] = { connectorCardId: m.cardId, connectorBloom: 0 };
+          setSetup({ connectorCardId: m.cardId, connectorBloom: 0 });
           pOverlay.remove();
           recompute();
           renderMiddlePanel();
@@ -1444,7 +1474,8 @@ function openGreenYellowBoardManager() {
         state.greenYellowConnectSelections,
         DATA.cardConnectInfo,
         DATA.byId,
-        DATA.cardPotentials
+        DATA.cardPotentials,
+        state.connectSelections
       );
     }
     const yellowGrid = document.createElement('div');
