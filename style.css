@@ -1426,6 +1426,17 @@ header.masthead {
   font-weight: 400;
   letter-spacing: normal;
 }
+.board-info-icon {
+  display: inline-block;
+  color: var(--text-faint);
+  text-transform: none;
+  font-weight: 400;
+  letter-spacing: normal;
+  cursor: help;
+  font-size: 12px;
+  vertical-align: 1px;
+}
+.board-info-icon:hover { color: var(--text-dim); }
 
 .board-row {
   display: grid;

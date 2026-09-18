@@ -720,7 +720,7 @@ function openBoardEditor(card, isLeaderSlotContext) {
     connectSection.innerHTML = '';
     const heading = document.createElement('div');
     heading.className = 'board-group-label';
-    heading.innerHTML = 'Connect Effects <span class="board-group-hint">\u2014 assign a connector character; her boost applies automatically to whichever of your unlocked nodes fall in her exact pattern</span>';
+    heading.innerHTML = 'Connect Effects <span class="board-info-icon" title="Assign a connector character; her boost applies automatically to whichever of your unlocked nodes fall in her exact pattern.">\u24d8</span>';
     connectSection.appendChild(heading);
 
     if (!state.connectSelections[characterId]) state.connectSelections[characterId] = {};
@@ -1264,7 +1264,7 @@ function openGreenYellowBoardManager() {
     const heading = document.createElement('div');
     heading.className = 'board-group-label';
     heading.innerHTML =
-      'Connect Effect <span class="board-group-hint">\u2014 assign a connector character; her boost applies to whichever of this character\u2019s unlocked Yellow nodes fall in her exact pattern. Both are standing assignments for this character, not tied to your current team. Center is shared with the team builder\u2019s board editor - the same assignment either way.</span>';
+      'Connect Effect <span class="board-info-icon" title="Assign a connector character; her boost applies to whichever of this character\u2019s unlocked Yellow nodes fall in her exact pattern. Both are standing assignments for this character, not tied to your current team. Center is shared with the team builder\u2019s board editor - the same assignment either way.">\u24d8</span>';
     container.appendChild(heading);
 
     const renderSlotRow = (label, getSetup, setSetup) => {
