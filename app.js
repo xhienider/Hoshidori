@@ -1319,14 +1319,16 @@ function openGreenYellowBoardManager() {
     function renderPList(query) {
       pList.innerHTML = '';
       const q = query.trim().toLowerCase();
-      // Only content/center-area connectors can geometrically reach Yellow
-      // positions at all (confirmed earlier) - leader/member-area connectors
-      // would never match anything here, so they're filtered out rather than
-      // shown as dead options.
+      // The game does NOT filter which connector cards are selectable here by
+      // their own `area` tag (confirmed directly) - matches how Red/Blue's
+      // existing picker also shows every connect-eligible card regardless of
+      // area. Whether a card does anything once assigned depends only on
+      // whether its pattern (anchored at this character's own Content-area
+      // CONNECTION-node position) happens to land on a real node.
       const matches = DATA.members
         .filter((m) => {
           const info = DATA.cardConnectInfo[m.cardId];
-          if (!info || (info.area !== 'content' && info.area !== 'center')) return false;
+          if (!info) return false;
           if (q && !m.characterName?.toLowerCase().includes(q) && !m.cardSubtitle?.toLowerCase().includes(q)) return false;
           return true;
         })

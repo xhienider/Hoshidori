@@ -861,16 +861,33 @@ export function computeGreenBoardBonuses(greenYellowSelections, greenYellowBoard
  * Optional connect-effect support (connectorSelections/cardConnectInfo/
  * cardsById/cardPotentials): unlike Red/Blue, this is a GLOBAL per-character
  * assignment (state.greenYellowConnectSelections), not team-scoped - matches
- * how the rest of Yellow already applies regardless of current unit. The
- * connector's pattern is anchored at the shared board center (0,0), same as
- * a "center"-type Red/Blue slot - Yellow has no separate anchor of its own.
+ * how the rest of Yellow already applies regardless of current unit.
+ *
+ * ANCHOR (confirmed 2026-09 against real in-game behavior): Yellow's
+ * connect-effect slot is anchored at the character's OWN Content-area
+ * CONNECTION-type bridge node - i.e. greenYellowBoardData's
+ * contentConnector position for that character's variant ((7,0) for
+ * tree-model-001/003, (-7,0) for tree-model-002/004) - NOT at the shared
+ * board center (0,0). This mirrors exactly how Red/Blue's existing
+ * "member" slot is anchored at ITS OWN CONNECTION-node position (confirmed:
+ * board_categories.json's member anchor {-7,0} matches Suisei's own
+ * tree-model-001 member-side CONNECTION node exactly) - Yellow simply
+ * never had a slot exposed for this before now. A connector's own pattern
+ * offsets are then relative to THIS anchor, same convention as every other
+ * slot (e.g. Tokino Sora's own connector pattern {-1},{-2},{-3}, applied to
+ * her own tree-model-001 anchor of (7,0), correctly targets the real nodes
+ * at (6,0),(5,0),(4,0)).
+ *
+ * Per the user's direct observation: the game does NOT filter which
+ * connector cards can be assigned here by their own `area` tag - any
+ * connector card is selectable regardless of whether it's tagged
+ * leader/member/content/center. Only whether its PATTERN happens to land on
+ * a real, unlocked node (once anchored here) determines whether it does
+ * anything - so this function (and the picker UI) must not filter by area.
+ *
  * A connector only amplifies a node the character has ALREADY unlocked
  * (same rule as Red/Blue - it boosts existing investment, doesn't grant new
- * nodes for free). NOTE: the underlying card_connect_info.json "content"-area
- * entries (40 of them) were extracted but never validated against a real
- * in-game example before being wired in here - the math follows the same
- * pattern proven correct for Red/Blue, but this specific area's connector
- * behavior is unverified.
+ * nodes for free).
  *
  * Returns permil, capped at 100 (10%) per the in-game "Effects over the
  * limit are not applied" rule - confirmed via the in-game tooltip.
@@ -916,13 +933,14 @@ export function computeYellowScoreBonus(
     const connectorSetup = connectorSelections?.[characterId];
     if (connectorSetup?.connectorCardId && cardConnectInfo && cardsById && unlockedSet?.size) {
       const connectorCard = cardsById[connectorSetup.connectorCardId];
-      if (connectorCard) {
+      const anchor = greenYellowBoardData.variants[variant]?.contentConnector?.[0];
+      if (connectorCard && anchor) {
         const connectorInfo = getConnectorInfo(connectorCard, connectorSetup.connectorBloom || 0, cardConnectInfo, cardPotentials);
         if (connectorInfo?.boostPermil && connectorInfo.pattern) {
           const byPosition = new Map();
           for (const node of contentNodes) byPosition.set(`${node.x},${node.y}`, node);
           for (const offset of connectorInfo.pattern) {
-            const posKey = `${offset.x || 0},${offset.y || 0}`;
+            const posKey = `${anchor.x + (offset.x || 0)},${anchor.y + (offset.y || 0)}`;
             const node = byPosition.get(posKey);
             if (!node || node.singerType !== songSingerType) continue;
             if (!unlockedSet.has(posKey)) continue; // amplifies an already-unlocked node, same rule as Red/Blue
