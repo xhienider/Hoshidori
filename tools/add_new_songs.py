@@ -109,7 +109,20 @@ def build_note_density(sus_paths_by_difficulty: dict[str, Path]) -> dict:
                 type_counts = result["by_type_per_second"].get(sec, {})
                 mapped: dict[str, int] = {}
                 for k, v in type_counts.items():
-                    code = TYPE_CODE_MAP.get(k, k)
+                    # holodori-scores >=? emits critical-hit note types as a
+                    # "critical_" prefix on the base type (e.g. "critical_tap"),
+                    # NOT the "X!" suffix convention the rest of this project's
+                    # data (and unitEngine.js's strippedTypeCode()) expects -
+                    # confirmed 2026-09 by diffing a fresh extraction against
+                    # the existing note_density corpus, which uses "T!"/"F!"/etc.
+                    # exclusively and never "critical_" anywhere. Fold it back
+                    # into that convention here so downstream code doesn't need
+                    # to know about the newer package's naming.
+                    is_critical = k.startswith("critical_")
+                    base = k[len("critical_"):] if is_critical else k
+                    code = TYPE_CODE_MAP.get(base, base)
+                    if is_critical:
+                        code += "!"
                     mapped[code] = mapped.get(code, 0) + v
                 per_second.append([total, mapped])
         out[diff] = {"perSecond": per_second, "totalChartWeight": total_weight}
