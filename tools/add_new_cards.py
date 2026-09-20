@@ -126,6 +126,21 @@ class Datamine:
         self.level_curve_groups = self._group_by(load_json(root / "CardLevel.json"), "groupId") if (root / "CardLevel.json").exists() else {}
         self.level_limit_groups = self._group_by(load_json(root / "CardLevelLimit.json"), "groupId") if (root / "CardLevelLimit.json").exists() else {}
 
+        # connect-effect tables (see build_connect_info() docstring) - optional,
+        # only needed if --card-connect-info is passed.
+        self.connect_effects_by_id_level: dict[str, dict[int, dict]] = {}
+        if (root / "SkillTreeConnectEffect.json").exists():
+            for row in load_json(root / "SkillTreeConnectEffect.json"):
+                d = row["data"]
+                self.connect_effects_by_id_level.setdefault(d["id"], {})[d["level"]] = d
+        self.connect_extent_by_group: dict[str, list[dict]] = {}
+        if (root / "SkillTreeConnectEffectExtent.json").exists():
+            for row in load_json(root / "SkillTreeConnectEffectExtent.json"):
+                d = row["data"]
+                self.connect_extent_by_group.setdefault(d["groupId"], []).append(
+                    {"x": d.get("positionX"), "y": d.get("positionY")}
+                )
+
     @staticmethod
     def _group_by(records: list[dict], key: str) -> dict:
         out: dict[str, list] = {}
@@ -323,11 +338,64 @@ def build_card_entry(dm_new: Datamine, card_id: str, existing_members: list[dict
     return entry
 
 
+
+# Raw skillTreeConnectEffectId area keyword -> data/card_connect_info.json's
+# "area" string. NOT a literal rename - confirmed 2026-09 against the existing
+# 124-entry corpus (122/124 reconstructed byte-identical; the other 2 turned
+# out to be a pre-existing swap bug in that corpus, not a mapping error here):
+# "card_area" means the MEMBER (Blue) board, not Green/Card-area, matching
+# this project's other confirmed card/blue vs all_member/green naming inversion
+# (see PROJECT_STATUS.md's "single most important recurring lesson").
+# "general_purpose_area" cards get an entry but supported=False - the site's
+# picker UI doesn't yet handle that area type (3 confirmed cases, all pre-existing).
+CONNECT_AREA_MAP = {
+    "leader_area": "leader",
+    "card_area": "member",
+    "center_area": "center",
+    "content_area": "content",
+    "general_purpose_area": "general_purpose",
+}
+
+
+def _connect_area_from_group_id(group_id: str) -> str | None:
+    rest = group_id.split("skill_tree_connect_effect_extent-", 1)[1]
+    for raw, mapped in CONNECT_AREA_MAP.items():
+        if rest.startswith(raw):
+            return mapped
+    return None
+
+
+def build_connect_info(dm: Datamine, card: dict) -> dict | None:
+    """data/card_connect_info.json entry for one card, or None if the card has
+    no connect effect at all (confirmed: EVERY rarity-3 card has
+    skillTreeConnectEffectId=null in the raw data - not a gap, they genuinely
+    don't have this mechanic in-game. Only 4-star/5-star cards carry one.)."""
+    steid = card.get("skillTreeConnectEffectId")
+    if not steid:
+        return None
+    levels = dm.connect_effects_by_id_level.get(steid)
+    if not levels or 1 not in levels or 2 not in levels:
+        return None
+    group_id = levels[1]["skillTreeConnectEffectExtentGroupId"]
+    area = _connect_area_from_group_id(group_id)
+    pattern = dm.connect_extent_by_group.get(group_id, [])
+    return {
+        "characterId": card["characterId"],
+        "area": area,
+        "supported": area != "general_purpose",
+        "nodeCount": len(pattern),
+        "pattern": pattern,
+        "boostPermilLevel1": int(levels[1]["effectPermilUp"]),
+        "boostPermilLevel2": int(levels[2]["effectPermilUp"]),
+    }
+
+
 def main():
     p = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     p.add_argument("--old-datamine", type=Path, required=True)
     p.add_argument("--new-datamine", type=Path, required=True)
     p.add_argument("--members-json", type=Path, required=True)
+    p.add_argument("--card-connect-info", type=Path, default=None, help="Optional path to data/card_connect_info.json - if given, adds entries for new cards that have a connect effect")
     p.add_argument("--dry-run", action="store_true")
     args = p.parse_args()
 
@@ -373,6 +441,22 @@ def main():
     for e in added:
         e.pop("_cardLevelGroupId", None)
 
+    connect_added = {}
+    connect_skipped_no_effect = []
+    if args.card_connect_info:
+        for card_id in new_ids:
+            if card_id in existing_ids:
+                continue
+            entry = build_connect_info(dm_new, dm_new.cards[card_id])
+            if entry is not None:
+                connect_added[card_id] = entry
+            else:
+                connect_skipped_no_effect.append(card_id)
+        if connect_added:
+            print(f"\nConnect-info: {len(connect_added)} new card(s) have a connect effect -> {list(connect_added.keys())}")
+        if connect_skipped_no_effect:
+            print(f"Connect-info: {len(connect_skipped_no_effect)} new card(s) have NO connect effect in the raw data (expected for rarity-3 cards) -> {connect_skipped_no_effect}")
+
     if not args.dry_run and added:
         members.extend(added)
         with open(args.members_json, "w", encoding="utf-8") as f:
@@ -380,6 +464,13 @@ def main():
         print(f"\nUpdated {args.members_json} - now {len(members)} cards total.")
     elif args.dry_run:
         print("\n(dry run - no files written)")
+
+    if not args.dry_run and connect_added:
+        cci = load_json(args.card_connect_info)
+        cci.update(connect_added)
+        with open(args.card_connect_info, "w", encoding="utf-8") as f:
+            json.dump(cci, f, ensure_ascii=False)
+        print(f"Updated {args.card_connect_info} - now {len(cci)} entries total.")
 
 
 if __name__ == "__main__":
