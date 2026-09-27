@@ -163,6 +163,9 @@ def build_music_entry(song_id: str, new_datamine: Path, sus_dir: Path) -> dict:
         "mvUrl": m.get("mvUrl"),
         "difficultyLevels": difficulty_levels,
         "liveScoreCoefficientPermil": m["liveScoreCoefficientPermil"],
+        # Yellow-board Score Bonus matches on this (see unitEngine.js) - was
+        # previously omitted here and had to be hand-added (caught 2026-09 on m0525).
+        "musicSingerType": m["musicSingerType"].split("_")[-1].lower(),
     }
 
 
