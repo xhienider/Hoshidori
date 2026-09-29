@@ -156,7 +156,7 @@ def build_music_entry(song_id: str, new_datamine: Path, sus_dir: Path) -> dict:
         "title": title,
         "playingSeconds": m["playingSeconds"],
         "feverSeconds": fever_seconds,
-        "characterIds": m["characterIds"],
+        "characterIds": m.get("characterIds") or [],  # absent on ALL-type songs; existing entries use []
         "releaseDate": release_date,
         "releaseType": release_type,
         "unlockCost": None,  # not yet mapped from raw data - matches existing entries' common case

@@ -74,11 +74,12 @@ matched exactly):
       (condition, often null/omitted for "always active" leaders) +
       livePassiveSkillEffectGroupId -> resolved via LivePassiveSkillEffect.json
       same as passive skills above.
-    NOTE: this script does NOT yet handle the "additionalEffects" pattern
-    (a second, separately-triggered leader effect, confirmed to exist on at
-    least Watame's card via additionalLivePassiveSkillEffectGroupId on
-    LiveLeaderSkill) - if the new card's LiveLeaderSkill row has that field
-    populated, this script will currently miss it. Flagged loudly if seen.
+    Second, separately-triggered leader effect (additionalLiveSkillTriggerGroupId /
+    additionalLivePassiveSkillEffectGroupId on LiveLeaderSkill) IS handled -
+    see build_leader_skill(); written as additionalCondition/additionalEffects,
+    which unitEngine.js already consumes. Seen on Watame, Flare, FuwaMoco, and
+    Marine (0085). A warning is emitted only if the additional trigger differs
+    from the main one (never observed so far).
 """
 
 from __future__ import annotations
