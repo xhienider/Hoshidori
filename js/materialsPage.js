@@ -22,6 +22,9 @@ import {
   applyPreset,
   presetDelta,
   normalizeAccount,
+  genRank,
+  sortCharacters,
+  unlockedNodeCount,
 } from './materials.js';
 
 const AREA_COLOR_VAR = {
@@ -30,6 +33,28 @@ const AREA_COLOR_VAR = {
   green: '--green-node',
   yellow: '--yellow-node',
 };
+const SORT_KEY = 'hoshidori_materials_sort';
+const SORT_OPTIONS = [
+  ['name', 'A - Z', 'Alphabetical'],
+  ['gen', 'Gen', 'By generation (Gen 0 \u2192 ReGLOSS), debut order within a gen'],
+  ['holoboard', 'Holoboard', 'Most Holoboard nodes unlocked first'],
+];
+function readSort() {
+  try {
+    const v = localStorage.getItem(SORT_KEY);
+    return SORT_OPTIONS.some(([k]) => k === v) ? v : 'name';
+  } catch {
+    return 'name';
+  }
+}
+function writeSort(v) {
+  try {
+    localStorage.setItem(SORT_KEY, v);
+  } catch {
+    /* sort choice just won't be remembered */
+  }
+}
+
 const fmt = (n) => Number(n || 0).toLocaleString('en-US');
 
 let boardPresetsPromise = null;
@@ -134,7 +159,7 @@ export async function openMaterialsPage() {
   const allChars = Object.entries(boardMaterials.characters)
     .map(([characterId, c]) => ({ characterId, ...c }))
     .sort((a, b) => a.name.localeCompare(b.name));
-  const allGroups = [...new Set(allChars.flatMap((c) => c.groups))].sort();
+  const allGroups = [...new Set(allChars.flatMap((c) => c.groups))].sort((a, b) => genRank(a) - genRank(b) || a.localeCompare(b));
   const nodeTotal = (characterId) =>
     getCharacterBoard(boardMaterials, characterId).nodes.filter((n) => n.kind === 'node').length;
 
@@ -142,6 +167,7 @@ export async function openMaterialsPage() {
   let activeArea = 'red';
   let searchQuery = '';
   let groupFilter = '';
+  let sortMode = readSort();
   let clearAllArmed = false;
   let statusMessage = '';
 
@@ -168,7 +194,7 @@ export async function openMaterialsPage() {
   function renderCharList() {
     listItemsEl.innerHTML = '';
     const q = searchQuery.trim().toLowerCase();
-    const filtered = allChars.filter(
+    const filtered = sortCharacters(allChars, sortMode, boardMaterials, account).filter(
       (c) => (!q || c.name.toLowerCase().includes(q)) && (!groupFilter || c.groups.includes(groupFilter))
     );
     if (!filtered.length) {
@@ -178,12 +204,8 @@ export async function openMaterialsPage() {
     for (const c of filtered) {
       const item = el('div', 'gy-char-item' + (c.characterId === selectedCharacterId ? ' active' : ''));
       item.appendChild(el('span', null, c.name));
-      const ids = account.boards[c.characterId];
-      if (ids?.length) {
-        const board = getCharacterBoard(boardMaterials, c.characterId);
-        const done = ids.filter((id) => board.byId.get(id)?.kind === 'node').length;
-        item.appendChild(el('span', 'mat-char-progress', `${done}/${nodeTotal(c.characterId)}`));
-      }
+      const done = unlockedNodeCount(boardMaterials, account, c.characterId);
+      if (done) item.appendChild(el('span', 'mat-char-progress', `${done}/${nodeTotal(c.characterId)}`));
       item.onclick = () => {
         selectedCharacterId = c.characterId;
         renderAll();
@@ -209,7 +231,21 @@ export async function openMaterialsPage() {
       groupFilter = groupSelect.value;
       renderCharList();
     };
-    leftPanel.append(search, groupSelect, listItemsEl);
+    const sortRow = el('div', 'mat-sort-row');
+    sortRow.appendChild(el('span', 'mat-presets-label', 'Sort:'));
+    for (const [key, label, title] of SORT_OPTIONS) {
+      const btn = el('button', 'gy-tab-btn mat-sort-btn' + (sortMode === key ? ' active' : ''), label);
+      btn.type = 'button';
+      btn.title = title;
+      btn.onclick = () => {
+        sortMode = key;
+        writeSort(key);
+        for (const b of sortRow.querySelectorAll('.mat-sort-btn')) b.classList.toggle('active', b === btn);
+        renderCharList();
+      };
+      sortRow.appendChild(btn);
+    }
+    leftPanel.append(search, groupSelect, sortRow, listItemsEl);
     renderCharList();
   }
 

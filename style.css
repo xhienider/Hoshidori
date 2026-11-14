@@ -2638,3 +2638,10 @@ header.masthead {
   margin-right: 2px;
 }
 .mat-preset-done { opacity: 0.45; }
+.mat-sort-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  flex-shrink: 0;
+}
+.mat-sort-btn { flex: 1; font-size: 11px; padding: 4px 6px; }

@@ -229,6 +229,39 @@ export function presetDelta(board, unlockedIds, presetNodeIds) {
   return { added, ...sumCost(added) };
 }
 
+/** Generation order used for sorting and the generation filter. Matched
+ *  case-insensitively against board_materials.json's group labels. A holomem
+ *  in two groups (Fubuki: Gen 1 + GAMERS) sorts under the earlier one. */
+export const GEN_ORDER = ['Gen 0', 'Gen 1', 'Gen 2', 'GAMERS', 'Gen 3', 'Gen 4', 'Gen 5', 'holoX', 'ID Gen 1', 'ID Gen 2', 'ID Gen 3', 'Myth', 'Promise', 'Advent', 'ReGLOSS'];
+const GEN_RANK = new Map(GEN_ORDER.map((g, i) => [g.toLowerCase(), i]));
+export const genRank = (group) => GEN_RANK.get(String(group).toLowerCase()) ?? GEN_ORDER.length;
+const characterGenRank = (c) => Math.min(GEN_ORDER.length, ...(c.groups || []).map(genRank));
+
+/** Unlocked board nodes (not connector slots) for one holomem. */
+export function unlockedNodeCount(boardMaterials, account, characterId) {
+  const ids = account?.boards?.[characterId];
+  if (!ids?.length) return 0;
+  const board = getCharacterBoard(boardMaterials, characterId);
+  return ids.filter((id) => board.byId.get(id)?.kind === 'node').length;
+}
+
+/** Sorts holomems ({ characterId, name, groups }) for the list. Returns a new array.
+ *  - 'name'      : A - Z
+ *  - 'gen'       : GEN_ORDER, then debut order (character id) within a gen
+ *  - 'holoboard' : most unlocked nodes first, then A - Z */
+export function sortCharacters(chars, mode, boardMaterials, account) {
+  const byName = (a, b) => a.name.localeCompare(b.name);
+  const list = [...chars];
+  if (mode === 'gen') {
+    return list.sort((a, b) => characterGenRank(a) - characterGenRank(b) || a.characterId.localeCompare(b.characterId));
+  }
+  if (mode === 'holoboard') {
+    const count = new Map(list.map((c) => [c.characterId, unlockedNodeCount(boardMaterials, account, c.characterId)]));
+    return list.sort((a, b) => count.get(b.characterId) - count.get(a.characterId) || byName(a, b));
+  }
+  return list.sort(byName);
+}
+
 /** Normalises a stored/imported account object; drops ids that aren't real
  *  nodes of that holomem's layout. */
 export function normalizeAccount(raw, boardMaterials) {
