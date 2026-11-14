@@ -25,6 +25,7 @@ import {
   genRank,
   sortCharacters,
   unlockedNodeCount,
+  totalNodeCount,
 } from './materials.js';
 
 const AREA_COLOR_VAR = {
@@ -160,8 +161,7 @@ export async function openMaterialsPage() {
     .map(([characterId, c]) => ({ characterId, ...c }))
     .sort((a, b) => a.name.localeCompare(b.name));
   const allGroups = [...new Set(allChars.flatMap((c) => c.groups))].sort((a, b) => genRank(a) - genRank(b) || a.localeCompare(b));
-  const nodeTotal = (characterId) =>
-    getCharacterBoard(boardMaterials, characterId).nodes.filter((n) => n.kind === 'node').length;
+  const nodeTotal = (characterId) => totalNodeCount(boardMaterials, characterId);
 
   let selectedCharacterId = null;
   let activeArea = 'red';

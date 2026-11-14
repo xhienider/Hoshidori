@@ -237,12 +237,18 @@ const GEN_RANK = new Map(GEN_ORDER.map((g, i) => [g.toLowerCase(), i]));
 export const genRank = (group) => GEN_RANK.get(String(group).toLowerCase()) ?? GEN_ORDER.length;
 const characterGenRank = (c) => Math.min(GEN_ORDER.length, ...(c.groups || []).map(genRank));
 
-/** Unlocked board nodes (not connector slots) for one holomem. */
+/** Unlocked board slots for one holomem - nodes AND connect-effect slots
+ *  (the list's "x/153" count and the Holoboard sort use this). */
 export function unlockedNodeCount(boardMaterials, account, characterId) {
   const ids = account?.boards?.[characterId];
   if (!ids?.length) return 0;
   const board = getCharacterBoard(boardMaterials, characterId);
-  return ids.filter((id) => board.byId.get(id)?.kind === 'node').length;
+  return ids.filter((id) => board.byId.has(id)).length;
+}
+
+/** Total board slots for one holomem, connect-effect slots included. */
+export function totalNodeCount(boardMaterials, characterId) {
+  return getCharacterBoard(boardMaterials, characterId)?.nodes.length || 0;
 }
 
 /** Sorts holomems ({ characterId, name, groups }) for the list. Returns a new array.
