@@ -210,6 +210,25 @@ export function setArea(board, unlockedIds, area, on) {
   return unlocked;
 }
 
+/** Board presets (data/board_presets.json): adds a preset's nodes to the
+ *  board - existing unlocks are kept, so presets stack. Presets are stored as
+ *  node ids, which sit at mirrored positions on flipped layouts, so one list
+ *  works for every holomem. Anything the preset can't connect to the center
+ *  is dropped. Returns a NEW Set. */
+export function applyPreset(board, unlockedIds, presetNodeIds) {
+  const unlocked = new Set(unlockedIds || []);
+  for (const id of presetNodeIds || []) if (board.byId.has(id)) unlocked.add(id);
+  return pruneUnlocked(board, unlocked);
+}
+
+/** Nodes (not connectors) a preset would newly unlock, and their cost. */
+export function presetDelta(board, unlockedIds, presetNodeIds) {
+  const unlocked = unlockedIds instanceof Set ? unlockedIds : new Set(unlockedIds || []);
+  const after = applyPreset(board, unlocked, presetNodeIds);
+  const added = [...after].filter((id) => !unlocked.has(id)).map((id) => board.byId.get(id)).filter((n) => n.kind === 'node');
+  return { added, ...sumCost(added) };
+}
+
 /** Normalises a stored/imported account object; drops ids that aren't real
  *  nodes of that holomem's layout. */
 export function normalizeAccount(raw, boardMaterials) {

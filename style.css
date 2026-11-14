@@ -2628,3 +2628,13 @@ header.masthead {
 }
 .mat-short { font-size: 9.5px; color: var(--red); }
 .mat-enough { font-size: 9.5px; color: var(--green-node); }
+.mat-presets { margin-top: -2px; align-items: center; }
+.mat-presets-label {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-faint);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  margin-right: 2px;
+}
+.mat-preset-done { opacity: 0.45; }

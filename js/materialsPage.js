@@ -19,6 +19,8 @@ import {
   computeAccountTotals,
   toggleNode,
   setArea,
+  applyPreset,
+  presetDelta,
   normalizeAccount,
 } from './materials.js';
 
@@ -29,6 +31,18 @@ const AREA_COLOR_VAR = {
   yellow: '--yellow-node',
 };
 const fmt = (n) => Number(n || 0).toLocaleString('en-US');
+
+let boardPresetsPromise = null;
+/** Optional: data/board_presets.json. A missing/broken file just means no preset buttons. */
+function loadBoardPresets() {
+  if (!boardPresetsPromise) {
+    boardPresetsPromise = fetch('data/board_presets.json')
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => j?.presets || {})
+      .catch(() => ({}));
+  }
+  return boardPresetsPromise;
+}
 
 let boardMaterialsPromise = null;
 function loadBoardMaterials() {
@@ -107,8 +121,9 @@ export async function openMaterialsPage() {
   overlay.appendChild(header);
 
   let boardMaterials;
+  let boardPresets = {};
   try {
-    boardMaterials = await loadBoardMaterials();
+    [boardMaterials, boardPresets] = await Promise.all([loadBoardMaterials(), loadBoardPresets()]);
   } catch (err) {
     overlay.appendChild(el('div', 'empty-state', `Couldn’t load board data (${err.message}).`));
     return;
@@ -236,6 +251,26 @@ export async function openMaterialsPage() {
     };
     actions.append(allBtn, clearBtn);
     midPanel.appendChild(actions);
+
+    const presets = boardPresets[activeArea] || [];
+    if (presets.length) {
+      const row = el('div', 'mat-actions mat-presets');
+      row.appendChild(el('span', 'mat-presets-label', 'Presets:'));
+      for (const preset of presets) {
+        const delta = presetDelta(board, unlocked, preset.nodes);
+        const btn = el('button', 'presets-btn' + (delta.added.length ? '' : ' mat-preset-done'), preset.name);
+        btn.type = 'button';
+        btn.title = delta.added.length
+          ? `Adds ${delta.added.length} node${delta.added.length === 1 ? '' : 's'} (${costText(delta.cost, boardMaterials)}). Keeps what's already unlocked - use Clear first to start from scratch.`
+          : 'Already fully unlocked on this board.';
+        btn.onclick = () => {
+          setUnlocked(selectedCharacterId, applyPreset(board, unlockedOf(selectedCharacterId), preset.nodes));
+          renderAll();
+        };
+        row.appendChild(btn);
+      }
+      midPanel.appendChild(row);
+    }
 
     const container = el('div', 'gy-diagram-container');
     midPanel.appendChild(container);
