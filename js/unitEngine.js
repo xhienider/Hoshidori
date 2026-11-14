@@ -771,30 +771,11 @@ const SKILL_TREE_EFFECT_PREFIX = 'SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_';
  * else (mostly mini-game/economy rewards - Chase, jump rope, gold, card EXP -
  * genuinely unrelated to anything this site computes) and is NOT read here.
  *
- * TWO KNOWN, UNRESOLVED GAPS in the stat-boost subset itself (deliberately
- * NOT modeled yet - both confirmed real via real in-game screenshots,
- * neither is a guess):
- *   1. THREE of the 24 ALL_MEMBER nodes use effectType
- *      *_FOR_CHARACTER_GROUPING (values 75/150/225 permil) instead of a
- *      plain stat type. These are in "cardOther", not "card", so they're
- *      currently invisible to this function entirely. Confirmed via
- *      screenshot: applies to the BOARD OWNER'S OWN generation (e.g.
- *      Suisei's node text read "Grants All Stats UP 150 to Gen 0", and
- *      she's genuinely Gen 0) - but the raw SkillTreeEffect row's stored
- *      target (skillTreeEffectTargetId) is a DIFFERENT, seemingly-unrelated
- *      group ("grp-indonesia-gen_3" for Suisei's own tree-model-001,
- *      confirmed by direct lookup) - strongly suggests the game resolves
- *      the real target dynamically from the board owner's own
- *      regularCharacterGroupingIds rather than using what's stored, but
- *      this is an unverified hypothesis, not confirmed against a second
- *      character's template.
- *   2. A separate, cross-roster "Limit 900/900" cap exists per RECIPIENT
- *      character (confirmed via screenshot of the in-game "Skill Target
- *      holomem" list) - i.e. the total incoming boost any one recipient can
- *      receive from EVERY other character's board combined is capped, not
- *      just each individual booster's own contribution. Modeling this
- *      correctly would need visibility into the whole roster's board state
- *      simultaneously, not just the current unit - out of scope for now.
+ * The three ALL_MEMBER "gen boost" nodes (G-008 / G-011 / G-021, effectType
+ * *_FOR_CHARACTER_GROUPING) are NOT handled here - they boost a whole
+ * generation rather than the owner's own card alone, so they live in their
+ * own "cardGrouping" key and are computed by computeGreenGroupingBonuses
+ * below. See that function's docstring for the confirmed mechanics.
  *
  * @param {Record<string, Set<string>>} greenYellowSelections - state.greenYellowBoardSelections
  * @param {object} greenYellowBoardData - the loaded data/green_yellow_board.json
@@ -840,6 +821,81 @@ export function computeGreenBoardBonuses(greenYellowSelections, greenYellowBoard
     }
   }
   return { statFlat };
+}
+
+/**
+ * Green-board "gen boost" nodes (ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING) -
+ * the 3 ALL_MEMBER nodes G-008 / G-011 / G-021, computed ROSTER-WIDE.
+ *
+ * CONFIRMED MECHANICS (2026-11-14, "main 13" datamine + in-game checks):
+ *   - The node POSITIONS are shared (variants[*].cardGrouping), but the
+ *     VALUE and TARGET are per character: SkillTreeNode.json has one row per
+ *     character per node, extracted by tools/extract_green_grouping_nodes.py
+ *     into greenYellowBoardData.characterGroupingNodes[characterId][nodeGroupId]
+ *     = { value, targetGroupingId }. (An earlier extraction used one row -
+ *     Kobo's, 75/225/150 -> grp-indonesia-gen_3 - as everyone's template
+ *     value, which is where the old "stored target doesn't match the shown
+ *     gen" puzzle came from. There is no dynamic target resolution.)
+ *   - Values: gens with 3 members in-game 75/225/150 (450 per board); gens
+ *     with 4+ members 50/150/100 (300 per board); Fubuki (Gen 1 + GAMERS)
+ *     100 -> Gen 1, 300 -> GAMERS, 200 -> Gen 1. All confirmed in-game.
+ *   - Targets are generation-level groupings only (never the country-wide
+ *     grp-indonesia). Every member of the target grouping receives the
+ *     value as a flat All Stats boost - INCLUDING the board owner herself
+ *     (confirmed in-game).
+ *   - Each RECIPIENT is capped at greenYellowBoardData.groupingValueLimit
+ *     (900, from SkillTreeEffectValueLimit.json) summed across EVERY
+ *     character's board. That's why this takes the whole selections map,
+ *     not the current unit: a recipient's boost depends on her gen-mates'
+ *     boards whether or not they're in the unit.
+ *
+ * Pure data function - not yet fed into Overall Power (same deferred status
+ * as computeGreenBoardBonuses; see PROJECT_STATUS.md Open Item 1).
+ *
+ * @param {Record<string, Set<string>>} greenYellowSelections - state.greenYellowBoardSelections (every character)
+ * @param {object} greenYellowBoardData - the loaded data/green_yellow_board.json
+ * @param {object} boardCategoriesData - the loaded data/board_categories.json (for each character's greenYellowVariant)
+ * @param {Record<string, string[]>} characterGroupings - the loaded data/character_groupings.json
+ * @returns {{
+ *   received: Record<string, number>,   // capped All Stats boost per recipient characterId
+ *   raw: Record<string, number>,        // uncapped total per recipient
+ *   contributions: Record<string, {fromCharacterId:string,nodeGroupId:string,value:number,targetGroupingId:string}[]>,
+ *   given: Record<string, Record<string, number>>, // per owner: { targetGroupingId: total value unlocked }
+ *   limit: number
+ * }}
+ */
+export function computeGreenGroupingBonuses(greenYellowSelections, greenYellowBoardData, boardCategoriesData, characterGroupings) {
+  const limit = Number(greenYellowBoardData?.groupingValueLimit ?? 900);
+  const perCharacter = greenYellowBoardData?.characterGroupingNodes || {};
+  const raw = {};
+  const contributions = {};
+  const given = {};
+
+  for (const [ownerId, unlockedSet] of Object.entries(greenYellowSelections || {})) {
+    if (!unlockedSet || !unlockedSet.size) continue;
+    const variant = boardCategoriesData[ownerId]?.greenYellowVariant;
+    const nodes = greenYellowBoardData?.variants?.[variant]?.cardGrouping || [];
+    const own = perCharacter[ownerId];
+    if (!own) continue;
+    for (const node of nodes) {
+      if (!unlockedSet.has(`${node.x},${node.y}`)) continue;
+      const eff = own[node.nodeGroupId];
+      if (!eff) continue;
+      const value = Number(eff.value);
+      const gid = eff.targetGroupingId;
+      if (!given[ownerId]) given[ownerId] = {};
+      given[ownerId][gid] = (given[ownerId][gid] || 0) + value;
+      for (const recipientId of characterGroupings[gid] || []) {
+        raw[recipientId] = (raw[recipientId] || 0) + value;
+        if (!contributions[recipientId]) contributions[recipientId] = [];
+        contributions[recipientId].push({ fromCharacterId: ownerId, nodeGroupId: node.nodeGroupId, value, targetGroupingId: gid });
+      }
+    }
+  }
+
+  const received = {};
+  for (const [recipientId, total] of Object.entries(raw)) received[recipientId] = Math.min(total, limit);
+  return { received, raw, contributions, given, limit };
 }
 
 /**

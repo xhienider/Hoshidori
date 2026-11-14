@@ -517,26 +517,6 @@
           "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
         },
         {
-          "nodeGroupId": "G-008",
-          "x": 0,
-          "y": -6,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
-          "value": "75",
-          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
-        },
-        {
-          "nodeGroupId": "G-011",
-          "x": 0,
-          "y": -7,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
-          "value": "225",
-          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
-        },
-        {
           "nodeGroupId": "G-014",
           "x": -3,
           "y": -7,
@@ -577,16 +557,6 @@
           "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
         },
         {
-          "nodeGroupId": "G-021",
-          "x": 0,
-          "y": -9,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
-          "value": "150",
-          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
-        },
-        {
           "nodeGroupId": "G-022",
           "x": -1,
           "y": -9,
@@ -614,6 +584,32 @@
           "y": 0,
           "grade": 1,
           "cost": 1
+        }
+      ],
+      "cardGrouping": [
+        {
+          "nodeGroupId": "G-008",
+          "x": 0,
+          "y": -6,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-011",
+          "x": 0,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-021",
+          "x": 0,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
         }
       ]
     },
@@ -1134,26 +1130,6 @@
           "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
         },
         {
-          "nodeGroupId": "G-008",
-          "x": 0,
-          "y": -6,
-          "grade": 1,
-          "cost": 2,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
-          "value": "75",
-          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
-        },
-        {
-          "nodeGroupId": "G-011",
-          "x": 0,
-          "y": -7,
-          "grade": 2,
-          "cost": 5,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
-          "value": "225",
-          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
-        },
-        {
           "nodeGroupId": "G-014",
           "x": -3,
           "y": -7,
@@ -1194,16 +1170,6 @@
           "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_MINI_GAME_REWARD_QUANTITY_UP_PERMIL_UP"
         },
         {
-          "nodeGroupId": "G-021",
-          "x": 0,
-          "y": -9,
-          "grade": 1,
-          "cost": 3,
-          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING",
-          "value": "150",
-          "note": "non-stat all_member effect: SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
-        },
-        {
           "nodeGroupId": "G-022",
           "x": -1,
           "y": -9,
@@ -1232,7 +1198,809 @@
           "grade": 1,
           "cost": 1
         }
+      ],
+      "cardGrouping": [
+        {
+          "nodeGroupId": "G-008",
+          "x": 0,
+          "y": -6,
+          "grade": 1,
+          "cost": 2,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-011",
+          "x": 0,
+          "y": -7,
+          "grade": 2,
+          "cost": 5,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        },
+        {
+          "nodeGroupId": "G-021",
+          "x": 0,
+          "y": -9,
+          "grade": 1,
+          "cost": 3,
+          "effectType": "SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_ALL_PARAMETER_UP_FOR_CHARACTER_GROUPING"
+        }
       ]
     }
-  }
+  },
+  "characterGroupingNodes": {
+    "chr-00001": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_0"
+      }
+    },
+    "chr-00002": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_0"
+      }
+    },
+    "chr-00004": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_1"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_1"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_1"
+      }
+    },
+    "chr-00005": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_1"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_1"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_1"
+      }
+    },
+    "chr-00006": {
+      "G-008": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_1"
+      },
+      "G-011": {
+        "value": 300,
+        "targetGroupingId": "grp-gamers"
+      },
+      "G-021": {
+        "value": 200,
+        "targetGroupingId": "grp-gen_1"
+      }
+    },
+    "chr-00007": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_1"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_1"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_1"
+      }
+    },
+    "chr-00010": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-gen_2"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-gen_2"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_2"
+      }
+    },
+    "chr-00011": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-gen_2"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-gen_2"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_2"
+      }
+    },
+    "chr-00012": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-gen_2"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-gen_2"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_2"
+      }
+    },
+    "chr-00013": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_0"
+      }
+    },
+    "chr-00014": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gamers"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gamers"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gamers"
+      }
+    },
+    "chr-00015": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_0"
+      }
+    },
+    "chr-00016": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gamers"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gamers"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gamers"
+      }
+    },
+    "chr-00017": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gamers"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gamers"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gamers"
+      }
+    },
+    "chr-00018": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_0"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_0"
+      }
+    },
+    "chr-00019": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_3"
+      }
+    },
+    "chr-00021": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_3"
+      }
+    },
+    "chr-00022": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_3"
+      }
+    },
+    "chr-00023": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_3"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_3"
+      }
+    },
+    "chr-00026": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-gen_4"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-gen_4"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_4"
+      }
+    },
+    "chr-00027": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-gen_4"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-gen_4"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_4"
+      }
+    },
+    "chr-00028": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-gen_4"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-gen_4"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_4"
+      }
+    },
+    "chr-00030": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_5"
+      }
+    },
+    "chr-00031": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_5"
+      }
+    },
+    "chr-00032": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_5"
+      }
+    },
+    "chr-00034": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-gen_5"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-gen_5"
+      }
+    },
+    "chr-00035": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-holox"
+      }
+    },
+    "chr-00036": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-holox"
+      }
+    },
+    "chr-00037": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-holox"
+      }
+    },
+    "chr-00039": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-holox"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-holox"
+      }
+    },
+    "chr-03001": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      }
+    },
+    "chr-03002": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      }
+    },
+    "chr-03003": {
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      },
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_1"
+      }
+    },
+    "chr-03004": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      }
+    },
+    "chr-03005": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      }
+    },
+    "chr-03006": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_2"
+      }
+    },
+    "chr-03007": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      }
+    },
+    "chr-03008": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      }
+    },
+    "chr-03009": {
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      },
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-indonesia-gen_3"
+      }
+    },
+    "chr-04001": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-myth"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-myth"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-myth"
+      }
+    },
+    "chr-04002": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-myth"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-myth"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-myth"
+      }
+    },
+    "chr-04003": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-myth"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-myth"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-myth"
+      }
+    },
+    "chr-04007": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-promise"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-promise"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-promise"
+      }
+    },
+    "chr-04010": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-promise"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-promise"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-promise"
+      }
+    },
+    "chr-04012": {
+      "G-008": {
+        "value": 75,
+        "targetGroupingId": "grp-promise"
+      },
+      "G-011": {
+        "value": 225,
+        "targetGroupingId": "grp-promise"
+      },
+      "G-021": {
+        "value": 150,
+        "targetGroupingId": "grp-promise"
+      }
+    },
+    "chr-04013": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-advent"
+      }
+    },
+    "chr-04014": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-advent"
+      }
+    },
+    "chr-04015": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-advent"
+      }
+    },
+    "chr-04016": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-advent"
+      }
+    },
+    "chr-04017": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-advent"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-advent"
+      }
+    },
+    "chr-06002": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-regloss"
+      }
+    },
+    "chr-06003": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-regloss"
+      }
+    },
+    "chr-06004": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-regloss"
+      }
+    },
+    "chr-06005": {
+      "G-008": {
+        "value": 50,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-011": {
+        "value": 150,
+        "targetGroupingId": "grp-regloss"
+      },
+      "G-021": {
+        "value": 100,
+        "targetGroupingId": "grp-regloss"
+      }
+    }
+  },
+  "groupingLabels": {
+    "grp-advent": "Advent",
+    "grp-gamers": "GAMERS",
+    "grp-gen_0": "Gen 0",
+    "grp-gen_1": "Gen 1",
+    "grp-gen_2": "Gen 2",
+    "grp-gen_3": "Gen 3",
+    "grp-gen_4": "Gen 4",
+    "grp-gen_5": "Gen 5",
+    "grp-holox": "holoX",
+    "grp-indonesia-gen_1": "ID Gen 1",
+    "grp-indonesia-gen_2": "ID Gen 2",
+    "grp-indonesia-gen_3": "ID Gen 3",
+    "grp-myth": "Myth",
+    "grp-promise": "Promise",
+    "grp-regloss": "ReGLOSS"
+  },
+  "groupingValueLimit": 900
 }

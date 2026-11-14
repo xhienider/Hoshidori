@@ -13,6 +13,7 @@ import {
   computeConnectBonuses,
   getConnectorInfo,
   computeGreenBoardBonuses,
+  computeGreenGroupingBonuses,
   computeYellowScoreBonus,
   mergeBoardBonuses,
   buildBoardIndex,
@@ -1077,6 +1078,11 @@ function openGreenYellowBoardManager() {
       tab === 'green'
         ? [
             ...variantData.card.map((n) => ({ ...n, kind: 'card' })),
+            ...(variantData.cardGrouping || []).map((n) => {
+              // gen-boost node: position is shared, value/target are per character
+              const own = DATA.greenYellowBoard.characterGroupingNodes?.[characterId]?.[n.nodeGroupId];
+              return { ...n, kind: 'cardGrouping', value: own?.value, targetGroupingId: own?.targetGroupingId };
+            }),
             ...(variantData.cardOther || []).map((n) => ({ ...n, kind: 'cardOther' })),
           ]
         : [
@@ -1126,7 +1132,7 @@ function openGreenYellowBoardManager() {
       const unlocked = tabUnlockedSet.has(posKey);
       const el = document.createElementNS(svgNS, 'circle');
       const colorVar =
-        n.kind === 'card'
+        n.kind === 'card' || n.kind === 'cardGrouping'
           ? '--green-node'
           : n.kind === 'connector'
             ? '--blue-node'
@@ -1147,6 +1153,9 @@ function openGreenYellowBoardManager() {
         label = `${BOARD_CATEGORY_LABELS[shortType] || shortType} \u00b7 +${n.value} pts`;
       } else if (n.kind === 'contentScore') {
         label = `Score Bonus \u00b7 +${(Number(n.value) / 10).toFixed(1)}% \u00b7 ${GY_SINGER_TYPE_LABELS[n.singerType] || n.singerType}`;
+      } else if (n.kind === 'cardGrouping') {
+        const target = DATA.greenYellowBoard.groupingLabels?.[n.targetGroupingId] || n.targetGroupingId || '?';
+        label = `Gen Boost \u00b7 All Stats +${n.value ?? '?'} to ${target} (incl. this holomem)`;
       } else if (n.kind === 'cardOther') {
         label = `${n.note || 'Other effect'} (not modeled here)`;
       } else if (n.kind === 'connector') {
@@ -1203,7 +1212,7 @@ function openGreenYellowBoardManager() {
     legend.className = 'board-diagram-legend';
     legend.textContent =
       tab === 'green'
-        ? `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 green = stat boost \u00b7 grey = other (not modeled) \u00b7 click a node to unlock/lock it`
+        ? `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 green = stat boost (large = gen boost) \u00b7 grey = other (not modeled) \u00b7 click a node to unlock/lock it`
         : `${boardPointsSpentFromSet(tabBoardIndex, tabUnlockedSet)} pts \u00b7 orange = Score Bonus \u00b7 grey = Work Reward (not modeled) \u00b7 blue = Connector (no effect) \u00b7 click a node to unlock/lock it`;
     container.appendChild(legend);
   }
@@ -1458,6 +1467,40 @@ function openGreenYellowBoardManager() {
     }
     rightPanel.appendChild(statGrid);
 
+    // Green gen-boost summary: what this board gives its gen(s), and what this
+    // holomem receives from EVERY board in her gen(s) (incl. her own), capped.
+    const genHeading = document.createElement('div');
+    genHeading.className = 'board-group-label';
+    genHeading.textContent = 'Green \u2014 Gen Boost (All Stats)';
+    rightPanel.appendChild(genHeading);
+    const genResult = computeGreenGroupingBonuses(
+      state.greenYellowBoardSelections,
+      DATA.greenYellowBoard,
+      DATA.boardCategories,
+      DATA.characterGroupings
+    );
+    const groupLabel = (gid) => DATA.greenYellowBoard.groupingLabels?.[gid] || gid;
+    const genGrid = document.createElement('div');
+    genGrid.className = 'power-breakdown';
+    const addRow = (labelText, valueText) => {
+      const l = document.createElement('span');
+      l.textContent = labelText;
+      const v = document.createElement('span');
+      v.className = 'num';
+      v.textContent = valueText;
+      genGrid.appendChild(l);
+      genGrid.appendChild(v);
+    };
+    const ownTargets = new Set(
+      Object.values(DATA.greenYellowBoard.characterGroupingNodes?.[selectedCharacterId] || {}).map((n) => n.targetGroupingId)
+    );
+    const givenByThis = genResult.given[selectedCharacterId] || {};
+    for (const gid of ownTargets) addRow(`Gives ${groupLabel(gid)}`, `+${givenByThis[gid] || 0}`);
+    const rawIn = genResult.raw[selectedCharacterId] || 0;
+    const cappedIn = genResult.received[selectedCharacterId] || 0;
+    addRow('Receives', `+${cappedIn} / ${genResult.limit}${rawIn > cappedIn ? ` (${rawIn} before cap)` : ''}`);
+    rightPanel.appendChild(genGrid);
+
     // Yellow summary: Solo/Group/All %, each independently capped at 10%
     const yellowHeading = document.createElement('div');
     yellowHeading.className = 'board-group-label';
@@ -1494,7 +1537,7 @@ function openGreenYellowBoardManager() {
     const note = document.createElement('div');
     note.className = 'estimate-note';
     note.textContent =
-      'Each Yellow type (Solo/Group/All) is capped independently at 10%, matching the in-game "effects over the limit are not applied" rule. Green totals shown here are this character\u2019s own stat boosts - they only affect Overall Power when this character is actually in your current unit.';
+      'Each Yellow type (Solo/Group/All) is capped independently at 10%, matching the in-game "effects over the limit are not applied" rule. Green totals shown here are this character\u2019s own stat boosts - they only affect Overall Power when this character is actually in your current unit. Gen Boost \u201cReceives\u201d counts every saved board in this holomem\u2019s gen(s), including her own, capped at 900 per holomem.';
     rightPanel.appendChild(note);
   }
 
