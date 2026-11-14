@@ -1,5 +1,6 @@
 import { resolveMemberStats, getStatRoles, getSkillLevel, SKILL_LEVEL_TYPES } from './js/statEngine.js';
 import { evaluateLeaderCondition, resolveEffectRecipients } from './js/skillEngine.js';
+import { openMaterialsPage } from './js/materialsPage.js';
 import {
   computeUnit,
   mapSpecialSkillsToSong,
@@ -5913,6 +5914,7 @@ async function main() {
   document.getElementById('activity-btn').addEventListener('click', openCharacterActivityView);
   document.getElementById('song-ranking-btn').addEventListener('click', openSongRankingView);
   document.getElementById('board-manager-btn').addEventListener('click', openGreenYellowBoardManager);
+  document.getElementById('materials-btn').addEventListener('click', openMaterialsPage);
 
   // "Tools" dropdown: click to toggle, click anywhere outside (or click any
   // item inside, since every item opens a full-screen overlay anyway) closes

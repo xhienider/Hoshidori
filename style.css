@@ -19,6 +19,7 @@
   --red-node: #ff5c6c;
   --blue-node: #4fa8e8;
   --green-node: #4ade80;
+  --yellow-node: #facc15;
 
   --perf: var(--blue-bright);
   --tech: var(--blue-mid);
@@ -2567,3 +2568,63 @@ header.masthead {
   gap: 18px;
 }
 @media (max-width: 700px) { .two-col { grid-template-columns: 1fr; } }
+
+/* ---------------- Materials Tracker (js/materialsPage.js) ---------------- */
+.materials-layout { grid-template-columns: 260px 1fr 420px; }
+.mat-char-progress {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--green-node);
+}
+.mat-area-tab.active {
+  border-color: var(--node-color);
+  color: var(--node-color);
+  background: color-mix(in srgb, var(--node-color) 12%, transparent);
+}
+.mat-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  flex-shrink: 0;
+  margin: 4px 0 8px;
+}
+.mat-actions .presets-btn { font-size: 11px; padding: 5px 10px; }
+.mat-danger { border-color: var(--red) !important; color: var(--red) !important; }
+.board-diagram-node.mat-connector { stroke-dasharray: 2 2; }
+.mat-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 11.5px;
+  margin: 4px 0 6px;
+}
+.mat-table th {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  font-weight: 500;
+  color: var(--text-faint);
+  text-align: right;
+  padding: 3px 4px;
+  border-bottom: 1px solid var(--line);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.mat-table th:first-child { text-align: left; }
+.mat-table td {
+  padding: 4px;
+  border-bottom: 1px solid var(--line);
+  color: var(--text-dim);
+  vertical-align: top;
+}
+.mat-table td.num { text-align: right; font-family: var(--font-mono); }
+.mat-color-cell {
+  color: var(--node-color) !important;
+  font-weight: 600;
+  white-space: nowrap;
+}
+.mat-held-input {
+  width: 74px;
+  text-align: right;
+  padding: 2px 4px;
+}
+.mat-short { font-size: 9.5px; color: var(--red); }
+.mat-enough { font-size: 9.5px; color: var(--green-node); }
