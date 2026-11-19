@@ -1,0 +1,2329 @@
+{
+ "datamineVersion": "9171c5282eaf",
+ "rankCurve": [
+  {
+   "rank": 1,
+   "exp": 0
+  },
+  {
+   "rank": 2,
+   "exp": 2
+  },
+  {
+   "rank": 3,
+   "exp": 4
+  },
+  {
+   "rank": 4,
+   "exp": 6
+  },
+  {
+   "rank": 5,
+   "exp": 9
+  },
+  {
+   "rank": 6,
+   "exp": 12
+  },
+  {
+   "rank": 7,
+   "exp": 15
+  },
+  {
+   "rank": 8,
+   "exp": 18
+  },
+  {
+   "rank": 9,
+   "exp": 21
+  },
+  {
+   "rank": 10,
+   "exp": 24
+  },
+  {
+   "rank": 11,
+   "exp": 27
+  },
+  {
+   "rank": 12,
+   "exp": 30
+  },
+  {
+   "rank": 13,
+   "exp": 33
+  },
+  {
+   "rank": 14,
+   "exp": 36
+  },
+  {
+   "rank": 15,
+   "exp": 39
+  },
+  {
+   "rank": 16,
+   "exp": 42
+  },
+  {
+   "rank": 17,
+   "exp": 45
+  },
+  {
+   "rank": 18,
+   "exp": 48
+  },
+  {
+   "rank": 19,
+   "exp": 51
+  },
+  {
+   "rank": 20,
+   "exp": 55
+  },
+  {
+   "rank": 21,
+   "exp": 59
+  },
+  {
+   "rank": 22,
+   "exp": 63
+  },
+  {
+   "rank": 23,
+   "exp": 67
+  },
+  {
+   "rank": 24,
+   "exp": 71
+  },
+  {
+   "rank": 25,
+   "exp": 75
+  },
+  {
+   "rank": 26,
+   "exp": 79
+  },
+  {
+   "rank": 27,
+   "exp": 83
+  },
+  {
+   "rank": 28,
+   "exp": 87
+  },
+  {
+   "rank": 29,
+   "exp": 91
+  },
+  {
+   "rank": 30,
+   "exp": 96
+  },
+  {
+   "rank": 31,
+   "exp": 101
+  },
+  {
+   "rank": 32,
+   "exp": 106
+  },
+  {
+   "rank": 33,
+   "exp": 111
+  },
+  {
+   "rank": 34,
+   "exp": 116
+  },
+  {
+   "rank": 35,
+   "exp": 121
+  },
+  {
+   "rank": 36,
+   "exp": 126
+  },
+  {
+   "rank": 37,
+   "exp": 131
+  },
+  {
+   "rank": 38,
+   "exp": 136
+  },
+  {
+   "rank": 39,
+   "exp": 141
+  },
+  {
+   "rank": 40,
+   "exp": 146
+  },
+  {
+   "rank": 41,
+   "exp": 151
+  },
+  {
+   "rank": 42,
+   "exp": 156
+  },
+  {
+   "rank": 43,
+   "exp": 161
+  },
+  {
+   "rank": 44,
+   "exp": 166
+  },
+  {
+   "rank": 45,
+   "exp": 171
+  },
+  {
+   "rank": 46,
+   "exp": 176
+  },
+  {
+   "rank": 47,
+   "exp": 181
+  },
+  {
+   "rank": 48,
+   "exp": 186
+  },
+  {
+   "rank": 49,
+   "exp": 191
+  },
+  {
+   "rank": 50,
+   "exp": 196
+  }
+ ],
+ "achievements": [
+  {
+   "key": "increment_character_get_count",
+   "label": "Unlock a holomem.",
+   "category": "Holomem",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    }
+   ],
+   "auto": "unlock"
+  },
+  {
+   "key": "absolute_character_level",
+   "label": "Reach Holomem Rank {0}.",
+   "category": "Holomem",
+   "tiers": [
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    },
+    {
+     "threshold": 30,
+     "exp": 1
+    }
+   ],
+   "auto": "rank"
+  },
+  {
+   "key": "increment_live_play_count",
+   "label": "As the Leader, play {0} Live",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 5,
+     "exp": 1
+    },
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    },
+    {
+     "threshold": 40,
+     "exp": 1
+    },
+    {
+     "threshold": 70,
+     "exp": 1
+    },
+    {
+     "threshold": 100,
+     "exp": 1
+    },
+    {
+     "threshold": 130,
+     "exp": 1
+    },
+    {
+     "threshold": 160,
+     "exp": 1
+    },
+    {
+     "threshold": 200,
+     "exp": 1
+    },
+    {
+     "threshold": 250,
+     "exp": 1
+    },
+    {
+     "threshold": 300,
+     "exp": 1
+    },
+    {
+     "threshold": 350,
+     "exp": 1
+    },
+    {
+     "threshold": 400,
+     "exp": 1
+    },
+    {
+     "threshold": 450,
+     "exp": 1
+    },
+    {
+     "threshold": 500,
+     "exp": 1
+    },
+    {
+     "threshold": 600,
+     "exp": 1
+    },
+    {
+     "threshold": 700,
+     "exp": 1
+    },
+    {
+     "threshold": 800,
+     "exp": 1
+    },
+    {
+     "threshold": 900,
+     "exp": 1
+    },
+    {
+     "threshold": 1000,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "own_song",
+   "label": "As the Leader, play their own song {0} time(s)",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 3,
+     "exp": 1
+    },
+    {
+     "threshold": 7,
+     "exp": 1
+    },
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    },
+    {
+     "threshold": 30,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "increment_live_clear_count-10",
+   "label": "As the Leader, clear a song at Lv 10 or higher.",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "increment_live_clear_count-15",
+   "label": "As the Leader, clear a song at Lv 15 or higher.",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "increment_live_clear_count-20",
+   "label": "As the Leader, clear a song at Lv 20 or higher.",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "increment_live_clear_count-25",
+   "label": "As the Leader, clear a song at Lv 25 or higher.",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "absolute_live_deck_evaluation_value",
+   "label": "As the Leader, reach Unit Score {0}.",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 100000,
+     "exp": 1
+    },
+    {
+     "threshold": 200000,
+     "exp": 1
+    },
+    {
+     "threshold": 300000,
+     "exp": 1
+    },
+    {
+     "threshold": 600000,
+     "exp": 1
+    },
+    {
+     "threshold": 1000000,
+     "exp": 1
+    },
+    {
+     "threshold": 1500000,
+     "exp": 1
+    },
+    {
+     "threshold": 2000000,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "increment_live_highest_score",
+   "label": "As the Leader, reach Live Score {0}.",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 100000,
+     "exp": 1
+    },
+    {
+     "threshold": 300000,
+     "exp": 1
+    },
+    {
+     "threshold": 600000,
+     "exp": 1
+    },
+    {
+     "threshold": 1000000,
+     "exp": 1
+    },
+    {
+     "threshold": 1500000,
+     "exp": 1
+    },
+    {
+     "threshold": 2000000,
+     "exp": 1
+    },
+    {
+     "threshold": 2500000,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "absolute_music_highest_score_rating",
+   "label": "Reach Holomem Score Rating of {0}",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 500,
+     "exp": 1
+    },
+    {
+     "threshold": 1000,
+     "exp": 1
+    },
+    {
+     "threshold": 1500,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "absolute_music_release_count_by_character_id-solo",
+   "label": "Unlock {0} solo song(s) for this talent",
+   "category": "Live",
+   "tiers": [
+    {
+     "threshold": 2,
+     "exp": 1
+    },
+    {
+     "threshold": 3,
+     "exp": 1
+    },
+    {
+     "threshold": 4,
+     "exp": 1
+    },
+    {
+     "threshold": 5,
+     "exp": 1
+    },
+    {
+     "threshold": 6,
+     "exp": 1
+    },
+    {
+     "threshold": 7,
+     "exp": 1
+    }
+   ],
+   "capReason": "solo songs"
+  },
+  {
+   "key": "absolute_card_get_unique_count",
+   "label": "Obtain {0} different type(s) of Members.",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 2
+    },
+    {
+     "threshold": 2,
+     "exp": 2
+    },
+    {
+     "threshold": 3,
+     "exp": 2
+    },
+    {
+     "threshold": 4,
+     "exp": 2
+    },
+    {
+     "threshold": 5,
+     "exp": 2
+    }
+   ],
+   "capReason": "cards"
+  },
+  {
+   "key": "increment_card_get_count",
+   "label": "Obtain {0} Member Cards.",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    },
+    {
+     "threshold": 40,
+     "exp": 1
+    },
+    {
+     "threshold": 60,
+     "exp": 1
+    },
+    {
+     "threshold": 80,
+     "exp": 1
+    },
+    {
+     "threshold": 100,
+     "exp": 1
+    },
+    {
+     "threshold": 150,
+     "exp": 1
+    },
+    {
+     "threshold": 200,
+     "exp": 1
+    },
+    {
+     "threshold": 250,
+     "exp": 1
+    },
+    {
+     "threshold": 300,
+     "exp": 1
+    },
+    {
+     "threshold": 350,
+     "exp": 1
+    },
+    {
+     "threshold": 400,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "absolute_costume_get_count",
+   "label": "Obtain {0} different Live Outfits.",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 2,
+     "exp": 1
+    },
+    {
+     "threshold": 3,
+     "exp": 1
+    },
+    {
+     "threshold": 4,
+     "exp": 1
+    },
+    {
+     "threshold": 5,
+     "exp": 1
+    }
+   ],
+   "capReason": "outfits"
+  },
+  {
+   "key": "absolute_card_level_sum_by_card_id",
+   "label": "Reach of total of {0} Member Levels.",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    },
+    {
+     "threshold": 30,
+     "exp": 1
+    },
+    {
+     "threshold": 40,
+     "exp": 1
+    },
+    {
+     "threshold": 50,
+     "exp": 1
+    },
+    {
+     "threshold": 60,
+     "exp": 1
+    },
+    {
+     "threshold": 70,
+     "exp": 1
+    },
+    {
+     "threshold": 80,
+     "exp": 1
+    },
+    {
+     "threshold": 90,
+     "exp": 1
+    },
+    {
+     "threshold": 100,
+     "exp": 1
+    },
+    {
+     "threshold": 110,
+     "exp": 1
+    },
+    {
+     "threshold": 120,
+     "exp": 1
+    },
+    {
+     "threshold": 130,
+     "exp": 1
+    },
+    {
+     "threshold": 140,
+     "exp": 1
+    },
+    {
+     "threshold": 150,
+     "exp": 1
+    },
+    {
+     "threshold": 160,
+     "exp": 1
+    },
+    {
+     "threshold": 170,
+     "exp": 1
+    },
+    {
+     "threshold": 180,
+     "exp": 1
+    },
+    {
+     "threshold": 190,
+     "exp": 1
+    },
+    {
+     "threshold": 200,
+     "exp": 1
+    },
+    {
+     "threshold": 210,
+     "exp": 1
+    },
+    {
+     "threshold": 220,
+     "exp": 1
+    },
+    {
+     "threshold": 230,
+     "exp": 1
+    },
+    {
+     "threshold": 240,
+     "exp": 1
+    },
+    {
+     "threshold": 250,
+     "exp": 1
+    },
+    {
+     "threshold": 260,
+     "exp": 1
+    },
+    {
+     "threshold": 270,
+     "exp": 1
+    },
+    {
+     "threshold": 280,
+     "exp": 1
+    },
+    {
+     "threshold": 290,
+     "exp": 1
+    },
+    {
+     "threshold": 300,
+     "exp": 1
+    },
+    {
+     "threshold": 310,
+     "exp": 1
+    },
+    {
+     "threshold": 320,
+     "exp": 1
+    },
+    {
+     "threshold": 330,
+     "exp": 1
+    },
+    {
+     "threshold": 340,
+     "exp": 1
+    },
+    {
+     "threshold": 350,
+     "exp": 1
+    },
+    {
+     "threshold": 360,
+     "exp": 1
+    }
+   ],
+   "capReason": "cards' max levels"
+  },
+  {
+   "key": "increment_card_level_limit_break_count",
+   "label": "Train Members {0} time(s).",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 2,
+     "exp": 1
+    },
+    {
+     "threshold": 3,
+     "exp": 1
+    },
+    {
+     "threshold": 4,
+     "exp": 1
+    },
+    {
+     "threshold": 5,
+     "exp": 1
+    },
+    {
+     "threshold": 6,
+     "exp": 1
+    },
+    {
+     "threshold": 7,
+     "exp": 1
+    },
+    {
+     "threshold": 8,
+     "exp": 1
+    },
+    {
+     "threshold": 9,
+     "exp": 1
+    },
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 12,
+     "exp": 1
+    },
+    {
+     "threshold": 14,
+     "exp": 1
+    },
+    {
+     "threshold": 16,
+     "exp": 1
+    },
+    {
+     "threshold": 18,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    }
+   ],
+   "capReason": "cards"
+  },
+  {
+   "key": "absolute_card_level_limit_break",
+   "label": "Train a Member up to Stage {0}.",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 2,
+     "exp": 1
+    },
+    {
+     "threshold": 3,
+     "exp": 1
+    },
+    {
+     "threshold": 4,
+     "exp": 1
+    }
+   ],
+   "capReason": "cards"
+  },
+  {
+   "key": "increment_card_upgrade_potential_count",
+   "label": "Bloom Members {0} time(s).",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 2,
+     "exp": 1
+    },
+    {
+     "threshold": 4,
+     "exp": 1
+    },
+    {
+     "threshold": 6,
+     "exp": 1
+    },
+    {
+     "threshold": 8,
+     "exp": 1
+    },
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 12,
+     "exp": 1
+    },
+    {
+     "threshold": 14,
+     "exp": 1
+    },
+    {
+     "threshold": 16,
+     "exp": 1
+    },
+    {
+     "threshold": 18,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    },
+    {
+     "threshold": 22,
+     "exp": 1
+    },
+    {
+     "threshold": 24,
+     "exp": 1
+    },
+    {
+     "threshold": 26,
+     "exp": 1
+    }
+   ],
+   "capReason": "cards"
+  },
+  {
+   "key": "absolute_card_upgrade_potential",
+   "label": "Bloom a Member up to Stage {0}.",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 2,
+     "exp": 1
+    },
+    {
+     "threshold": 3,
+     "exp": 1
+    },
+    {
+     "threshold": 4,
+     "exp": 1
+    },
+    {
+     "threshold": 5,
+     "exp": 1
+    }
+   ],
+   "capReason": "cards"
+  },
+  {
+   "key": "absolute_skill_tree_release_count",
+   "label": "Unlock {0} Holomem Boards.",
+   "category": "Members & Boards",
+   "tiers": [
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 20,
+     "exp": 1
+    },
+    {
+     "threshold": 30,
+     "exp": 1
+    },
+    {
+     "threshold": 40,
+     "exp": 1
+    },
+    {
+     "threshold": 50,
+     "exp": 1
+    },
+    {
+     "threshold": 60,
+     "exp": 1
+    },
+    {
+     "threshold": 70,
+     "exp": 1
+    },
+    {
+     "threshold": 80,
+     "exp": 1
+    },
+    {
+     "threshold": 90,
+     "exp": 1
+    },
+    {
+     "threshold": 100,
+     "exp": 1
+    },
+    {
+     "threshold": 120,
+     "exp": 1
+    },
+    {
+     "threshold": 140,
+     "exp": 1
+    }
+   ],
+   "capReason": "board slots"
+  },
+  {
+   "key": "increment_work_finish_count",
+   "label": "Select them as a Member to complete Holowork {0} time(s).",
+   "category": "Park & Games",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 5,
+     "exp": 1
+    },
+    {
+     "threshold": 10,
+     "exp": 1
+    },
+    {
+     "threshold": 30,
+     "exp": 1
+    },
+    {
+     "threshold": 50,
+     "exp": 1
+    },
+    {
+     "threshold": 100,
+     "exp": 1
+    },
+    {
+     "threshold": 200,
+     "exp": 1
+    },
+    {
+     "threshold": 300,
+     "exp": 1
+    },
+    {
+     "threshold": 400,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "increment_combo_card_game_same_category_three_card_count",
+   "label": "In Pokajan! complete the \"3 same-color cards\" hand {0} time(s).",
+   "category": "Park & Games",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    }
+   ]
+  },
+  {
+   "key": "absolute_park_emotion_get_count",
+   "label": "Collect {0} different Emotes.",
+   "category": "Park & Games",
+   "tiers": [
+    {
+     "threshold": 11,
+     "exp": 1
+    },
+    {
+     "threshold": 12,
+     "exp": 1
+    },
+    {
+     "threshold": 13,
+     "exp": 1
+    },
+    {
+     "threshold": 14,
+     "exp": 1
+    },
+    {
+     "threshold": 15,
+     "exp": 1
+    },
+    {
+     "threshold": 16,
+     "exp": 1
+    },
+    {
+     "threshold": 17,
+     "exp": 1
+    }
+   ],
+   "capReason": "emotes"
+  },
+  {
+   "key": "absolute_park_talk_free_unique_count",
+   "label": "Read {0} kind(s) of Free Chat.",
+   "category": "Park & Games",
+   "tiers": [
+    {
+     "threshold": 1,
+     "exp": 1
+    },
+    {
+     "threshold": 3,
+     "exp": 1
+    },
+    {
+     "threshold": 6,
+     "exp": 1
+    },
+    {
+     "threshold": 10,
+     "exp": 1
+    }
+   ]
+  }
+ ],
+ "characters": {
+  "chr-00001": {
+   "name": "Tokino Sora",
+   "groups": [
+    "Gen 0"
+   ],
+   "ownSong": {
+    "musicId": "m0022",
+    "title": "Dream☆Story"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 3,
+    "absolute_card_level_sum_by_card_id": 210,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 12,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 15,
+    "absolute_costume_get_count": 3,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 2,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00002": {
+   "name": "Robocosan",
+   "groups": [
+    "Gen 0"
+   ],
+   "ownSong": {
+    "musicId": "m0023",
+    "title": "rirubi"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00004": {
+   "name": "Aki Rosenthal",
+   "groups": [
+    "Gen 1"
+   ],
+   "ownSong": {
+    "musicId": "m0026",
+    "title": "SHALLYS"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00005": {
+   "name": "Akai Haato",
+   "groups": [
+    "Gen 1"
+   ],
+   "ownSong": {
+    "musicId": "m0190",
+    "title": "sensation -KANSHOKU-"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 3,
+    "absolute_card_level_sum_by_card_id": 210,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 12,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 15,
+    "absolute_costume_get_count": 3,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00006": {
+   "name": "Shirakami Fubuki",
+   "groups": [
+    "GAMERS",
+    "Gen 1"
+   ],
+   "ownSong": {
+    "musicId": "m0184",
+    "title": "SUPERNOVA"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 5,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00007": {
+   "name": "Natsuiro Matsuri",
+   "groups": [
+    "Gen 1"
+   ],
+   "ownSong": {
+    "musicId": "m0028",
+    "title": "Virtualove"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00010": {
+   "name": "Nakiri Ayame",
+   "groups": [
+    "Gen 2"
+   ],
+   "ownSong": {
+    "musicId": "m0083",
+    "title": "Yoi no Yo, Yoi!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00011": {
+   "name": "Yuzuki Choco",
+   "groups": [
+    "Gen 2"
+   ],
+   "ownSong": {
+    "musicId": "m0031",
+    "title": "NoDistance"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 3,
+    "absolute_card_level_sum_by_card_id": 210,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 12,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 15,
+    "absolute_costume_get_count": 3,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 2,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00012": {
+   "name": "Oozora Subaru",
+   "groups": [
+    "Gen 2"
+   ],
+   "ownSong": {
+    "musicId": "m0032",
+    "title": "Pleiades!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00013": {
+   "name": "AZKi",
+   "groups": [
+    "Gen 0"
+   ],
+   "ownSong": {
+    "musicId": "m0189",
+    "title": "Inochi(2024 ver.)"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 3,
+    "absolute_card_level_sum_by_card_id": 210,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 12,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 15,
+    "absolute_costume_get_count": 3,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 2,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00014": {
+   "name": "Ookami Mio",
+   "groups": [
+    "GAMERS"
+   ],
+   "ownSong": {
+    "musicId": "m0018",
+    "title": "Howling"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 5,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00015": {
+   "name": "Sakura Miko",
+   "groups": [
+    "Gen 0"
+   ],
+   "ownSong": {
+    "musicId": "m0076",
+    "title": "flower rhapsody"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00016": {
+   "name": "Nekomata Okayu",
+   "groups": [
+    "GAMERS"
+   ],
+   "ownSong": {
+    "musicId": "m0087",
+    "title": "Neko Kaburi-Na"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00017": {
+   "name": "Inugami Korone",
+   "groups": [
+    "GAMERS"
+   ],
+   "ownSong": {
+    "musicId": "m0033",
+    "title": "Doggy god's street"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00018": {
+   "name": "Hoshimachi Suisei",
+   "groups": [
+    "Gen 0"
+   ],
+   "ownSong": {
+    "musicId": "m0009",
+    "title": "Stellar Stellar"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00019": {
+   "name": "Usada Pekora",
+   "groups": [
+    "Gen 3"
+   ],
+   "ownSong": {
+    "musicId": "m0089",
+    "title": "ZenjinruiUsagikakeikaku!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00021": {
+   "name": "Shiranui Flare",
+   "groups": [
+    "Gen 3"
+   ],
+   "ownSong": {
+    "musicId": "m0035",
+    "title": "Zenryoku-Jumping!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00022": {
+   "name": "Shirogane Noel",
+   "groups": [
+    "Gen 3"
+   ],
+   "ownSong": {
+    "musicId": "m0092",
+    "title": "Gyu-Don Carnival!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00023": {
+   "name": "Houshou Marine",
+   "groups": [
+    "Gen 3"
+   ],
+   "ownSong": {
+    "musicId": "m0090",
+    "title": "Bishoujyo Muzai♡Pirates"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00026": {
+   "name": "Tsunomaki Watame",
+   "groups": [
+    "Gen 4"
+   ],
+   "ownSong": {
+    "musicId": "m0037",
+    "title": "My song"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00027": {
+   "name": "Tokoyami Towa",
+   "groups": [
+    "Gen 4"
+   ],
+   "ownSong": {
+    "musicId": "m0038",
+    "title": "Palette"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00028": {
+   "name": "Himemori Luna",
+   "groups": [
+    "Gen 4"
+   ],
+   "ownSong": {
+    "musicId": "m0140",
+    "title": "Escort me! Luknight"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00030": {
+   "name": "Yukihana Lamy",
+   "groups": [
+    "Gen 5"
+   ],
+   "ownSong": {
+    "musicId": "m0040",
+    "title": "Asuenokyokaisen"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00031": {
+   "name": "Momosuzu Nene",
+   "groups": [
+    "Gen 5"
+   ],
+   "ownSong": {
+    "musicId": "m0020",
+    "title": "NENENENENENENENE!DAIBAKUSOU"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00032": {
+   "name": "Shishiro Botan",
+   "groups": [
+    "Gen 5"
+   ],
+   "ownSong": {
+    "musicId": "m0041",
+    "title": "Lioness’ Pride"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00034": {
+   "name": "Omaru Polka",
+   "groups": [
+    "Gen 5"
+   ],
+   "ownSong": {
+    "musicId": "m0042",
+    "title": "Po"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00035": {
+   "name": "La+ Darknesss",
+   "groups": [
+    "holoX"
+   ],
+   "ownSong": {
+    "musicId": "m0185",
+    "title": "Not Interested"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00036": {
+   "name": "Takane Lui",
+   "groups": [
+    "holoX"
+   ],
+   "ownSong": {
+    "musicId": "m0021",
+    "title": "Overd"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00037": {
+   "name": "Hakui Koyori",
+   "groups": [
+    "holoX"
+   ],
+   "ownSong": {
+    "musicId": "m0044",
+    "title": "WAO!!(2025 ver.)"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-00039": {
+   "name": "Kazama Iroha",
+   "groups": [
+    "holoX"
+   ],
+   "ownSong": {
+    "musicId": "m0046",
+    "title": "IrohaStep!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 3,
+    "absolute_card_level_sum_by_card_id": 210,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 12,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 15,
+    "absolute_costume_get_count": 3,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 2,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03001": {
+   "name": "Ayunda Risu",
+   "groups": [
+    "ID Gen 1"
+   ],
+   "ownSong": {
+    "musicId": "m0047",
+    "title": "ALiCE&u"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03002": {
+   "name": "Moona Hoshinova",
+   "groups": [
+    "ID Gen 1"
+   ],
+   "ownSong": {
+    "musicId": "m0014",
+    "title": "High Tide"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03003": {
+   "name": "Airani Iofifteen",
+   "groups": [
+    "ID Gen 1"
+   ],
+   "ownSong": {
+    "musicId": "m0048",
+    "title": "Q&A=E"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03004": {
+   "name": "Kureiji Ollie",
+   "groups": [
+    "ID Gen 2"
+   ],
+   "ownSong": {
+    "musicId": "m0052",
+    "title": "JOLLIE JOLLIE"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03005": {
+   "name": "Anya Melfissa",
+   "groups": [
+    "ID Gen 2"
+   ],
+   "ownSong": {
+    "musicId": "m0053",
+    "title": "Unreal Veil"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03006": {
+   "name": "Pavolia Reine",
+   "groups": [
+    "ID Gen 2"
+   ],
+   "ownSong": {
+    "musicId": "m0054",
+    "title": "Gate Open: START!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03007": {
+   "name": "Vestia Zeta",
+   "groups": [
+    "ID Gen 3"
+   ],
+   "ownSong": {
+    "musicId": "m0060",
+    "title": "You're Mine"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03008": {
+   "name": "Kaela Kovalskia",
+   "groups": [
+    "ID Gen 3"
+   ],
+   "ownSong": {
+    "musicId": "m0179",
+    "title": "dahlah."
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-03009": {
+   "name": "Kobo Kanaeru",
+   "groups": [
+    "ID Gen 3"
+   ],
+   "ownSong": {
+    "musicId": "m0062",
+    "title": "Mantra Hujan"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04001": {
+   "name": "Mori Calliope",
+   "groups": [
+    "Myth"
+   ],
+   "ownSong": {
+    "musicId": "m0012",
+    "title": "Excuse My Rudeness, But Could You Please RIP?"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04002": {
+   "name": "Takanashi Kiara",
+   "groups": [
+    "Myth"
+   ],
+   "ownSong": {
+    "musicId": "m0049",
+    "title": "SPARKS"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 3,
+    "absolute_card_level_sum_by_card_id": 210,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 12,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 15,
+    "absolute_costume_get_count": 3,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 2,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04003": {
+   "name": "Ninomae Ina'nis",
+   "groups": [
+    "Myth"
+   ],
+   "ownSong": {
+    "musicId": "m0050",
+    "title": "VIOLET"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04007": {
+   "name": "IRyS",
+   "groups": [
+    "Promise"
+   ],
+   "ownSong": {
+    "musicId": "m0183",
+    "title": "Carbonated Love"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04010": {
+   "name": "Ouro Kronii",
+   "groups": [
+    "Promise"
+   ],
+   "ownSong": {
+    "musicId": "m0058",
+    "title": "Daydream"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 3,
+    "absolute_card_level_sum_by_card_id": 210,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 12,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 15,
+    "absolute_costume_get_count": 3,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 2,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04012": {
+   "name": "Hakos Baelz",
+   "groups": [
+    "Promise"
+   ],
+   "ownSong": {
+    "musicId": "m0121",
+    "title": "PSYCHO"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04013": {
+   "name": "Shiori Novella",
+   "groups": [
+    "Advent"
+   ],
+   "ownSong": {
+    "musicId": "m0064",
+    "title": "Monsters and Men"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04014": {
+   "name": "Koseki Bijou",
+   "groups": [
+    "Advent"
+   ],
+   "ownSong": {
+    "musicId": "m0065",
+    "title": "Prism no Mahou"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04015": {
+   "name": "Nerissa Ravencroft",
+   "groups": [
+    "Advent"
+   ],
+   "ownSong": {
+    "musicId": "m0066",
+    "title": "Say My Name"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04016": {
+   "name": "Fuwawa Abyssgard",
+   "groups": [
+    "Advent"
+   ],
+   "ownSong": {
+    "musicId": "m0063",
+    "title": "Lifetime Showtime"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 5,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-04017": {
+   "name": "Mococo Abyssgard",
+   "groups": [
+    "Advent"
+   ],
+   "ownSong": {
+    "musicId": "m0192",
+    "title": "Born to be \"BAU\"DOL☆★"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 5,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-06002": {
+   "name": "Otonose Kanade",
+   "groups": [
+    "ReGLOSS"
+   ],
+   "ownSong": {
+    "musicId": "m0068",
+    "title": "GREATEST"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-06003": {
+   "name": "Ichijou Ririka",
+   "groups": [
+    "ReGLOSS"
+   ],
+   "ownSong": {
+    "musicId": "m0069",
+    "title": "Kyoumodaitensai!"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-06004": {
+   "name": "Juufuutei Raden",
+   "groups": [
+    "ReGLOSS"
+   ],
+   "ownSong": {
+    "musicId": "m0070",
+    "title": "Japan no bijutsushi oboemasho"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  },
+  "chr-06005": {
+   "name": "Todoroki Hajime",
+   "groups": [
+    "ReGLOSS"
+   ],
+   "ownSong": {
+    "musicId": "m0071",
+    "title": "Countach"
+   },
+   "caps": {
+    "absolute_card_get_unique_count": 4,
+    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_level_limit_break": 4,
+    "increment_card_level_limit_break_count": 16,
+    "absolute_card_upgrade_potential": 5,
+    "increment_card_upgrade_potential_count": 20,
+    "absolute_costume_get_count": 4,
+    "absolute_park_emotion_get_count": 22,
+    "absolute_music_release_count_by_character_id-solo": 3,
+    "absolute_skill_tree_release_count": 153
+   }
+  }
+ }
+}

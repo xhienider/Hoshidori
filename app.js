@@ -1,6 +1,7 @@
 import { resolveMemberStats, getStatRoles, getSkillLevel, SKILL_LEVEL_TYPES } from './js/statEngine.js';
 import { evaluateLeaderCondition, resolveEffectRecipients } from './js/skillEngine.js';
 import { openMaterialsPage } from './js/materialsPage.js';
+import { openRankPage } from './js/rankPage.js';
 import {
   computeUnit,
   mapSpecialSkillsToSong,
@@ -5909,6 +5910,7 @@ async function main() {
   document.getElementById('presets-btn').addEventListener('click', openPresetsPanel);
   document.getElementById('compare-btn').addEventListener('click', openComparePage);
   document.getElementById('cost-calc-btn').addEventListener('click', openCostCalculator);
+  document.getElementById('rank-calc-btn').addEventListener('click', openRankPage);
   document.getElementById('card-viewer-btn').addEventListener('click', openCardViewer);
   document.getElementById('music-viewer-btn').addEventListener('click', openMusicViewer);
   document.getElementById('activity-btn').addEventListener('click', openCharacterActivityView);
@@ -5918,7 +5920,7 @@ async function main() {
 
   // "Tools" dropdown: click to toggle, click anywhere outside (or click any
   // item inside, since every item opens a full-screen overlay anyway) closes
-  // it. No search/filtering - a flat list of 5 items doesn't need it.
+  // it. No search/filtering - a flat list of 6 items doesn't need it.
   // Single unified listener (not separate button/menu/document handlers
   // coordinated via stopPropagation) - simpler and not dependent on event
   // ordering between multiple listeners on overlapping elements.
