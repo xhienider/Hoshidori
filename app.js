@@ -1,6 +1,7 @@
 import { resolveMemberStats, getStatRoles, getSkillLevel, SKILL_LEVEL_TYPES } from './js/statEngine.js';
 import { evaluateLeaderCondition, resolveEffectRecipients } from './js/skillEngine.js';
 import { openMaterialsPage } from './js/materialsPage.js';
+import { readTrackerAccount, trackerCharacterIds, trackerAreaPositions, syncAreaIntoSet } from './js/materials.js';
 import { openRankPage } from './js/rankPage.js';
 import {
   computeUnit,
@@ -543,6 +544,116 @@ const BOARD_CATEGORY_LABELS = {
   LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP: 'Score Support',
 };
 
+// ---------------------------------------------------------------------------
+// Sync from the Materials Tracker (one-way: tracker -> Builder / Board Manager).
+// The tracker's data file is only fetched the first time a sync is pressed.
+// The tracker's saved record is re-read on every sync, so edits made on the
+// Materials page in the same session are picked up.
+// ---------------------------------------------------------------------------
+let trackerBoardMaterialsPromise = null;
+function loadTrackerBoardMaterials() {
+  if (!trackerBoardMaterialsPromise) {
+    trackerBoardMaterialsPromise = fetch('data/board_materials.json').then((r) => {
+      if (!r.ok) throw new Error(`board_materials.json: HTTP ${r.status}`);
+      return r.json();
+    });
+    trackerBoardMaterialsPromise.catch(() => {
+      trackerBoardMaterialsPromise = null; // allow a retry
+    });
+  }
+  return trackerBoardMaterialsPromise;
+}
+
+/** Positions the Builder's Red/Blue editor models for a holomem. */
+function builderKnownPositions(characterId) {
+  const charData = DATA.boardCategories?.[characterId];
+  return charData ? new Set(buildBoardIndex(charData).keys()) : new Set();
+}
+
+/** Positions the Board Manager models for one Green/Yellow tab. */
+function greenYellowTabPositions(variantData, tab) {
+  const lists =
+    tab === 'green'
+      ? [variantData.card, variantData.cardGrouping, variantData.cardOther]
+      : [variantData.contentScoreBonus, variantData.contentOther, variantData.contentConnector];
+  const out = new Set();
+  for (const list of lists) for (const n of list || []) out.add(`${n.x},${n.y}`);
+  return out;
+}
+
+/** Replaces one board area of one holomem in `targetSet` with the tracker's.
+ *  area: 'red' | 'blue' | 'green' | 'yellow'. Returns null when the holomem
+ *  isn't in the tracker (nothing is changed then). */
+function syncAreaFromTracker(boardMaterials, account, characterId, area, targetSet, knownPositions) {
+  const positions = trackerAreaPositions(boardMaterials, account, characterId, area);
+  if (!positions) return null;
+  return syncAreaIntoSet(targetSet, positions, knownPositions);
+}
+
+/** Small "Sync from Tracker" button; label/tooltip reflect whether this
+ *  holomem has tracker data. onSync is async and returns a status string. */
+function makeTrackerSyncButton(label, characterIds, onSync) {
+  const btn = document.createElement('button');
+  btn.type = 'button';
+  btn.className = 'presets-btn tracker-sync-btn';
+  btn.textContent = label;
+  const inTracker = trackerCharacterIds();
+  const available = characterIds.filter((id) => inTracker.has(id));
+  if (!available.length) {
+    btn.disabled = true;
+    btn.title = 'Not entered in the Materials Tracker yet - nothing to sync.';
+    return btn;
+  }
+  btn.title = 'Replaces this board with what the Materials Tracker has (one-way: edits here don\u2019t go back to the tracker).';
+  btn.onclick = async () => {
+    btn.disabled = true;
+    const original = btn.textContent;
+    try {
+      btn.textContent = await onSync();
+    } catch (err) {
+      btn.textContent = 'Sync failed';
+      btn.title = String(err?.message || err);
+    }
+    setTimeout(() => {
+      btn.textContent = original;
+      btn.disabled = false;
+    }, 2500);
+  };
+  return btn;
+}
+
+/** Builder masthead button: leader's Red + every unit member's Blue. */
+async function syncTeamFromTracker() {
+  const boardMaterials = await loadTrackerBoardMaterials();
+  const account = readTrackerAccount(boardMaterials);
+  const jobs = [];
+  const leaderCard = state.leader.cardId ? DATA.byId[state.leader.cardId] : null;
+  if (leaderCard) jobs.push([leaderCard.characterId, 'red']);
+  for (const u of state.unit) {
+    const card = u.cardId ? DATA.byId[u.cardId] : null;
+    if (card) jobs.push([card.characterId, 'blue']);
+  }
+  let synced = 0;
+  const missing = [];
+  for (const [characterId, area] of jobs) {
+    if (!DATA.boardCategories?.[characterId]) continue;
+    if (!state.boardSelections[characterId]) state.boardSelections[characterId] = new Set();
+    const sel = state.boardSelections[characterId];
+    const result = syncAreaFromTracker(boardMaterials, account, characterId, area, sel, builderKnownPositions(characterId));
+    if (!result) {
+      missing.push(DATA.boardCategories[characterId].characterName);
+      continue;
+    }
+    const pruned = pruneDisconnected(sel);
+    sel.clear();
+    for (const p of pruned) sel.add(p);
+    synced++;
+  }
+  renderSelectionRow();
+  recompute();
+  return { synced, total: jobs.length, missing };
+}
+
 function openBoardEditor(card, isLeaderSlotContext) {
   const characterId = card.characterId;
   const charData = DATA.boardCategories[characterId];
@@ -573,6 +684,19 @@ function openBoardEditor(card, isLeaderSlotContext) {
     createInfoIcon(
       'Node sizes vary and are already reflected in the cost/value shown. Click any node to unlock it \u2014 if it isn\u2019t adjacent to an already-unlocked node yet, every node on the path back to the center unlocks automatically along with it. Locking a node also locks anything past it that becomes disconnected. Green (support) and Yellow (content) areas aren\u2019t modeled yet \u2014 enter those as a manual bonus for now.'
     )
+  );
+  const syncArea = isLeaderSlotContext ? 'red' : 'blue';
+  header.appendChild(
+    makeTrackerSyncButton(`Sync ${isLeaderSlotContext ? 'Red' : 'Blue'} from Tracker`, [characterId], async () => {
+      const boardMaterials = await loadTrackerBoardMaterials();
+      const result = syncAreaFromTracker(boardMaterials, readTrackerAccount(boardMaterials), characterId, syncArea, sel, new Set(boardIndex.keys()));
+      if (!result) return 'Not in tracker';
+      const pruned = pruneDisconnected(sel);
+      sel.clear();
+      for (const p of pruned) sel.add(p);
+      refreshEditor();
+      return `Synced \u2713 (${result.added} nodes)`;
+    })
   );
   box.appendChild(header);
 
@@ -1043,6 +1167,36 @@ function openGreenYellowBoardManager() {
 
   function renderLeftPanel() {
     leftPanel.innerHTML = '';
+    const syncAllBtn = makeTrackerSyncButton(
+      'Sync all holomems from Tracker',
+      allChars.map((c) => c.characterId),
+      async () => {
+        const boardMaterials = await loadTrackerBoardMaterials();
+        const account = readTrackerAccount(boardMaterials);
+        let synced = 0;
+        for (const c of allChars) {
+          const variantData = DATA.greenYellowBoard.variants[c.greenYellowVariant];
+          if (!variantData) continue;
+          if (!state.greenYellowBoardSelections[c.characterId]) state.greenYellowBoardSelections[c.characterId] = new Set();
+          const sel = state.greenYellowBoardSelections[c.characterId];
+          let any = false;
+          for (const tab of ['green', 'yellow']) {
+            if (syncAreaFromTracker(boardMaterials, account, c.characterId, tab, sel, greenYellowTabPositions(variantData, tab))) any = true;
+          }
+          if (any) synced++;
+        }
+        recompute();
+        renderCharListItems();
+        renderMiddlePanel();
+        renderSummaryPanel();
+        return `Synced \u2713 (${synced} holomems)`;
+      }
+    );
+    syncAllBtn.classList.add('tracker-sync-all');
+    syncAllBtn.title = syncAllBtn.disabled
+      ? syncAllBtn.title
+      : 'Replaces the Green and Yellow boards of every holomem entered in the Materials Tracker (one-way). Holomems not in the tracker are left alone. The gen-boost "Receives" total needs every gen-mate\u2019s board, so this is the quickest way to get it right.';
+    leftPanel.appendChild(syncAllBtn);
     const searchInput = document.createElement('input');
     searchInput.type = 'text';
     searchInput.placeholder = 'Search characters\u2026';
@@ -1242,6 +1396,33 @@ function openGreenYellowBoardManager() {
       tabs.appendChild(btn);
     }
     midPanel.appendChild(tabs);
+
+    const syncRow = document.createElement('div');
+    syncRow.className = 'tracker-sync-row';
+    const syncCharacterId = selectedCharacterId;
+    const syncTab = activeTab;
+    syncRow.appendChild(
+      makeTrackerSyncButton(`Sync ${syncTab === 'green' ? 'Green' : 'Yellow'} from Tracker`, [syncCharacterId], async () => {
+        const boardMaterials = await loadTrackerBoardMaterials();
+        if (!state.greenYellowBoardSelections[syncCharacterId]) state.greenYellowBoardSelections[syncCharacterId] = new Set();
+        const result = syncAreaFromTracker(
+          boardMaterials,
+          readTrackerAccount(boardMaterials),
+          syncCharacterId,
+          syncTab,
+          state.greenYellowBoardSelections[syncCharacterId],
+          greenYellowTabPositions(variantData, syncTab)
+        );
+        if (!result) return 'Not in tracker';
+        recompute();
+        renderCharListItems();
+        // redraw just the board (not the whole panel) so this button can show its status
+        renderDiagramTab(diagramContainer, syncCharacterId, variantData, syncTab);
+        renderSummaryPanel();
+        return `Synced \u2713 (${result.added} nodes)`;
+      })
+    );
+    midPanel.appendChild(syncRow);
 
     const diagramContainer = document.createElement('div');
     diagramContainer.className = 'gy-diagram-container';
@@ -5917,6 +6098,24 @@ async function main() {
   document.getElementById('song-ranking-btn').addEventListener('click', openSongRankingView);
   document.getElementById('board-manager-btn').addEventListener('click', openGreenYellowBoardManager);
   document.getElementById('materials-btn').addEventListener('click', openMaterialsPage);
+  const syncTeamBtn = document.getElementById('sync-team-btn');
+  syncTeamBtn.title = 'Replaces the leader\u2019s Red board and every unit member\u2019s Blue board with what the Materials Tracker has (one-way). Saved presets are not changed.';
+  syncTeamBtn.addEventListener('click', async () => {
+    syncTeamBtn.disabled = true;
+    const original = syncTeamBtn.textContent;
+    try {
+      const { synced, total, missing } = await syncTeamFromTracker();
+      syncTeamBtn.textContent = total ? `Synced ${synced}/${total}` : 'No team yet';
+      if (missing.length) syncTeamBtn.title = `Not in the Materials Tracker: ${missing.join(', ')}`;
+    } catch (err) {
+      syncTeamBtn.textContent = 'Sync failed';
+      syncTeamBtn.title = String(err?.message || err);
+    }
+    setTimeout(() => {
+      syncTeamBtn.textContent = original;
+      syncTeamBtn.disabled = false;
+    }, 2500);
+  });
 
   // "Tools" dropdown: click to toggle, click anywhere outside (or click any
   // item inside, since every item opens a full-screen overlay anyway) closes

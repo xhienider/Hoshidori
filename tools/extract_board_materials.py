@@ -22,7 +22,10 @@ CONFIRMED STRUCTURE (2026-11-14, "main 13" datamine):
   - A node's area is its groupId prefix: R- Red (leader), B- Blue (member),
     G- Green (ALL_MEMBER), Y- Yellow (content), S- connector slot (S-001 is
     the center; the other 3 are the Red/Blue/Yellow connect anchors, which
-    cost nothing).
+    cost 1 board point each but no materials).
+  - Board points come from Holomem Rank ups (CharacterLevel.skillTreePointQuantity).
+    Separately, many nodes are hidden/locked until a DREAM RANK (player level,
+    view/unlockConditionGroupId = cd-player_level-N); written as `dreamRank`.
   - Costs (consumptions + consumptionSkillTreePointQuantity) depend only on
     the node's groupId - identical for every character (asserted below).
   - Effects are per layout, except a few groups that have extra rows with
@@ -117,6 +120,12 @@ def main():
         positions[d['groupId']][d['skillTreeNodeGroupId']] = (d.get('positionX', 0), d.get('positionY', 0))
 
     # node rows: one default row per group (no characterIds) + per-character rows
+    def dream_rank(d):
+        levels = [int(c.rsplit('-', 1)[1]) for c in (d.get('viewConditionGroupId'), d.get('unlockConditionGroupId'))
+                  if c and c.startswith('cd-player_level-')]
+        return max(levels, default=0)
+
+    dream_by_group = {}
     default_row = {}
     char_rows = defaultdict(dict)  # groupId -> {characterId: row}
     cost_by_group = {}
@@ -130,6 +139,7 @@ def main():
         if g in cost_by_group and cost_by_group[g] != cost:
             sys.exit(f'{g}: cost differs between rows ({cost_by_group[g]} vs {cost}) - per-character costs need handling')
         cost_by_group[g] = cost
+        dream_by_group[g] = max(dream_by_group.get(g, 0), dream_rank(d))
         if d.get('characterIds'):
             for cid in d['characterIds']:
                 char_rows[g][cid] = d
@@ -154,7 +164,8 @@ def main():
                 if len(areas) != 1:
                     sys.exit(f'{model} {g}: cannot tell which area this connector belongs to ({areas})')
                 nodes.append({'id': g, 'x': x, 'y': y, 'area': areas.pop(), 'kind': 'connector',
-                              'grade': 1, 'points': 0, 'cost': {}})
+                              'grade': 1, 'points': cost_by_group.get(g, (0, ()))[0], 'cost': {},
+                              'dreamRank': dream_by_group.get(g, 0)})
                 continue
             row = first_row(g)
             if row is None:
@@ -176,6 +187,7 @@ def main():
                 'kind': 'node',
                 'grade': row.get('grade', 1),
                 'points': points,
+                'dreamRank': dream_by_group.get(g, 0),
                 'cost': {item_id: qty for item_id, qty in consumptions},
                 'effect': effect_text(eff, lang),
                 'icon': effect_icon(eff),

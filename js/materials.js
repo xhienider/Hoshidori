@@ -21,8 +21,8 @@
  * when it's next to the center or to an unlocked node OF THE SAME AREA;
  * clicking a far node unlocks the shortest same-area path to it; locking a
  * node also locks everything that's no longer connected to the center.
- * Connector slots (S-002..S-004) cost nothing and are unlocked
- * automatically whenever a path passes through them.
+ * Connector slots (S-002..S-004) cost no materials (1 board point each)
+ * and are unlocked automatically whenever a path passes through them.
  */
 
 export const AREAS = ['red', 'blue', 'green', 'yellow'];
@@ -285,4 +285,70 @@ export function normalizeAccount(raw, boardMaterials) {
   }
   account.updatedAt = raw.updatedAt || null;
   return account;
+}
+
+// ---------------------------------------------------------------------------
+// Syncing the tracker into the Builder (Red/Blue) and Board Manager
+// (Green/Yellow). ONE-WAY: tracker -> editor. Those editors store boards as
+// Sets of "x,y" positions; the tracker stores node ids. Both use the
+// holomem's real layout, so a node id maps to exactly one position
+// (verified for all 54 holomems: board_categories.json's Red/Blue positions
+// and green_yellow_board.json's Green/Yellow positions all match).
+// ---------------------------------------------------------------------------
+
+/** The tracker's saved account, read straight from localStorage. */
+export function readTrackerAccount(boardMaterials) {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    return normalizeAccount(raw ? JSON.parse(raw) : null, boardMaterials);
+  } catch {
+    return normalizeAccount(null, boardMaterials);
+  }
+}
+
+/** Holomems that have anything entered in the tracker. Reads raw storage, so
+ *  it works before board_materials.json has loaded (for enabling buttons). */
+export function trackerCharacterIds() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+    return new Set(Object.entries(raw?.boards || {}).filter(([, ids]) => Array.isArray(ids) && ids.length).map(([id]) => id));
+  } catch {
+    return new Set();
+  }
+}
+
+/** One board area of one holomem from the tracker, as "x,y" positions on
+ *  her real layout: { all: every position in that area, unlocked: the
+ *  unlocked ones }. Null if the holomem isn't in the tracker at all. */
+export function trackerAreaPositions(boardMaterials, account, characterId, area) {
+  const ids = account?.boards?.[characterId];
+  const board = getCharacterBoard(boardMaterials, characterId);
+  if (!ids?.length || !board) return null;
+  const unlockedIds = new Set(ids);
+  const areaNodes = board.nodes.filter((n) => n.area === area);
+  return {
+    all: areaNodes.map((n) => `${n.x},${n.y}`),
+    unlocked: areaNodes.filter((n) => unlockedIds.has(n.id)).map((n) => `${n.x},${n.y}`),
+  };
+}
+
+/** REPLACES one area inside an editor's position Set (mutated in place, since
+ *  the editors hold on to the Set object): removes every position of that
+ *  area, then adds the tracker's unlocked ones that the editor knows about
+ *  (`knownPositions`). Positions the editor doesn't model are dropped - e.g.
+ *  the Builder's 19 missing non-stat Red nodes or the Board Manager's
+ *  missing G-025; dropping them disconnects nothing (checked for every
+ *  holomem). Positions outside the area are left alone. Returns
+ *  { added, skipped }. */
+export function syncAreaIntoSet(targetSet, areaPositions, knownPositions) {
+  for (const p of areaPositions.all) targetSet.delete(p);
+  let added = 0;
+  let skipped = 0;
+  for (const p of areaPositions.unlocked) {
+    if (knownPositions.has(p)) {
+      targetSet.add(p);
+      added++;
+    } else skipped++;
+  }
+  return { added, skipped };
 }

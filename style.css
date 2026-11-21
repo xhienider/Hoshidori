@@ -2734,3 +2734,9 @@ header.masthead {
   .rank-layout { grid-template-columns: 220px 1fr; }
   .rank-layout .gy-summary-panel { grid-column: 1 / -1; border-top: 1px solid var(--line); }
 }
+
+/* ---------------- Sync from Materials Tracker ---------------- */
+.tracker-sync-btn { font-size: 11px; padding: 4px 10px; margin-top: 6px; }
+.tracker-sync-btn:disabled { opacity: 0.45; cursor: not-allowed; }
+.tracker-sync-row { display: flex; gap: 6px; flex-shrink: 0; margin: 4px 0 6px; }
+.tracker-sync-all { width: 100%; margin: 0 0 6px; flex-shrink: 0; }

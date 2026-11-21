@@ -22,6 +22,7 @@ import {
   applyPreset,
   presetDelta,
   normalizeAccount,
+  readTrackerAccount,
   genRank,
   sortCharacters,
   unlockedNodeCount,
@@ -81,14 +82,7 @@ function loadBoardMaterials() {
   return boardMaterialsPromise;
 }
 
-function readAccount(boardMaterials) {
-  try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    return normalizeAccount(raw ? JSON.parse(raw) : null, boardMaterials);
-  } catch {
-    return normalizeAccount(null, boardMaterials);
-  }
-}
+const readAccount = (boardMaterials) => readTrackerAccount(boardMaterials);
 
 function writeAccount(account) {
   account.updatedAt = new Date().toISOString();
@@ -349,7 +343,7 @@ export async function openMaterialsPage() {
       const title = document.createElementNS(svgNS, 'title');
       title.textContent =
         n.kind === 'connector'
-          ? 'Connector slot (free - unlocked automatically when a path passes through)'
+          ? `Connect-effect slot \u00b7 ${n.points}pt, no materials \u00b7 unlocked automatically when a path passes through`
           : `${n.effect || n.id} · ${costText(n.cost, boardMaterials)} · ${n.points}pt · ${n.grade >= 2 ? '2★' : '1★'}${isOn ? ' (unlocked)' : ''}`;
       c.appendChild(title);
       c.addEventListener('click', () => {
