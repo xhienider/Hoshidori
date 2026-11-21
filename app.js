@@ -246,6 +246,52 @@ async function loadData() {
 }
 
 // ---------------------------------------------------------------------------
+// Board Manager persistence. Green/Yellow boards (and Yellow's own bridge
+// connector choices) are ROSTER-WIDE, not team-specific, so they're saved on
+// their own - never inside unit presets (a preset only records which source
+// Green/Yellow use; see greenSourceOf/yellowSourceOf). Saved on every
+// recompute() - every Board Manager edit, sync and connector change already
+// calls it - and loaded once at startup.
+// ---------------------------------------------------------------------------
+const GY_BOARDS_STORAGE_KEY = 'hoshidori_gy_boards_v1';
+
+function loadGreenYellowBoards() {
+  try {
+    const raw = JSON.parse(localStorage.getItem(GY_BOARDS_STORAGE_KEY) || 'null');
+    if (!raw || typeof raw !== 'object') return;
+    for (const [characterId, positions] of Object.entries(raw.boards || {})) {
+      if (!DATA.boardCategories?.[characterId] || !Array.isArray(positions)) continue;
+      state.greenYellowBoardSelections[characterId] = new Set(positions.filter((p) => typeof p === 'string' && /^-?\d+,-?\d+$/.test(p)));
+    }
+    for (const [characterId, sel] of Object.entries(raw.connectors || {})) {
+      if (DATA.boardCategories?.[characterId] && sel && typeof sel === 'object') state.greenYellowConnectSelections[characterId] = sel;
+    }
+  } catch {
+    /* corrupt or unavailable storage - start empty */
+  }
+}
+
+let lastSavedGreenYellow = null;
+function saveGreenYellowBoards() {
+  const boards = {};
+  for (const [characterId, set] of Object.entries(state.greenYellowBoardSelections)) {
+    if (set?.size) boards[characterId] = [...set].sort();
+  }
+  const connectors = {};
+  for (const [characterId, sel] of Object.entries(state.greenYellowConnectSelections)) {
+    if (sel?.connectorCardId) connectors[characterId] = sel;
+  }
+  const json = JSON.stringify({ version: 1, boards, connectors });
+  if (json === lastSavedGreenYellow) return; // recompute() runs often - only write on change
+  try {
+    localStorage.setItem(GY_BOARDS_STORAGE_KEY, json);
+    lastSavedGreenYellow = json;
+  } catch {
+    /* storage full/unavailable - boards just won't persist */
+  }
+}
+
+// ---------------------------------------------------------------------------
 // Note density (notes-per-second per song/difficulty) - lazy-loaded per song
 // rather than bundled upfront, since the full set is ~1.4MB across all songs
 // but a typical single-song file is only ~5-15KB. Not every song has data
@@ -315,6 +361,8 @@ const state = {
   manualPowerUpBonusPercent: 0, // "Upgrade Bonus X%" from the Member training screen - % of (Member Parameter + Outfit Skill + Passive Skill + Memory Bonus)
   manualHolomemBoardBonusIngame: null, // deprecated - superseded by manualGreenBonus (recalculated via the Green Bonus popup, not a locked-in raw total)
   manualGreenBonus: null, // Green/Content-area board bonus (delta only), computed by subtracting the site's live Red+Blue total from a player-entered in-game figure via the "Calculate Green Bonus" popup. null = not yet calculated.
+  greenSource: null, // 'manual' | 'board' | null (null = default: manual if manualGreenBonus is set, else board) - see greenSourceOf()
+  yellowSource: null, // 'manual' | 'board' | null (null = default: manual if manualYellowNodePercent is set, else board) - see yellowSourceOf()
   manualYellowNodePercent: null, // Score Bonus's Holomem Board line: yellow/Content-area singer-conditional contribution, looked up directly from the in-game "Skill-Eligible Songs" screen for the CURRENTLY SELECTED SONG (already capped at 10%, no delta math needed). null = not entered. Resets whenever songId changes, since the value is song-specific and a stale carry-over would silently corrupt a different song's calculation.
   coverageShowBonusText: true, // main builder's sec-by-sec table: whether each active member's cell shows its "X% + Y% @ Z%" bonus text, or just the winner/suppressed highlight color with no text
   coverageShowScoreNumbers: true, // main builder's sec-by-sec table: whether each active member's cell shows its small per-second theoretical-score subtext
@@ -1738,7 +1786,7 @@ function openGreenYellowBoardManager() {
  *  live Red+Blue total (passed in fresh at click time) and hands the
  *  remainder back as the Green delta - never a raw locked-in total, so
  *  future red/blue board edits keep affecting the overall total correctly. */
-function openGreenBonusCalculator(currentRedBonus, currentBlueBonus, onCalculated) {
+function openGreenBonusCalculator(currentRedBonus, currentBlueBonus, onCalculated, boardManagerGreen = null) {
   const overlay = document.createElement('div');
   overlay.className = 'picker-overlay';
 
@@ -1772,6 +1820,23 @@ function openGreenBonusCalculator(currentRedBonus, currentBlueBonus, onCalculate
   input.className = 'green-bonus-input';
   input.placeholder = 'Holomem Board Bonus (in-game)';
   box.appendChild(input);
+
+  // Accuracy check: what the Board Manager calculates for Green, and how the
+  // in-game figure compares as you type.
+  if (boardManagerGreen != null) {
+    const bmLine = document.createElement('div');
+    bmLine.className = 'green-bonus-current';
+    const render = () => {
+      const raw = input.value.trim();
+      const implied = raw === '' ? null : Math.round(Number(raw) || 0) - (currentRedBonus + currentBlueBonus);
+      bmLine.textContent =
+        `Board Manager calculates Green: ${boardManagerGreen.toLocaleString()}` +
+        (implied == null ? '' : ` \u00b7 game implies ${implied.toLocaleString()} (${implied - boardManagerGreen >= 0 ? '+' : ''}${(implied - boardManagerGreen).toLocaleString()})`);
+    };
+    input.addEventListener('input', render);
+    render();
+    box.appendChild(bmLine);
+  }
 
   const btnRow = document.createElement('div');
   btnRow.className = 'green-bonus-btn-row';
@@ -2162,6 +2227,7 @@ function openSongPicker() {
 
       item.onclick = () => {
         state.songId = s.id;
+        if (state.yellowSource == null && state.manualYellowNodePercent != null) state.yellowSource = 'manual'; // keep a manual user on manual after the reset below
         state.manualYellowNodePercent = null; // song-specific value - stale carry-over would silently corrupt the new song's calculation
         overlay.remove();
         recompute();
@@ -2282,6 +2348,7 @@ function computeFullResult(team, songOverride) {
 }
 
 function recompute() {
+  saveGreenYellowBoards();
   const computed = computeFullResult(state);
 
   if (!computed) {
@@ -3204,6 +3271,136 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
   coverageRowEl.appendChild(memberStatsWrap);
 }
 
+// ---------------------------------------------------------------------------
+// Green / Yellow SOURCE SWITCH: each can come from the player's manual
+// in-game figure ("manual") or live from the Board Manager ("board").
+// Defaults keep existing setups unchanged: manual if a manual value was ever
+// entered, otherwise board. Works on any object carrying the four fields -
+// the live `state` or a saved preset.
+// ---------------------------------------------------------------------------
+const greenSourceOf = (o) => o?.greenSource || (o?.manualGreenBonus != null ? 'manual' : 'board');
+const yellowSourceOf = (o) => o?.yellowSource || (o?.manualYellowNodePercent != null ? 'manual' : 'board');
+
+const gyAreaPositionCache = {};
+/** "x,y" positions of one Green/Yellow area for a holomem's layout. */
+function gyAreaPositions(characterId, tab) {
+  const variant = DATA.boardCategories?.[characterId]?.greenYellowVariant;
+  const key = `${variant}|${tab}`;
+  if (!gyAreaPositionCache[key]) {
+    const variantData = DATA.greenYellowBoard?.variants?.[variant];
+    gyAreaPositionCache[key] = variantData ? greenYellowTabPositions(variantData, tab) : new Set();
+  }
+  return gyAreaPositionCache[key];
+}
+function hasGreenYellowArea(characterId, tab) {
+  const set = state.greenYellowBoardSelections[characterId];
+  if (!set?.size) return false;
+  for (const p of gyAreaPositions(characterId, tab)) if (set.has(p)) return true;
+  return false;
+}
+
+/** Green from the Board Manager for the performing members in `result`, in the
+ *  Holomem Board Bonus's own units (summed Performance + Technique + Sense):
+ *  each member's own Green stat nodes + 3 x the gen-boost All Stats she
+ *  receives (roster-wide, capped at 900 - computeGreenGroupingBonuses).
+ *  Also returns coverage counts so the UI can explain a low number. */
+function computeBoardManagerGreen(result) {
+  const members = (result?.memberStats || [])
+    .map((m) => ({ cardId: m.cardId, characterId: DATA.byId[m.cardId]?.characterId, isUnitMember: true }))
+    .filter((m) => m.characterId && DATA.boardCategories?.[m.characterId]);
+  const own = computeGreenBoardBonuses(state.greenYellowBoardSelections, DATA.greenYellowBoard, DATA.boardCategories, members).statFlat;
+  const gen = computeGreenGroupingBonuses(state.greenYellowBoardSelections, DATA.greenYellowBoard, DATA.boardCategories, DATA.characterGroupings);
+  let ownTotal = 0;
+  let genTotal = 0;
+  for (const m of members) {
+    const st = own[m.cardId];
+    if (st) ownTotal += st.performance + st.technique + st.sense;
+    genTotal += 3 * (gen.received[m.characterId] || 0);
+  }
+  // coverage: members' own boards, and every gen-mate whose board feeds the gen boost
+  const targetGroups = new Set(
+    Object.values(DATA.greenYellowBoard?.characterGroupingNodes || {}).flatMap((nodes) => Object.values(nodes).map((n) => n.targetGroupingId))
+  );
+  const mates = new Set();
+  for (const m of members) {
+    for (const gid of targetGroups) {
+      if ((DATA.characterGroupings[gid] || []).includes(m.characterId)) {
+        for (const id of DATA.characterGroupings[gid]) if (DATA.boardCategories?.[id]) mates.add(id);
+      }
+    }
+  }
+  return {
+    value: ownTotal + genTotal,
+    ownTotal,
+    genTotal,
+    members: members.length,
+    membersWithBoard: members.filter((m) => hasGreenYellowArea(m.characterId, 'green')).length,
+    genMates: mates.size,
+    genMatesWithBoard: [...mates].filter((id) => hasGreenYellowArea(id, 'green')).length,
+  };
+}
+
+/** Yellow from the Board Manager for `song`, as a PERCENT (0-10, same units as
+ *  the manual input). Songs credited to all of hololive store no singer list,
+ *  so every holomem's board is counted for them (unverified in-game; the
+ *  10% cap usually makes it moot). */
+function computeBoardManagerYellow(song) {
+  if (!song) return { percent: 0, singers: 0, singersWithBoard: 0, allSong: false };
+  const allSong = !song.characterIds?.length && song.musicSingerType === 'all';
+  const singerIds = (song.characterIds?.length ? song.characterIds : allSong ? Object.keys(DATA.boardCategories || {}) : []).filter(
+    (id) => DATA.boardCategories?.[id]
+  );
+  const permil = computeYellowScoreBonus(
+    state.greenYellowBoardSelections,
+    DATA.greenYellowBoard,
+    DATA.boardCategories,
+    singerIds,
+    song.musicSingerType,
+    state.greenYellowConnectSelections,
+    DATA.cardConnectInfo,
+    DATA.byId,
+    DATA.cardPotentials,
+    state.connectSelections
+  );
+  return {
+    percent: permil / 10,
+    singers: singerIds.length,
+    singersWithBoard: singerIds.filter((id) => hasGreenYellowArea(id, 'yellow')).length,
+    allSong,
+  };
+}
+
+/** The Green figure actually used for `o` (state or a preset) and team `result`. */
+function effectiveGreenBonus(o, result) {
+  return greenSourceOf(o) === 'board' ? computeBoardManagerGreen(result).value : o?.manualGreenBonus ?? null;
+}
+/** The Yellow percent actually used for `o` and `song`. */
+function effectiveYellowPercent(o, song) {
+  return yellowSourceOf(o) === 'board' ? computeBoardManagerYellow(song).percent : o?.manualYellowNodePercent || 0;
+}
+
+/** Small "Manual | Board Manager" toggle. */
+function makeSourceToggle(current, onChange) {
+  const wrap = document.createElement('span');
+  wrap.className = 'source-toggle';
+  wrap.onclick = (e) => e.stopPropagation();
+  for (const [key, label] of [
+    ['manual', 'Manual'],
+    ['board', 'Board Manager'],
+  ]) {
+    const b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'source-toggle-btn' + (current === key ? ' active' : '');
+    b.textContent = label;
+    b.onclick = (e) => {
+      e.stopPropagation();
+      if (current !== key) onChange(key);
+    };
+    wrap.appendChild(b);
+  }
+  return wrap;
+}
+
 /** Red+Blue are always the site's own live board computation (recomputes
  *  automatically whenever the player edits either board) - only Green is a
  *  player-entered figure, and even that is just a delta (see
@@ -3254,8 +3451,9 @@ function computeMemoryBonus(perMemberStats, percent) {
 function computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats) {
   const breakdown = computeOverallPowerBreakdown(result, pureBaseStats, memberOnlyBaseStats);
   const memoryBonus = computeMemoryBonus(breakdown.perMemberStats, state.manualMemoryBonusPercent);
-  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualGreenBonus);
-  const powerUpBonus = computeMemberPowerUpBonus(breakdown, state.manualGreenBonus, state.manualPowerUpBonusPercent);
+  const green = effectiveGreenBonus(state, result);
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, green);
+  const powerUpBonus = computeMemberPowerUpBonus(breakdown, green, state.manualPowerUpBonusPercent);
   return breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus + powerUpBonus;
 }
 
@@ -3336,8 +3534,10 @@ function computeUnitScoreBreakdown(computed) {
   // where eff3 is the yellow value in PERMIL (10% -> 100). Validated bit-exact
   // against three independent real (yellow%, Board%) data points across two
   // differently-built teams (785, 646, and 198 - all matched precisely).
-  if (state.manualYellowNodePercent) {
-    const eff3 = state.manualYellowNodePercent * 10; // percent -> permil
+  const scoreSong = state.songId ? DATA.songs.find((sg) => sg.id === state.songId) : null;
+  const yellowPercent = effectiveYellowPercent(state, scoreSong); // manual figure or live Board Manager value (source switch)
+  if (yellowPercent) {
+    const eff3 = yellowPercent * 10; // percent -> permil
     const otherLinesSum = activeResult.activePermil + outfitPermil + passivePermil + specialResult.specialPermil;
     boardPermil = Math.ceil(boardPermil + eff3 * (1 + otherLinesSum / 1000));
   }
@@ -3423,13 +3623,16 @@ function renderPowerRow(computed) {
   // Memory Bonus ("Unit Stats X%" on the Memory Stand screen) - a % of
   // Member Parameter only, not the whole subtotal.
   const memoryBonus = computeMemoryBonus(breakdown.perMemberStats, state.manualMemoryBonusPercent);
-  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, state.manualGreenBonus);
+  const greenSource = greenSourceOf(state);
+  const boardGreen = computeBoardManagerGreen(result);
+  const green = greenSource === 'board' ? boardGreen.value : state.manualGreenBonus;
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, green);
   // Member Power-Up Bonus ("Upgrade Bonus X%" on the Member training screen)
   // - per member, (their Member Parameter + Outfit Skill + Passive Skill +
   // Red/Blue board bonus) * the power-up %, rounded per member then summed.
   // Deliberately excludes Memory Bonus. Green's own share is added once,
   // separately, since it isn't a per-member value.
-  const powerUpBonus = computeMemberPowerUpBonus(breakdown, state.manualGreenBonus, state.manualPowerUpBonusPercent);
+  const powerUpBonus = computeMemberPowerUpBonus(breakdown, green, state.manualPowerUpBonusPercent);
 
   const total = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus + powerUpBonus;
 
@@ -3498,25 +3701,40 @@ function renderPowerRow(computed) {
   greenWrap.className = 'power-percent-wrap';
   const greenNum = document.createElement('span');
   greenNum.className = 'num';
-  greenNum.textContent = state.manualGreenBonus != null ? state.manualGreenBonus.toLocaleString() : '\u2014';
+  greenNum.textContent = green != null ? green.toLocaleString() : '\u2014';
   greenWrap.appendChild(greenNum);
-  const greenBtn = document.createElement('button');
-  greenBtn.type = 'button';
-  greenBtn.className = 'board-btn';
-  greenBtn.textContent = state.manualGreenBonus != null ? 'Recalculate' : 'Calculate Green Bonus';
-  greenBtn.onclick = (e) => {
-    e.stopPropagation();
-    openGreenBonusCalculator(breakdown.redBonus, breakdown.blueBonus, (green) => {
-      state.manualGreenBonus = green;
+  greenWrap.appendChild(
+    makeSourceToggle(greenSource, (src) => {
+      state.greenSource = src;
       recompute();
-    });
-  };
-  greenWrap.appendChild(greenBtn);
+    })
+  );
+  if (greenSource === 'manual') {
+    const greenBtn = document.createElement('button');
+    greenBtn.type = 'button';
+    greenBtn.className = 'board-btn';
+    greenBtn.textContent = state.manualGreenBonus != null ? 'Recalculate' : 'Calculate Green Bonus';
+    greenBtn.onclick = (e) => {
+      e.stopPropagation();
+      openGreenBonusCalculator(breakdown.redBonus, breakdown.blueBonus, (value) => {
+        state.manualGreenBonus = value;
+        state.greenSource = 'manual';
+        recompute();
+      }, boardGreen.value);
+    };
+    greenWrap.appendChild(greenBtn);
+  } else {
+    const note = document.createElement('span');
+    note.className = 'source-note' + (boardGreen.membersWithBoard < boardGreen.members || boardGreen.genMatesWithBoard < boardGreen.genMates ? ' incomplete' : '');
+    note.textContent = `boards ${boardGreen.membersWithBoard}/${boardGreen.members} \u00b7 gen-mates ${boardGreen.genMatesWithBoard}/${boardGreen.genMates}`;
+    note.title = `Own Green nodes: ${boardGreen.ownTotal.toLocaleString()} \u00b7 gen boost: ${boardGreen.genTotal.toLocaleString()} (3 \u00d7 All Stats received, capped at 900 per member). "boards" = unit members with a Green board entered in the Board Manager; "gen-mates" = holomems whose board feeds your members' gen boost. Missing boards make this lower than the game\u2019s.`;
+    greenWrap.appendChild(note);
+  }
   addRow(
     'Green Bonus',
     greenWrap,
     createInfoIcon(
-      'Content-area board nodes are spread across your whole roster, which this site can\u2019t see. Click Calculate, enter the Holomem Board Bonus shown in the Unit Score after the Song Selection screen, and the difference from this site\u2019s live Red+Blue total is used as your Green contribution. Stays fixed until you recalculate - editing the red or blue board only updates those two, not Green.',
+      'Two sources. Manual: click Calculate, enter the Holomem Board Bonus shown in the Unit Score after the Song Selection screen, and the difference from this site\u2019s live Red+Blue total is used as Green (stays fixed until you recalculate). Board Manager: computed live from the Green boards in the Board Manager - your members\u2019 own Green stat nodes plus the gen boost they receive - so it only matches the game once those boards are entered (use "Sync all holomems from Tracker").',
       'images/help/holomem_board_bonus_reference.webp'
     ),
     true
@@ -3569,7 +3787,7 @@ function renderPowerRow(computed) {
   const note = document.createElement('div');
   note.className = 'estimate-note';
   note.textContent =
-    'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green (support) board bonuses aren\u2019t included in Holomem Board Bonus yet. Memory Bonus is the "Unit Stats %" from the Memory Stand screen, applied to Member Parameter only. Member Power-Up Bonus is the "Upgrade Bonus %" from the Member training screen, applied to Member Parameter + Outfit Skill + Passive Skill + Holomem Board Bonus + Memory Bonus. Enter both manually above.';
+    'Member Parameter, Outfit Skill, Passive Skill, and Holomem Board Bonus are computed directly from real game data. Green comes from either your in-game figure (Manual) or the Board Manager\u2019s boards (switch on the Green Bonus row). Memory Bonus is the "Unit Stats %" from the Memory Stand screen, applied to Member Parameter only. Member Power-Up Bonus is the "Upgrade Bonus %" from the Member training screen, applied to Member Parameter + Outfit Skill + Passive Skill + Holomem Board Bonus + Memory Bonus. Enter both manually above.';
   panel.appendChild(note);
 
   panelsRow.appendChild(panel);
@@ -3636,25 +3854,49 @@ function buildScoreBonusPanel(unitScoreData) {
   boardNum.className = 'num';
   boardNum.textContent = `${(lines.board / 10).toFixed(1)}%`;
   boardWrap.appendChild(boardNum);
-  const yellowInput = document.createElement('input');
-  yellowInput.type = 'number';
-  yellowInput.className = 'mini-input power-manual-input';
-  yellowInput.min = 0;
-  yellowInput.max = 10;
-  yellowInput.step = 0.01;
-  yellowInput.placeholder = 'yellow %';
-  yellowInput.value = state.manualYellowNodePercent ?? '';
-  yellowInput.onclick = (e) => e.stopPropagation();
-  yellowInput.onchange = () => {
-    const raw = yellowInput.value.trim();
-    state.manualYellowNodePercent = raw === '' ? null : clamp(Number(raw) || 0, 0, 10);
-    recompute();
-  };
-  boardWrap.appendChild(yellowInput);
-  const yellowSuffix = document.createElement('span');
-  yellowSuffix.className = 'power-percent-sign';
-  yellowSuffix.textContent = '% yellow';
-  boardWrap.appendChild(yellowSuffix);
+  const yellowSource = yellowSourceOf(state);
+  boardWrap.appendChild(
+    makeSourceToggle(yellowSource, (src) => {
+      state.yellowSource = src;
+      recompute();
+    })
+  );
+  if (yellowSource === 'manual') {
+    const yellowInput = document.createElement('input');
+    yellowInput.type = 'number';
+    yellowInput.className = 'mini-input power-manual-input';
+    yellowInput.min = 0;
+    yellowInput.max = 10;
+    yellowInput.step = 0.01;
+    yellowInput.placeholder = 'yellow %';
+    yellowInput.value = state.manualYellowNodePercent ?? '';
+    yellowInput.onclick = (e) => e.stopPropagation();
+    yellowInput.onchange = () => {
+      const raw = yellowInput.value.trim();
+      state.manualYellowNodePercent = raw === '' ? null : clamp(Number(raw) || 0, 0, 10);
+      state.yellowSource = 'manual';
+      recompute();
+    };
+    boardWrap.appendChild(yellowInput);
+    const yellowSuffix = document.createElement('span');
+    yellowSuffix.className = 'power-percent-sign';
+    yellowSuffix.textContent = '% yellow';
+    boardWrap.appendChild(yellowSuffix);
+  } else {
+    const ySong = state.songId ? DATA.songs.find((sg) => sg.id === state.songId) : null;
+    const by = computeBoardManagerYellow(ySong);
+    const yVal = document.createElement('span');
+    yVal.className = 'num';
+    yVal.textContent = `${by.percent.toFixed(1)}% yellow`;
+    boardWrap.appendChild(yVal);
+    const note = document.createElement('span');
+    note.className = 'source-note' + (by.singersWithBoard < by.singers ? ' incomplete' : '');
+    note.textContent = ySong ? (by.allSong ? `all-hololive song \u00b7 ${by.singersWithBoard} boards` : `singers ${by.singersWithBoard}/${by.singers}`) : 'no song selected';
+    note.title = by.allSong
+      ? 'Songs credited to all of hololive carry no singer list, so every holomem\u2019s Yellow board is counted (not yet verified in-game; the 10% cap usually makes it moot).'
+      : '"singers" = holomems credited on this song with a Yellow board entered in the Board Manager. Yellow comes only from the credited singers\u2019 boards, matched against the song\u2019s solo/group/all type, capped at 10%.';
+    boardWrap.appendChild(note);
+  }
   const boardLabelEl = document.createElement('span');
   boardLabelEl.textContent = 'Holomem Board Bonus';
   boardLabelEl.appendChild(
@@ -3732,6 +3974,8 @@ function buildPresetFromCurrentState(name) {
     manualPowerUpBonusPercent: state.manualPowerUpBonusPercent,
     manualGreenBonus: state.manualGreenBonus,
     manualYellowNodePercent: state.manualYellowNodePercent,
+    greenSource: greenSourceOf(state), // which source this team uses - the Board Manager's boards themselves are saved separately (roster-wide)
+    yellowSource: yellowSourceOf(state),
     characterData,
   };
 }
@@ -3744,6 +3988,8 @@ function applyPreset(preset) {
   state.manualPowerUpBonusPercent = preset.manualPowerUpBonusPercent ?? 0;
   state.manualGreenBonus = preset.manualGreenBonus ?? null;
   state.manualYellowNodePercent = preset.manualYellowNodePercent ?? null;
+  state.greenSource = preset.greenSource ?? null; // older presets: null -> default rule in greenSourceOf()
+  state.yellowSource = preset.yellowSource ?? null;
   for (const [characterId, data] of Object.entries(preset.characterData || {})) {
     state.boardSelections[characterId] = new Set(data.boardSelections || []);
     if (data.connectSelections) state.connectSelections[characterId] = data.connectSelections;
@@ -3976,8 +4222,9 @@ function renderCompareTeamColumn(side, preset, computed, onChoosePreset) {
 function computeComparePower(preset, computed) {
   const breakdown = computeOverallPowerBreakdown(computed.result, computed.pureBaseStats, computed.baseStats);
   const memoryBonus = computeMemoryBonus(breakdown.perMemberStats, preset.manualMemoryBonusPercent || 0);
-  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, preset.manualGreenBonus ?? null);
-  const powerUpBonus = computeMemberPowerUpBonus(breakdown, preset.manualGreenBonus ?? null, preset.manualPowerUpBonusPercent || 0);
+  const green = effectiveGreenBonus(preset, computed.result);
+  const holomemBoardBonus = effectiveHolomemBoardBonus(breakdown, green);
+  const powerUpBonus = computeMemberPowerUpBonus(breakdown, green, preset.manualPowerUpBonusPercent || 0);
   const total = breakdown.memberParameter + breakdown.outfitSkill + breakdown.passiveSkill + holomemBoardBonus + memoryBonus + powerUpBonus;
   return { ...breakdown, holomemBoardBonus, memoryBonus, powerUpBonus, total };
 }
@@ -6085,6 +6332,7 @@ function renderCardViewerListRow(d) {
 
 async function main() {
   await loadData();
+  loadGreenYellowBoards();
   renderSelectionRow();
   recompute();
 

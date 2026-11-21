@@ -2740,3 +2740,11 @@ header.masthead {
 .tracker-sync-btn:disabled { opacity: 0.45; cursor: not-allowed; }
 .tracker-sync-row { display: flex; gap: 6px; flex-shrink: 0; margin: 4px 0 6px; }
 .tracker-sync-all { width: 100%; margin: 0 0 6px; flex-shrink: 0; }
+
+/* ---------------- Green / Yellow source switch ---------------- */
+.source-toggle { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; margin: 0 4px; vertical-align: middle; }
+.source-toggle-btn { background: transparent; border: 0; color: var(--text-faint); font-size: 10px; padding: 2px 6px; cursor: pointer; font-family: var(--font-mono); }
+.source-toggle-btn + .source-toggle-btn { border-left: 1px solid var(--line); }
+.source-toggle-btn.active { background: color-mix(in srgb, var(--green-node) 18%, transparent); color: var(--green-node); }
+.source-note { font-family: var(--font-mono); font-size: 10px; color: var(--text-faint); margin-left: 4px; cursor: help; }
+.source-note.incomplete { color: var(--orange, #f59e0b); }
