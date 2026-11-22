@@ -1,0 +1,210 @@
+{
+  "version": 1,
+  "updated": "2026-11-22",
+  "topics": [
+    {
+      "key": "unit",
+      "label": "Building your unit"
+    },
+    {
+      "key": "numbers",
+      "label": "Reading your numbers"
+    },
+    {
+      "key": "skills",
+      "label": "Skills and coverage"
+    },
+    {
+      "key": "boards",
+      "label": "Boards and levels"
+    },
+    {
+      "key": "songs",
+      "label": "Pushing a song score"
+    },
+    {
+      "key": "events",
+      "label": "Events"
+    }
+  ],
+  "items": [
+    {
+      "id": "same-type",
+      "topic": "unit",
+      "badge": "data",
+      "q": "Should I form a team with the same card type (Happy, Cute, Pure)?",
+      "a": "<b>No.</b> Count how many of each type your leader skill and passives need, and fill those counts.",
+      "why": "<p>Type does nothing by itself; songs carry no type in the game data. It matters only through skills: 26 leader skills need a minimum number of one type, and most stat and Score Support passives hit \"2 members of type X\". A 2-2-1 or 3-2 split often switches on more passives than a mono-type team.</p>",
+      "when": "If your leader needs 3 or more of one type, meet that first and fit passives around it."
+    },
+    {
+      "id": "same-stat",
+      "topic": "unit",
+      "badge": "data",
+      "q": "Should I form a team with the same main stat?",
+      "a": "<b>Yes, when your leader buffs one stat.</b> Match everyone’s main stat to it. With an all-stats or Score Support leader, it matters much less.",
+      "why": "<p>Overall Power adds Performance, Technique and Sense equally, so no stat is better on its own. But single-stat leader skills are the biggest buff in the game: +80% to +135% of one stat for the whole unit on 5★ cards. A card’s main stat is about 41–46% of its stats and its weakest about 25–29%, so a mismatched member gets far less.</p>",
+      "when": "All-stats leaders (+30% to +50%) treat every stat equally. Score Support leaders (+60%) don’t touch stats."
+    },
+    {
+      "id": "off-stat",
+      "topic": "unit",
+      "badge": "estimate",
+      "q": "When should I use a card with a different main stat?",
+      "a": "<b>When it brings something a matched card can’t:</b> a needed type or group count, a skill that fills a coverage gap, or a self all-stats or Score Support passive.",
+      "why": "<p>A mismatch only shrinks the leader’s stat buff. Under a +130% leader it costs about 1.5–2.6% of Unit Score, and less as your boards fill (see the Bloom question). A passive that switches on (+2 to +4.5%) or a skill that closes a coverage gap is often worth more.</p>",
+      "when": "Under an all-stats or Score Support leader the cost is close to zero, so pick on skills alone.",
+      "tryIt": true
+    },
+    {
+      "id": "bloom",
+      "topic": "unit",
+      "badge": "estimate",
+      "q": "Should I prioritise Bloom 1 and 2 cards over unbloomed ones, even with a different main stat or an inactive passive?",
+      "a": "<b>Usually yes,</b> unless the leader buffs one of the Bloom 1 card’s weakest stats, the buff is around +130%, and your boards are still light. Keep passives working first.",
+      "why": "<p>Unit Score = Overall Power × 2.037 × (1 + Score Bonus), so every change is a % of Unit Score.</p><div class=\"scroll\"><table><tr><th>Change on one card</th><th class=\"n\">Unit Score</th></tr><tr><td>Bloom 1 (active skill level 2)</td><td class=\"n\">+2.0%</td></tr><tr><td>Bloom 2 (+10% stats)</td><td class=\"n\">+1.7 to +1.9%</td></tr><tr><td>Leader buffs the card’s second stat</td><td class=\"n\">−1.1 to −2.1%</td></tr><tr><td>Leader buffs the card’s weakest stat</td><td class=\"n\">−1.3 to −2.6%</td></tr><tr><td>Stat passive doesn’t activate</td><td class=\"n\">−3 to −4%</td></tr></table></div>",
+      "how": "<ul><li><b>Bloom 1</b> only raises the active skill’s Score Up (usually +20 points). The Unit Score formula on 1,200 random 5★ units gave a median of +2.0%. It counts twice, because the Special line scales with the Active line.</li><li><b>A mismatch</b> only shrinks the leader’s stat buff. Board stats, Memory Bonus and passives grow Overall Power without it, so it matters less as boards fill:</li></ul><div class=\"scroll\"><table><tr><th>Leader buff, weakest stat</th><th class=\"n\">No boards</th><th class=\"n\">Blue done</th><th class=\"n\">Red + Blue full</th></tr><tr><td>+80%</td><td class=\"n\">−1.8%</td><td class=\"n\">−1.6%</td><td class=\"n\">−1.4%</td></tr><tr><td>+100%</td><td class=\"n\">−2.1%</td><td class=\"n\">−1.9%</td><td class=\"n\">−1.6%</td></tr><tr><td>+130%</td><td class=\"n\">−2.6%</td><td class=\"n\">−2.3%</td><td class=\"n\">−2.0%</td></tr></table></div><p>Only the +130% row, before Red is built, costs more than Bloom 1’s +2.0%.</p>",
+      "when": "In a real song only the strongest active skill counts, so Bloom 1 on a card usually overlapped by a stronger skill gains less than Unit Score suggests.",
+      "tryIt": true
+    },
+    {
+      "id": "passives",
+      "topic": "unit",
+      "badge": "estimate",
+      "q": "Which passive is best for Unit Score: stat up on 2 members, Score Support on 2 members, or all stats on one?",
+      "a": "<b>Stat up on 2 members’ main stat</b>, then all stats on self, then stat up on an off stat, then Score Support. The order holds at every board stage.",
+      "why": "<div class=\"scroll\"><table><tr><th>Passive (5★, level 2, +130% leader)</th><th class=\"n\">No boards</th><th class=\"n\">Full boards</th></tr><tr><td>Stat up, 2 members, main stat</td><td class=\"n\">+4.5%</td><td class=\"n\">+3.4%</td></tr><tr><td>All stats, self</td><td class=\"n\">+4.0%</td><td class=\"n\">+3.0%</td></tr><tr><td>Stat up, 2 members, off stat</td><td class=\"n\">+2.8%</td><td class=\"n\">+2.1%</td></tr><tr><td>Score Support, 2 members</td><td class=\"n\">+1.6%</td><td class=\"n\">+1.5%</td></tr></table></div>",
+      "how": "<ul><li><b>Stat passives</b> come from the cards’ own stats, so boards dilute them like the leader buff.</li><li><b>Score Support</b> is diluted too: Red boards add +20–30% Score Support for the whole unit, and all Score Support adds together. It also misses the Special line, which follows only the base Active line. Medians of 500 random 5★ units.</li></ul><p>Boards narrow the gap from about 3× to 2×, but Score Support never overtakes a working stat passive.</p>",
+      "when": "Use Score Support as a tiebreaker: about +1.7% on your two strongest skills, about +1.2% with a Score Support leader.",
+      "tryIt": true
+    },
+    {
+      "id": "stats",
+      "topic": "numbers",
+      "badge": "confirmed",
+      "q": "What do the stats actually do?",
+      "a": "<b>Treat Performance + Technique + Sense as one total.</b> Only push one stat when your leader or passives buff it.",
+      "why": "<p>Overall Power adds the three stats with equal weight, and every note’s score scales directly with Overall Power. No stat has a separate effect on score in the game data.</p>"
+    },
+    {
+      "id": "unit-score",
+      "topic": "numbers",
+      "badge": "confirmed",
+      "q": "What is Unit Score, and why is higher better?",
+      "a": "<b>Unit Score = Overall Power × 2.037 × (1 + Score Bonus).</b> Use it to compare units quickly, then check your target song.",
+      "why": "<p>It matches the in-game Unit Score Details screen. Both parts also drive real song score, so a higher Unit Score usually means a higher song score.</p>",
+      "when": "Unit Score assumes a fixed 200-second song with skills firing at their average rate. Your real song may favour a different unit."
+    },
+    {
+      "id": "power-bonus",
+      "topic": "numbers",
+      "badge": "confirmed",
+      "q": "What are Overall Power and Score Bonus, and how do they affect my song score?",
+      "a": "<b>Overall Power is the unit’s strength; Score Bonus is the extra score from skills.</b> Every note scales with Overall Power, and Score Bonus multiplies on top.",
+      "why": "<h4>Overall Power adds</h4><ul><li>Member Parameter (stats from level and Bloom)</li><li>Outfit Skill (leader stat buff)</li><li>Passive Skill (stat passives)</li><li>Holomem Board Bonus (Red, Blue, Green)</li><li>Memory Bonus and Member Power-Up Bonus</li></ul><h4>Score Bonus adds</h4><p>Active, Outfit (leader Score Support), Passive (Score Support), Board and Special lines.</p><p>Per note: Overall Power × difficulty multiplier × (1 + combo bonus) × (1 + active skill bonus) × (1 + Yellow bonus).</p>"
+    },
+    {
+      "id": "bonus-vs-score",
+      "topic": "numbers",
+      "badge": "confirmed",
+      "q": "Does a higher Score Bonus always mean a higher song score?",
+      "a": "<b>No.</b> When two units are close, run both on your target song in Hoshidori.",
+      "why": "<ol><li>Only the strongest active skill counts at any moment, so overlaps waste uptime.</li><li>Skills on during dense note sections earn more.</li><li>Special skills fire at the song’s own special skill activation points.</li><li>Activation is random, so runs vary.</li></ol><p>A unit can also gain Score Bonus by giving up Overall Power. If the power loss is larger, the song score drops.</p>",
+      "tryIt": true
+    },
+    {
+      "id": "position",
+      "topic": "skills",
+      "badge": "estimate",
+      "q": "Does the position of my members in my unit matter?",
+      "a": "<b>Yes.</b> Order members so each special skill lands at a special skill activation point where an active skill is likely on, and put the member you want to win ties earlier.",
+      "why": "<p>Each member’s special fires at one of the song’s five special skill activation points, in unit order. If two active skills give the same bonus and started in the same second, the earlier member wins (confirmed).</p>",
+      "when": "Position doesn’t change Overall Power or which passives switch on."
+    },
+    {
+      "id": "specials",
+      "topic": "skills",
+      "badge": "confirmed",
+      "q": "What are special skills, and how do they work with active skills?",
+      "a": "<b>A special skill is a booster for active skills.</b> Plan for an active skill to be on during each special’s window.",
+      "why": "<p>For 10–14 seconds after its special skill activation point, a special raises the Score Up of whatever active skill is on: +115% to +160% on 5★ cards. Some also add +40% to +55% activation chance. With no active skill on, the special is wasted. In Unit Score, the Special line scales with your Active line.</p>"
+    },
+    {
+      "id": "coverage",
+      "topic": "skills",
+      "badge": "confirmed",
+      "q": "What is skill coverage, and why is it important?",
+      "a": "<b>Coverage is the share of the song with at least one active skill on.</b> Gaps earn no skill bonus at all.",
+      "why": "<p>Only the strongest active skill counts at a time, so overlaps are wasted too. A 5★ active skill is on only 32–47% of the time, so several skills must take turns. On KANADE, the best 4-member core covered 96.7% with no frequency nodes and 99.2% with 4.</p>"
+    },
+    {
+      "id": "good-coverage",
+      "topic": "skills",
+      "badge": "data",
+      "q": "What should I look out for to get good skill coverage?",
+      "a": "<b>Mix cooldowns, cover the opening, and check where the gaps fall</b>, not just the percentage.",
+      "why": "<ul><li>Two skills with the same cooldown overlap every time.</li><li>Each skill first fires one cooldown in, so bring a 15–18 second cooldown for the opening.</li><li>A gap in a dense section or special skill window costs more than one in a quiet part.</li><li>Use frequency nodes to shift timing, one at a time.</li><li>Skills fire about 46–55% of the time, so coverage is a best-case plan.</li></ul>",
+      "tryIt": true
+    },
+    {
+      "id": "coverage-vs-skill",
+      "topic": "skills",
+      "badge": "estimate",
+      "q": "Should I sacrifice coverage for an active skill with a better score bonus?",
+      "a": "<b>For small gaps, yes.</b> 15 more points of Score Up (e.g. 100% vs 85%) is worth about 8 seconds of gap on a 150-second song.",
+      "why": "<p>A skill with 37% uptime and +15 points raises your song-wide average by about 5.5 points. Each uncovered second costs about 0.7 points of average. That holds only while the stronger skill is the top one on.</p>",
+      "when": "Protect coverage on special skill windows and dense sections, where gaps cost more.",
+      "tryIt": true
+    },
+    {
+      "id": "board-setups",
+      "topic": "boards",
+      "badge": "writing",
+      "q": "Are there board setups (leader + card + all member + content) I should aim for?",
+      "a": "Being written. The Player Guide’s Holoboard templates will answer this."
+    },
+    {
+      "id": "breakpoints",
+      "topic": "boards",
+      "badge": "writing",
+      "q": "Are there good breakpoints and character levels to aim for?",
+      "a": "Being written."
+    },
+    {
+      "id": "frequency-nodes",
+      "topic": "boards",
+      "badge": "confirmed",
+      "q": "Why do my Score Bonus and Unit Score drop when I unlock a frequency-up node?",
+      "a": "<b>The node shifts every later activation.</b> Unlock frequency nodes one at a time and lock any that lower Score Bonus.",
+      "why": "<p>Each node shortens that member’s cooldown by about 4%. Windows that filled gaps can slide on top of another member’s skill, leaving new gaps. In Unit Score, overlapping skills with combined activation chance over 100% are averaged, so a weaker skill on top of a stronger one pulls it down.</p>",
+      "when": "On KANADE, the best cores peaked at 4 frequency nodes; more never helped.",
+      "tryIt": true
+    },
+    {
+      "id": "target-song",
+      "topic": "songs",
+      "badge": "confirmed",
+      "q": "If I want to score high on a certain song, what should I consider?",
+      "a": "<b>Power first, then the song’s type and singers, then skill timing.</b>",
+      "why": "<ol><li>Overall Power: every note scales with it.</li><li>Yellow Score Bonus nodes of the song’s type (solo, group, all) on the singers’ boards, up to 10%. Singers don’t need to be in your unit.</li><li>Skills on during the song’s dense sections.</li><li>Special skill activation points.</li><li>Difficulty multiplier.</li></ol>",
+      "tryIt": true
+    },
+    {
+      "id": "lower-difficulty",
+      "topic": "songs",
+      "badge": "estimate",
+      "q": "Should I push score on a lower difficulty if I can’t full combo the higher one?",
+      "a": "<b>Usually no: stay on the harder chart.</b> Its lead survives several combo breaks. Check your own song below.",
+      "why": "<p>Higher difficulty multiplies every note’s score, and longer charts build more combo bonus (up to +10% at 1,000 combo). On a full combo the harder chart scores 3–7% more. A break restarts the combo climb, but on the songs we checked Expert still beat a Hard full combo through 3 to 12 breaks.</p>",
+      "when": "The calculator assumes every other note is Perfect+. Losing many notes to Greats or misses, or breaking combo while a combo-gated active skill is on, favours the easier chart.",
+      "calc": "difficulty"
+    },
+    {
+      "id": "new-event",
+      "topic": "events",
+      "badge": "writing",
+      "q": "How do I prepare for an event with new cards and songs?",
+      "a": "Being written. The upcoming Player Guide will cover event preparation step by step, by player style and event format."
+    }
+  ]
+}

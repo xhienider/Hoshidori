@@ -3,6 +3,7 @@ import { evaluateLeaderCondition, resolveEffectRecipients } from './js/skillEngi
 import { openMaterialsPage } from './js/materialsPage.js';
 import { readTrackerAccount, trackerCharacterIds, trackerAreaPositions, syncAreaIntoSet } from './js/materials.js';
 import { openRankPage } from './js/rankPage.js';
+import { openFaqPage, openFaqFromHash } from './js/faqPage.js';
 import {
   computeUnit,
   mapSpecialSkillsToSong,
@@ -2983,7 +2984,7 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
   feverCheckbox.type = 'checkbox';
   feverCheckbox.checked = true;
   feverRow.appendChild(feverCheckbox);
-  feverRow.appendChild(document.createTextNode('Prioritize fever windows (cover those first, then the rest of the song)'));
+  feverRow.appendChild(document.createTextNode('Prioritize special skill windows (cover those first, then the rest of the song)'));
   wrap.appendChild(feverRow);
 
   const btn = document.createElement('button');
@@ -3065,7 +3066,7 @@ function renderFrequencyNodePanel(unit, song, duration, specialResults) {
       const feverPill = rec.isFullFeverCoverage
         ? '<span class="pill met">100% SPECIAL SKILL COVERAGE</span>'
         : `<span class="pill unmet">${rec.feverCoveragePercent.toFixed(1)}% SPECIAL SKILL COVERAGE</span>`;
-      feverLine = `<div class="effect-detail" style="margin-bottom:4px;">${feverPill} <span style="margin-left:8px;">across the song's 5 fever windows (${rec.feverTotalSeconds.toFixed(1)}s total) \u2014 prioritized ahead of overall coverage.</span></div>`;
+      feverLine = `<div class="effect-detail" style="margin-bottom:4px;">${feverPill} <span style="margin-left:8px;">across the song's 5 special skill windows (${rec.feverTotalSeconds.toFixed(1)}s total) \u2014 prioritized ahead of overall coverage.</span></div>`;
     }
 
     const costSummary = [
@@ -6346,6 +6347,9 @@ async function main() {
   document.getElementById('song-ranking-btn').addEventListener('click', openSongRankingView);
   document.getElementById('board-manager-btn').addEventListener('click', openGreenYellowBoardManager);
   document.getElementById('materials-btn').addEventListener('click', openMaterialsPage);
+  document.getElementById('faq-btn').addEventListener('click', () => openFaqPage());
+  window.addEventListener('hashchange', openFaqFromHash);
+  openFaqFromHash(); // index.html#faq or #faq-<question id> opens the FAQ directly
   const syncTeamBtn = document.getElementById('sync-team-btn');
   syncTeamBtn.title = 'Replaces the leader\u2019s Red board and every unit member\u2019s Blue board with what the Materials Tracker has (one-way). Saved presets are not changed.';
   syncTeamBtn.addEventListener('click', async () => {

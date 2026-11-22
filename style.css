@@ -2748,3 +2748,97 @@ header.masthead {
 .source-toggle-btn.active { background: color-mix(in srgb, var(--green-node) 18%, transparent); color: var(--green-node); }
 .source-note { font-family: var(--font-mono); font-size: 10px; color: var(--text-faint); margin-left: 4px; cursor: help; }
 .source-note.incomplete { color: var(--orange, #f59e0b); }
+
+/* ---------- Player FAQ (js/faqPage.js, content in data/faq.json) ---------- */
+.faq-body { max-width: 900px; margin: 0 auto; }
+.faq-tools { position: sticky; top: 58px; z-index: 1; background: var(--bg); padding: 4px 0 12px; }
+.faq-search {
+  width: 100%; font: 15px var(--font-body); color: var(--text); background: var(--panel);
+  border: 1px solid var(--line); border-radius: 9px; padding: 10px 12px; min-height: 42px;
+}
+.faq-search:focus { outline: 2px solid var(--orange-dim); border-color: var(--orange); }
+.faq-chips { display: flex; gap: 8px; overflow-x: auto; padding-top: 10px; scrollbar-width: none; }
+.faq-chip {
+  flex: none; background: transparent; border: 1px solid var(--line); color: var(--text-dim);
+  font: 12.5px var(--font-body); padding: 6px 12px; border-radius: 999px; cursor: pointer; min-height: 34px;
+}
+.faq-chip:hover { color: var(--text); }
+.faq-chip.on { background: var(--orange); border-color: var(--orange); color: #070b12; font-weight: 600; }
+.faq-legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--text-dim); margin: 2px 0 8px; }
+.faq-group {
+  font-family: var(--font-display); font-weight: 600; font-size: 12.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-dim); margin: 26px 0 10px;
+}
+.faq-card { background: var(--panel); border: 1px solid var(--line); border-radius: 11px; margin-bottom: 10px; }
+.faq-card.open { border-color: #33496a; }
+.faq-q {
+  display: flex; gap: 12px; align-items: flex-start; width: 100%; text-align: left; background: none;
+  border: 0; color: var(--text); font: 600 15px/1.4 var(--font-body); padding: 14px 16px; cursor: pointer;
+}
+.faq-q:focus-visible { outline: 2px solid var(--blue-bright); border-radius: 11px; }
+.faq-q-text { flex: 1; }
+.faq-caret { flex: none; color: var(--text-faint); transition: transform 0.2s; margin-top: 1px; font-size: 12px; }
+.faq-card.open .faq-caret { transform: rotate(90deg); color: var(--orange); }
+.faq-short { padding: 0 16px 14px; margin-top: -4px; font-size: 14px; line-height: 1.55; }
+.faq-short b { color: var(--orange); font-weight: 600; }
+.faq-more { display: none; margin: 0 16px; padding-bottom: 16px; border-top: 1px solid var(--line); font-size: 14px; line-height: 1.55; }
+.faq-card.open .faq-more { display: block; }
+.faq-h {
+  font-family: var(--font-display); font-weight: 600; font-size: 11.5px; letter-spacing: 0.06em;
+  text-transform: uppercase; color: var(--text-dim); margin: 14px 0 4px;
+}
+.faq-part { color: #cfdbe8; }
+.faq-part p { margin: 6px 0; }
+.faq-part ul, .faq-part ol { padding-left: 20px; margin: 6px 0; }
+.faq-part .scroll { overflow-x: auto; }
+.faq-part table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }
+.faq-part th, .faq-part td { text-align: left; padding: 6px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+.faq-part th { color: var(--text-dim); font-weight: 500; }
+.faq-part td.n, .faq-part th.n { text-align: right; white-space: nowrap; }
+.faq-foot { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 14px; }
+.faq-badge {
+  flex: none; font: 500 10.5px var(--font-mono); padding: 2px 7px; border-radius: 5px; border: 1px solid;
+  white-space: nowrap; margin-top: 2px;
+}
+.faq-b-confirmed { color: var(--green-node); border-color: #24603d; }
+.faq-b-data { color: var(--blue-bright); border-color: #24476b; }
+.faq-b-estimate { color: #ffb84d; border-color: #6b5124; }
+.faq-b-writing { color: var(--text-faint); border-color: var(--line); }
+.faq-empty { color: var(--text-dim); text-align: center; padding: 40px 0; }
+.faq-footnote { font-size: 11.5px; color: var(--text-faint); margin-top: 18px; }
+.faq-calc { background: var(--panel-raised); border: 1px solid var(--line); border-radius: 10px; padding: 14px; margin: 12px 0 4px; }
+.faq-calc-row { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.faq-calc-label { display: block; font-size: 11.5px; color: var(--text-dim); margin-bottom: 4px; }
+.faq-calc-select {
+  width: 100%; min-height: 38px; font: 14px var(--font-body); background: var(--panel); color: var(--text);
+  border: 1px solid var(--line); border-radius: 7px; padding: 0 8px;
+}
+.faq-calc-range { width: 100%; min-height: 38px; accent-color: var(--orange); }
+.faq-verdict { font-family: var(--font-display); font-weight: 600; font-size: 24px; line-height: 1.15; margin: 14px 0 10px; }
+.faq-bars { display: grid; gap: 8px; }
+.faq-bar { display: grid; grid-template-columns: 10em minmax(0, 1fr) 4.5em; gap: 10px; align-items: center; font-size: 12.5px; }
+.faq-track { display: block; height: 12px; background: var(--panel); border-radius: 4px; overflow: hidden; }
+.faq-fill { display: block; height: 100%; border-radius: 4px; transition: width 0.3s; }
+.faq-fill-easy { background: var(--blue-mid); }
+.faq-fill-hard { background: var(--blue-bright); }
+.faq-fill-broken { background: var(--orange); }
+.faq-bar-value { text-align: right; font-family: var(--font-mono); }
+.faq-calc-note { font-size: 11.5px; color: var(--text-faint); margin: 10px 0 0; }
+.faq-toast {
+  position: fixed; left: 50%; bottom: 24px; transform: translateX(-50%); background: var(--panel-raised);
+  border: 1px solid var(--orange-dim); color: var(--text); padding: 9px 14px; border-radius: 8px; font-size: 13px;
+  opacity: 0; transition: opacity 0.2s; pointer-events: none; z-index: 101;
+}
+.faq-toast.show { opacity: 1; }
+@media (max-width: 600px) {
+  .faq-page { padding: 14px 14px 60px; }
+  .faq-page .compare-page-close { white-space: nowrap; padding: 8px 10px; }
+  .faq-tools { top: 0; position: static; }
+  .faq-calc-row { grid-template-columns: 1fr; }
+  .faq-bar { grid-template-columns: 7.5em minmax(0, 1fr) 4em; }
+  .faq-q .faq-badge { display: none; }
+  .faq-card.open .faq-q .faq-badge { display: inline-block; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .faq-caret, .faq-fill, .faq-toast { transition: none; }
+}
