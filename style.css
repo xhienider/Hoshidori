@@ -2789,6 +2789,7 @@ header.masthead {
 }
 .faq-part { color: #cfdbe8; }
 .faq-part p { margin: 6px 0; }
+.faq-part a { color: var(--blue-bright); }
 .faq-part ul, .faq-part ol { padding-left: 20px; margin: 6px 0; }
 .faq-part .scroll { overflow-x: auto; }
 .faq-part table { width: 100%; border-collapse: collapse; font-size: 13px; margin: 8px 0; }

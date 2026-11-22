@@ -258,6 +258,25 @@ export async function openFaqPage(initialId = null) {
     render();
   });
 
+  // Links between answers (<a href="#faq-<id>"> in faq.json): jump in place
+  // instead of letting the browser change the hash, and clear any filter
+  // that would hide the target question.
+  list.addEventListener('click', (e) => {
+    const a = e.target.closest('a[href^="#faq-"]');
+    if (!a) return;
+    e.preventDefault();
+    const id = a.getAttribute('href').slice('#faq-'.length);
+    if (!faq.items.some((it) => it.id === id)) return;
+    open.add(id);
+    topic = 'all';
+    query = '';
+    search.value = '';
+    for (const c of chips.children) c.classList.toggle('on', c.dataset.key === 'all');
+    render();
+    overlay.querySelector(`#faq-${CSS.escape(id)}`)?.scrollIntoView({ block: 'start', behavior: 'smooth' });
+    setHash(id);
+  });
+
   render();
   if (initialId) {
     const target = overlay.querySelector(`#faq-${CSS.escape(initialId)}`);

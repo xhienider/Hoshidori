@@ -104,6 +104,17 @@
       "why": "<h4>Overall Power adds</h4><ul><li>Member Parameter (stats from level and Bloom)</li><li>Outfit Skill (leader stat buff)</li><li>Passive Skill (stat passives)</li><li>Holomem Board Bonus (Red, Blue, Green)</li><li>Memory Bonus and Member Power-Up Bonus</li></ul><h4>Score Bonus adds</h4><p>Active, Outfit (leader Score Support), Passive (Score Support), Board and Special lines.</p><p>Per note: Overall Power × difficulty multiplier × (1 + combo bonus) × (1 + active skill bonus) × (1 + Yellow bonus).</p>"
     },
     {
+      "id": "overall-power",
+      "topic": "numbers",
+      "badge": "estimate",
+      "q": "How do I increase Overall Power efficiently?",
+      "a": "<b>Fix team choices first, then level, then boards.</b> Matching main stats and keeping passives active cost nothing; levels and a strong leader buff are the biggest levers.",
+      "why": "<div class=\"scroll\"><table><tr><th>Lever</th><th class=\"n\">Overall Power</th></tr><tr><td>Leader buff +80% → +130% (same stat)</td><td class=\"n\">+11 to +15%</td></tr><tr><td>Red board on the leader (stats only)</td><td class=\"n\">+17%, +23% if she sings</td></tr><tr><td>Whole unit Lv70 → Lv80</td><td class=\"n\">+10.5 to +12%</td></tr><tr><td>Blue Stats Only on all five members</td><td class=\"n\">+8%</td></tr><tr><td>A stat passive switched on (2 members, main stat)</td><td class=\"n\">+3.7 to +4.7%</td></tr><tr><td>One card: 4★ max → 5★ Lv80</td><td class=\"n\">+3.1 to +3.5%</td></tr><tr><td>One card: main stat matches the leader (vs weakest stat)</td><td class=\"n\">+2.0 to +2.6%</td></tr><tr><td>One card: +10 levels</td><td class=\"n\">+2.0 to +2.4%</td></tr><tr><td>One card: Bloom 2 (+10% stats)</td><td class=\"n\">+1.9 to +2.1%</td></tr><tr><td>+1% Member Power-Up Bonus</td><td class=\"n\">+0.9 to +1.0%</td></tr><tr><td>Green gen bonus (2 gen-mates in unit)</td><td class=\"n\">+0.7 to +0.9%</td></tr><tr><td>+1% Memory Bonus</td><td class=\"n\">+0.4 to +0.6%</td></tr></table></div><p>Ranges run from a fresh account (no boards, memory or power-up) to a built one (full Red and Blue, memory 5.6%, power-up 10%).</p>",
+      "how": "<ul><li>The leader buff multiplies the stat it targets on all five members, which is why matching main stats and a big buff matter so much.</li><li>Each level adds the same stats (about 250 per level on a 5★), but EXP cost climbs steeply: Lv70→80 costs about 4× the EXP of Lv40→50. Raise your lowest cards first.</li><li>Board stats, Memory Bonus and passives add to Overall Power without boosting the leader buff, so each one dilutes the others a little as your account grows.</li></ul>",
+      "when": "Overall Power isn’t the whole story. Yellow (+7.5–10% song score), Score Support from Red boards and leaders, and Bloom 1 all raise your score without moving Overall Power. See <a href=\"#faq-board-setups\">board setups</a> for where board points pay off most.",
+      "tryIt": true
+    },
+    {
       "id": "bonus-vs-score",
       "topic": "numbers",
       "badge": "confirmed",
@@ -162,9 +173,13 @@
     {
       "id": "board-setups",
       "topic": "boards",
-      "badge": "writing",
-      "q": "Are there board setups (leader + card + all member + content) I should aim for?",
-      "a": "Being written. The Player Guide’s Holoboard templates will answer this."
+      "badge": "estimate",
+      "q": "Are there board setups (leader + member + all member + content) I should aim for?",
+      "a": "<b>Red for leaders, Yellow for singers, Green for gens, Blue for the rest.</b> Board points belong to each holomem, so decide per holomem: a leader fills Red first, then Yellow; a member fills Yellow, then Green’s gen bonus, then Blue.",
+      "why": "<div class=\"scroll\"><table><tr><th>Preset</th><th class=\"n\">Points</th><th class=\"n\">Song score</th><th class=\"n\">Per 10 pts</th></tr><tr><td>Red Singer – Minimum (leader sings)</td><td class=\"n\">91</td><td class=\"n\">+24%</td><td class=\"n\">+2.7%</td></tr><tr><td>Red Singer – Full Bonus (leader sings)</td><td class=\"n\">141</td><td class=\"n\">+35%</td><td class=\"n\">+2.5%</td></tr><tr><td>Yellow Solo 10% (her solo songs)</td><td class=\"n\">35</td><td class=\"n\">+7.5%</td><td class=\"n\">+2.1%</td></tr><tr><td>Red Non-Singer – Full Bonus</td><td class=\"n\">126</td><td class=\"n\">+25%</td><td class=\"n\">+2.0%</td></tr><tr><td>Yellow Unit Only (unit songs)</td><td class=\"n\">28</td><td class=\"n\">+4%</td><td class=\"n\">+1.4%</td></tr><tr><td>Green Gen Bonus Only (2 gen-mates in unit)</td><td class=\"n\">20</td><td class=\"n\">+0.9 to +1.4%</td><td class=\"n\">+0.5 to +0.7%</td></tr><tr><td>Blue Stats Only (one member)</td><td class=\"n\">72</td><td class=\"n\">+2.6%</td><td class=\"n\">+0.4%</td></tr><tr><td>Green Minimum</td><td class=\"n\">5</td><td class=\"n\">~0%</td><td class=\"n\">~0%</td></tr></table></div>",
+      "how": "<ul><li><b>Red</b> applies to all five members and adds up to +30% Score Support on top of stats, so it is the biggest lever. Its singer nodes only work when the leader sings the song; otherwise take Non-Singer – Full Bonus.</li><li><b>Yellow</b> multiplies every note’s score directly (+7.5% Yellow = +7.5% song score), and works even when the singer isn’t in your unit. It doesn’t show in Overall Power, and Unit Score undersells it.</li><li><b>Green’s gen bonus</b> boosts every member of that gen, up to 900 each across your roster, for 20 points.</li><li><b>Blue</b> adds the most Overall Power per holomem but only boosts that one card, and does nothing while she is your leader.</li></ul><p>Figures: each preset’s nodes from the game data, on a Lv80 unit with a +130% leader, memory 5.6% and power-up 10%; skill effects are medians of 300 random 5★ units.</p>",
+      "when": "Yellow’s Solo 10% preset reaches 7.5% from nodes; the last 2.5% comes from connect effects. If a holomem is the only one from her gen in your unit, Blue beats Green’s gen bonus for her.",
+      "tryIt": true
     },
     {
       "id": "breakpoints",
@@ -189,7 +204,7 @@
       "badge": "confirmed",
       "q": "If I want to score high on a certain song, what should I consider?",
       "a": "<b>Power first, then the song’s type and singers, then skill timing.</b>",
-      "why": "<ol><li>Overall Power: every note scales with it.</li><li>Yellow Score Bonus nodes of the song’s type (solo, group, all) on the singers’ boards, up to 10%. Singers don’t need to be in your unit.</li><li>Skills on during the song’s dense sections.</li><li>Special skill activation points.</li><li>Difficulty multiplier.</li></ol>",
+      "why": "<ol><li>Overall Power: every note scales with it (see <a href=\"#faq-overall-power\">how to raise it efficiently</a>). It doesn’t include Yellow or Score Support, so don’t judge boards by it alone (see <a href=\"#faq-board-setups\">board setups</a>).</li><li>Yellow Score Bonus nodes of the song’s type (solo, group, all) on the singers’ boards, up to 10%. Singers don’t need to be in your unit.</li><li>Skills on during the song’s dense sections.</li><li>Special skill activation points.</li><li>Difficulty multiplier.</li></ol>",
       "tryIt": true
     },
     {
