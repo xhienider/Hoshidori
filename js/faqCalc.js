@@ -82,3 +82,44 @@ export function compareDifficulties(song, density, harder, easier, breaks) {
     gapPct: pct(harderBroken) - 100,
   };
 }
+
+/** Typical special skill window used for the activation-point table (5★ specials last 9–14 s). */
+export const SPECIAL_WINDOW_SECONDS = 12;
+
+/**
+ * For each of a song's special skill activation points (music.json
+ * `feverSeconds`): the combo when it fires (assuming a clean full combo up to
+ * then), the notes inside a SPECIAL_WINDOW_SECONDS window, and the window's
+ * relative value = sum over those notes of (1 + combo bonus). A special only
+ * boosts the active skill that is on, so `value` is how much a special placed
+ * there can earn relative to the other points, not an absolute score.
+ * @returns {null | {points: {index, t, combo, notes, value, pctOfBest}[], best: number, worst: number}}
+ */
+export function activationPointProfile(song, density, difficulty, windowSeconds = SPECIAL_WINDOW_SECONDS) {
+  const perSecond = density?.[difficulty]?.perSecond;
+  const times = song?.feverSeconds;
+  if (!perSecond || !times?.length) return null;
+  const counts = perSecond.map((e) => (e ? Number(e[0]) || 0 : 0));
+  const before = [0];
+  for (const c of counts) before.push(before[before.length - 1] + c);
+  const points = times.map((t, index) => {
+    const start = Math.max(0, Math.floor(t));
+    const end = Math.min(counts.length, start + windowSeconds);
+    const combo = before[Math.min(start, counts.length)];
+    let c = combo;
+    let notes = 0;
+    let value = 0;
+    for (let s = start; s < end; s++) {
+      for (let k = 0; k < counts[s]; k++) {
+        value += 1 + comboBonusAt(c);
+        c++;
+        notes++;
+      }
+    }
+    return { index: index + 1, t: Number(t), combo, notes, value };
+  });
+  const maxValue = Math.max(...points.map((p) => p.value)) || 1;
+  for (const p of points) p.pctOfBest = (p.value / maxValue) * 100;
+  const order = [...points].sort((a, b) => b.value - a.value);
+  return { points, best: order[0].index, worst: order[order.length - 1].index };
+}

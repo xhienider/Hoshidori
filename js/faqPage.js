@@ -10,7 +10,7 @@
  * with that question expanded (the "Copy link" button produces these).
  * Answer HTML in faq.json is site-authored content and is inserted as-is.
  */
-import { compareDifficulties } from './faqCalc.js';
+import { compareDifficulties, activationPointProfile, SPECIAL_WINDOW_SECONDS } from './faqCalc.js';
 
 const BADGES = {
   confirmed: ['faq-b-confirmed', 'Confirmed', 'checked in-game'],
@@ -181,6 +181,7 @@ export async function openFaqPage(initialId = null) {
     if (hasMore) {
       const more = el('div', 'faq-more');
       if (item.calc === 'difficulty') more.appendChild(buildDifficultyCalc());
+      if (item.calc === 'activation') more.appendChild(buildActivationCalc());
       for (const [key, title] of [
         ['why', 'Why'],
         ['how', 'How we worked it out'],
@@ -371,5 +372,96 @@ function buildDifficultyCalc() {
       verdict.textContent = `Couldn’t load songs (${err.message}).`;
     });
   for (const c of [songSel, pairSel, breaks]) c.addEventListener('input', update);
+  return box;
+}
+
+// ---------------------------------------------------------------------------
+// Live table: what each special skill activation point is worth in one song
+// ---------------------------------------------------------------------------
+function buildActivationCalc() {
+  const box = el('div', 'faq-calc');
+  const row = el('div', 'faq-calc-row faq-calc-row-2');
+  const songSel = el('select', 'faq-calc-select');
+  songSel.id = 'faq-act-song';
+  const diffSel = el('select', 'faq-calc-select');
+  diffSel.id = 'faq-act-diff';
+  for (const d of ['expert', 'hard', 'normal', 'easy']) {
+    const o = el('option', null, cap(d));
+    o.value = d;
+    diffSel.appendChild(o);
+  }
+  for (const [text, control] of [
+    ['Song', songSel],
+    ['Difficulty', diffSel],
+  ]) {
+    const wrap = el('div');
+    const label = el('label', 'faq-calc-label', text);
+    label.htmlFor = control.id;
+    wrap.append(label, control);
+    row.appendChild(wrap);
+  }
+  const verdict = el('div', 'faq-verdict', 'Loading songs…');
+  const table = el('div', 'faq-act-table');
+  const note = el(
+    'p',
+    'faq-calc-note',
+    `Value = notes in the ${SPECIAL_WINDOW_SECONDS} seconds after each point, weighted by combo bonus, as a share of the best point. Combo assumes a clean full combo up to that point; under 100 switches off combo-100 specials’ activation-chance bonus. Members’ specials fire in unit order.`
+  );
+  box.append(row, verdict, table, note);
+
+  let songs = [];
+  let seq = 0;
+  async function update() {
+    const song = songs.find((s) => s.id === songSel.value);
+    if (!song) return;
+    const mine = ++seq;
+    verdict.textContent = 'Loading chart…';
+    const density = await loadDensity(song.id);
+    if (mine !== seq) return;
+    const r = density ? activationPointProfile(song, density, diffSel.value) : null;
+    table.replaceChildren();
+    if (!r) {
+      verdict.textContent = 'No chart data for this song yet.';
+      return;
+    }
+    const best = r.points[r.best - 1];
+    const worst = r.points[r.worst - 1];
+    const gap = worst.value ? (best.value / worst.value - 1) * 100 : 0;
+    verdict.textContent = `Strongest: point ${r.best}, worth ${gap.toFixed(0)}% more than point ${r.worst}`;
+    const head = el('div', 'faq-act-row faq-act-head');
+    for (const h of ['Point', 'Time', 'Combo', 'Notes', 'Value']) head.appendChild(el('span', null, h));
+    table.appendChild(head);
+    for (const p of r.points) {
+      const line = el('div', `faq-act-row${p.index === r.best ? ' faq-act-best' : ''}`);
+      const mm = Math.floor(p.t / 60);
+      const ss = String(Math.floor(p.t % 60)).padStart(2, '0');
+      const combo = el('span', p.combo < 100 ? 'faq-act-low' : null, p.combo < 100 ? `${p.combo} (<100)` : String(p.combo));
+      const valueCell = el('span', 'faq-act-value');
+      const track = el('span', 'faq-track');
+      const fill = el('span', `faq-fill ${p.index === r.best ? 'faq-fill-broken' : 'faq-fill-hard'}`);
+      fill.style.width = `${Math.max(4, p.pctOfBest)}%`;
+      track.appendChild(fill);
+      valueCell.append(track, el('span', 'faq-bar-value', `${p.pctOfBest.toFixed(0)}%`));
+      line.append(el('span', null, String(p.index)), el('span', null, `${mm}:${ss}`), combo, el('span', null, String(p.notes)), valueCell);
+      table.appendChild(line);
+    }
+  }
+
+  loadMusic()
+    .then((music) => {
+      songs = music.filter((s) => s.feverSeconds?.length).sort((a, b) => a.title.localeCompare(b.title));
+      for (const s of songs) {
+        const o = el('option', null, s.title);
+        o.value = s.id;
+        songSel.appendChild(o);
+      }
+      const preferred = songs.find((s) => s.id === 'm0049') || songs[0];
+      if (preferred) songSel.value = preferred.id;
+      update();
+    })
+    .catch((err) => {
+      verdict.textContent = `Couldn’t load songs (${err.message}).`;
+    });
+  for (const c of [songSel, diffSel]) c.addEventListener('input', update);
   return box;
 }

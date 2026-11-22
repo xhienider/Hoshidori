@@ -117,9 +117,12 @@
       "topic": "skills",
       "badge": "estimate",
       "q": "Does the position of my members in my unit matter?",
-      "a": "<b>Yes.</b> Order members so each special skill lands at a special skill activation point where an active skill is likely on, and put the member you want to win ties earlier.",
-      "why": "<p>Each member’s special fires at one of the song’s five special skill activation points, in unit order. If two active skills give the same bonus and started in the same second, the earlier member wins (confirmed).</p>",
-      "when": "Position doesn’t change Overall Power or which passives switch on."
+      "a": "<b>Yes.</b> Put your strongest special skills on the song’s densest special skill activation points (often the 4th and 5th, but check the song), and keep combo-100 specials out of the first position.",
+      "why": "<p>Members’ special skills fire at the song’s five special skill activation points in unit order: first member at the first point, and so on. A special boosts whatever active skill is on for 10–14 seconds, so where it lands decides how many notes it boosts.</p>",
+      "when": "A special is wasted if no active skill is on during its window, so plan coverage around the activation points too. If two active skills tie on bonus, the member earlier in the unit wins. Life-gated specials (life 600 or 1,000+) are the reverse of combo-gated ones: safer early, before you take damage.",
+      "how": "<ul><li><b>Density matters most.</b> Across 44 songs on Expert, the best activation point is worth a median 40% more than the worst (up to about 3×). Point 4 or 5 is strongest in 26 of 44 songs, but every point wins somewhere.</li><li><b>Combo conditions:</b> 5 specials need combo 100+ for their +50–55% activation-chance bonus. On Expert, combo is still under 100 at the first point in 18 of 44 songs (34 of 44 on Hard), even with a clean start. By the second point it’s past 100 on every Expert song. The main Score Up boost still works either way.</li><li><b>Combo bonus</b> gives the 5th point about 5–6% more than the 1st. A useful tiebreaker, much smaller than density.</li></ul>",
+      "calc": "activation",
+      "tryIt": true
     },
     {
       "id": "specials",
