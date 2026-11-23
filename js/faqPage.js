@@ -17,6 +17,7 @@ import {
   singleBreakCostCurve,
   dangerZones,
   compareWithBreakMap,
+  chartFactorAt,
 } from './faqCalc.js';
 
 const BADGES = {
@@ -329,7 +330,7 @@ function buildDifficultyCalc() {
     row.appendChild(wrap);
   }
 
-  const hint = el('p', 'faq-map-hint', 'Tap the timeline where you usually break combo on the harder chart. Tap a marker to remove it.');
+  const hint = el('p', 'faq-map-hint', 'Tap the timeline where you usually break combo on the harder chart (tap a marker to remove it), then set roughly how many Greats you get on each chart.');
   const fig = el('div', 'faq-map');
   const svg = svgEl('svg', { role: 'img', 'aria-label': 'Notes per second on the harder chart, with special skill activation points and your combo breaks' });
   fig.appendChild(svg);
@@ -347,15 +348,38 @@ function buildDifficultyCalc() {
   clearBtn.type = 'button';
   actions.append(zoneBtn, clearBtn);
 
+  // Greats: how many notes on each chart are judged Great instead of Perfect
+  const greatRow = el('div', 'faq-calc-row faq-calc-row-2 faq-great-row');
+  const greatHi = el('input', 'faq-calc-range');
+  greatHi.type = 'range';
+  greatHi.id = 'faq-great-hi';
+  const greatLo = el('input', 'faq-calc-range');
+  greatLo.type = 'range';
+  greatLo.id = 'faq-great-lo';
+  const greatHiLabel = el('label', 'faq-calc-label');
+  greatHiLabel.htmlFor = greatHi.id;
+  const greatLoLabel = el('label', 'faq-calc-label');
+  greatLoLabel.htmlFor = greatLo.id;
+  for (const [label, input] of [
+    [greatHiLabel, greatHi],
+    [greatLoLabel, greatLo],
+  ]) {
+    input.min = '0';
+    input.value = '0';
+    const wrap = el('div');
+    wrap.append(label, input);
+    greatRow.appendChild(wrap);
+  }
+
   const verdict = el('div', 'faq-verdict', 'Loading songs…');
   const summary = el('p', 'faq-map-summary');
   const bars = el('div', 'faq-bars');
   const note = el(
     'p',
     'faq-calc-note',
-    'Estimate: every other note Perfect+, same unit and skills, skills not weighted. A break costs the combo bonus on the notes after it until your combo climbs back, so mid-song breaks cost most and extra breaks in the same stretch cost little. Bars are zoomed in to show the gap.'
+    'Estimate: same unit and skills, skills not weighted. A Great scores 80% of a Perfect (Perfect and Perfect+ score the same) and only taps and hold starts can be Great; Greats keep your combo and are spread evenly, so dense stretches get more of them. A break costs the combo bonus on the notes after it until your combo climbs back, so mid-song breaks cost most and extra breaks in the same stretch cost little. Bars are zoomed in to show the gap.'
   );
-  box.append(row, hint, fig, legend, actions, verdict, summary, bars, note);
+  box.append(row, hint, fig, legend, actions, greatRow, verdict, summary, bars, note);
 
   let songs = [];
   let current = null; // {song, density, hi, lo, counts, cost, zones}
@@ -424,7 +448,7 @@ function buildDifficultyCalc() {
     bars.replaceChildren();
     if (!current) return;
     const { song, density, hi, lo } = current;
-    const r = compareWithBreakMap(song, density, hi, lo, breaks);
+    const r = compareWithBreakMap(song, density, hi, lo, breaks, Number(greatHi.value), Number(greatLo.value));
     if (!r) {
       verdict.textContent = 'This song doesn’t have both charts.';
       summary.textContent = '';
@@ -433,19 +457,25 @@ function buildDifficultyCalc() {
     const H = cap(hi);
     const L = cap(lo);
     const n = r.harderBroken.breaksPlaced;
-    const s = n === 1 ? '' : 's';
-    verdict.textContent =
-      n === 0
-        ? `${H} full combo scores ${r.gapPct.toFixed(1)}% more than ${L}`
-        : r.gapPct >= 0
-          ? `${H} with ${n === 1 ? 'this break' : `these ${n} breaks`} still wins by ${r.gapPct.toFixed(1)}%`
-          : `Play ${L}: ${H} with ${n === 1 ? 'this break' : `these ${n} breaks`} scores ${(-r.gapPct).toFixed(1)}% less`;
-    summary.textContent =
-      n === 0 ? 'No breaks placed yet.' : `${n === 1 ? 'This break costs' : `These ${n} breaks cost`} ${r.breakCostPct.toFixed(1)}% of your ${H} full-combo score.`;
+    const gH = r.harderBroken.greatsPlaced;
+    const gL = r.easier.greatsPlaced;
+    const plural = (k, word) => `${k} ${word}${k === 1 ? '' : 's'}`;
+    greatHiLabel.textContent = `Greats on ${H}: ${gH} (${((gH / r.harderBroken.notes) * 100).toFixed(0)}% of notes)`;
+    greatLoLabel.textContent = `Greats on ${L}: ${gL} (${((gL / r.easier.notes) * 100).toFixed(0)}% of notes)`;
+    const hiParts = [n && plural(n, 'break'), gH && plural(gH, 'Great')].filter(Boolean).join(' and ');
+    const loPart = gL ? ` with ${plural(gL, 'Great')}` : ' full combo';
+    verdict.textContent = !hiParts
+      ? `${H} full combo scores ${r.gapPct.toFixed(1)}% ${r.gapPct >= 0 ? 'more' : 'less'} than ${L}${gL ? loPart : ''}`
+      : r.gapPct >= 0
+        ? `${H} with ${hiParts} still beats ${L}${loPart} by ${r.gapPct.toFixed(1)}%`
+        : `Play ${L}: ${H} with ${hiParts} scores ${(-r.gapPct).toFixed(1)}% less than ${L}${loPart}`;
+    summary.textContent = !hiParts
+      ? 'No breaks or Greats on the harder chart yet.'
+      : `Your ${hiParts} cost ${r.lossPct.toFixed(1)}% compared with an all-Perfect full combo on ${H}.`;
     const rows = [
-      [`${L} FC (Lv ${r.easier.level})`, 100, 'faq-fill-easy'],
+      [`${L}${gL ? `, ${plural(gL, 'Great')}` : ' FC'} (Lv ${r.easier.level})`, 100, 'faq-fill-easy'],
       [`${H} FC (Lv ${r.harderFc.level})`, r.harderFcPct, 'faq-fill-hard'],
-      [`${H}, ${n} break${s}`, r.harderBrokenPct, 'faq-fill-broken'],
+      [`${H}, yours`, r.harderBrokenPct, 'faq-fill-broken'],
     ];
     const lowV = Math.min(...rows.map((x) => x[1])) - 3;
     const highV = Math.max(...rows.map((x) => x[1]));
@@ -480,6 +510,12 @@ function buildDifficultyCalc() {
     }
     current = { song, density, hi, lo, counts, cost: singleBreakCostCurve(density, hi), zones: dangerZones(counts) };
     breaks = [];
+    const eligibleHi = chartFactorAt(song, density, hi)?.eligibleForGreat ?? 0;
+    const eligibleLo = chartFactorAt(song, density, lo)?.eligibleForGreat ?? 0;
+    greatHi.max = String(Math.min(eligibleHi, 400));
+    greatLo.max = String(Math.min(eligibleLo, 400));
+    greatHi.value = String(Math.min(Number(greatHi.value), Number(greatHi.max)));
+    greatLo.value = String(Math.min(Number(greatLo.value), Number(greatLo.max)));
     draw();
     renderResult();
   }
@@ -537,6 +573,7 @@ function buildDifficultyCalc() {
       verdict.textContent = `Couldn’t load songs (${err.message}).`;
     });
   for (const c of [songSel, pairSel]) c.addEventListener('input', load);
+  for (const c of [greatHi, greatLo]) c.addEventListener('input', renderResult);
   return box;
 }
 

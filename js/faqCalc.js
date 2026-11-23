@@ -14,7 +14,7 @@
  * combo to 0, breaks are spread evenly through the chart, and all notes are
  * weighted equally (per-type chart weights differ by a few percent at most).
  */
-import { comboBonusAt } from './unitEngine.js';
+import { comboBonusAt, NOTE_WEIGHTS_PERFECT_PLUS } from './unitEngine.js';
 
 /** Song-level score multiplier for a difficulty level. */
 export function musicCoefficient(liveScoreCoefficientPermil, level) {
@@ -125,8 +125,14 @@ export function activationPointProfile(song, density, difficulty, windowSeconds 
 }
 
 // ---------------------------------------------------------------------------
-// Break map: combo breaks placed at real moments in the chart
+// Break map: combo breaks (and Greats) placed in a chart, with real note weights
 // ---------------------------------------------------------------------------
+/** LiveNote.json: GREAT scores 800 permil of PERFECT (PERFECT and PERFECT_PLUS
+ *  score the same). Only taps (T) and long starts (LS) have a GREAT row; flicks
+ *  and long ends/relays/continuations are PERFECT or miss. A Great keeps the
+ *  combo going (confirmed in-game by the user, 2026-11-23). */
+export const GREAT_SCORE_RATIO = 0.8;
+const GREAT_ELIGIBLE = new Set(['T', 'LS']);
 
 /** Per-second note counts for one chart, or null. */
 export function perSecondCounts(density, difficulty) {
@@ -135,56 +141,93 @@ export function perSecondCounts(density, difficulty) {
 }
 
 /**
- * Note indices hit by breaks placed at given seconds. Each break lands on the
- * middle note of its second; several breaks in the same second take
- * consecutive notes there (capped at that second's note count). Seconds with
- * no notes can't hold a break and are ignored.
+ * The chart as a flat list of combo-earning notes in time order (within a
+ * second, by type code order - the data has no finer timing): each with its
+ * PERFECT weight, whether it can be judged Great, and its second.
  */
-export function breakNoteIndices(counts, breakSeconds) {
-  const before = [0];
-  for (const c of counts) before.push(before[before.length - 1] + c);
+export function chartNotes(density, difficulty) {
+  const perSecond = density?.[difficulty]?.perSecond;
+  if (!perSecond) return null;
+  const notes = [];
+  const firstIndexOfSecond = [];
+  perSecond.forEach((e, second) => {
+    firstIndexOfSecond.push(notes.length);
+    if (!e || !e[0]) return;
+    const codes = e[1] || {};
+    for (const code of Object.keys(codes).sort()) {
+      const type = code.replace(/!$/, '');
+      const weight = NOTE_WEIGHTS_PERFECT_PLUS[type] ?? 1000;
+      for (let k = 0; k < codes[code]; k++) notes.push({ weight, eligible: GREAT_ELIGIBLE.has(type), second });
+    }
+  });
+  firstIndexOfSecond.push(notes.length);
+  return { notes, firstIndexOfSecond, eligibleCount: notes.filter((n) => n.eligible).length };
+}
+
+/**
+ * Note indices hit by breaks placed at given seconds: the middle note(s) of
+ * that second; several breaks in one second take consecutive notes there.
+ */
+export function breakNoteIndices(chart, breakSeconds) {
   const perSec = new Map();
   for (const s of breakSeconds) perSec.set(s, (perSec.get(s) || 0) + 1);
   const out = new Set();
   for (const [s, k] of perSec) {
-    const n = counts[s] || 0;
+    const start = chart.firstIndexOfSecond[s];
+    const n = (chart.firstIndexOfSecond[s + 1] ?? start) - start;
     if (!n) continue;
     const take = Math.min(k, n);
-    const start = before[s] + Math.max(0, Math.floor((n - take) / 2));
-    for (let i = 0; i < take; i++) out.add(start + i);
+    const first = start + Math.max(0, Math.floor((n - take) / 2));
+    for (let i = 0; i < take; i++) out.add(first + i);
   }
   return out;
 }
 
-/** Average (1 + combo bonus) per note with misses at the given note indices. */
-function comboFactorWithMisses(notes, missAt) {
-  if (!notes) return 0;
-  let combo = 0;
-  let sum = 0;
-  for (let n = 0; n < notes; n++) {
-    if (missAt.has(n)) {
-      combo = 0;
-      continue;
-    }
-    sum += 1 + comboBonusAt(combo);
-    combo++;
-  }
-  return sum / notes;
+/** Indices of `greats` Great-eligible notes spread evenly through the chart. */
+function greatNoteIndices(chart, greats) {
+  const out = new Set();
+  const g = Math.max(0, Math.min(Math.round(greats), chart.eligibleCount));
+  if (!g) return out;
+  const eligible = [];
+  chart.notes.forEach((n, i) => n.eligible && eligible.push(i));
+  for (let k = 0; k < g; k++) out.add(eligible[Math.floor(((k + 0.5) * eligible.length) / g)]);
+  return out;
 }
 
-/** Relative score of a chart with breaks at the given seconds. */
-export function chartFactorAt(song, density, difficulty, breakSeconds = []) {
+/** Weighted average of judgement x (1 + combo bonus) over the chart. */
+function weightedFactor(chart, missAt, greatAt) {
+  let combo = 0;
+  let sum = 0;
+  let total = 0;
+  chart.notes.forEach((n, i) => {
+    total += n.weight;
+    if (missAt.has(i)) {
+      combo = 0;
+      return;
+    }
+    const judgement = greatAt.has(i) ? GREAT_SCORE_RATIO : 1;
+    sum += n.weight * judgement * (1 + comboBonusAt(combo));
+    combo++;
+  });
+  return total ? sum / total : 0;
+}
+
+/** Relative score of a chart with breaks at given seconds and `greats` Greats. */
+export function chartFactorAt(song, density, difficulty, breakSeconds = [], greats = 0) {
   const level = song?.difficultyLevels?.[difficulty];
-  const counts = perSecondCounts(density, difficulty);
-  if (level == null || !counts) return null;
-  const notes = counts.reduce((a, b) => a + b, 0);
-  const missAt = breakNoteIndices(counts, breakSeconds);
+  const chart = chartNotes(density, difficulty);
+  if (level == null || !chart) return null;
+  const missAt = breakNoteIndices(chart, breakSeconds);
+  const greatAt = greatNoteIndices(chart, greats);
+  for (const i of missAt) greatAt.delete(i);
   return {
     difficulty,
     level,
-    notes,
+    notes: chart.notes.length,
+    eligibleForGreat: chart.eligibleCount,
     breaksPlaced: missAt.size,
-    factor: musicCoefficient(song.liveScoreCoefficientPermil, level) * comboFactorWithMisses(notes, missAt),
+    greatsPlaced: greatAt.size,
+    factor: musicCoefficient(song.liveScoreCoefficientPermil, level) * weightedFactor(chart, missAt, greatAt),
   };
 }
 
@@ -193,15 +236,20 @@ export function chartFactorAt(song, density, difficulty, breakSeconds = []) {
  * assuming no other breaks. null for seconds with no notes.
  */
 export function singleBreakCostCurve(density, difficulty) {
-  const counts = perSecondCounts(density, difficulty);
-  if (!counts) return null;
-  const notes = counts.reduce((a, b) => a + b, 0);
-  const fc = comboFactorWithMisses(notes, new Set());
-  return counts.map((n, s) => {
-    if (!n) return null;
-    const f = comboFactorWithMisses(notes, breakNoteIndices(counts, [s]));
-    return ((fc - f) / fc) * 100;
-  });
+  const chart = chartNotes(density, difficulty);
+  if (!chart) return null;
+  const none = new Set();
+  const fc = weightedFactor(chart, none, none);
+  const seconds = chart.firstIndexOfSecond.length - 1;
+  const out = [];
+  for (let s = 0; s < seconds; s++) {
+    if (chart.firstIndexOfSecond[s + 1] === chart.firstIndexOfSecond[s]) {
+      out.push(null);
+      continue;
+    }
+    out.push(((fc - weightedFactor(chart, breakNoteIndices(chart, [s]), none)) / fc) * 100);
+  }
+  return out;
 }
 
 /**
@@ -233,19 +281,19 @@ export function dangerZones(counts, { width = 4, max = 4 } = {}) {
  * Harder chart with breaks at real moments vs a full combo on the easier
  * chart. Percentages are relative to the easier full combo.
  */
-export function compareWithBreakMap(song, density, harder, easier, breakSeconds) {
-  const easierFc = chartFactorAt(song, density, easier, []);
-  const harderFc = chartFactorAt(song, density, harder, []);
-  const harderBroken = chartFactorAt(song, density, harder, breakSeconds);
-  if (!easierFc || !harderFc || !harderBroken || !easierFc.factor) return null;
-  const pct = (x) => (x.factor / easierFc.factor) * 100;
+export function compareWithBreakMap(song, density, harder, easier, breakSeconds, greatsHarder = 0, greatsEasier = 0) {
+  const easierBase = chartFactorAt(song, density, easier, [], greatsEasier);
+  const harderFc = chartFactorAt(song, density, harder, [], 0);
+  const harderBroken = chartFactorAt(song, density, harder, breakSeconds, greatsHarder);
+  if (!easierBase || !harderFc || !harderBroken || !easierBase.factor) return null;
+  const pct = (x) => (x.factor / easierBase.factor) * 100;
   return {
-    easier: easierFc,
+    easier: easierBase,
     harderFc,
     harderBroken,
     harderFcPct: pct(harderFc),
     harderBrokenPct: pct(harderBroken),
     gapPct: pct(harderBroken) - 100,
-    breakCostPct: ((harderFc.factor - harderBroken.factor) / harderFc.factor) * 100,
+    lossPct: ((harderFc.factor - harderBroken.factor) / harderFc.factor) * 100,
   };
 }

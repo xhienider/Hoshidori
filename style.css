@@ -2861,6 +2861,7 @@ header.masthead {
 .faq-key-cost { background: color-mix(in srgb, var(--orange) 45%, transparent); }
 .faq-key-zone { background: #ffb84d; height: 4px; vertical-align: 2px; }
 .faq-key-point { width: 0; height: 10px; border-left: 1px dashed var(--text-dim); border-radius: 0; }
+.faq-great-row { margin-top: 12px; }
 .faq-map-summary { font-size: 13px; color: var(--text-dim); margin: 0 0 10px; }
 @media (max-width: 600px) {
   .faq-page { padding: 14px 14px 60px; }
