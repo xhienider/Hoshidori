@@ -79,6 +79,15 @@
       "tryIt": true
     },
     {
+      "id": "passive-targets",
+      "topic": "unit",
+      "badge": "confirmed",
+      "q": "If more members qualify for a passive than it can buff, which members get it?",
+      "a": "<b>The strongest qualifying members, by what the passive boosts.</b> On a tie, the member earlier in the unit gets it.",
+      "why": "<ul><li><b>Single-stat passive</b> (for example Technique up on 2 members): the qualifying members with the highest value of that stat.</li><li><b>All-stats passive:</b> the qualifying members with the highest total stats.</li><li><b>Score Support passive:</b> the qualifying members with the highest active skill bonus (Score Up).</li></ul><p>In every case a tie goes to whichever card is earlier in the unit.</p>",
+      "when": "This is another reason main stats matter: a card whose main stat isn’t the boosted stat often loses the passive to a teammate who does have it as their main stat. Unit order only decides ties."
+    },
+    {
       "id": "stats",
       "topic": "numbers",
       "badge": "confirmed",
@@ -184,9 +193,12 @@
     {
       "id": "breakpoints",
       "topic": "boards",
-      "badge": "writing",
+      "badge": "data",
       "q": "Are there good breakpoints and character levels to aim for?",
-      "a": "Being written."
+      "a": "<b>Aim for the Holomem Rank and Dream Rank each holomem’s role needs.</b> From Rank 30 board points come fastest (10 per rank). Cards have no special level breakpoints: raise your lowest cards first.",
+      "why": "<div class=\"scroll\"><table><tr><th>Role (Player Guide template)</th><th class=\"n\">Holomem Rank</th><th class=\"n\">Dream Rank</th><th class=\"n\">Board points</th></tr><tr><td>Oshi</td><td class=\"n\">43</td><td class=\"n\">25</td><td class=\"n\">282</td></tr><tr><td>Event Leader / Song Rating Leader</td><td class=\"n\">32</td><td class=\"n\">25</td><td class=\"n\">176</td></tr><tr><td>Event Member</td><td class=\"n\">30</td><td class=\"n\">30</td><td class=\"n\">156</td></tr><tr><td>Event Leader (Minimal)</td><td class=\"n\">26</td><td class=\"n\">20</td><td class=\"n\">126</td></tr><tr><td>Non-Event Leader</td><td class=\"n\">26</td><td class=\"n\">25</td><td class=\"n\">126</td></tr><tr><td>Non-Event Member</td><td class=\"n\">21</td><td class=\"n\">15</td><td class=\"n\">87</td></tr><tr><td>Event Support</td><td class=\"n\">15</td><td class=\"n\">20</td><td class=\"n\">49</td></tr><tr><td>Unit Support</td><td class=\"n\">11</td><td class=\"n\">20</td><td class=\"n\">28</td></tr><tr><td>Gen Support</td><td class=\"n\">10</td><td class=\"n\">30</td><td class=\"n\">22</td></tr><tr><td>Generic Support</td><td class=\"n\">4</td><td class=\"n\">none</td><td class=\"n\">5</td></tr></table></div><p>Dream Rank milestones (your account level) unlock parts of every holomem’s board:</p><ul><li><b>10:</b> Red connect slot</li><li><b>15:</b> Blue connect slot</li><li><b>20:</b> Yellow connect slot</li><li><b>25:</b> Red’s 2★ nodes, needed for a full Red board</li><li><b>30:</b> Green’s gen-bonus nodes</li></ul>",
+      "how": "<p>Board points come from Holomem Rank: 2 per rank-up at first, then 3, 5, 6, 7 and 8, and 10 per rank from Rank 30. That totals 26 points at Rank 10, 83 at Rank 20, 161 at Rank 30, 261 at Rank 40 and 361 at Rank 50. A full board costs 453, so no holomem can unlock everything. The totals assume a holomem starts with 0 points at Rank 1 (not yet checked in-game).</p>",
+      "when": "Holomem Rank comes from achievement EXP, and today’s content caps most holomems at Rank 41–45, so Oshi (Rank 43) may not be reachable yet for holomems with few cards or solo songs. The Holomem Rank Calc (Tools menu) shows where each holomem stands. For card upgrades, Bloom 1 and 2 are the efficient early Blooms (see <a href=\"#faq-bloom\">the Bloom question</a>); for where to spend board points, see <a href=\"#faq-board-setups\">board setups</a>."
     },
     {
       "id": "frequency-nodes",
