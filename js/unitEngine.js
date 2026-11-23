@@ -48,6 +48,26 @@ export function computeUnit(input, data) {
 
   const unitCards = unit.map((u) => u.card);
 
+  // Inputs for choosing recipients when a capped effect (e.g. "2 Cute members")
+  // has more qualifying members than it can reach - see rankingScore() in
+  // skillEngine.js. Stats are the cards' own (level + Bloom) values; the active
+  // Score Up uses the same enhanced-effect assumption as step 4 below.
+  const statsByCardId = Object.fromEntries(memberStats.map((m) => [m.cardId, m.stats]));
+  const activeScoreUpByCardId = Object.fromEntries(
+    unit.map(({ card, bloom }) => {
+      const levelData = card.activeSkill?.[String(getSkillLevel(card, bloom, cardPotentials, SKILL_LEVEL_TYPES.ACTIVE))];
+      if (!levelData) return [card.cardId, 0];
+      let effects = levelData.effects || [];
+      if (levelData.enhancedCondition && levelData.enhancedEffects) {
+        const met = evaluateLeaderCondition(levelData.enhancedCondition, leaderCard, unitCards, characterGroupings);
+        if (met === true || met === 'situational') effects = levelData.enhancedEffects;
+      }
+      const scoreUp = effects.find((e) => e.type.endsWith('_TYPE_SCORE_UP_PERMIL_UP'));
+      return [card.cardId, scoreUp ? Number(scoreUp.value) : 0];
+    })
+  );
+  const rankingFor = (effect) => ({ effectType: effect.type, statsByCardId, activeScoreUpByCardId });
+
   // --- 2. Leader skill ---
   let leaderResult = null;
   if (leaderCard.leaderSkill) {
@@ -65,7 +85,7 @@ export function computeUnit(input, data) {
     // main effect or the additional one (see below).
     const rawEffects = conditionMet === false ? [] : leaderCard.leaderSkill.effects || [];
     const effects = rawEffects.map((effect) => {
-      const recipients = conditionMet ? resolveEffectRecipients(effect.target, leaderCard, unitCards, characterGroupings) : [];
+      const recipients = conditionMet ? resolveEffectRecipients(effect.target, leaderCard, unitCards, characterGroupings, rankingFor(effect)) : [];
       return {
         type: effect.type,
         valuePermil: Number(effect.value),
@@ -92,7 +112,7 @@ export function computeUnit(input, data) {
       );
       const rawAdditionalEffects = additionalConditionMet === false ? [] : leaderCard.leaderSkill.additionalEffects || [];
       additionalEffects = rawAdditionalEffects.map((effect) => {
-        const recipients = additionalConditionMet ? resolveEffectRecipients(effect.target, leaderCard, unitCards, characterGroupings) : [];
+        const recipients = additionalConditionMet ? resolveEffectRecipients(effect.target, leaderCard, unitCards, characterGroupings, rankingFor(effect)) : [];
         return {
           type: effect.type,
           valuePermil: Number(effect.value),
@@ -122,7 +142,7 @@ export function computeUnit(input, data) {
     if (!levelData) return { cardId: card.cardId, level: passiveLevel, effects: [] };
     const conditionMet = evaluateLeaderCondition(levelData.condition, leaderCard, unitCards, characterGroupings);
     const resolved = levelData.effects.map((effect) => {
-      const recipients = conditionMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings) : [];
+      const recipients = conditionMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings, rankingFor(effect)) : [];
       return {
         type: effect.type,
         valuePermil: Number(effect.value),
