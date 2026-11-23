@@ -10,7 +10,14 @@
  * with that question expanded (the "Copy link" button produces these).
  * Answer HTML in faq.json is site-authored content and is inserted as-is.
  */
-import { compareDifficulties, activationPointProfile, SPECIAL_WINDOW_SECONDS } from './faqCalc.js';
+import {
+  activationPointProfile,
+  SPECIAL_WINDOW_SECONDS,
+  perSecondCounts,
+  singleBreakCostCurve,
+  dangerZones,
+  compareWithBreakMap,
+} from './faqCalc.js';
 
 const BADGES = {
   confirmed: ['faq-b-confirmed', 'Confirmed', 'checked in-game'],
@@ -288,20 +295,20 @@ export async function openFaqPage(initialId = null) {
 }
 
 // ---------------------------------------------------------------------------
-// Live calculator: lower difficulty vs combo breaks on the harder chart
+// Live calculator: break map - harder chart with combo breaks at real moments
+// vs a full combo on the easier chart
 // ---------------------------------------------------------------------------
+const SVG_NS = 'http://www.w3.org/2000/svg';
+function svgEl(tag, attrs = {}) {
+  const e = document.createElementNS(SVG_NS, tag);
+  for (const [k, v] of Object.entries(attrs)) e.setAttribute(k, v);
+  return e;
+}
+const mmss = (t) => `${Math.floor(t / 60)}:${String(Math.floor(t % 60)).padStart(2, '0')}`;
+
 function buildDifficultyCalc() {
   const box = el('div', 'faq-calc');
-  const row = el('div', 'faq-calc-row');
-
-  const field = (labelText, control) => {
-    const wrap = el('div');
-    const label = el('label', 'faq-calc-label', labelText);
-    label.htmlFor = control.id;
-    wrap.append(label, control);
-    return { wrap, label };
-  };
-
+  const row = el('div', 'faq-calc-row faq-calc-row-2');
   const songSel = el('select', 'faq-calc-select');
   songSel.id = 'faq-calc-song';
   const pairSel = el('select', 'faq-calc-select');
@@ -311,52 +318,130 @@ function buildDifficultyCalc() {
     o.value = `${hi}|${lo}`;
     pairSel.appendChild(o);
   }
-  const breaks = el('input', 'faq-calc-range');
-  breaks.id = 'faq-calc-breaks';
-  breaks.type = 'range';
-  breaks.min = '0';
-  breaks.max = '12';
-  breaks.value = '1';
-  const breaksField = field('Combo breaks on the harder chart: 1', breaks);
+  for (const [text, control] of [
+    ['Song', songSel],
+    ['Compare', pairSel],
+  ]) {
+    const wrap = el('div');
+    const label = el('label', 'faq-calc-label', text);
+    label.htmlFor = control.id;
+    wrap.append(label, control);
+    row.appendChild(wrap);
+  }
 
-  row.append(field('Song', songSel).wrap, field('Compare', pairSel).wrap, breaksField.wrap);
+  const hint = el('p', 'faq-map-hint', 'Tap the timeline where you usually break combo on the harder chart. Tap a marker to remove it.');
+  const fig = el('div', 'faq-map');
+  const svg = svgEl('svg', { role: 'img', 'aria-label': 'Notes per second on the harder chart, with special skill activation points and your combo breaks' });
+  fig.appendChild(svg);
+  const legend = el('div', 'faq-map-legend');
+  legend.innerHTML =
+    '<span><i class="faq-key faq-key-notes"></i>Notes per second</span>' +
+    '<span><i class="faq-key faq-key-cost"></i>Cost of a break there</span>' +
+    '<span><i class="faq-key faq-key-zone"></i>Densest stretches</span>' +
+    '<span><i class="faq-key faq-key-point"></i>Special skill activation point</span>';
+
+  const actions = el('div', 'faq-foot');
+  const zoneBtn = el('button', 'presets-btn', 'One break in each dense stretch');
+  zoneBtn.type = 'button';
+  const clearBtn = el('button', 'presets-btn', 'Clear breaks');
+  clearBtn.type = 'button';
+  actions.append(zoneBtn, clearBtn);
+
   const verdict = el('div', 'faq-verdict', 'Loading songs…');
+  const summary = el('p', 'faq-map-summary');
   const bars = el('div', 'faq-bars');
   const note = el(
     'p',
     'faq-calc-note',
-    'Estimate: every other note Perfect+, breaks spread evenly through the chart, same unit and skills. Scores are relative to a full combo on the easier chart; bars are zoomed in to show the gap.'
+    'Estimate: every other note Perfect+, same unit and skills, skills not weighted. A break costs the combo bonus on the notes after it until your combo climbs back, so mid-song breaks cost most and extra breaks in the same stretch cost little. Bars are zoomed in to show the gap.'
   );
-  box.append(row, verdict, bars, note);
+  box.append(row, hint, fig, legend, actions, verdict, summary, bars, note);
 
   let songs = [];
+  let current = null; // {song, density, hi, lo, counts, cost, zones}
+  let breaks = []; // seconds, repeats allowed
   let seq = 0;
-  async function update() {
-    const n = Number(breaks.value);
-    breaksField.label.textContent = `Combo breaks on the harder chart: ${n}`;
-    const song = songs.find((s) => s.id === songSel.value);
-    if (!song) return;
-    const [hi, lo] = pairSel.value.split('|');
-    const mine = ++seq;
-    verdict.textContent = 'Loading chart…';
-    const density = await loadDensity(song.id);
-    if (mine !== seq) return; // a newer selection is already loading
-    const r = density ? compareDifficulties(song, density, hi, lo, n) : null;
+
+  function draw() {
+    svg.replaceChildren();
+    if (!current) return;
+    const { counts, cost, zones, song } = current;
+    const W = fig.clientWidth || 600;
+    const H = fig.clientHeight || 170;
+    svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
+    const padT = 22;
+    const padB = 24;
+    const L = counts.length;
+    const bw = W / L;
+    const maxN = Math.max(1, ...counts);
+    const maxCost = Math.max(0.01, ...cost.filter((c) => c != null));
+    const plotH = H - padT - padB;
+    // cost shading + note bars
+    for (let s = 0; s < L; s++) {
+      if (cost[s] != null) {
+        svg.appendChild(svgEl('rect', { x: s * bw, y: padT, width: Math.max(1, bw), height: plotH, class: 'faq-map-cost', 'fill-opacity': (0.02 + 0.55 * (cost[s] / maxCost) ** 2).toFixed(3) }));
+      }
+      const h = (counts[s] / maxN) * plotH;
+      if (h > 0) svg.appendChild(svgEl('rect', { x: s * bw + bw * 0.15, y: padT + plotH - h, width: Math.max(1, bw * 0.7), height: h, class: 'faq-map-bar' }));
+    }
+    // dense stretches
+    for (const z of zones) {
+      svg.appendChild(svgEl('rect', { x: z.start * bw, y: padT + plotH + 3, width: (z.end - z.start) * bw, height: 4, rx: 2, class: 'faq-map-zone' }));
+    }
+    // special skill activation points
+    (song.feverSeconds || []).forEach((t, i) => {
+      const x = t * bw;
+      svg.appendChild(svgEl('line', { x1: x, x2: x, y1: padT - 4, y2: padT + plotH, class: 'faq-map-point' }));
+      const label = svgEl('text', { x, y: padT - 8, class: 'faq-map-point-label', 'text-anchor': 'middle' });
+      label.textContent = String(i + 1);
+      svg.appendChild(label);
+    });
+    // time axis ends
+    const t0 = svgEl('text', { x: 2, y: H - 3, class: 'faq-map-axis' });
+    t0.textContent = '0:00';
+    const t1 = svgEl('text', { x: W - 2, y: H - 3, class: 'faq-map-axis', 'text-anchor': 'end' });
+    t1.textContent = mmss(L);
+    svg.append(t0, t1);
+    // break markers
+    const tally = new Map();
+    for (const s of breaks) tally.set(s, (tally.get(s) || 0) + 1);
+    for (const [s, k] of tally) {
+      const x = (s + 0.5) * bw;
+      const g = svgEl('g', { class: 'faq-map-break', 'data-second': String(s) });
+      g.appendChild(svgEl('line', { x1: x, x2: x, y1: padT, y2: padT + plotH }));
+      g.appendChild(svgEl('circle', { cx: x, cy: padT + 8, r: 8 }));
+      const tx = svgEl('text', { x, y: padT + 12, 'text-anchor': 'middle' });
+      tx.textContent = k > 1 ? String(k) : '×';
+      g.appendChild(tx);
+      const title = svgEl('title');
+      title.textContent = `${k} break${k > 1 ? 's' : ''} at ${mmss(s)} - tap to remove one`;
+      g.appendChild(title);
+      svg.appendChild(g);
+    }
+  }
+
+  function renderResult() {
     bars.replaceChildren();
+    if (!current) return;
+    const { song, density, hi, lo } = current;
+    const r = compareWithBreakMap(song, density, hi, lo, breaks);
     if (!r) {
-      verdict.textContent = 'No chart data for this song yet.';
+      verdict.textContent = 'This song doesn’t have both charts.';
+      summary.textContent = '';
       return;
     }
     const H = cap(hi);
     const L = cap(lo);
-    const gap = r.gapPct;
+    const n = r.harderBroken.breaksPlaced;
     const s = n === 1 ? '' : 's';
     verdict.textContent =
       n === 0
-        ? `${H} full combo scores ${gap.toFixed(1)}% more than ${L}`
-        : gap >= 0
-          ? `${H} with ${n} break${s} still wins by ${gap.toFixed(1)}%`
-          : `Play ${L}: ${H} with ${n} break${s} scores ${(-gap).toFixed(1)}% less`;
+        ? `${H} full combo scores ${r.gapPct.toFixed(1)}% more than ${L}`
+        : r.gapPct >= 0
+          ? `${H} with ${n === 1 ? 'this break' : `these ${n} breaks`} still wins by ${r.gapPct.toFixed(1)}%`
+          : `Play ${L}: ${H} with ${n === 1 ? 'this break' : `these ${n} breaks`} scores ${(-r.gapPct).toFixed(1)}% less`;
+    summary.textContent =
+      n === 0 ? 'No breaks placed yet.' : `${n === 1 ? 'This break costs' : `These ${n} breaks cost`} ${r.breakCostPct.toFixed(1)}% of your ${H} full-combo score.`;
     const rows = [
       [`${L} FC (Lv ${r.easier.level})`, 100, 'faq-fill-easy'],
       [`${H} FC (Lv ${r.harderFc.level})`, r.harderFcPct, 'faq-fill-hard'],
@@ -375,22 +460,83 @@ function buildDifficultyCalc() {
     }
   }
 
+  async function load() {
+    const song = songs.find((x) => x.id === songSel.value);
+    if (!song) return;
+    const [hi, lo] = pairSel.value.split('|');
+    const mine = ++seq;
+    verdict.textContent = 'Loading chart…';
+    const density = await loadDensity(song.id);
+    if (mine !== seq) return;
+    const counts = density ? perSecondCounts(density, hi) : null;
+    if (!counts || song.difficultyLevels?.[lo] == null) {
+      current = null;
+      breaks = [];
+      draw();
+      bars.replaceChildren();
+      summary.textContent = '';
+      verdict.textContent = density ? 'This song doesn’t have both charts.' : 'No chart data for this song yet.';
+      return;
+    }
+    current = { song, density, hi, lo, counts, cost: singleBreakCostCurve(density, hi), zones: dangerZones(counts) };
+    breaks = [];
+    draw();
+    renderResult();
+  }
+
+  svg.addEventListener('click', (e) => {
+    if (!current) return;
+    const marker = e.target.closest('.faq-map-break');
+    if (marker) {
+      const sec = Number(marker.dataset.second);
+      const i = breaks.lastIndexOf(sec);
+      if (i >= 0) breaks.splice(i, 1);
+    } else {
+      const rect = svg.getBoundingClientRect();
+      const sec = Math.floor(((e.clientX - rect.left) / rect.width) * current.counts.length);
+      if (sec < 0 || sec >= current.counts.length) return;
+      // snap to the nearest second that has notes (a break needs a note)
+      let best = -1;
+      for (let d = 0; d <= 3 && best < 0; d++) {
+        if (current.counts[sec - d] > 0) best = sec - d;
+        else if (current.counts[sec + d] > 0) best = sec + d;
+      }
+      if (best < 0) return;
+      breaks.push(best);
+    }
+    draw();
+    renderResult();
+  });
+  zoneBtn.onclick = () => {
+    if (!current) return;
+    breaks = current.zones.map((z) => z.peak);
+    draw();
+    renderResult();
+  };
+  clearBtn.onclick = () => {
+    breaks = [];
+    draw();
+    renderResult();
+  };
+  const resize = new ResizeObserver(() => draw());
+  resize.observe(fig);
+
   loadMusic()
     .then((music) => {
-      songs = music.filter((s) => s.difficultyLevels).sort((a, b) => a.title.localeCompare(b.title));
-      for (const s of songs) {
-        const o = el('option', null, s.title);
-        o.value = s.id;
+      songs = music.filter((x) => x.difficultyLevels).sort((a, b) => a.title.localeCompare(b.title));
+      for (const x of songs) {
+        const o = el('option', null, x.title);
+        o.value = x.id;
         songSel.appendChild(o);
       }
-      const preferred = songs.find((s) => s.id === 'm0049') || songs[0];
+      const preferred = songs.find((x) => x.id === 'm0049') || songs[0];
       if (preferred) songSel.value = preferred.id;
-      update();
+      load();
     })
     .catch((err) => {
       verdict.textContent = `Couldn’t load songs (${err.message}).`;
     });
-  for (const c of [songSel, pairSel, breaks]) c.addEventListener('input', update);
+  for (const c of [songSel, pairSel]) c.addEventListener('input', load);
   return box;
 }
 

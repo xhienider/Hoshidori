@@ -224,10 +224,11 @@
       "topic": "songs",
       "badge": "estimate",
       "q": "Should I push score on a lower difficulty if I can’t full combo the higher one?",
-      "a": "<b>Usually no: stay on the harder chart.</b> Its lead survives several combo breaks. Check your own song below.",
-      "why": "<p>Higher difficulty multiplies every note’s score, and longer charts build more combo bonus (up to +10% at 1,000 combo). On a full combo the harder chart scores 3–7% more. A break restarts the combo climb, but on the songs we checked Expert still beat a Hard full combo through 3 to 12 breaks.</p>",
-      "when": "The calculator assumes every other note is Perfect+. Losing many notes to Greats or misses, or breaking combo while a combo-gated active skill is on, favours the easier chart.",
-      "calc": "difficulty"
+      "a": "<b>Usually no: stay on the harder chart.</b> Where you break matters more than how often. Mark your usual break spots below to check your song.",
+      "why": "<p>Higher difficulty multiplies every note’s score, and longer charts build more combo bonus (up to +10% at 1,000 combo). On a full combo the harder chart scores 3–7% more.</p><p>A break costs you the combo bonus on every note after it, until your combo climbs back, so its cost depends on when it happens:</p><div class=\"scroll\"><table><tr><th>Where the break happens</th><th class=\"n\">Cost of one break</th></tr><tr><td>Before the 1st special skill activation point</td><td class=\"n\">0.3–1.0%</td></tr><tr><td>1st → 2nd point</td><td class=\"n\">1.0–2.3%</td></tr><tr><td>Middle of the song (2nd → 4th point)</td><td class=\"n\">1.5–2.7%</td></tr><tr><td>After the 5th point</td><td class=\"n\">0.5–0.9%</td></tr></table></div><p>Extra breaks in a stretch where you’ve already broken cost little, because your combo is already low.</p>",
+      "when": "The calculator assumes every other note is Perfect+ and doesn’t weight skills. Losing many notes to Greats or misses, breaking during a special skill window, or breaking while a combo-gated active skill is on all favour the easier chart.",
+      "calc": "difficulty",
+      "how": "<ul><li>Cost of one break at every second, across 44 songs on Expert: the worst moment is usually right around the halfway mark; the first and last few seconds cost about 0.1%.</li><li>On yumeiro wonder, Expert with 4 breaks all in the final stretch still beats a Hard full combo by 3.7%. With 4 breaks all mid-song the lead shrinks to 0.4%. Spread evenly through the song, Hard would win.</li></ul>"
     },
     {
       "id": "new-event",

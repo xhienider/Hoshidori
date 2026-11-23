@@ -2769,6 +2769,7 @@ header.masthead {
   font-family: var(--font-display); font-weight: 600; font-size: 12.5px; letter-spacing: 0.06em;
   text-transform: uppercase; color: var(--text-dim); margin: 26px 0 10px;
 }
+.faq-card { scroll-margin-top: 200px; }
 .faq-card { background: var(--panel); border: 1px solid var(--line); border-radius: 11px; margin-bottom: 10px; }
 .faq-card.open { border-color: #33496a; }
 .faq-q {
@@ -2841,11 +2842,33 @@ header.masthead {
 .faq-act-best { background: color-mix(in srgb, var(--orange) 10%, transparent); }
 .faq-act-low { color: #ffb84d; }
 .faq-act-value { display: grid; grid-template-columns: minmax(0, 1fr) 3.5em; gap: 8px; align-items: center; }
+.faq-map-hint { font-size: 12.5px; color: var(--text-dim); margin: 12px 0 6px; }
+.faq-map { position: relative; height: 170px; background: var(--panel); border: 1px solid var(--line); border-radius: 8px; cursor: crosshair; }
+.faq-map > svg { position: absolute; inset: 0; width: 100%; height: 100%; }
+.faq-map-cost { fill: var(--orange); }
+.faq-map-bar { fill: var(--blue-bright); opacity: 0.85; }
+.faq-map-zone { fill: #ffb84d; }
+.faq-map-point { stroke: var(--text-dim); stroke-width: 1; stroke-dasharray: 3 3; }
+.faq-map-point-label { fill: var(--text-dim); font: 600 11px var(--font-mono); }
+.faq-map-axis { fill: var(--text-faint); font: 10px var(--font-mono); }
+.faq-map-break { cursor: pointer; }
+.faq-map-break line { stroke: #ff5d5d; stroke-width: 2; }
+.faq-map-break circle { fill: #ff5d5d; }
+.faq-map-break text { fill: #070b12; font: 700 11px var(--font-mono); pointer-events: none; }
+.faq-map-legend { display: flex; flex-wrap: wrap; gap: 6px 14px; font-size: 11.5px; color: var(--text-dim); margin-top: 8px; }
+.faq-key { display: inline-block; width: 10px; height: 10px; border-radius: 2px; margin-right: 5px; vertical-align: -1px; }
+.faq-key-notes { background: var(--blue-bright); }
+.faq-key-cost { background: color-mix(in srgb, var(--orange) 45%, transparent); }
+.faq-key-zone { background: #ffb84d; height: 4px; vertical-align: 2px; }
+.faq-key-point { width: 0; height: 10px; border-left: 1px dashed var(--text-dim); border-radius: 0; }
+.faq-map-summary { font-size: 13px; color: var(--text-dim); margin: 0 0 10px; }
 @media (max-width: 600px) {
   .faq-page { padding: 14px 14px 60px; }
   .faq-page .compare-page-close { white-space: nowrap; padding: 8px 10px; }
   .faq-tools { top: 0; position: static; }
+  .faq-card { scroll-margin-top: 90px; }
   .faq-calc-row, .faq-calc-row-2 { grid-template-columns: 1fr; }
+  .faq-map { height: 150px; }
   .faq-act-row { grid-template-columns: 2.4em 4.6em 3em minmax(0, 1fr); gap: 6px; font-size: 12px; }
   .faq-act-row > :nth-child(2) { display: none; }
   .faq-bar { grid-template-columns: 7.5em minmax(0, 1fr) 4em; }

@@ -123,3 +123,129 @@ export function activationPointProfile(song, density, difficulty, windowSeconds 
   const order = [...points].sort((a, b) => b.value - a.value);
   return { points, best: order[0].index, worst: order[order.length - 1].index };
 }
+
+// ---------------------------------------------------------------------------
+// Break map: combo breaks placed at real moments in the chart
+// ---------------------------------------------------------------------------
+
+/** Per-second note counts for one chart, or null. */
+export function perSecondCounts(density, difficulty) {
+  const perSecond = density?.[difficulty]?.perSecond;
+  return perSecond ? perSecond.map((e) => (e ? Number(e[0]) || 0 : 0)) : null;
+}
+
+/**
+ * Note indices hit by breaks placed at given seconds. Each break lands on the
+ * middle note of its second; several breaks in the same second take
+ * consecutive notes there (capped at that second's note count). Seconds with
+ * no notes can't hold a break and are ignored.
+ */
+export function breakNoteIndices(counts, breakSeconds) {
+  const before = [0];
+  for (const c of counts) before.push(before[before.length - 1] + c);
+  const perSec = new Map();
+  for (const s of breakSeconds) perSec.set(s, (perSec.get(s) || 0) + 1);
+  const out = new Set();
+  for (const [s, k] of perSec) {
+    const n = counts[s] || 0;
+    if (!n) continue;
+    const take = Math.min(k, n);
+    const start = before[s] + Math.max(0, Math.floor((n - take) / 2));
+    for (let i = 0; i < take; i++) out.add(start + i);
+  }
+  return out;
+}
+
+/** Average (1 + combo bonus) per note with misses at the given note indices. */
+function comboFactorWithMisses(notes, missAt) {
+  if (!notes) return 0;
+  let combo = 0;
+  let sum = 0;
+  for (let n = 0; n < notes; n++) {
+    if (missAt.has(n)) {
+      combo = 0;
+      continue;
+    }
+    sum += 1 + comboBonusAt(combo);
+    combo++;
+  }
+  return sum / notes;
+}
+
+/** Relative score of a chart with breaks at the given seconds. */
+export function chartFactorAt(song, density, difficulty, breakSeconds = []) {
+  const level = song?.difficultyLevels?.[difficulty];
+  const counts = perSecondCounts(density, difficulty);
+  if (level == null || !counts) return null;
+  const notes = counts.reduce((a, b) => a + b, 0);
+  const missAt = breakNoteIndices(counts, breakSeconds);
+  return {
+    difficulty,
+    level,
+    notes,
+    breaksPlaced: missAt.size,
+    factor: musicCoefficient(song.liveScoreCoefficientPermil, level) * comboFactorWithMisses(notes, missAt),
+  };
+}
+
+/**
+ * Cost (% of that chart's full-combo score) of ONE break at each second,
+ * assuming no other breaks. null for seconds with no notes.
+ */
+export function singleBreakCostCurve(density, difficulty) {
+  const counts = perSecondCounts(density, difficulty);
+  if (!counts) return null;
+  const notes = counts.reduce((a, b) => a + b, 0);
+  const fc = comboFactorWithMisses(notes, new Set());
+  return counts.map((n, s) => {
+    if (!n) return null;
+    const f = comboFactorWithMisses(notes, breakNoteIndices(counts, [s]));
+    return ((fc - f) / fc) * 100;
+  });
+}
+
+/**
+ * The densest stretches of a chart ("danger zones"): up to `max`
+ * non-overlapping windows of `width` seconds with the most notes, returned as
+ * {start, end, peak, notes} sorted by time; `peak` is the busiest second.
+ */
+export function dangerZones(counts, { width = 4, max = 4 } = {}) {
+  if (!counts?.length) return [];
+  const sums = [];
+  for (let s = 0; s + width <= counts.length; s++) {
+    let t = 0;
+    for (let k = 0; k < width; k++) t += counts[s + k];
+    sums.push({ start: s, notes: t });
+  }
+  sums.sort((a, b) => b.notes - a.notes);
+  const zones = [];
+  for (const w of sums) {
+    if (zones.length >= max) break;
+    if (zones.some((z) => w.start < z.end + 2 && w.start + width > z.start - 2)) continue;
+    let peak = w.start;
+    for (let k = 1; k < width; k++) if (counts[w.start + k] > counts[peak]) peak = w.start + k;
+    zones.push({ start: w.start, end: w.start + width, peak, notes: w.notes });
+  }
+  return zones.sort((a, b) => a.start - b.start);
+}
+
+/**
+ * Harder chart with breaks at real moments vs a full combo on the easier
+ * chart. Percentages are relative to the easier full combo.
+ */
+export function compareWithBreakMap(song, density, harder, easier, breakSeconds) {
+  const easierFc = chartFactorAt(song, density, easier, []);
+  const harderFc = chartFactorAt(song, density, harder, []);
+  const harderBroken = chartFactorAt(song, density, harder, breakSeconds);
+  if (!easierFc || !harderFc || !harderBroken || !easierFc.factor) return null;
+  const pct = (x) => (x.factor / easierFc.factor) * 100;
+  return {
+    easier: easierFc,
+    harderFc,
+    harderBroken,
+    harderFcPct: pct(harderFc),
+    harderBrokenPct: pct(harderBroken),
+    gapPct: pct(harderBroken) - 100,
+    breakCostPct: ((harderFc.factor - harderBroken.factor) / harderFc.factor) * 100,
+  };
+}
