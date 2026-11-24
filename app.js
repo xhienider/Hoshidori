@@ -4,6 +4,8 @@ import { openMaterialsPage } from './js/materialsPage.js';
 import { readTrackerAccount, trackerCharacterIds, trackerAreaPositions, syncAreaIntoSet } from './js/materials.js';
 import { openRankPage } from './js/rankPage.js';
 import { openFaqPage, openFaqFromHash } from './js/faqPage.js';
+import { renderEventPanel } from './js/eventPage.js';
+import { autoScore } from './js/eventCalc.js';
 import {
   computeUnit,
   mapSpecialSkillsToSong,
@@ -3172,6 +3174,15 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
         difficultyLevel,
         noteDensityForDiff.totalChartWeight
       );
+      // Auto Live version of the same score, for the Event Points panel.
+      scoreData.autoTotal = autoScore(
+        timeline,
+        noteDensityEntries,
+        deckPower,
+        liveScoreCoefficientPermil,
+        difficultyLevel,
+        noteDensityForDiff.totalChartWeight
+      );
     }
   }
 
@@ -3221,6 +3232,17 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
     scoreNote.textContent =
       'These scores assume the yellow/Content-area singer-conditional board bonus is maxed at 10% for this song, regardless of your actual board setup - a reasonable assumption for a theoretical max, but not necessarily what you\u2019d actually score.';
     coverageRowEl.appendChild(scoreNote);
+
+    const eventEl = document.createElement('div');
+    eventEl.className = 'event-panel';
+    coverageRowEl.appendChild(eventEl);
+    renderEventPanel(eventEl, {
+      unit,
+      song,
+      maxScore: scoreData.grandTotal,
+      autoScore: scoreData.autoTotal ?? null,
+      characterName: (id) => DATA.members.find((m) => m.characterId === id)?.characterName || id,
+    });
   }
 
   coverageRowEl.appendChild(renderFrequencyNodePanel(unit, song, duration, result.specials));

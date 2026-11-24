@@ -2879,3 +2879,44 @@ header.masthead {
 @media (prefers-reduced-motion: reduce) {
   .faq-caret, .faq-fill, .faq-toast { transition: none; }
 }
+
+/* ---------- Event Points panel (Builder, under the score cards) ---------- */
+.event-panel {
+  margin-top: 18px;
+  border-top: 1px solid var(--line);
+  padding-top: 14px;
+}
+.ev-event { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 12px; margin: 4px 0 12px; }
+.ev-event-name { font-family: var(--font-display); font-size: 18px; color: var(--text); letter-spacing: 0.02em; }
+.ev-event-meta { font-size: 12px; color: var(--text-dim); }
+.ev-grid { display: grid; grid-template-columns: minmax(260px, 1fr) minmax(260px, 1fr); gap: 14px; }
+@media (max-width: 760px) { .ev-grid { grid-template-columns: 1fr; } }
+.ev-bonus, .ev-controls {
+  background: var(--panel-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 10px 12px;
+}
+.ev-cards { display: flex; flex-direction: column; gap: 4px; }
+.ev-card { display: grid; grid-template-columns: 90px 1fr auto; gap: 8px; font-size: 12px; align-items: baseline; }
+.ev-card-name { color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.ev-card-parts { color: var(--text-dim); }
+.ev-card-total { font-family: var(--font-mono); color: var(--blue-pale); }
+.ev-bonus-total { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line); font-size: 13px; color: var(--text-dim); }
+.ev-bonus-total b { font-family: var(--font-mono); color: var(--orange); font-size: 16px; margin-left: 6px; }
+.ev-controls { display: flex; flex-direction: column; gap: 8px; font-size: 12px; color: var(--text-dim); }
+.ev-seg { display: inline-flex; border: 1px solid var(--line); border-radius: 6px; overflow: hidden; align-self: flex-start; }
+.ev-mode { background: transparent; color: var(--text-dim); border: 0; padding: 5px 14px; font: inherit; cursor: pointer; }
+.ev-mode.on { background: var(--orange); color: #fff; }
+.ev-field { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 10px; }
+.ev-field select, .ev-event select { background: var(--panel); color: var(--text); border: 1px solid var(--line); border-radius: 4px; padding: 3px 6px; font: inherit; }
+.ev-check, .ev-radio { display: inline-flex; align-items: center; gap: 6px; cursor: pointer; }
+.ev-radio b, .ev-field-note b { font-family: var(--font-mono); color: var(--text); font-weight: 500; }
+.ev-custom { width: 110px; }
+.ev-warn { margin-top: 10px; font-size: 12px; color: var(--yellow-node); }
+.ev-table { width: 100%; border-collapse: collapse; margin-top: 12px; font-size: 13px; }
+.ev-table th { text-align: left; font-weight: 500; color: var(--text-dim); font-size: 11px; border-bottom: 1px solid var(--line); padding: 6px 8px; }
+.ev-table td { padding: 5px 8px; border-bottom: 1px solid var(--line); color: var(--text); }
+.ev-table .n { text-align: right; font-family: var(--font-mono); }
+.ev-table .ev-pts { color: var(--orange); }
+.ev-none { margin-top: 6px; padding: 14px 16px; background: var(--panel-raised); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--text-dim); }
