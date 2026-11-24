@@ -2459,10 +2459,12 @@ function renderInfoRow(result, leaderCard, unit, scoreSupport, baseStats) {
   unit.forEach((u, i) => rowB.appendChild(renderMemberPassiveCard(result.passives[i], u.card)));
   infoRowEl.appendChild(rowB);
 
-  // Row C: (empty under leader) + Active Skill, top-aligned.
+  // Row C: Unit Score (under the Song) + Active Skill, top-aligned.
   const rowC = document.createElement('div');
   rowC.className = 'member-grid info-subrow row-top';
-  rowC.appendChild(document.createElement('div'));
+  const unitScoreSlot = document.createElement('div');
+  unitScoreSlot.id = 'unit-score-slot'; // filled by renderPowerRow with the Unit Score
+  rowC.appendChild(unitScoreSlot);
   unit.forEach((u, i) => rowC.appendChild(renderMemberActiveCard(result.actives[i], u.card, scoreSupport)));
   infoRowEl.appendChild(rowC);
 }
@@ -3161,6 +3163,7 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
   // note density has actually loaded for this song/difficulty, and the song
   // carries both a difficulty rating and its own score coefficient.
   let scoreData = null;
+  let eventEl = null;
   if (Array.isArray(noteDensityEntries)) {
     const difficultyLevel = song.difficultyLevels?.[state.difficulty];
     const liveScoreCoefficientPermil = song.liveScoreCoefficientPermil;
@@ -3233,9 +3236,9 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
       'These scores assume the yellow/Content-area singer-conditional board bonus is maxed at 10% for this song, regardless of your actual board setup - a reasonable assumption for a theoretical max, but not necessarily what you\u2019d actually score.';
     coverageRowEl.appendChild(scoreNote);
 
-    const eventEl = document.createElement('div');
+    // Event Points goes last, after the coverage-related panels (appended below).
+    eventEl = document.createElement('div');
     eventEl.className = 'event-panel';
-    coverageRowEl.appendChild(eventEl);
     renderEventPanel(eventEl, {
       unit,
       song,
@@ -3292,6 +3295,8 @@ function renderCoverageRow(result, unit, scoreSupport, pureBaseStats, memberOnly
     memberStatsWrap.appendChild(card);
   }
   coverageRowEl.appendChild(memberStatsWrap);
+
+  if (eventEl) coverageRowEl.appendChild(eventEl);
 }
 
 // ---------------------------------------------------------------------------
@@ -3629,7 +3634,16 @@ function renderPowerRow(computed) {
   const hero = document.createElement('div');
   hero.className = 'unit-score-hero';
   hero.innerHTML = `<div class="unit-score-hero-label">Unit Score</div><div class="unit-score-hero-value">${unitScoreData.unitScore.toLocaleString()}</div>`;
-  wrap.appendChild(hero);
+  // Desktop: the Unit Score sits in the leader column under the Song (slot made
+  // by renderInfoRow). Mobile has no such slot, so it heads the power row.
+  const unitScoreSlot = document.getElementById('unit-score-slot');
+  if (unitScoreSlot) {
+    unitScoreSlot.innerHTML = '';
+    hero.classList.add('in-slot', 'leader-accent');
+    unitScoreSlot.appendChild(hero);
+  } else {
+    wrap.appendChild(hero);
+  }
 
   const panelsRow = document.createElement('div');
   panelsRow.className = 'unit-score-panels';

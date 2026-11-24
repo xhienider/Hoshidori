@@ -2920,3 +2920,10 @@ header.masthead {
 .ev-table .n { text-align: right; font-family: var(--font-mono); }
 .ev-table .ev-pts { color: var(--orange); }
 .ev-none { margin-top: 6px; padding: 14px 16px; background: var(--panel-raised); border: 1px solid var(--line); border-radius: 8px; font-size: 13px; color: var(--text-dim); }
+
+/* Unit Score in the leader column, under the Song (Row C of the info row). */
+.unit-score-hero.in-slot { align-self: stretch; padding: 14px 12px; }
+.unit-score-hero.in-slot .unit-score-hero-value { font-size: 34px; }
+#power-row { margin: 16px 0; }
+.unit-score-panels { align-items: stretch; }
+.unit-score-panels > .panel { margin-top: 0; }
