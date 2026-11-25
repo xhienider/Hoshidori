@@ -12,11 +12,11 @@ import {
   cardEventBonus,
   songLengthBonusPercent,
   eventPoints,
-  pickCurrentEvent,
+  selectableEvents,
 } from './eventCalc.js';
 
 const STORAGE_KEY = 'hoshidori_event_v1';
-const DEFAULTS = { multi: true, boosts: 1, passport: false, highlight: false, source: 'auto', customScore: '', holomemId: null };
+const DEFAULTS = { multi: true, boosts: 1, passport: false, highlight: false, source: 'auto', customScore: '', holomemId: null, eventId: null };
 
 let eventsPromise = null;
 let eventsData = null;
@@ -66,12 +66,15 @@ export function renderEventPanel(container, ctx) {
   }
 
   const s = readSettings();
-  const event = pickCurrentEvent(eventsData, todayIso());
-  if (!event) {
+  const choices = selectableEvents(eventsData, todayIso());
+  if (!choices.length) {
     container.innerHTML = `<div class="panel-label">Event Points</div>
-      <div class="ev-none">No event is running right now. The event points estimate will appear here when the next event starts.</div>`;
+      <div class="ev-none">No event is running or announced right now. The event points estimate will appear here once the next event is announced.</div>`;
     return;
   }
+  const chosen = choices.find((c) => c.event.id === s.eventId) || choices[0];
+  const event = chosen.event;
+  const isUpcoming = chosen.status === 'upcoming';
   const isSpotlight = event?.type === 'spotlight';
   const holomems = event?.holomems || [];
   const holomemId = holomems.includes(s.holomemId) ? s.holomemId : holomems[holomems.length - 1] || null;
@@ -125,7 +128,17 @@ export function renderEventPanel(container, ctx) {
 
   const typeLabel = EVENT_TYPES[eventType]?.label || eventType;
   const dates = event?.start ? ` · ${esc(event.start)} – ${esc(event.end || '?')}` : '';
-  const eventHeader = `<div class="ev-event"><span class="ev-event-name">${esc(event.name)}</span><span class="ev-event-meta">${esc(typeLabel)}${dates}${event.banner ? ` · banner: ${esc(event.banner)}` : ''}</span></div>
+  const eventSelect =
+    choices.length > 1
+      ? `<label class="ev-field">Event <select class="ev-event-pick">${choices
+          .map((c) => `<option value="${esc(c.event.id)}"${c === chosen ? ' selected' : ''}>${esc(c.event.name)} (${c.status === 'live' ? 'running now' : `starts ${esc(c.event.start)}`})</option>`)
+          .join('')}</select></label>`
+      : '';
+  const upcomingNote = isUpcoming
+    ? `<div class="ev-field-note">Upcoming event (starts ${esc(event.start)}) — test your team for it ahead of time.</div>`
+    : '';
+  const eventHeader = `${eventSelect}<div class="ev-event"><span class="ev-event-name">${esc(event.name)}</span><span class="ev-event-meta">${esc(typeLabel)}${dates}${event.banner ? ` · banner: ${esc(event.banner)}` : ''}</span></div>
+       ${upcomingNote}
        ${event.verified ? '' : `<div class="ev-warn">Not yet checked against this event’s in-game bonus screen: banner cards and bonus sizes (Member +${event.memberBonusPercent}%, holomem +${event.holomemBonusPercent}%) are worked out from the game data.</div>`}`;
 
   const holomemSelect =
@@ -180,5 +193,6 @@ export function renderEventPanel(container, ctx) {
   container.querySelectorAll('input[name="ev-src"]').forEach((r) => (r.onchange = () => rerender({ source: r.value })));
   const customEl = container.querySelector('.ev-custom');
   customEl.onchange = () => rerender({ customScore: customEl.value.replace(/[^\d]/g, ''), source: 'custom' });
+  container.querySelector('.ev-event-pick')?.addEventListener('change', (e) => rerender({ eventId: e.target.value }));
   container.querySelector('.ev-holomem')?.addEventListener('change', (e) => rerender({ holomemId: e.target.value }));
 }

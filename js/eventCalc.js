@@ -118,3 +118,14 @@ export function pickCurrentEvent(eventsData, today) {
     .sort((a, b) => b.start.localeCompare(a.start));
   return live[0] || null;
 }
+
+/** Events a player can pick in the panel on `today`: every running event (latest start first),
+ *  then every announced upcoming one (both dates known, start after today; soonest first), so a
+ *  team can be tested before the event opens. Each entry is `{event, status: 'live'|'upcoming'}`.
+ *  Past and undated events are never offered. */
+export function selectableEvents(eventsData, today) {
+  const dated = (eventsData?.events || []).filter((e) => e.start && e.end);
+  const live = dated.filter((e) => e.start <= today && today <= e.end).sort((a, b) => b.start.localeCompare(a.start));
+  const upcoming = dated.filter((e) => e.start > today).sort((a, b) => a.start.localeCompare(b.start));
+  return [...live.map((event) => ({ event, status: 'live' })), ...upcoming.map((event) => ({ event, status: 'upcoming' }))];
+}
