@@ -2257,9 +2257,11 @@ function strippedTypeCode(code) {
  * @param {number} liveScoreCoefficientPermil - song's own coefficient (Music.json)
  * @param {number} difficultyLevel - numeric difficulty rating for the chosen difficulty
  * @param {number} totalChartWeight - from note_density/{musicId}.json's totalChartWeight field, for the chosen difficulty
+ * @param {number} [skillTreeBonus] - Yellow (Content-area) bonus as a fraction (0.1 = 10%); defaults to the
+ *        assumed-maxed SKILL_TREE_BONUS. Only the Challenge Live page passes a real per-song value.
  * @returns {{perSecond:{t:number,score:number}[], totalChartWeight:number, musicCoefficient:number, grandTotal:number}}
  */
-export function computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel, totalChartWeight) {
+export function computeScoreTimeline(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel, totalChartWeight, skillTreeBonus = SKILL_TREE_BONUS) {
   const musicCoefficient = 1 + (liveScoreCoefficientPermil / 1000) * (difficultyLevel - 5);
 
   const baseFactor = totalChartWeight > 0 ? (deckPower * 2.3 * musicCoefficient) / totalChartWeight : 0;
@@ -2273,7 +2275,7 @@ export function computeScoreTimeline(timeline, noteDensityEntries, deckPower, li
     let total = 0;
     for (const [code, count] of Object.entries(entry[1])) {
       const weight = NOTE_WEIGHTS_PERFECT_PLUS[strippedTypeCode(code)] || 0;
-      const noteScore = Math.ceil(baseFactor * weight * (1 + comboBonus) * (1 + skillBonus) * (1 + SKILL_TREE_BONUS));
+      const noteScore = Math.ceil(baseFactor * weight * (1 + comboBonus) * (1 + skillBonus) * (1 + skillTreeBonus));
       total += noteScore * count;
     }
     return total;

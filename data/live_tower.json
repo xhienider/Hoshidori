@@ -1,0 +1,3685 @@
+{
+ "version": 1,
+ "benchmarkPermil": {
+  "S": 1180,
+  "A": 910,
+  "B": 700
+ },
+ "towers": [
+  {
+   "id": "live_tower-default-001",
+   "type": "permanent",
+   "start": "2026-11-25T05:00:00+08:00",
+   "floors": [
+    {
+     "number": 1,
+     "musicIds": [
+      "m0022",
+      "m0142",
+      "m0189",
+      "m0076",
+      "m0324"
+     ],
+     "clearScore": 710000,
+     "thresholds": {
+      "S": 719500,
+      "A": 555000,
+      "B": 427000
+     },
+     "bonusCharacterIds": [
+      "chr-00001",
+      "chr-00002",
+      "chr-00013",
+      "chr-00015",
+      "chr-00018"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 2,
+     "musicIds": [
+      "m0524",
+      "m0362",
+      "m0162",
+      "m0308"
+     ],
+     "clearScore": 710000,
+     "thresholds": {
+      "S": 719500,
+      "A": 555000,
+      "B": 427000
+     },
+     "bonusCharacterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-1",
+       "name": "Happy Beads",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 3,
+     "musicIds": [
+      "m0385",
+      "m0157",
+      "m0357"
+     ],
+     "clearScore": 710000,
+     "thresholds": {
+      "S": 719500,
+      "A": 555000,
+      "B": 427000
+     },
+     "bonusCharacterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 4,
+     "musicIds": [
+      "m0350",
+      "m0344",
+      "m0102",
+      "m0046"
+     ],
+     "clearScore": 710000,
+     "thresholds": {
+      "S": 719500,
+      "A": 555000,
+      "B": 427000
+     },
+     "bonusCharacterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-1",
+       "name": "Yellow Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 5,
+     "musicIds": [
+      "m0334",
+      "m0111",
+      "m0198"
+     ],
+     "clearScore": 800000,
+     "thresholds": {
+      "S": 802000,
+      "A": 618500,
+      "B": 476000
+     },
+     "bonusCharacterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 6,
+     "musicIds": [
+      "m0040",
+      "m0384",
+      "m0366",
+      "m0144"
+     ],
+     "clearScore": 800000,
+     "thresholds": {
+      "S": 814000,
+      "A": 627500,
+      "B": 483000
+     },
+     "bonusCharacterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 7,
+     "musicIds": [
+      "m0156",
+      "m0091",
+      "m0404",
+      "m0548"
+     ],
+     "clearScore": 800000,
+     "thresholds": {
+      "S": 814000,
+      "A": 627500,
+      "B": 483000
+     },
+     "bonusCharacterIds": [
+      "chr-00019",
+      "chr-00021",
+      "chr-00022",
+      "chr-00023"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 150000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 8,
+     "musicIds": [
+      "m0396",
+      "m0528",
+      "m0159"
+     ],
+     "clearScore": 800000,
+     "thresholds": {
+      "S": 814000,
+      "A": 627500,
+      "B": 483000
+     },
+     "bonusCharacterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 9,
+     "musicIds": [
+      "m0206",
+      "m0365",
+      "m0140"
+     ],
+     "clearScore": 800000,
+     "thresholds": {
+      "S": 814000,
+      "A": 627500,
+      "B": 483000
+     },
+     "bonusCharacterIds": [
+      "chr-00026",
+      "chr-00027",
+      "chr-00028"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_card-1",
+       "name": "Blue Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 10,
+     "musicIds": [
+      "m0332",
+      "m0147",
+      "m0310"
+     ],
+     "clearScore": 840000,
+     "thresholds": {
+      "S": 849500,
+      "A": 655000,
+      "B": 504000
+     },
+     "bonusCharacterIds": [
+      "chr-00010",
+      "chr-00011",
+      "chr-00012"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 11,
+     "musicIds": [
+      "m0142",
+      "m0153",
+      "m0376",
+      "m0337"
+     ],
+     "clearScore": 840000,
+     "thresholds": {
+      "S": 861000,
+      "A": 664000,
+      "B": 511000
+     },
+     "bonusCharacterIds": [
+      "chr-00004",
+      "chr-00005",
+      "chr-00006",
+      "chr-00007"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_level_up",
+       "name": "Lesson Pt",
+       "quantity": 150000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 12,
+     "musicIds": [
+      "m0378",
+      "m0352",
+      "m0386"
+     ],
+     "clearScore": 840000,
+     "thresholds": {
+      "S": 849500,
+      "A": 655000,
+      "B": 504000
+     },
+     "bonusCharacterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 13,
+     "musicIds": [
+      "m0351",
+      "m0167",
+      "m0403",
+      "m0527",
+      "m0166"
+     ],
+     "clearScore": 840000,
+     "thresholds": {
+      "S": 861000,
+      "A": 664000,
+      "B": 511000
+     },
+     "bonusCharacterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-1",
+       "name": "Pure Beads",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 14,
+     "musicIds": [
+      "m0350",
+      "m0155",
+      "m0413",
+      "m0164"
+     ],
+     "clearScore": 840000,
+     "thresholds": {
+      "S": 861000,
+      "A": 664000,
+      "B": 511000
+     },
+     "bonusCharacterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 15,
+     "musicIds": [
+      "m0369",
+      "m0368",
+      "m0358"
+     ],
+     "clearScore": 880000,
+     "thresholds": {
+      "S": 896500,
+      "A": 691500,
+      "B": 532000
+     },
+     "bonusCharacterIds": [
+      "chr-03007",
+      "chr-03008",
+      "chr-03009"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 16,
+     "musicIds": [
+      "m0309",
+      "m0162",
+      "m0372",
+      "m0371"
+     ],
+     "clearScore": 890000,
+     "thresholds": {
+      "S": 908500,
+      "A": 700500,
+      "B": 539000
+     },
+     "bonusCharacterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 17,
+     "musicIds": [
+      "m0145",
+      "m0049",
+      "m0336"
+     ],
+     "clearScore": 890000,
+     "thresholds": {
+      "S": 896500,
+      "A": 691500,
+      "B": 532000
+     },
+     "bonusCharacterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 150000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 18,
+     "musicIds": [
+      "m0398",
+      "m0307",
+      "m0041",
+      "m0360"
+     ],
+     "clearScore": 890000,
+     "thresholds": {
+      "S": 908500,
+      "A": 700500,
+      "B": 539000
+     },
+     "bonusCharacterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_card-2",
+       "name": "Blue Hexa",
+       "quantity": 20
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 19,
+     "musicIds": [
+      "m0394",
+      "m0014",
+      "m0550"
+     ],
+     "clearScore": 890000,
+     "thresholds": {
+      "S": 896500,
+      "A": 691500,
+      "B": 532000
+     },
+     "bonusCharacterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 20,
+     "musicIds": [
+      "m0141",
+      "m0073",
+      "m0303",
+      "m0323",
+      "m0009"
+     ],
+     "clearScore": 990000,
+     "thresholds": {
+      "S": 1003000,
+      "A": 773500,
+      "B": 595000
+     },
+     "bonusCharacterIds": [
+      "chr-00001",
+      "chr-00002",
+      "chr-00013",
+      "chr-00015",
+      "chr-00018"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 21,
+     "musicIds": [
+      "m0037",
+      "m0171",
+      "m0377"
+     ],
+     "clearScore": 990000,
+     "thresholds": {
+      "S": 1003000,
+      "A": 773500,
+      "B": 595000
+     },
+     "bonusCharacterIds": [
+      "chr-00026",
+      "chr-00027",
+      "chr-00028"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 22,
+     "musicIds": [
+      "m0188",
+      "m0340",
+      "m0177",
+      "m0338"
+     ],
+     "clearScore": 990000,
+     "thresholds": {
+      "S": 1014500,
+      "A": 782500,
+      "B": 602000
+     },
+     "bonusCharacterIds": [
+      "chr-00014",
+      "chr-00016",
+      "chr-00017",
+      "chr-00006"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-2",
+       "name": "Green Hexa",
+       "quantity": 20
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 23,
+     "musicIds": [
+      "m0326",
+      "m0058",
+      "m0201"
+     ],
+     "clearScore": 990000,
+     "thresholds": {
+      "S": 1003000,
+      "A": 773500,
+      "B": 595000
+     },
+     "bonusCharacterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-1",
+       "name": "Happy Beads",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 24,
+     "musicIds": [
+      "m0388",
+      "m0161",
+      "m0330"
+     ],
+     "clearScore": 990000,
+     "thresholds": {
+      "S": 1003000,
+      "A": 773500,
+      "B": 595000
+     },
+     "bonusCharacterIds": [
+      "chr-03007",
+      "chr-03008",
+      "chr-03009"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 25,
+     "musicIds": [
+      "m0327",
+      "m0104",
+      "m0155",
+      "m0525"
+     ],
+     "clearScore": 1100000,
+     "thresholds": {
+      "S": 1109000,
+      "A": 855000,
+      "B": 658000
+     },
+     "bonusCharacterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-cmn-sr",
+       "name": "Hololium",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 26,
+     "musicIds": [
+      "m0064",
+      "m0367",
+      "m0369",
+      "m0348",
+      "m0063"
+     ],
+     "clearScore": 1100000,
+     "thresholds": {
+      "S": 1121000,
+      "A": 864500,
+      "B": 665000
+     },
+     "bonusCharacterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 27,
+     "musicIds": [
+      "m0387",
+      "m0312",
+      "m0309",
+      "m0548"
+     ],
+     "clearScore": 1100000,
+     "thresholds": {
+      "S": 1121000,
+      "A": 864500,
+      "B": 665000
+     },
+     "bonusCharacterIds": [
+      "chr-00019",
+      "chr-00021",
+      "chr-00022",
+      "chr-00023"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-1",
+       "name": "Yellow Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 28,
+     "musicIds": [
+      "m0180",
+      "m0084",
+      "m0197"
+     ],
+     "clearScore": 1100000,
+     "thresholds": {
+      "S": 1109000,
+      "A": 855000,
+      "B": 658000
+     },
+     "bonusCharacterIds": [
+      "chr-00010",
+      "chr-00011",
+      "chr-00012"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 29,
+     "musicIds": [
+      "m0335",
+      "m0053",
+      "m0386"
+     ],
+     "clearScore": 1100000,
+     "thresholds": {
+      "S": 1109000,
+      "A": 855000,
+      "B": 658000
+     },
+     "bonusCharacterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-1",
+       "name": "Cute Beads",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 30,
+     "musicIds": [
+      "m0349",
+      "m0347",
+      "m0163",
+      "m0153"
+     ],
+     "clearScore": 1200000,
+     "thresholds": {
+      "S": 1227000,
+      "A": 946000,
+      "B": 728000
+     },
+     "bonusCharacterIds": [
+      "chr-00004",
+      "chr-00005",
+      "chr-00006",
+      "chr-00007"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 31,
+     "musicIds": [
+      "m0304",
+      "m0307",
+      "m0050"
+     ],
+     "clearScore": 1200000,
+     "thresholds": {
+      "S": 1215000,
+      "A": 937000,
+      "B": 721000
+     },
+     "bonusCharacterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 32,
+     "musicIds": [
+      "m0122",
+      "m0359",
+      "m0149"
+     ],
+     "clearScore": 1200000,
+     "thresholds": {
+      "S": 1215000,
+      "A": 937000,
+      "B": 721000
+     },
+     "bonusCharacterIds": [
+      "chr-03007",
+      "chr-03008",
+      "chr-03009"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_level_up",
+       "name": "Lesson Pt",
+       "quantity": 150000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 33,
+     "musicIds": [
+      "m0317",
+      "m0115",
+      "m0459"
+     ],
+     "clearScore": 1200000,
+     "thresholds": {
+      "S": 1215000,
+      "A": 937000,
+      "B": 721000
+     },
+     "bonusCharacterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_card-1",
+       "name": "Blue Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 34,
+     "musicIds": [
+      "m0165",
+      "m0346",
+      "m0333"
+     ],
+     "clearScore": 1200000,
+     "thresholds": {
+      "S": 1215000,
+      "A": 937000,
+      "B": 721000
+     },
+     "bonusCharacterIds": [
+      "chr-00026",
+      "chr-00027",
+      "chr-00028"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 35,
+     "musicIds": [
+      "m0131",
+      "m0187",
+      "m0070",
+      "m0071"
+     ],
+     "clearScore": 1260000,
+     "thresholds": {
+      "S": 1286000,
+      "A": 991500,
+      "B": 763000
+     },
+     "bonusCharacterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 36,
+     "musicIds": [
+      "m0159",
+      "m0106",
+      "m0331"
+     ],
+     "clearScore": 1260000,
+     "thresholds": {
+      "S": 1274000,
+      "A": 982500,
+      "B": 756000
+     },
+     "bonusCharacterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 37,
+     "musicIds": [
+      "m0089",
+      "m0171",
+      "m0311",
+      "m0302"
+     ],
+     "clearScore": 1270000,
+     "thresholds": {
+      "S": 1286000,
+      "A": 991500,
+      "B": 763000
+     },
+     "bonusCharacterIds": [
+      "chr-00019",
+      "chr-00021",
+      "chr-00022",
+      "chr-00023"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_leader-1",
+       "name": "Red Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 38,
+     "musicIds": [
+      "m0303",
+      "m0073",
+      "m0164",
+      "m0076",
+      "m0075"
+     ],
+     "clearScore": 1270000,
+     "thresholds": {
+      "S": 1286000,
+      "A": 991500,
+      "B": 763000
+     },
+     "bonusCharacterIds": [
+      "chr-00001",
+      "chr-00002",
+      "chr-00013",
+      "chr-00015",
+      "chr-00018"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 150000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 39,
+     "musicIds": [
+      "m0361",
+      "m0099",
+      "m0150",
+      "m0154"
+     ],
+     "clearScore": 1270000,
+     "thresholds": {
+      "S": 1286000,
+      "A": 991500,
+      "B": 763000
+     },
+     "bonusCharacterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 40,
+     "musicIds": [
+      "m0146",
+      "m0031",
+      "m0085"
+     ],
+     "clearScore": 1390000,
+     "thresholds": {
+      "S": 1416000,
+      "A": 1092000,
+      "B": 840000
+     },
+     "bonusCharacterIds": [
+      "chr-00010",
+      "chr-00011",
+      "chr-00012"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 2
+      }
+     ]
+    },
+    {
+     "number": 41,
+     "musicIds": [
+      "m0176",
+      "m0120",
+      "m0182"
+     ],
+     "clearScore": 1400000,
+     "thresholds": {
+      "S": 1416000,
+      "A": 1092000,
+      "B": 840000
+     },
+     "bonusCharacterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 42,
+     "musicIds": [
+      "m0339",
+      "m0168",
+      "m0148",
+      "m0184"
+     ],
+     "clearScore": 1400000,
+     "thresholds": {
+      "S": 1427500,
+      "A": 1101000,
+      "B": 847000
+     },
+     "bonusCharacterIds": [
+      "chr-00014",
+      "chr-00016",
+      "chr-00017",
+      "chr-00006"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-1",
+       "name": "Cute Beads",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 43,
+     "musicIds": [
+      "m0304",
+      "m0111",
+      "m0319"
+     ],
+     "clearScore": 1400000,
+     "thresholds": {
+      "S": 1416000,
+      "A": 1092000,
+      "B": 840000
+     },
+     "bonusCharacterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 44,
+     "musicIds": [
+      "m0158",
+      "m0065",
+      "m0373",
+      "m0166",
+      "m0527"
+     ],
+     "clearScore": 1410000,
+     "thresholds": {
+      "S": 1427500,
+      "A": 1101000,
+      "B": 847000
+     },
+     "bonusCharacterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-1",
+       "name": "Yellow Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 45,
+     "musicIds": [
+      "m0525",
+      "m0348",
+      "m0044",
+      "m0105"
+     ],
+     "clearScore": 1460000,
+     "thresholds": {
+      "S": 1486500,
+      "A": 1146500,
+      "B": 882000
+     },
+     "bonusCharacterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+     ],
+     "bonusPermil": 100,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 46,
+     "musicIds": [
+      "m0072",
+      "m0383",
+      "m0074",
+      "m0177",
+      "m0325"
+     ],
+     "clearScore": 1470000,
+     "thresholds": {
+      "S": 1486500,
+      "A": 1146500,
+      "B": 882000
+     },
+     "bonusCharacterIds": [
+      "chr-00001",
+      "chr-00002",
+      "chr-00013",
+      "chr-00015",
+      "chr-00018"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 47,
+     "musicIds": [
+      "m0161",
+      "m0359",
+      "m0124"
+     ],
+     "clearScore": 1450000,
+     "thresholds": {
+      "S": 1475000,
+      "A": 1137500,
+      "B": 875000
+     },
+     "bonusCharacterIds": [
+      "chr-03007",
+      "chr-03008",
+      "chr-03009"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_level_up",
+       "name": "Lesson Pt",
+       "quantity": 150000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 48,
+     "musicIds": [
+      "m0026",
+      "m0190",
+      "m0080"
+     ],
+     "clearScore": 1450000,
+     "thresholds": {
+      "S": 1475000,
+      "A": 1137500,
+      "B": 875000
+     },
+     "bonusCharacterIds": [
+      "chr-00004",
+      "chr-00005",
+      "chr-00007"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-1",
+       "name": "Pure Beads",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 49,
+     "musicIds": [
+      "m0139",
+      "m0198",
+      "m0112"
+     ],
+     "clearScore": 1450000,
+     "thresholds": {
+      "S": 1475000,
+      "A": 1137500,
+      "B": 875000
+     },
+     "bonusCharacterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+     ],
+     "bonusPermil": 100,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_leader-2",
+       "name": "Red Hexa",
+       "quantity": 20
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 50,
+     "musicIds": [
+      "m0127",
+      "m0128",
+      "m0158",
+      "m0192",
+      "m0191"
+     ],
+     "clearScore": 1640000,
+     "thresholds": {
+      "S": 1663500,
+      "A": 1283000,
+      "B": 987000
+     },
+     "bonusCharacterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+     ],
+     "bonusPermil": 150,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 500
+      },
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_leader-3",
+       "name": "Red Star Cube",
+       "quantity": 10
+      }
+     ]
+    },
+    {
+     "number": 51,
+     "musicIds": [
+      "m0327",
+      "m0021",
+      "m0413",
+      "m0046"
+     ],
+     "clearScore": 1650000,
+     "thresholds": {
+      "S": 1675500,
+      "A": 1292000,
+      "B": 994000
+     },
+     "bonusCharacterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 52,
+     "musicIds": [
+      "m0525",
+      "m0154",
+      "m0363",
+      "m0100"
+     ],
+     "clearScore": 1670000,
+     "thresholds": {
+      "S": 1699000,
+      "A": 1310000,
+      "B": 1008000
+     },
+     "bonusCharacterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 53,
+     "musicIds": [
+      "m0034",
+      "m0091",
+      "m0092",
+      "m0090"
+     ],
+     "clearScore": 1690000,
+     "thresholds": {
+      "S": 1711000,
+      "A": 1319500,
+      "B": 1015000
+     },
+     "bonusCharacterIds": [
+      "chr-00019",
+      "chr-00021",
+      "chr-00022",
+      "chr-00023"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 100
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 54,
+     "musicIds": [
+      "m0083",
+      "m0031",
+      "m0032"
+     ],
+     "clearScore": 1700000,
+     "thresholds": {
+      "S": 1734500,
+      "A": 1337500,
+      "B": 1029000
+     },
+     "bonusCharacterIds": [
+      "chr-00010",
+      "chr-00011",
+      "chr-00012"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 55,
+     "musicIds": [
+      "m0131",
+      "m0187",
+      "m0133",
+      "m0071"
+     ],
+     "clearScore": 1780000,
+     "thresholds": {
+      "S": 1805000,
+      "A": 1392000,
+      "B": 1071000
+     },
+     "bonusCharacterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+     ],
+     "bonusPermil": 150,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 2
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 56,
+     "musicIds": [
+      "m0094",
+      "m0346",
+      "m0166"
+     ],
+     "clearScore": 1760000,
+     "thresholds": {
+      "S": 1781500,
+      "A": 1374000,
+      "B": 1057000
+     },
+     "bonusCharacterIds": [
+      "chr-00026",
+      "chr-00027",
+      "chr-00028"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_level_up",
+       "name": "Lesson Pt",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 57,
+     "musicIds": [
+      "m0052",
+      "m0160",
+      "m0165"
+     ],
+     "clearScore": 1770000,
+     "thresholds": {
+      "S": 1793500,
+      "A": 1383000,
+      "B": 1064000
+     },
+     "bonusCharacterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 58,
+     "musicIds": [
+      "m0183",
+      "m0120",
+      "m0319"
+     ],
+     "clearScore": 1780000,
+     "thresholds": {
+      "S": 1805000,
+      "A": 1392000,
+      "B": 1071000
+     },
+     "bonusCharacterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-1",
+       "name": "Yellow Cube",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 59,
+     "musicIds": [
+      "m0018",
+      "m0329",
+      "m0375"
+     ],
+     "clearScore": 1780000,
+     "thresholds": {
+      "S": 1805000,
+      "A": 1392000,
+      "B": 1071000
+     },
+     "bonusCharacterIds": [
+      "chr-00014",
+      "chr-00016",
+      "chr-00017"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 60,
+     "musicIds": [
+      "m0109",
+      "m0139",
+      "m0198"
+     ],
+     "clearScore": 1900000,
+     "thresholds": {
+      "S": 1923000,
+      "A": 1483000,
+      "B": 1141000
+     },
+     "bonusCharacterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+     ],
+     "bonusPermil": 150,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 2
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 61,
+     "musicIds": [
+      "m0141",
+      "m0023",
+      "m0189",
+      "m0138",
+      "m0324"
+     ],
+     "clearScore": 1960000,
+     "thresholds": {
+      "S": 1994000,
+      "A": 1537500,
+      "B": 1183000
+     },
+     "bonusCharacterIds": [
+      "chr-00001",
+      "chr-00002",
+      "chr-00013",
+      "chr-00015",
+      "chr-00018"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-1",
+       "name": "Happy Beads",
+       "quantity": 500
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 62,
+     "musicIds": [
+      "m0078",
+      "m0079",
+      "m0028"
+     ],
+     "clearScore": 1910000,
+     "thresholds": {
+      "S": 1947000,
+      "A": 1501500,
+      "B": 1155000
+     },
+     "bonusCharacterIds": [
+      "chr-00004",
+      "chr-00005",
+      "chr-00007"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 63,
+     "musicIds": [
+      "m0353",
+      "m0148",
+      "m0086"
+     ],
+     "clearScore": 1920000,
+     "thresholds": {
+      "S": 1947000,
+      "A": 1501500,
+      "B": 1155000
+     },
+     "bonusCharacterIds": [
+      "chr-00014",
+      "chr-00016",
+      "chr-00017"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 64,
+     "musicIds": [
+      "m0306",
+      "m0196",
+      "m0331"
+     ],
+     "clearScore": 1930000,
+     "thresholds": {
+      "S": 1958500,
+      "A": 1510500,
+      "B": 1162000
+     },
+     "bonusCharacterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_level_up",
+       "name": "Lesson Pt",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 65,
+     "musicIds": [
+      "m0097",
+      "m0020",
+      "m0098",
+      "m0144"
+     ],
+     "clearScore": 2120000,
+     "thresholds": {
+      "S": 2159000,
+      "A": 1665000,
+      "B": 1281000
+     },
+     "bonusCharacterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+     ],
+     "bonusPermil": 150,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 2
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 66,
+     "musicIds": [
+      "m0150",
+      "m0095",
+      "m0181"
+     ],
+     "clearScore": 2080000,
+     "thresholds": {
+      "S": 2112000,
+      "A": 1628500,
+      "B": 1253000
+     },
+     "bonusCharacterIds": [
+      "chr-00026",
+      "chr-00027",
+      "chr-00028"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-2",
+       "name": "Yellow Hexa",
+       "quantity": 40
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 67,
+     "musicIds": [
+      "m0068",
+      "m0069",
+      "m0133",
+      "m0134"
+     ],
+     "clearScore": 2140000,
+     "thresholds": {
+      "S": 2171000,
+      "A": 1674000,
+      "B": 1288000
+     },
+     "bonusCharacterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 68,
+     "musicIds": [
+      "m0160",
+      "m0317",
+      "m0116"
+     ],
+     "clearScore": 2090000,
+     "thresholds": {
+      "S": 2124000,
+      "A": 1638000,
+      "B": 1260000
+     },
+     "bonusCharacterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 69,
+     "musicIds": [
+      "m0342",
+      "m0017",
+      "m0033"
+     ],
+     "clearScore": 2100000,
+     "thresholds": {
+      "S": 2135500,
+      "A": 1647000,
+      "B": 1267000
+     },
+     "bonusCharacterIds": [
+      "chr-00014",
+      "chr-00016",
+      "chr-00017"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 70,
+     "musicIds": [
+      "m0185",
+      "m0104",
+      "m0102",
+      "m0105"
+     ],
+     "clearScore": 2160000,
+     "thresholds": {
+      "S": 2194500,
+      "A": 1692500,
+      "B": 1302000
+     },
+     "bonusCharacterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+     ],
+     "bonusPermil": 150,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 2
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 71,
+     "musicIds": [
+      "m0201",
+      "m0058",
+      "m0182"
+     ],
+     "clearScore": 2110000,
+     "thresholds": {
+      "S": 2147500,
+      "A": 1656000,
+      "B": 1274000
+     },
+     "bonusCharacterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_level_up",
+       "name": "Lesson Pt",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 72,
+     "musicIds": [
+      "m0089",
+      "m0176",
+      "m0186",
+      "m0156"
+     ],
+     "clearScore": 2180000,
+     "thresholds": {
+      "S": 2218000,
+      "A": 1710500,
+      "B": 1316000
+     },
+     "bonusCharacterIds": [
+      "chr-00019",
+      "chr-00021",
+      "chr-00022",
+      "chr-00023"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 73,
+     "musicIds": [
+      "m0146",
+      "m0084",
+      "m0147"
+     ],
+     "clearScore": 2130000,
+     "thresholds": {
+      "S": 2159000,
+      "A": 1665000,
+      "B": 1281000
+     },
+     "bonusCharacterIds": [
+      "chr-00010",
+      "chr-00011",
+      "chr-00012"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 74,
+     "musicIds": [
+      "m0142",
+      "m0347",
+      "m0080"
+     ],
+     "clearScore": 2140000,
+     "thresholds": {
+      "S": 2171000,
+      "A": 1674000,
+      "B": 1288000
+     },
+     "bonusCharacterIds": [
+      "chr-00004",
+      "chr-00005",
+      "chr-00007"
+     ],
+     "bonusPermil": 150,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 75,
+     "musicIds": [
+      "m0060",
+      "m0123",
+      "m0161"
+     ],
+     "clearScore": 2340000,
+     "thresholds": {
+      "S": 2383500,
+      "A": 1838000,
+      "B": 1414000
+     },
+     "bonusCharacterIds": [
+      "chr-03007",
+      "chr-03008",
+      "chr-03009"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-cmn-sr",
+       "name": "Hololium",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 76,
+     "musicIds": [
+      "m0154",
+      "m0307",
+      "m0098",
+      "m0042"
+     ],
+     "clearScore": 2450000,
+     "thresholds": {
+      "S": 2489500,
+      "A": 1920000,
+      "B": 1477000
+     },
+     "bonusCharacterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 77,
+     "musicIds": [
+      "m0158",
+      "m0167",
+      "m0129",
+      "m0191",
+      "m0348"
+     ],
+     "clearScore": 2510000,
+     "thresholds": {
+      "S": 2548500,
+      "A": 1965500,
+      "B": 1512000
+     },
+     "bonusCharacterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_card-1",
+       "name": "Blue Cube",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 78,
+     "musicIds": [
+      "m0068",
+      "m0362",
+      "m0308",
+      "m0371"
+     ],
+     "clearScore": 2480000,
+     "thresholds": {
+      "S": 2513000,
+      "A": 1938000,
+      "B": 1491000
+     },
+     "bonusCharacterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-1",
+       "name": "Pure Beads",
+       "quantity": 500
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 79,
+     "musicIds": [
+      "m0378",
+      "m0053",
+      "m0160"
+     ],
+     "clearScore": 2390000,
+     "thresholds": {
+      "S": 2430500,
+      "A": 1874500,
+      "B": 1442000
+     },
+     "bonusCharacterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_level_up",
+       "name": "Lesson Pt",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 80,
+     "musicIds": [
+      "m0047",
+      "m0014",
+      "m0331"
+     ],
+     "clearScore": 2440000,
+     "thresholds": {
+      "S": 2478000,
+      "A": 1911000,
+      "B": 1470000
+     },
+     "bonusCharacterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 2
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 81,
+     "musicIds": [
+      "m0037",
+      "m0038",
+      "m0377"
+     ],
+     "clearScore": 2450000,
+     "thresholds": {
+      "S": 2489500,
+      "A": 1920000,
+      "B": 1477000
+     },
+     "bonusCharacterIds": [
+      "chr-00026",
+      "chr-00027",
+      "chr-00028"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-2",
+       "name": "Green Hexa",
+       "quantity": 40
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 82,
+     "musicIds": [
+      "m0083",
+      "m0197",
+      "m0032"
+     ],
+     "clearScore": 2460000,
+     "thresholds": {
+      "S": 2501500,
+      "A": 1929000,
+      "B": 1484000
+     },
+     "bonusCharacterIds": [
+      "chr-00010",
+      "chr-00011",
+      "chr-00012"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-gold",
+       "name": "Hologold",
+       "quantity": 300000
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 83,
+     "musicIds": [
+      "m0176",
+      "m0157",
+      "m0121"
+     ],
+     "clearScore": 2470000,
+     "thresholds": {
+      "S": 2513000,
+      "A": 1938000,
+      "B": 1491000
+     },
+     "bonusCharacterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 84,
+     "musicIds": [
+      "m0034",
+      "m0035",
+      "m0404",
+      "m0149"
+     ],
+     "clearScore": 2600000,
+     "thresholds": {
+      "S": 2643000,
+      "A": 2038000,
+      "B": 1568000
+     },
+     "bonusCharacterIds": [
+      "chr-00019",
+      "chr-00021",
+      "chr-00022",
+      "chr-00023"
+     ],
+     "bonusPermil": 200,
+     "mandatory": false,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 85,
+     "musicIds": [
+      "m0022",
+      "m0023",
+      "m0303",
+      "m0323",
+      "m0196"
+     ],
+     "clearScore": 2880000,
+     "thresholds": {
+      "S": 2891000,
+      "A": 2229500,
+      "B": 1715000
+     },
+     "bonusCharacterIds": [
+      "chr-00001",
+      "chr-00002",
+      "chr-00013",
+      "chr-00015",
+      "chr-00018"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-cmn-sr",
+       "name": "Hololium",
+       "quantity": 1
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 86,
+     "musicIds": [
+      "m0127",
+      "m0065",
+      "m0066",
+      "m0063",
+      "m0192"
+     ],
+     "clearScore": 2910000,
+     "thresholds": {
+      "S": 2926000,
+      "A": 2256500,
+      "B": 1736000
+     },
+     "bonusCharacterIds": [
+      "chr-04013",
+      "chr-04014",
+      "chr-04015",
+      "chr-04016",
+      "chr-04017"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-1",
+       "name": "Cute Beads",
+       "quantity": 500
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 87,
+     "musicIds": [
+      "m0012",
+      "m0049",
+      "m0336"
+     ],
+     "clearScore": 2760000,
+     "thresholds": {
+      "S": 2773000,
+      "A": 2138500,
+      "B": 1645000
+     },
+     "bonusCharacterIds": [
+      "chr-04001",
+      "chr-04002",
+      "chr-04003"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-1",
+       "name": "Green Cube",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 88,
+     "musicIds": [
+      "m0388",
+      "m0179",
+      "m0062"
+     ],
+     "clearScore": 2790000,
+     "thresholds": {
+      "S": 2808000,
+      "A": 2165500,
+      "B": 1666000
+     },
+     "bonusCharacterIds": [
+      "chr-03007",
+      "chr-03008",
+      "chr-03009"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 89,
+     "musicIds": [
+      "m0107",
+      "m0528",
+      "m0108"
+     ],
+     "clearScore": 2820000,
+     "thresholds": {
+      "S": 2843500,
+      "A": 2193000,
+      "B": 1687000
+     },
+     "bonusCharacterIds": [
+      "chr-03001",
+      "chr-03002",
+      "chr-03003"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-1",
+       "name": "Yellow Cube",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 90,
+     "musicIds": [
+      "m0206",
+      "m0095",
+      "m0140"
+     ],
+     "clearScore": 2990000,
+     "thresholds": {
+      "S": 3032500,
+      "A": 2338500,
+      "B": 1799000
+     },
+     "bonusCharacterIds": [
+      "chr-00026",
+      "chr-00027",
+      "chr-00028"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-mini_game_reward_up_stamina_recover",
+       "name": "Minigame Boost Jelly",
+       "quantity": 3
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 91,
+     "musicIds": [
+      "m0332",
+      "m0031",
+      "m0310"
+     ],
+     "clearScore": 3000000,
+     "thresholds": {
+      "S": 3044000,
+      "A": 2347500,
+      "B": 1806000
+     },
+     "bonusCharacterIds": [
+      "chr-00010",
+      "chr-00011",
+      "chr-00012"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_card-2",
+       "name": "Blue Hexa",
+       "quantity": 40
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 92,
+     "musicIds": [
+      "m0117",
+      "m0120",
+      "m0357"
+     ],
+     "clearScore": 3010000,
+     "thresholds": {
+      "S": 3056000,
+      "A": 2356500,
+      "B": 1813000
+     },
+     "bonusCharacterIds": [
+      "chr-04007",
+      "chr-04010",
+      "chr-04012"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 93,
+     "musicIds": [
+      "m0114",
+      "m0352",
+      "m0054"
+     ],
+     "clearScore": 3010000,
+     "thresholds": {
+      "S": 3056000,
+      "A": 2356500,
+      "B": 1813000
+     },
+     "bonusCharacterIds": [
+      "chr-03004",
+      "chr-03005",
+      "chr-03006"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-1",
+       "name": "Yellow Cube",
+       "quantity": 200
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 94,
+     "musicIds": [
+      "m0101",
+      "m0344",
+      "m0155",
+      "m0164"
+     ],
+     "clearScore": 3160000,
+     "thresholds": {
+      "S": 3209500,
+      "A": 2475000,
+      "B": 1904000
+     },
+     "bonusCharacterIds": [
+      "chr-00035",
+      "chr-00036",
+      "chr-00037",
+      "chr-00039"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_1-2",
+       "name": "Cute Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 95,
+     "musicIds": [
+      "m0026",
+      "m0079",
+      "m0376",
+      "m0337"
+     ],
+     "clearScore": 3260000,
+     "thresholds": {
+      "S": 3304000,
+      "A": 2548000,
+      "B": 1960000
+     },
+     "bonusCharacterIds": [
+      "chr-00004",
+      "chr-00005",
+      "chr-00006",
+      "chr-00007"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-cmn-sr",
+       "name": "Hololium",
+       "quantity": 2
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_reward_up_stamina_recover",
+       "name": "Live Boost Drink",
+       "quantity": 5
+      }
+     ]
+    },
+    {
+     "number": 96,
+     "musicIds": [
+      "m0318",
+      "m0087",
+      "m0168",
+      "m0342"
+     ],
+     "clearScore": 3260000,
+     "thresholds": {
+      "S": 3304000,
+      "A": 2548000,
+      "B": 1960000
+     },
+     "bonusCharacterIds": [
+      "chr-00014",
+      "chr-00016",
+      "chr-00017",
+      "chr-00006"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_2-2",
+       "name": "Pure Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 97,
+     "musicIds": [
+      "m0387",
+      "m0312",
+      "m0092",
+      "m0163"
+     ],
+     "clearScore": 3260000,
+     "thresholds": {
+      "S": 3304000,
+      "A": 2548000,
+      "B": 1960000
+     },
+     "bonusCharacterIds": [
+      "chr-00019",
+      "chr-00021",
+      "chr-00022",
+      "chr-00023"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_allmember-2",
+       "name": "Green Hexa",
+       "quantity": 40
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 98,
+     "musicIds": [
+      "m0040",
+      "m0384",
+      "m0150",
+      "m0360"
+     ],
+     "clearScore": 3260000,
+     "thresholds": {
+      "S": 3304000,
+      "A": 2548000,
+      "B": 1960000
+     },
+     "bonusCharacterIds": [
+      "chr-00030",
+      "chr-00031",
+      "chr-00032",
+      "chr-00034"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-card_limit_break-attribute_3-2",
+       "name": "Happy Crystals",
+       "quantity": 300
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 99,
+     "musicIds": [
+      "m0524",
+      "m0069",
+      "m0369",
+      "m0134"
+     ],
+     "clearScore": 3260000,
+     "thresholds": {
+      "S": 3304000,
+      "A": 2548000,
+      "B": 1960000
+     },
+     "bonusCharacterIds": [
+      "chr-06002",
+      "chr-06003",
+      "chr-06004",
+      "chr-06005"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_content-2",
+       "name": "Yellow Hexa",
+       "quantity": 40
+      },
+      {
+       "type": "ITEM",
+       "id": "item-live_auto_play",
+       "name": "Auto-play Ticket",
+       "quantity": 20
+      }
+     ]
+    },
+    {
+     "number": 100,
+     "musicIds": [
+      "m0072",
+      "m0383",
+      "m0074",
+      "m0325",
+      "m0145"
+     ],
+     "clearScore": 3610000,
+     "thresholds": {
+      "S": 3669500,
+      "A": 2830000,
+      "B": 2177000
+     },
+     "bonusCharacterIds": [
+      "chr-00001",
+      "chr-00002",
+      "chr-00013",
+      "chr-00015",
+      "chr-00018"
+     ],
+     "bonusPermil": 200,
+     "mandatory": true,
+     "rewards": [
+      {
+       "type": "STONE_TOTAL",
+       "id": null,
+       "name": "Red Diamonds",
+       "quantity": 500
+      },
+      {
+       "type": "ITEM",
+       "id": "item-skill_tree_leader-3",
+       "name": "Red Star Cube",
+       "quantity": 10
+      }
+     ]
+    }
+   ]
+  }
+ ]
+}

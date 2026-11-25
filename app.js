@@ -6,6 +6,8 @@ import { openRankPage } from './js/rankPage.js';
 import { openFaqPage, openFaqFromHash } from './js/faqPage.js';
 import { renderEventPanel } from './js/eventPage.js';
 import { autoScore } from './js/eventCalc.js';
+import { openChallengePage } from './js/challengePage.js';
+import { expectedTimeline, DIFFICULTIES as CHALLENGE_DIFFICULTIES } from './js/challengeCalc.js';
 import {
   computeUnit,
   mapSpecialSkillsToSong,
@@ -3523,7 +3525,7 @@ const UNIT_SCORE_CONSTANT = 101867 / 50000;
  * if the team has no leader/active-skill data to work with.
  * @param {ReturnType<typeof computeFullResult>} computed
  */
-function computeUnitScoreBreakdown(computed) {
+function computeUnitScoreBreakdown(computed, opts = {}) {
   const { result, unit, pureBaseStats, baseStats: memberOnlyBaseStats, combinedBonuses, pureActives, passiveProbUp = {} } = computed;
   const unitCards = unit.map((u) => u.card);
 
@@ -3556,7 +3558,7 @@ function computeUnitScoreBreakdown(computed) {
     const boost = Math.max(0, nonSpecialTotal - activeResult.activePermil);
     [outfitPermil, passivePermil, boardPermil] = adamsApportionment([quotas.qOutfit, quotas.qPassive, quotas.qBoard], boost);
     // TEMPORARY DEBUG - remove once the Board_base discrepancy is resolved.
-    console.log('[UnitScore debug]', {
+    if (!opts.quiet) console.log('[UnitScore debug]', {
       eOutfit,
       ePassive,
       eBoard,
@@ -3588,8 +3590,9 @@ function computeUnitScoreBreakdown(computed) {
   // where eff3 is the yellow value in PERMIL (10% -> 100). Validated bit-exact
   // against three independent real (yellow%, Board%) data points across two
   // differently-built teams (785, 646, and 198 - all matched precisely).
+  // opts.yellowPercent (Challenge Live page) overrides the Builder's own song + source switch.
   const scoreSong = state.songId ? DATA.songs.find((sg) => sg.id === state.songId) : null;
-  const yellowPercent = effectiveYellowPercent(state, scoreSong); // manual figure or live Board Manager value (source switch)
+  const yellowPercent = opts.yellowPercent ?? effectiveYellowPercent(state, scoreSong); // manual figure or live Board Manager value (source switch)
   if (yellowPercent) {
     const eff3 = yellowPercent * 10; // percent -> permil
     const otherLinesSum = activeResult.activePermil + outfitPermil + passivePermil + specialResult.specialPermil;
@@ -4347,6 +4350,86 @@ async function computeSongRankings() {
 
   results.sort((a, b) => b.maxTotalScore - a.maxTotalScore);
   return results;
+}
+
+// ---------------------------------------------------------------------------
+// Challenge Live helpers (js/challengePage.js gets these through openChallenge()).
+// ---------------------------------------------------------------------------
+
+/** Everything that changes the team's scores, as one string - the Challenge Live cache key. */
+function challengeTeamKey() {
+  const sets = (o) => Object.fromEntries(Object.entries(o || {}).map(([k, v]) => [k, v instanceof Set ? [...v].sort() : v]));
+  return JSON.stringify({
+    leader: state.leader,
+    unit: state.unit,
+    board: sets(state.boardSelections),
+    connect: state.connectSelections,
+    gy: sets(state.greenYellowBoardSelections),
+    gyc: state.greenYellowConnectSelections,
+    mem: state.manualMemoryBonusPercent,
+    pu: state.manualPowerUpBonusPercent,
+    green: [greenSourceOf(state), state.manualGreenBonus],
+  });
+}
+
+/** Song-level part of a Challenge Live song (no note density needed): the Unit Score for that
+ *  song (singer-conditional Red nodes + that song's Yellow) and the skill timelines. `yellowMode`
+ *  'board' = Board Manager Yellow for this song, 'max' = assume the 10% cap. */
+function evaluateChallengeSong(song, yellowMode) {
+  const computed = computeFullResult(state, song);
+  if (!computed) return null;
+  const yellowPercent = yellowMode === 'max' ? 10 : computeBoardManagerYellow(song).percent;
+  const unitScore = computeUnitScoreBreakdown(computed, { yellowPercent, quiet: true }).unitScore;
+  const deckPower = computeOverallPowerTotal(computed.result, computed.pureBaseStats, computed.baseStats);
+  const duration = song.playingSeconds || Math.max(...song.feverSeconds) + 15;
+  const timeline = simulateActiveTimeline({
+    activeResults: computed.result.actives,
+    specialResults: computed.result.specials,
+    unitCards: computed.unit.map((u) => u.card),
+    scoreSupport: computed.scoreSupport,
+    feverSeconds: song.feverSeconds,
+    durationSeconds: duration,
+  });
+  return { song, unitScore, deckPower, yellowPercent, timeline, expected: expectedTimeline(timeline) };
+}
+
+/** Per-difficulty scores for an evaluated song: {difficulty: {level, auto, fc, max}} - Auto and
+ *  full combo with EXPECTED skills, Max = full combo with every skill firing (Builder's Max). */
+function scoreChallengeSong(ev, density) {
+  const out = {};
+  if (!ev || !density) return out;
+  const coef = ev.song.liveScoreCoefficientPermil;
+  const yellow = ev.yellowPercent / 100;
+  for (const difficulty of CHALLENGE_DIFFICULTIES) {
+    const d = density[difficulty];
+    const level = ev.song.difficultyLevels?.[difficulty];
+    if (!d || level == null || coef == null) continue;
+    const args = [d.perSecond, ev.deckPower, coef, level, d.totalChartWeight, yellow];
+    out[difficulty] = {
+      level,
+      auto: autoScore(ev.expected, ...args),
+      fc: computeScoreTimeline(ev.expected, ...args).grandTotal,
+      max: computeScoreTimeline(ev.timeline, ...args).grandTotal,
+    };
+  }
+  return out;
+}
+
+function openChallenge() {
+  openChallengePage({
+    ready: () => !!state.leader.cardId && state.unit.every((u) => u.cardId),
+    teamKey: challengeTeamKey,
+    unitCharacterIds: () => state.unit.map((u) => DATA.byId[u.cardId]?.characterId).filter(Boolean),
+    leaderCharacterId: () => DATA.byId[state.leader.cardId]?.characterId || null,
+    songById: (id) => DATA.songs.find((s) => s.id === id) || null,
+    characterName: (id) => DATA.members.find((m) => m.characterId === id)?.characterName || id,
+    evaluateSong: evaluateChallengeSong,
+    scoreSong: scoreChallengeSong,
+    loadDensity: async (songId) => {
+      if (!(songId in NOTE_DENSITY_CACHE)) await ensureNoteDensityLoaded([{ id: songId }]);
+      return NOTE_DENSITY_CACHE[songId];
+    },
+  });
 }
 
 function computeCompareCoverage(computed, song) {
@@ -6411,6 +6494,7 @@ async function main() {
   document.getElementById('board-manager-btn').addEventListener('click', openGreenYellowBoardManager);
   document.getElementById('materials-btn').addEventListener('click', openMaterialsPage);
   document.getElementById('faq-btn').addEventListener('click', () => openFaqPage());
+  document.getElementById('challenge-btn').addEventListener('click', openChallenge);
   window.addEventListener('hashchange', openFaqFromHash);
   openFaqFromHash(); // index.html#faq or #faq-<question id> opens the FAQ directly
   const syncTeamBtn = document.getElementById('sync-team-btn');

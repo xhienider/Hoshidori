@@ -90,10 +90,11 @@ export function eventPoints(p) {
 /**
  * Auto Live score from the same inputs as computeScoreTimeline: every tap,
  * flick and hold start/end scores 800 (the AUTO judgement), ticks score 100,
- * and there is no combo bonus. Skill timeline as in the Max score (best case).
+ * and there is no combo bonus. Skill timeline as in the Max score (best case) unless the caller passes
+ * an expected-value timeline (Challenge Live). skillTreeBonus: Yellow as a fraction, default 10%.
  */
 const AUTO_WEIGHT = { T: 800, F: 800, LS: 800, LE: 800, LFE: 800, LR: 100, LC: 100 };
-export function autoScore(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel, totalChartWeight) {
+export function autoScore(timeline, noteDensityEntries, deckPower, liveScoreCoefficientPermil, difficultyLevel, totalChartWeight, skillTreeBonus = SKILL_TREE_BONUS) {
   const musicCoefficient = 1 + (liveScoreCoefficientPermil / 1000) * (difficultyLevel - 5);
   const baseFactor = totalChartWeight > 0 ? (deckPower * 2.3 * musicCoefficient) / totalChartWeight : 0;
   let total = 0;
@@ -104,7 +105,7 @@ export function autoScore(timeline, noteDensityEntries, deckPower, liveScoreCoef
     for (const [code, count] of Object.entries(entry[1])) {
       const key = code.endsWith('!') ? code.slice(0, -1) : code;
       const w = AUTO_WEIGHT[key] ?? (NOTE_WEIGHTS_PERFECT_PLUS[key] ? 800 : 0);
-      total += Math.ceil(baseFactor * w * (1 + skill) * (1 + SKILL_TREE_BONUS)) * count;
+      total += Math.ceil(baseFactor * w * (1 + skill) * (1 + skillTreeBonus)) * count;
     }
   }
   return total;
