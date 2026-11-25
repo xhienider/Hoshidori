@@ -408,6 +408,39 @@
       "inferred": []
     },
     {
+      "id": "marathon_event-normal-010",
+      "name": "Joyful Twinkle Night",
+      "type": "point_rally",
+      "start": "2026-11-26",
+      "end": "2026-12-10",
+      "chapters": [
+        {
+          "chapter": 1,
+          "holomem": null,
+          "story": "Joyful Twinkle Night"
+        }
+      ],
+      "holomems": [
+        "chr-00015",
+        "chr-00028",
+        "chr-04003",
+        "chr-04013"
+      ],
+      "banner": "Dancing Christmas Moments",
+      "bannerCards": [
+        "card-00015-5-uniq-0120-00",
+        "card-00028-5-uniq-0121-00",
+        "card-04003-5-uniq-0122-00",
+        "card-04013-5-uniq-0123-00"
+      ],
+      "memberBonusPercent": 30,
+      "holomemBonusPercent": 30,
+      "verified": true,
+      "inferred": [
+        "banner cards = 5-star cards new in this dump"
+      ]
+    },
+    {
       "id": "marathon_event-normal-007",
       "name": "Neon Sunshine Festival",
       "type": "point_rally",

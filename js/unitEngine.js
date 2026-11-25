@@ -57,6 +57,9 @@ export function computeUnit(input, data) {
     unit.map(({ card, bloom }) => {
       const levelData = card.activeSkill?.[String(getSkillLevel(card, bloom, cardPotentials, SKILL_LEVEL_TYPES.ACTIVE))];
       if (!levelData) return [card.cardId, 0];
+      if (levelData.activationCondition && evaluateLeaderCondition(levelData.activationCondition, leaderCard, unitCards, characterGroupings) === false) {
+        return [card.cardId, 0]; // gated active skill that can't fire in this unit (see step 4)
+      }
       let effects = levelData.effects || [];
       if (levelData.enhancedCondition && levelData.enhancedEffects) {
         const met = evaluateLeaderCondition(levelData.enhancedCondition, leaderCard, unitCards, characterGroupings);
@@ -151,6 +154,25 @@ export function computeUnit(input, data) {
         conditionMet,
       };
     });
+    // A passive can carry a SECOND effect behind its own condition (first seen
+    // on Luna 0121, "main 14": Activation Rate UP + Sense UP). Resolved exactly
+    // like the main effect and appended, so every consumer that walks
+    // `effects` (Overall Power, Score Support, the passive card) sees it.
+    // Cards without additionalEffects are untouched.
+    if (levelData.additionalEffects?.length) {
+      const addMet = evaluateLeaderCondition(levelData.additionalCondition ?? null, leaderCard, unitCards, characterGroupings);
+      for (const effect of levelData.additionalEffects) {
+        const recipients = addMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings, rankingFor(effect)) : [];
+        resolved.push({
+          type: effect.type,
+          valuePermil: Number(effect.value),
+          recipients: recipients.map((c) => c.cardId),
+          applies: recipients.length > 0,
+          conditionMet: addMet,
+          isAdditional: true,
+        });
+      }
+    }
     return { cardId: card.cardId, level: passiveLevel, condition: levelData.condition, conditionMet, effects: resolved };
   });
 
@@ -166,6 +188,37 @@ export function computeUnit(input, data) {
     // dynamic in-song state (combo/life/judgement/song) can't be pre-evaluated,
     // so - per instruction - the enhanced value is assumed for simulation
     // purposes, flagged as 'assumed' rather than silently treated as certain.
+    // ACTIVATION GATE (Miko 0120 / Luna 0121, "main 14"): some active skills
+    // only fire at all under a condition ("With 2 or more Cute Type Members,
+    // For 10s, Score UP 110%"). Static team-composition gates are evaluated;
+    // a live-state gate would be assumed met, like enhanced conditions below.
+    // When the gate fails the skill never fires: no effect, 0% chance and no
+    // cooldown/duration, so every downstream simulator (Unit Score, coverage
+    // table, score timeline) treats it as absent. Cards without
+    // activationCondition are untouched.
+    if (levelData.activationCondition) {
+      const gate = evaluateLeaderCondition(levelData.activationCondition, leaderCard, unitCards, characterGroupings);
+      if (gate === false) {
+        return {
+          cardId: card.cardId,
+          level: activeLevel,
+          activationCondition: levelData.activationCondition,
+          activationConditionMet: false,
+          activationProbabilityPercent: 0,
+          coolTimeSeconds: null,
+          effectDurationSeconds: null,
+          enhancedCondition: levelData.enhancedCondition,
+          enhancedConditionMet: false,
+          baseEffects: levelData.effects.map((e) => ({ type: e.type, valuePercent: Number(e.value) / 10 })),
+          enhancedEffects: levelData.enhancedEffects?.map((e) => ({ type: e.type, valuePercent: Number(e.value) / 10 })) ?? [],
+          effects: [],
+        };
+      }
+    }
+    const gateFields = levelData.activationCondition
+      ? { activationCondition: levelData.activationCondition, activationConditionMet: true }
+      : {};
+
     let conditionMet = null;
     let effectiveEffects = levelData.effects;
     if (levelData.enhancedCondition) {
@@ -177,6 +230,7 @@ export function computeUnit(input, data) {
     return {
       cardId: card.cardId,
       level: activeLevel,
+      ...gateFields,
       activationProbabilityPercent: levelData.activationProbabilityPermil / 10,
       coolTimeSeconds: levelData.coolTimeMs / 1000,
       effectDurationSeconds: levelData.effectDurationMs / 1000,
@@ -196,6 +250,35 @@ export function computeUnit(input, data) {
     const specialLevel = getSkillLevel(card, bloom, cardPotentials, SKILL_LEVEL_TYPES.SPECIAL);
     const levelData = card.specialSkill?.[String(specialLevel)];
     if (!levelData) return { cardId: card.cardId, level: specialLevel };
+    // Two kinds of special "additional" effect exist:
+    //  - a RIDER: Skill Activation Rate UP on top of the Score Support boost
+    //    (every card up to "main 13") -> activationRateUpPercent, as before.
+    //  - an ENHANCED boost: a bigger Score Support that REPLACES the base one
+    //    when its condition holds (Luna 0121 / Ina 0122 / Shiori 0123, "main
+    //    14": "Score Support 70%. With 3 or more Cute Type Members, Score
+    //    Support 145%") - same replace-on-condition law as active skills'
+    //    enhancedEffects. Static conditions are evaluated; live-state ones
+    //    (LIFE >= 1000) are assumed met, as for active skills. Must NOT be
+    //    read as a rider - that would credit +145% Activation Rate.
+    const mainEffect = levelData.effects?.[0] ?? null;
+    const addEffect = levelData.additionalEffects?.[0] ?? null;
+    const isEnhancedBoost = !!(mainEffect && addEffect && addEffect.type === mainEffect.type);
+    if (isEnhancedBoost) {
+      const evalResult = evaluateLeaderCondition(levelData.additionalCondition ?? null, leaderCard, unitCards, characterGroupings);
+      const met = evalResult === 'situational' ? 'assumed' : evalResult;
+      const useEnhanced = met === true || met === 'assumed';
+      return {
+        cardId: card.cardId,
+        level: specialLevel,
+        effectDurationSeconds: levelData.effectDurationMs / 1000,
+        supportBonusPercent: Number((useEnhanced ? addEffect : mainEffect).value) / 10,
+        activationRateUpPercent: null,
+        baseSupportBonusPercent: Number(mainEffect.value) / 10,
+        enhancedSupportBonusPercent: Number(addEffect.value) / 10,
+        enhancedCondition: levelData.additionalCondition ?? null,
+        enhancedConditionMet: met,
+      };
+    }
     return {
       cardId: card.cardId,
       level: specialLevel,
@@ -1128,7 +1211,14 @@ export function applyBoardBonuses(result, boardBonuses) {
     const cardId = result.memberStats[i].cardId;
     const actUp = boardBonuses.activationProbabilityPermil[cardId];
     if (actUp && a.activationProbabilityPercent != null) {
-      a.activationProbabilityPercent += actUp / 10;
+      // Board "Activation Rate UP" is a RELATIVE multiplier on the card's own
+      // chance, not added percentage points - the same law the Unit Score's
+      // boosted pass uses (computeBoostedActiveSkillPercent):
+      //   prob' = ceil(prob * (1000 + probUp) / 1000), in permil
+      // e.g. 45% with a full Blue board (300) -> ceil(450*1.3) = 585 -> 58.5%,
+      // not 75%. Integer-numerator form avoids float noise before the ceil.
+      const basePermil = Math.round(a.activationProbabilityPercent * 10);
+      a.activationProbabilityPercent = Math.ceil((basePermil * (1000 + actUp)) / 1000) / 10;
     }
     const freqUp = boardBonuses.cooldownShortenPermil[cardId];
     if (freqUp && a.coolTimeSeconds != null) {
@@ -1596,6 +1686,30 @@ export function computeScoreSupport(passiveResults) {
   return support;
 }
 
+const PASSIVE_ACTIVATION_UP_TYPE =
+  'LivePassiveSkillEffectType_LIVE_PASSIVE_SKILL_EFFECT_TYPE_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP';
+
+/**
+ * Activation Rate UP granted by teammates' passives (first seen on Luna 0121,
+ * "main 14": +14% to 2 Cute members). Confirmed in-game (2026-11-25) to behave
+ * exactly like board Activation Rate UP - a RELATIVE multiplier on the
+ * recipient's own chance, prob' = ceil(prob * (1000 + up) / 1000) - so callers
+ * add it to the board's activationProbabilityPermil map (sources sum).
+ * @returns {Record<string, number>} cardId -> permil received (empty for units without such a passive)
+ */
+export function computePassiveActivationUp(passiveResults) {
+  const up = {};
+  for (const p of passiveResults) {
+    for (const effect of p.effects) {
+      if (!effect.applies || effect.type !== PASSIVE_ACTIVATION_UP_TYPE) continue;
+      for (const recipientId of effect.recipients) {
+        up[recipientId] = (up[recipientId] || 0) + effect.valuePermil;
+      }
+    }
+  }
+  return up;
+}
+
 /** Same idea as computeScoreSupport(), but for the leader's OWN leader-skill
  *  effects - checks both the main effect (10 cards have Score Support as
  *  their entire leader skill, e.g. Oozora Subaru's Vibrant Sun Splash!: +60%
@@ -1841,7 +1955,7 @@ export function adamsApportionment(quotas, target) {
  * @param {Record<string,number>} shortenPermil
  * @returns {{qOutfit:number, qPassive:number, qBoard:number, W:number}}
  */
-export function computeBoostQuotas(baseCards, boostedCards, outfitPercent, passivePercent, boardPermil, probUpPermil, shortenPermil) {
+export function computeBoostQuotas(baseCards, boostedCards, outfitPercent, passivePercent, boardPermil, probUpPermil, shortenPermil, passiveProbUpPermil = {}) {
   const boostedByCardId = Object.fromEntries(boostedCards.map((c) => [c.cardId, c]));
   const w = {};
   let W = 0;
@@ -1873,6 +1987,11 @@ export function computeBoostQuotas(baseCards, boostedCards, outfitPercent, passi
   for (const c of baseCards) {
     const cardW = w[c.cardId];
     qPassive += (passivePercent[c.cardId] || 0) * 10 * cardW; // percent -> permil
+    // Passive Activation Rate UP (Luna 0121) is credited to the Passive line,
+    // linearly like Score Support passives; probUpPermil stays board-only.
+    // The in-game line attribution is unverified; the boosted-pass TOTAL uses
+    // board + passive together (see computeUnitScoreBreakdown in app.js).
+    qPassive += (passiveProbUpPermil[c.cardId] || 0) * cardW;
     weightedBoard += (boardPermil[c.cardId] || 0) * cardW;
     weightedProbUp += (probUpPermil[c.cardId] || 0) * cardW;
     weightedShorten += (shortenPermil[c.cardId] || 0) * cardW;

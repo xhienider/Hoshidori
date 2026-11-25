@@ -34,6 +34,7 @@ import {
   computeBaseActiveSkillPercent,
   computeBoostedActiveSkillPercent,
   computeBoostQuotas,
+  computePassiveActivationUp,
   adamsApportionment,
   extractSpecialSkillInputs,
   computeSpecialSkillLine,
@@ -2259,6 +2260,16 @@ function openSongPicker() {
  *  and returns everything needed to render results, without touching global
  *  `state` or any DOM. Used by both the main page's recompute() and the
  *  Compare feature, so both stay consistent with a single source of truth. */
+/** Returns board/connect bonuses with passive Activation Rate UP added to the
+ *  per-card activationProbabilityPermil map (sources sum, as with board nodes).
+ *  Returns the input object unchanged when there is nothing to add. */
+function withPassiveProbUp(bonuses, passiveProbUp) {
+  if (!passiveProbUp || !Object.keys(passiveProbUp).length) return bonuses;
+  const merged = { ...bonuses.activationProbabilityPermil };
+  for (const [cardId, permil] of Object.entries(passiveProbUp)) merged[cardId] = (merged[cardId] || 0) + permil;
+  return { ...bonuses, activationProbabilityPermil: merged };
+}
+
 function computeFullResult(team, songOverride) {
   const leaderCard = team.leader.cardId ? DATA.byId[team.leader.cardId] : null;
   const unitFilled = team.unit.every((u) => u.cardId);
@@ -2343,11 +2354,17 @@ function computeFullResult(team, songOverride) {
   // before the mutation so both are available.
   const pureActives = result.actives.map((a) => ({ ...a }));
 
-  applyBoardBonuses(result, combinedBonuses);
+  // Passive Activation Rate UP (Luna 0121) behaves exactly like board Activation
+  // Rate UP (confirmed in-game 2026-11-25), so the active schedule uses board +
+  // passive together. combinedBonuses itself stays board/connect-only (the Unit
+  // Score credits the passive share to its Passive line). No such passive in
+  // the unit -> passiveProbUp is {} and nothing changes.
+  const passiveProbUp = computePassiveActivationUp(result.passives);
+  applyBoardBonuses(result, withPassiveProbUp(combinedBonuses, passiveProbUp));
 
   const scoreSupport = mergeScoreSupport(computeScoreSupport(result.passives), combinedBonuses.scoreSupportPermil, computeLeaderScoreSupport(result.leader));
 
-  return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong, combinedBonuses, pureActives };
+  return { leaderCard, unit, result, scoreSupport, baseStats, pureBaseStats, song: currentSong, combinedBonuses, pureActives, passiveProbUp };
 }
 
 function recompute() {
@@ -2679,7 +2696,15 @@ function renderMemberActiveCard(activeResult, card, scoreSupport) {
   const div = document.createElement('div');
   div.className = 'effect-card';
   let conditionLine = '';
-  if (activeResult.enhancedCondition) {
+  if (activeResult.activationCondition) {
+    // Gated active skill (fires only while the condition holds)
+    const gateText = CONDITION_LABELS[activeResult.activationCondition.type]?.(activeResult.activationCondition) ?? 'Conditional';
+    const gateMet = activeResult.activationConditionMet;
+    const gatePill = gateMet === false ? 'unmet' : 'met';
+    const gateNote = gateMet === false ? 'skill never activates in this unit' : 'skill can activate';
+    conditionLine += `<div class="effect-detail" style="margin-bottom:6px;"><span class="pill ${gatePill}">${gateMet === false ? 'NOT MET' : 'MET'}</span> Only fires with ${gateText} — ${gateNote}</div>`;
+  }
+  if (activeResult.enhancedCondition && activeResult.activationConditionMet !== false) {
     const condText = CONDITION_LABELS[activeResult.enhancedCondition.type]?.(activeResult.enhancedCondition) ?? 'Conditional';
     const met = activeResult.enhancedConditionMet;
     const pillClass = met === true ? 'met' : met === 'assumed' ? 'situational' : 'unmet';
@@ -2690,13 +2715,13 @@ function renderMemberActiveCard(activeResult, card, scoreSupport) {
         : met === 'assumed'
         ? 'boosted value assumed for simulation'
         : 'base value shown \u2014 would be higher if met';
-    conditionLine = `<div class="effect-detail" style="margin-bottom:6px;"><span class="pill ${pillClass}">${pillText}</span> ${condText} \u2014 ${valueNote}</div>`;
+    conditionLine += `<div class="effect-detail" style="margin-bottom:6px;"><span class="pill ${pillClass}">${pillText}</span> ${condText} \u2014 ${valueNote}</div>`;
   }
   div.innerHTML = `
     ${conditionLine}
     <div class="active-skill-grid">
       <span>Lv</span><span class="num">${activeResult.level ?? '\u2014'}</span>
-      <span>Activation</span><span class="num">${activeResult.activationProbabilityPercent != null ? activeResult.activationProbabilityPercent.toFixed(0) + '%' : '\u2014'}</span>
+      <span>Activation</span><span class="num">${activeResult.activationProbabilityPercent != null ? +activeResult.activationProbabilityPercent.toFixed(1) + '%' : '\u2014'}</span>
       <span>Cooldown</span><span class="num">${activeResult.coolTimeSeconds != null ? activeResult.coolTimeSeconds.toFixed(0) + 's' : '\u2014'}</span>
       <span>Duration</span><span class="num">${activeResult.effectDurationSeconds != null ? activeResult.effectDurationSeconds.toFixed(0) + 's' : '\u2014'}</span>
     </div>
@@ -3498,7 +3523,7 @@ const UNIT_SCORE_CONSTANT = 101867 / 50000;
  * @param {ReturnType<typeof computeFullResult>} computed
  */
 function computeUnitScoreBreakdown(computed) {
-  const { result, unit, pureBaseStats, baseStats: memberOnlyBaseStats, combinedBonuses, pureActives } = computed;
+  const { result, unit, pureBaseStats, baseStats: memberOnlyBaseStats, combinedBonuses, pureActives, passiveProbUp = {} } = computed;
   const unitCards = unit.map((u) => u.card);
 
   const overallPower = computeOverallPowerTotal(result, pureBaseStats, memberOnlyBaseStats);
@@ -3517,9 +3542,9 @@ function computeUnitScoreBreakdown(computed) {
   const activeResult = computeBaseActiveSkillPercent(baseCards);
 
   // the merged E (percent) for the boosted pass is exactly computed.scoreSupport
-  const boostedResult = computeBoostedActiveSkillPercent(baseCards, computed.scoreSupport, probUp, shorten);
+  const boostedResult = computeBoostedActiveSkillPercent(baseCards, computed.scoreSupport, withPassiveProbUp(combinedBonuses, passiveProbUp).activationProbabilityPermil, shorten);
 
-  const quotas = computeBoostQuotas(baseCards, boostedResult.boostedCards, eOutfit, ePassive, eBoard, probUp, shorten);
+  const quotas = computeBoostQuotas(baseCards, boostedResult.boostedCards, eOutfit, ePassive, eBoard, probUp, shorten, passiveProbUp);
   const N = [quotas.qOutfit > 0, quotas.qPassive > 0, quotas.qBoard > 0].filter(Boolean).length;
 
   let outfitPermil = 0;
@@ -5134,7 +5159,7 @@ function computeCardFilterData(card) {
   const passive = {
     hasCondition: !!passiveLvl1?.condition,
     conditionType: passiveLvl1?.condition?.type || null,
-    effects: (passiveLvl1?.effects || []).map((e) => ({
+    effects: [...(passiveLvl1?.effects || []), ...(passiveLvl1?.additionalEffects || [])].map((e) => ({
       type: e.type,
       valuePermil: Number(e.value),
       recipientType: e.target?.type || null,
@@ -6281,6 +6306,7 @@ function openCardDetailsPopup(d) {
         ${
           activeLvl1
             ? `
+          ${activeLvl1.activationCondition ? `<div class="cv-details-note">Only fires with: ${condText(activeLvl1.activationCondition)}</div>` : ''}
           <div class="cv-details-note">Cooldown: ${activeLvl1.coolTimeMs / 1000}s &middot; Activation: ${activeLvl1.activationProbabilityPermil / 10}% &middot; Duration: ${activeLvl1.effectDurationMs / 1000}s</div>
           ${(activeLvl1.effects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b></div>`).join('')}
           ${activeLvl1.enhancedCondition ? `<div class="cv-details-note" style="margin-top:6px;">Enhanced if: ${condText(activeLvl1.enhancedCondition)}</div>` : ''}
@@ -6297,7 +6323,7 @@ function openCardDetailsPopup(d) {
             ? `
           <div class="cv-details-note">Duration: ${specialLvl1.effectDurationMs / 1000}s</div>
           ${(specialLvl1.effects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b></div>`).join('')}
-          ${(specialLvl1.additionalEffects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b></div>`).join('')}
+          ${(specialLvl1.additionalEffects || []).map((e) => `<div class="cv-details-effect">${effectLabel(e.type)} <b>+${Number(e.value) / 10}%</b>${specialLvl1.effects?.[0]?.type === e.type ? ' (replaces the above when the condition is met)' : ''}</div>`).join('')}
           ${specialLvl1.additionalCondition ? `<div class="cv-details-note" style="margin-top:6px;">Condition: ${condText(specialLvl1.additionalCondition)}</div>` : ''}
         `
             : '<div class="cv-details-note">No special skill</div>'

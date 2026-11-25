@@ -200,6 +200,14 @@ def build_active_skill(dm: Datamine, card: dict, warnings: list[str]) -> dict:
             "enhancedCondition": resolve_trigger(dm, add_trigger_id),
             "enhancedEffects": [{"type": add_eff["type"], "value": add_eff["value"], "target": None}] if add_eff else [],
         }
+        # ACTIVATION GATE (first seen 2026-11, "main 14": Miko 0120, Luna 0121).
+        # A `liveSkillTriggerGroupId` on the active LEVEL row (not the usual
+        # additional* pair) gates the WHOLE skill - in-game text "With 2 or more
+        # Cute Type Members, For 10s, Score UP 110%": if unmet the skill never
+        # fires. Written only when present so older entries stay byte-identical.
+        gate_id = lvl.get("liveSkillTriggerGroupId")
+        if gate_id:
+            entry["activationCondition"] = resolve_trigger(dm, gate_id)
         out[level] = entry
     return out
 
@@ -222,6 +230,21 @@ def build_passive_skill(dm: Datamine, card: dict, warnings: list[str]) -> dict:
                 "value": eff["value"],
                 "target": resolve_target(dm, eff.get("liveSkillEffectTargetId")),
             })
+        # SECOND PASSIVE EFFECT (first seen 2026-11, "main 14": Luna 0121 -
+        # "Activation Rate UP 14% ... and Sense UP 13% to 2 Cute members"). Same
+        # additional* pair as leader skills; written only when present.
+        add_trigger_id = lvl.get("additionalLiveSkillTriggerGroupId")
+        add_eff_id = lvl.get("additionalLivePassiveSkillEffectGroupId")
+        if add_trigger_id or add_eff_id:
+            add_eff = dm.passive_effects.get(add_eff_id) if add_eff_id else None
+            entry["additionalCondition"] = resolve_trigger(dm, add_trigger_id)
+            entry["additionalEffects"] = [{
+                "type": add_eff["type"],
+                "value": add_eff["value"],
+                "target": resolve_target(dm, add_eff.get("liveSkillEffectTargetId")),
+            }] if add_eff else []
+            if add_eff_id and not add_eff:
+                warnings.append(f"{card['id']}: passive additional effect {add_eff_id} not found")
         out[level] = entry
     return out
 
