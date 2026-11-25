@@ -10,6 +10,15 @@ import { resolveMemberStats, getStatRoles } from './statEngine.js';
 import { evaluateLeaderCondition, resolveEffectRecipients } from './skillEngine.js';
 import { getSkillLevel, SKILL_LEVEL_TYPES } from './statEngine.js';
 
+// Effect types that have a recipient ranking rule in skillEngine.rankingScore().
+const RANKED_EFFECT_SUFFIXES = [
+  '_PERFORMANCE_UP_PERMIL_UP',
+  '_TECHNIQUE_UP_PERMIL_UP',
+  '_SENSE_UP_PERMIL_UP',
+  '_ALL_PARAMETER_UP_PERMIL_UP',
+  '_LIVE_ACTIVE_SKILL_EFFECT_UP_PERMIL_UP',
+];
+
 /**
  * @typedef {object} UnitInput
  * @property {object} leaderCard - member record used as leader
@@ -144,8 +153,20 @@ export function computeUnit(input, data) {
     const levelData = card.passiveSkill?.[String(passiveLevel)];
     if (!levelData) return { cardId: card.cardId, level: passiveLevel, effects: [] };
     const conditionMet = evaluateLeaderCondition(levelData.condition, leaderCard, unitCards, characterGroupings);
+    // A passive with several effects (Luna 0121: Activation Rate UP + Sense UP)
+    // applies AS A WHOLE to one set of members: every effect uses the recipient
+    // choice of the first effect that has a ranking rule (stat / Score Support,
+    // see rankingScore in skillEngine.js), so Activation Rate - which has no
+    // rule of its own - goes to the same members as the Sense. User's call
+    // 2026-11-25, pending in-game confirmation. Single-effect passives are
+    // unchanged (their own effect is the ranking effect).
+    const allPassiveEffects = [...(levelData.effects || []), ...(levelData.additionalEffects || [])];
+    const sharedRankingEffect = levelData.additionalEffects?.length
+      ? allPassiveEffects.find((e) => RANKED_EFFECT_SUFFIXES.some((suf) => e.type.endsWith(suf))) ?? null
+      : null;
+    const passiveRankingFor = (effect) => rankingFor(sharedRankingEffect ?? effect);
     const resolved = levelData.effects.map((effect) => {
-      const recipients = conditionMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings, rankingFor(effect)) : [];
+      const recipients = conditionMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings, passiveRankingFor(effect)) : [];
       return {
         type: effect.type,
         valuePermil: Number(effect.value),
@@ -162,7 +183,7 @@ export function computeUnit(input, data) {
     if (levelData.additionalEffects?.length) {
       const addMet = evaluateLeaderCondition(levelData.additionalCondition ?? null, leaderCard, unitCards, characterGroupings);
       for (const effect of levelData.additionalEffects) {
-        const recipients = addMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings, rankingFor(effect)) : [];
+        const recipients = addMet ? resolveEffectRecipients(effect.target, card, unitCards, characterGroupings, passiveRankingFor(effect)) : [];
         resolved.push({
           type: effect.type,
           valuePermil: Number(effect.value),
