@@ -875,16 +875,20 @@ export function computeBoardBonuses(unlockedPositions, boardCategoriesData, slot
 const SKILL_TREE_EFFECT_PREFIX = 'SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_';
 
 /**
- * Green (Card-area) board bonuses: flat stat boosts to a card's OWN stats.
+ * Green (Card-area) board bonuses: flat stat boosts, ROSTER-WIDE.
  * Unlike Red/Blue, Card/Content aren't bespoke per character - every
  * character's layout is one of only 2 shared templates (confirmed via
  * Character.json's skillTreeNodePositionGroupId - see data/green_yellow_board.json
  * and each character's greenYellowVariant field in board_categories.json).
- * Only relevant for characters actually in the current unit, since it boosts
- * that card's own Member Parameter contribution - a character's green
- * investment does nothing if they're not one of the 5 performing members
- * (unlike yellow, which applies regardless of current unit - see
- * computeYellowScoreBonus).
+ *
+ * CONFIRMED IN-GAME (2026-11-26, user): the node text "Grants X UP N to All"
+ * is literal. Removing a Green stat node from a holomem who is NOT in the
+ * unit lowers the unit's Unit Score. So every holomem's unlocked Green stat
+ * nodes are summed across the whole roster, and that sum goes to EACH of the
+ * unit's performing members (slots with isUnitMember). No cap exists for
+ * these effect types in SkillTreeEffectValueLimit.json (only Yellow's 100
+ * permil and the gen boost's 900). Before this, the engine counted only the
+ * member's own board, for her own card - that undercounted.
  *
  * The raw ALL_MEMBER node type (confirmed as the real "green" area via a
  * real in-game screenshot, 2026-09 - NOT SkillTreeNodeType_CARD, which is
@@ -907,44 +911,41 @@ const SKILL_TREE_EFFECT_PREFIX = 'SkillTreeEffectType_SKILL_TREE_EFFECT_TYPE_';
  * @param {object[]} slots - same slot shape as computeBoardBonuses/computeConnectBonuses
  */
 export function computeGreenBoardBonuses(greenYellowSelections, greenYellowBoardData, boardCategoriesData, slots) {
-  const statFlat = {};
-  const ensureStat = (cardId) => {
-    if (!statFlat[cardId]) statFlat[cardId] = { performance: 0, technique: 0, sense: 0 };
-    return statFlat[cardId];
-  };
-
-  for (const slot of slots) {
-    if (!slot.isUnitMember) continue;
-    const variant = boardCategoriesData[slot.characterId]?.greenYellowVariant;
-    if (!variant) continue;
-    const unlockedSet = greenYellowSelections[slot.characterId];
+  // Roster-wide sum of every holomem's unlocked Green stat nodes.
+  const roster = { performance: 0, technique: 0, sense: 0 };
+  for (const [characterId, unlockedSet] of Object.entries(greenYellowSelections || {})) {
     if (!unlockedSet || !unlockedSet.size) continue;
-
+    const variant = boardCategoriesData[characterId]?.greenYellowVariant;
+    if (!variant) continue;
     const cardNodes = greenYellowBoardData.variants[variant]?.card || [];
-    const st = ensureStat(slot.cardId);
     for (const node of cardNodes) {
-      const posKey = `${node.x},${node.y}`;
-      if (!unlockedSet.has(posKey)) continue;
+      if (!unlockedSet.has(`${node.x},${node.y}`)) continue;
       const value = Number(node.value);
       switch (node.effectType?.replace(SKILL_TREE_EFFECT_PREFIX, '')) {
         case 'ALL_PARAMETER_UP':
-          st.performance += value;
-          st.technique += value;
-          st.sense += value;
+          roster.performance += value;
+          roster.technique += value;
+          roster.sense += value;
           break;
         case 'PERFORMANCE_UP':
-          st.performance += value;
+          roster.performance += value;
           break;
         case 'TECHNIQUE_UP':
-          st.technique += value;
+          roster.technique += value;
           break;
         case 'SENSE_UP':
-          st.sense += value;
+          roster.sense += value;
           break;
       }
     }
   }
-  return { statFlat };
+  // ...given to each performing member.
+  const statFlat = {};
+  for (const slot of slots) {
+    if (!slot.isUnitMember) continue;
+    statFlat[slot.cardId] = { ...roster };
+  }
+  return { statFlat, roster };
 }
 
 /**

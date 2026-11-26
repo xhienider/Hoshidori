@@ -3357,7 +3357,8 @@ function hasGreenYellowArea(characterId, tab) {
 
 /** Green from the Board Manager for the performing members in `result`, in the
  *  Holomem Board Bonus's own units (summed Performance + Technique + Sense):
- *  each member's own Green stat nodes + 3 x the gen-boost All Stats she
+ *  the roster-wide Green stat nodes (every holomem's board, given to each
+ *  performing member - confirmed in-game 2026-11-26) + 3 x the gen-boost All Stats she
  *  receives (roster-wide, capped at 900 - computeGreenGroupingBonuses).
  *  Also returns coverage counts so the UI can explain a low number. */
 function computeBoardManagerGreen(result) {
@@ -3391,6 +3392,7 @@ function computeBoardManagerGreen(result) {
     genTotal,
     members: members.length,
     membersWithBoard: members.filter((m) => hasGreenYellowArea(m.characterId, 'green')).length,
+    rosterWithBoard: Object.keys(state.greenYellowBoardSelections || {}).filter((id) => hasGreenYellowArea(id, 'green')).length,
     genMates: mates.size,
     genMatesWithBoard: [...mates].filter((id) => hasGreenYellowArea(id, 'green')).length,
   };
@@ -3791,9 +3793,9 @@ function renderPowerRow(computed) {
     greenWrap.appendChild(greenBtn);
   } else {
     const note = document.createElement('span');
-    note.className = 'source-note' + (boardGreen.membersWithBoard < boardGreen.members || boardGreen.genMatesWithBoard < boardGreen.genMates ? ' incomplete' : '');
-    note.textContent = `boards ${boardGreen.membersWithBoard}/${boardGreen.members} \u00b7 gen-mates ${boardGreen.genMatesWithBoard}/${boardGreen.genMates}`;
-    note.title = `Own Green nodes: ${boardGreen.ownTotal.toLocaleString()} \u00b7 gen boost: ${boardGreen.genTotal.toLocaleString()} (3 \u00d7 All Stats received, capped at 900 per member). "boards" = unit members with a Green board entered in the Board Manager; "gen-mates" = holomems whose board feeds your members' gen boost. Missing boards make this lower than the game\u2019s.`;
+    note.className = 'source-note' + (boardGreen.genMatesWithBoard < boardGreen.genMates ? ' incomplete' : '');
+    note.textContent = `Green boards ${boardGreen.rosterWithBoard} \u00b7 gen-mates ${boardGreen.genMatesWithBoard}/${boardGreen.genMates}`;
+    note.title = `Green stat nodes: ${boardGreen.ownTotal.toLocaleString()} (every holomem's Green stat nodes, given to each of the 5 members) \u00b7 gen boost: ${boardGreen.genTotal.toLocaleString()} (3 \u00d7 All Stats received, capped at 900 per member). "Green boards" = holomems with a Green board entered in the Board Manager; "gen-mates" = holomems whose board feeds your members' gen boost. Missing boards make this lower than the game\u2019s.`;
     greenWrap.appendChild(note);
   }
   addRow(
