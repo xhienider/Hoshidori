@@ -3056,3 +3056,4 @@ header.masthead {
 .faq-node-table td { vertical-align: top; }
 .faq-node-icons { white-space: nowrap; }
 .faq-node-icon { width: 28px; height: 28px; vertical-align: middle; margin-right: 2px; background: #2a2f3d; border-radius: 6px; padding: 3px; box-sizing: border-box; }
+.faq-node-board { margin-top: 14px; }
