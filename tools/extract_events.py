@@ -15,6 +15,10 @@ What the game data gives (checked against Whistling Wind Walk, 2026-11-24):
   order (marked "inferred").
 - End: Condition `cd-event_end-marathon_event-...` (relay: endTime; normal: startTime = the moment
   the event ends). Times are converted to Singapore time (UTC+8), the user's timezone.
+  `endAt` = the exact closing moment as ISO with +08:00 (relay endTime is the last second, so
+  +1 s); every event so far closes at 19:00 SGT. Feeds the panel's countdown and Live Boost count.
+  endAt is data-derived timing, so it is also filled in on verified events (nothing else on
+  them is touched).
 - Banner: Gacha `gacha-pickup-normal-YYMMDD` with the event's start date; its name comes from
   LangGachaPoint ("Bright Autumn Trip Gacha Pt").
 What it does NOT give (server-side): the banner's card list and the bonus percentages.
@@ -125,11 +129,16 @@ def main():
             s = str(min(prios))
             ev['start'] = f'20{s[0:2]}-{s[2:4]}-{s[4:6]}'
         ev['end'] = None
+        ev['endAt'] = None
         for c in conditions:
             if c.get('groupId') == f'cd-event_end-{eid}' and c.get('type', '').endswith('TERM_DATETIME'):
                 t = c.get('endTime') or c.get('startTime')
                 if t:
                     d = ms_to_sgt(t)
+                    if c.get('endTime'):
+                        ev['endAt'] = (d + dt.timedelta(seconds=1)).isoformat()  # last second -> close moment
+                    else:
+                        ev['endAt'] = d.isoformat()
                     if c.get('startTime') and not c.get('endTime'):
                         d -= dt.timedelta(seconds=1)  # "after end" condition -> last moment of the event
                     ev['end'] = d.strftime('%Y-%m-%d')
@@ -190,6 +199,8 @@ def main():
     for ev in sorted(events.values(), key=lambda e: (e['start'] or '9999', e['id'])):
         prev = old.get(ev['id'], {})
         if prev.get('verified'):
+            if 'endAt' not in prev:  # timing only; keep the key right after 'end'
+                prev = {k2: v2 for k, v in prev.items() for k2, v2 in ([(k, v), ('endAt', ev['endAt'])] if k == 'end' else [(k, v)])}
             result.append(prev)
             continue
         member_pct, holomem_pct = DEFAULT_BONUS[ev['type']]
@@ -204,6 +215,7 @@ def main():
             'type': ev['type'],
             'start': ev['start'],
             'end': ev['end'],
+            'endAt': ev['endAt'],
             'chapters': ev['chapterList'],
             'holomems': holomems,
             'banner': gacha_names.get(f'la-gacha_point-pickup-{ev["banner"]}', '').replace(' Gacha Pts', '').replace(' Gacha Pt', '') if ev['banner'] else None,

@@ -130,3 +130,64 @@ export function selectableEvents(eventsData, today) {
   const upcoming = dated.filter((e) => e.start > today).sort((a, b) => a.start.localeCompare(b.start));
   return [...live.map((event) => ({ event, status: 'live' })), ...upcoming.map((event) => ({ event, status: 'upcoming' }))];
 }
+
+// ---------------------------------------------------------------------------
+// Event clock and Live Boosts until the end (2026-11-28).
+//
+// Live Boosts recover naturally 1 every 45 minutes while fewer than 10 are held
+// (Setting.json liveRewardUpStaminaRecoveryMinutes = 45, liveRewardUpStaminaMax = 10;
+// items / Red Diamonds can push the count past 10, up to 99 = ...OverflowMax).
+// Events close at 19:00 SGT on their end date (Condition cd-event_end-<event>:
+// relay-004 endTime 2026-11-30 18:59:59, normal-010 startTime 2026-12-10 19:00:00).
+
+export const LIVE_BOOST_RECOVERY_MINUTES = 45;
+export const LIVE_BOOST_NATURAL_MAX = 10;
+export const LIVE_BOOST_HELD_MAX = 99;
+const BOOST_PERIOD_MS = LIVE_BOOST_RECOVERY_MINUTES * 60000;
+
+/** The moment the event closes (ms since epoch): `endAt` (ISO, from tools/extract_events.py) or
+ *  the end date at 19:00 SGT, which every event so far has used. null when the end is unknown. */
+export function eventEndMs(event) {
+  const t = event?.endAt ? Date.parse(event.endAt) : NaN;
+  if (!Number.isNaN(t)) return t;
+  return event?.end ? Date.parse(`${event.end}T19:00:00+08:00`) : null;
+}
+
+/** "51h 24m 10s" (hours not wrapped into days, as asked). */
+export function formatCountdown(ms) {
+  const s = Math.max(0, Math.floor(ms / 1000));
+  const h = Math.floor(s / 3600);
+  const m = Math.floor((s % 3600) / 60);
+  return `${h}h ${String(m).padStart(2, '0')}m ${String(s % 60).padStart(2, '0')}s`;
+}
+
+/**
+ * Live Boosts a player can still spend before the event closes: the ones held at `heldAtMs`
+ * plus every natural recovery that lands early enough to start (and finish) one more live.
+ * Assumes the player keeps spending, so the bar never sits full at 10 (a full bar stops
+ * recovering - sleeping through 8 hours loses ~1 boost).
+ * @param {{held:number, heldAtMs:number, nextInMinutes?:number|null, endMs:number, lastLiveMs?:number}} p
+ *   nextInMinutes: the in-game timer to the next boost (0-45; default 45 = worst case).
+ *   lastLiveMs: time one live takes - a boost recovering later than end - lastLiveMs can't be used.
+ */
+export function liveBoostsUntilEnd({ held, heldAtMs, nextInMinutes, endMs, lastLiveMs = 0 }) {
+  const h = Math.max(0, Math.min(LIVE_BOOST_HELD_MAX, Math.floor(held || 0)));
+  const next = nextInMinutes == null || Number.isNaN(nextInMinutes) ? LIVE_BOOST_RECOVERY_MINUTES : Math.max(0, Math.min(LIVE_BOOST_RECOVERY_MINUTES, nextInMinutes));
+  const cutoff = endMs - lastLiveMs;
+  const first = heldAtMs + next * 60000;
+  const recoveries = cutoff >= first ? 1 + Math.floor((cutoff - first) / BOOST_PERIOD_MS) : 0;
+  return { held: h, recoveries, total: h + recoveries };
+}
+
+/**
+ * Event points from spending `totalBoosts` at `boostsPerLive` each: full lives, plus one live
+ * with the leftover boosts. pointsFor(b) = event points of one live using b boosts (the
+ * song-length bonus and Rewards ×N both depend on b, so the leftover live is priced on its own).
+ */
+export function pointsFromBoosts(totalBoosts, boostsPerLive, pointsFor) {
+  const b = Math.max(1, Math.min(10, Math.floor(boostsPerLive) || 1));
+  const total = Math.max(0, Math.floor(totalBoosts) || 0);
+  const lives = Math.floor(total / b);
+  const rest = total % b;
+  return { lives, rest, points: lives * pointsFor(b) + (rest ? pointsFor(rest) : 0) };
+}
