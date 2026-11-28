@@ -1,5 +1,5 @@
 {
- "_note": "Board presets for the Materials Tracker, from the 'Board Presets' page of the Guide Notes (2026-11-14). Stored as node ids, which are the same on every board layout - flipped layouts (tree-model-001 vs 002 for Blue/Yellow, 001/002 vs 003/004 for Red) put the same id at the mirrored position, so one list fits every holomem. Connector slots are listed too; they're free and only count when a path passes through them. Decoded from in-game screenshots of a tree-model-002 holomem.",
+ "_note": "Board presets for the Materials Tracker, from the 'Board Presets' page of the Guide Notes (2026-11-14). Stored as node ids, which are the same on every board layout - flipped layouts (tree-model-001 vs 002 for Blue/Yellow, 001/002 vs 003/004 for Red) put the same id at the mirrored position, so one list fits every holomem. Connector slots are listed too; they're free and only count when a path passes through them. Decoded from in-game screenshots of a tree-model-002 holomem. R-064 (main 14 leader node, +10% Activation Rate to all, 6 pts + 10 Red Star Cube + 100 Red Hexa) added to both Red \"Full Bonus\" presets 2026-11-28.",
  "presets": {
   "red": [
    {
@@ -49,7 +49,8 @@
      "R-061",
      "R-062",
      "R-063",
-     "S-002"
+     "S-002",
+     "R-064"
     ]
    },
    {
@@ -133,7 +134,8 @@
      "R-058",
      "R-060",
      "R-061",
-     "S-002"
+     "S-002",
+     "R-064"
     ]
    }
   ],

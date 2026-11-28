@@ -333,7 +333,7 @@ export async function openMaterialsPage() {
 
     for (const n of areaNodes) {
       const isOn = unlocked.has(n.id);
-      const radius = n.kind === 'connector' ? 7 : n.grade >= 2 ? 13 : 10;
+      const radius = n.kind === 'connector' ? 7 : n.grade >= 3 ? 15 : n.grade >= 2 ? 13 : 10;
       const c = document.createElementNS(svgNS, 'circle');
       c.setAttribute('cx', sx(n.x));
       c.setAttribute('cy', sy(n.y));
@@ -344,7 +344,7 @@ export async function openMaterialsPage() {
       title.textContent =
         n.kind === 'connector'
           ? `Connect-effect slot \u00b7 ${n.points}pt, no materials \u00b7 unlocked automatically when a path passes through`
-          : `${n.effect || n.id} · ${costText(n.cost, boardMaterials)} · ${n.points}pt · ${n.grade >= 2 ? '2★' : '1★'}${isOn ? ' (unlocked)' : ''}`;
+          : `${n.effect || n.id} · ${costText(n.cost, boardMaterials)} · ${n.points}pt · ${n.grade >= 3 ? '3★' : n.grade >= 2 ? '2★' : '1★'}${isOn ? ' (unlocked)' : ''}`;
       c.appendChild(title);
       c.addEventListener('click', () => {
         setUnlocked(selectedCharacterId, toggleNode(board, unlockedOf(selectedCharacterId), n.id));
@@ -371,7 +371,7 @@ export async function openMaterialsPage() {
       el(
         'div',
         'board-diagram-legend',
-        `${s.unlockedCount}/${s.totalCount} nodes · spent ${costText(s.spent.cost, boardMaterials)} · left ${costText(s.remaining.cost, boardMaterials)} · big = 2★ (Hexa) · click to unlock/lock (far nodes unlock the path)`
+        `${s.unlockedCount}/${s.totalCount} nodes · spent ${costText(s.spent.cost, boardMaterials)} · left ${costText(s.remaining.cost, boardMaterials)} · big = 2★ (Hexa), biggest = 3★ (Star Cube) · click to unlock/lock (far nodes unlock the path)`
       )
     );
   }
@@ -379,7 +379,9 @@ export async function openMaterialsPage() {
   // ---------------- right: summaries ----------------
   function materialPair(cost, color) {
     const ids = byColor[color];
-    return `${fmt(cost[ids.cube])} / ${fmt(cost[ids.hexa])}`;
+    // Red also has a Star Cube tier (R-064, "main 14"); other colors have none yet.
+    const star = ids.star ? ` + ${fmt(cost[ids.star])} Star` : '';
+    return `${fmt(cost[ids.cube])} / ${fmt(cost[ids.hexa])}${star}`;
   }
 
   function renderRight() {
@@ -416,8 +418,9 @@ export async function openMaterialsPage() {
     for (const h of ['Material', 'Spent', 'Held', 'Total', 'To finish all']) head.appendChild(el('th', null, h));
     const body = t.createTBody();
     for (const area of AREAS) {
-      for (const tier of ['cube', 'hexa']) {
+      for (const tier of ['cube', 'hexa', 'star']) {
         const id = byColor[area][tier];
+        if (!id) continue; // only Red has a Star Cube
         const m = boardMaterials.materials[id];
         const r = body.insertRow();
         const name = el('td', 'mat-color-cell', m.name);

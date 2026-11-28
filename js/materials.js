@@ -6,7 +6,7 @@
  * (every holomem, all 4 colors), stored under its own localStorage key.
  *
  * Data: data/board_materials.json (tools/extract_board_materials.py).
- *   - models[layout] = the 153 non-center nodes of that board layout, each
+ *   - models[layout] = the non-center nodes of that board layout (155 since "main 14"), each
  *     { id, x, y, area, kind: 'node'|'connector', grade, points, cost: {itemId: qty}, effect, icon }
  *   - characters[characterId] = { name, model, groups }
  *   - characterOverrides[characterId][nodeId] = { effect, icon } (per-holomem
@@ -238,7 +238,7 @@ export const genRank = (group) => GEN_RANK.get(String(group).toLowerCase()) ?? G
 const characterGenRank = (c) => Math.min(GEN_ORDER.length, ...(c.groups || []).map(genRank));
 
 /** Unlocked board slots for one holomem - nodes AND connect-effect slots
- *  (the list's "x/153" count and the Holoboard sort use this). */
+ *  (the list's "x/155" count and the Holoboard sort use this). */
 export function unlockedNodeCount(boardMaterials, account, characterId) {
   const ids = account?.boards?.[characterId];
   if (!ids?.length) return 0;

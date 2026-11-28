@@ -12,7 +12,7 @@ defaults to data/board_materials.json relative to the repo root.
 
 CONFIRMED STRUCTURE (2026-11-14, "main 13" datamine):
   - The whole board (Red + Blue + Green + Yellow + connector slots) is ONE grid
-    of 154 nodes per layout. There are 4 layouts, tree-model-001..004
+    of 154 nodes per layout ("main 14" added R-064 + G-026 -> 156). There are 4 layouts, tree-model-001..004
     (SkillTreeNodePosition.json), chosen per character by
     Character.json's skillTreeNodePositionGroupId. 001/003 (and 002/004)
     differ only in the Red area; 001 vs 002 mirror Blue/Yellow left/right.
@@ -34,6 +34,8 @@ CONFIRMED STRUCTURE (2026-11-14, "main 13" datamine):
 
 Materials (Item ids -> in-game names, from LangItem_Eng.json):
   item-skill_tree_leader-1/-2     Red Cube / Red Hexa
+  item-skill_tree_leader-3        Red Star Cube (added "main 14", 2026-11-25:
+                                  only R-064 uses it so far)
   item-skill_tree_card-1/-2       Blue Cube / Blue Hexa
   item-skill_tree_allmember-1/-2  Green Cube / Green Hexa
   item-skill_tree_content-1/-2    Yellow Cube / Yellow Hexa
@@ -48,6 +50,7 @@ AREA_BY_PREFIX = {'R': 'red', 'B': 'blue', 'G': 'green', 'Y': 'yellow'}
 MATERIALS = {
     'item-skill_tree_leader-1': ('red', 'cube'),
     'item-skill_tree_leader-2': ('red', 'hexa'),
+    'item-skill_tree_leader-3': ('red', 'star'),
     'item-skill_tree_card-1': ('blue', 'cube'),
     'item-skill_tree_card-2': ('blue', 'hexa'),
     'item-skill_tree_allmember-1': ('green', 'cube'),

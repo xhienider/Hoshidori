@@ -810,7 +810,7 @@ function openBoardEditor(card, isLeaderSlotContext) {
       const unlocked = sel.has(n.posKey);
       const el = document.createElementNS(svgNS, n.kind === 'connector' ? 'rect' : 'circle');
       const colorVar = n.kind === 'connector' ? '--text-faint' : n.area === 'leader' ? '--red-node' : '--blue-node';
-      const radius = n.grade >= 2 ? 13 : 10;
+      const radius = n.grade >= 3 ? 15 : n.grade >= 2 ? 13 : 10;
 
       if (n.kind === 'connector') {
         const size = 10;
@@ -834,7 +834,7 @@ function openBoardEditor(card, isLeaderSlotContext) {
         const isPermil = n.type.includes('PERMIL');
         const valLabel = isPermil ? `+${(n.value / 10).toFixed(1)}%` : `+${n.value} pts`;
         const singerNote = n.requiresSinger ? ' \u00b7 only when this character is a singer on the selected song' : '';
-        title.textContent = `${BOARD_CATEGORY_LABELS[n.type] || n.type} \u00b7 ${valLabel} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}${singerNote}`;
+        title.textContent = `${BOARD_CATEGORY_LABELS[n.type] || n.type} \u00b7 ${valLabel} \u00b7 ${n.cost}pt \u00b7 ${n.grade >= 3 ? '3\u2605' : n.grade >= 2 ? '2\u2605' : '1\u2605'}${unlocked ? ' (unlocked)' : ''}${singerNote}`;
         if (n.requiresSinger) el.classList.add('board-diagram-node-singer');
       }
       el.appendChild(title);

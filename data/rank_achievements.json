@@ -1,5 +1,5 @@
 {
- "datamineVersion": "9171c5282eaf",
+ "datamineVersion": "1112ae6e32e7",
  "rankCurve": [
   {
    "rank": 1,
@@ -1155,7 +1155,7 @@
     "absolute_costume_get_count": 3,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 2,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00002": {
@@ -1177,7 +1177,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00004": {
@@ -1199,7 +1199,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00005": {
@@ -1221,7 +1221,7 @@
     "absolute_costume_get_count": 3,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00006": {
@@ -1244,7 +1244,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 5,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00007": {
@@ -1266,7 +1266,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00010": {
@@ -1288,7 +1288,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00011": {
@@ -1310,7 +1310,7 @@
     "absolute_costume_get_count": 3,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 2,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00012": {
@@ -1332,7 +1332,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00013": {
@@ -1354,7 +1354,7 @@
     "absolute_costume_get_count": 3,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 2,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00014": {
@@ -1376,7 +1376,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 5,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00015": {
@@ -1389,16 +1389,16 @@
     "title": "flower rhapsody"
    },
    "caps": {
-    "absolute_card_get_unique_count": 4,
-    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_get_unique_count": 5,
+    "absolute_card_level_sum_by_card_id": 370,
     "absolute_card_level_limit_break": 4,
-    "increment_card_level_limit_break_count": 16,
+    "increment_card_level_limit_break_count": 20,
     "absolute_card_upgrade_potential": 5,
-    "increment_card_upgrade_potential_count": 20,
-    "absolute_costume_get_count": 4,
+    "increment_card_upgrade_potential_count": 25,
+    "absolute_costume_get_count": 5,
     "absolute_park_emotion_get_count": 22,
-    "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_music_release_count_by_character_id-solo": 5,
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00016": {
@@ -1420,7 +1420,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00017": {
@@ -1442,7 +1442,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00018": {
@@ -1464,7 +1464,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00019": {
@@ -1486,7 +1486,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00021": {
@@ -1508,7 +1508,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00022": {
@@ -1530,7 +1530,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00023": {
@@ -1552,7 +1552,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00026": {
@@ -1574,7 +1574,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00027": {
@@ -1596,7 +1596,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00028": {
@@ -1609,16 +1609,16 @@
     "title": "Escort me! Luknight"
    },
    "caps": {
-    "absolute_card_get_unique_count": 4,
-    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_get_unique_count": 5,
+    "absolute_card_level_sum_by_card_id": 370,
     "absolute_card_level_limit_break": 4,
-    "increment_card_level_limit_break_count": 16,
+    "increment_card_level_limit_break_count": 20,
     "absolute_card_upgrade_potential": 5,
-    "increment_card_upgrade_potential_count": 20,
-    "absolute_costume_get_count": 4,
+    "increment_card_upgrade_potential_count": 25,
+    "absolute_costume_get_count": 5,
     "absolute_park_emotion_get_count": 22,
-    "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_music_release_count_by_character_id-solo": 5,
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00030": {
@@ -1640,7 +1640,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00031": {
@@ -1662,7 +1662,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00032": {
@@ -1684,7 +1684,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00034": {
@@ -1706,7 +1706,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00035": {
@@ -1728,7 +1728,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00036": {
@@ -1750,7 +1750,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00037": {
@@ -1772,7 +1772,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-00039": {
@@ -1794,7 +1794,7 @@
     "absolute_costume_get_count": 3,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 2,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03001": {
@@ -1816,7 +1816,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03002": {
@@ -1838,7 +1838,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03003": {
@@ -1860,7 +1860,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03004": {
@@ -1882,7 +1882,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03005": {
@@ -1904,7 +1904,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03006": {
@@ -1926,7 +1926,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03007": {
@@ -1948,7 +1948,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03008": {
@@ -1970,7 +1970,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-03009": {
@@ -1992,7 +1992,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04001": {
@@ -2014,7 +2014,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04002": {
@@ -2036,7 +2036,7 @@
     "absolute_costume_get_count": 3,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 2,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04003": {
@@ -2049,16 +2049,16 @@
     "title": "VIOLET"
    },
    "caps": {
-    "absolute_card_get_unique_count": 4,
-    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_get_unique_count": 5,
+    "absolute_card_level_sum_by_card_id": 370,
     "absolute_card_level_limit_break": 4,
-    "increment_card_level_limit_break_count": 16,
+    "increment_card_level_limit_break_count": 20,
     "absolute_card_upgrade_potential": 5,
-    "increment_card_upgrade_potential_count": 20,
-    "absolute_costume_get_count": 4,
+    "increment_card_upgrade_potential_count": 25,
+    "absolute_costume_get_count": 5,
     "absolute_park_emotion_get_count": 22,
-    "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04007": {
@@ -2080,7 +2080,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04010": {
@@ -2102,7 +2102,7 @@
     "absolute_costume_get_count": 3,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 2,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04012": {
@@ -2124,7 +2124,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04013": {
@@ -2137,16 +2137,16 @@
     "title": "Monsters and Men"
    },
    "caps": {
-    "absolute_card_get_unique_count": 4,
-    "absolute_card_level_sum_by_card_id": 290,
+    "absolute_card_get_unique_count": 5,
+    "absolute_card_level_sum_by_card_id": 370,
     "absolute_card_level_limit_break": 4,
-    "increment_card_level_limit_break_count": 16,
+    "increment_card_level_limit_break_count": 20,
     "absolute_card_upgrade_potential": 5,
-    "increment_card_upgrade_potential_count": 20,
-    "absolute_costume_get_count": 4,
+    "increment_card_upgrade_potential_count": 25,
+    "absolute_costume_get_count": 5,
     "absolute_park_emotion_get_count": 22,
-    "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_music_release_count_by_character_id-solo": 4,
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04014": {
@@ -2168,7 +2168,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04015": {
@@ -2190,7 +2190,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 4,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04016": {
@@ -2212,7 +2212,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 5,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-04017": {
@@ -2234,7 +2234,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 5,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-06002": {
@@ -2256,7 +2256,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-06003": {
@@ -2278,7 +2278,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-06004": {
@@ -2300,7 +2300,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   },
   "chr-06005": {
@@ -2322,7 +2322,7 @@
     "absolute_costume_get_count": 4,
     "absolute_park_emotion_get_count": 22,
     "absolute_music_release_count_by_character_id-solo": 3,
-    "absolute_skill_tree_release_count": 153
+    "absolute_skill_tree_release_count": 155
    }
   }
  }
