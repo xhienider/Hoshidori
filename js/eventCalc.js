@@ -145,12 +145,25 @@ export const LIVE_BOOST_NATURAL_MAX = 10;
 export const LIVE_BOOST_HELD_MAX = 99;
 const BOOST_PERIOD_MS = LIVE_BOOST_RECOVERY_MINUTES * 60000;
 
-/** The moment the event closes (ms since epoch): `endAt` (ISO, from tools/extract_events.py) or
- *  the end date at 19:00 SGT, which every event so far has used. null when the end is unknown. */
-export function eventEndMs(event) {
+/** The moment the event closes in-game (ms since epoch): `endAt` (ISO, from
+ *  tools/extract_events.py) or the end date at 19:00 SGT, which every event so far has used.
+ *  For Point Rally this is when the exchange closes, which can be days after the ranking
+ *  ends (see eventEndMs). null when the end is unknown. */
+export function eventCloseMs(event) {
   const t = event?.endAt ? Date.parse(event.endAt) : NaN;
   if (!Number.isNaN(t)) return t;
   return event?.end ? Date.parse(`${event.end}T19:00:00+08:00`) : null;
+}
+
+/** The moment event points stop counting for the ranking: `rankingEndAt` when set, else the
+ *  close (eventCloseMs). The ranking end is NOT in the game data (server-side): Joyful Twinkle
+ *  Night's data only closes it on 10 Dec, while the in-game screen says ranking runs until
+ *  4 Dec 18:59 SGT (user, 2026-11-28) - the remaining days are for the exchange. So
+ *  rankingEndAt is entered by hand in events.json from the in-game event screen. The countdown,
+ *  Live Boost count and "By event end" / target columns all use this moment. */
+export function eventEndMs(event) {
+  const t = event?.rankingEndAt ? Date.parse(event.rankingEndAt) : NaN;
+  return Number.isNaN(t) ? eventCloseMs(event) : t;
 }
 
 /** "51h 24m 10s" (hours not wrapped into days, as asked). */

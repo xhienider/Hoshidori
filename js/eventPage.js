@@ -14,6 +14,7 @@ import {
   eventPoints,
   selectableEvents,
   eventEndMs,
+  eventCloseMs,
   formatCountdown,
   liveBoostsUntilEnd,
   pointsFromBoosts,
@@ -72,7 +73,7 @@ function tick() {
   }
   els.forEach((el) => {
     const left = Number(el.dataset.end) - now;
-    el.textContent = left > 0 ? formatCountdown(left) : 'Event has ended';
+    el.textContent = left > 0 ? formatCountdown(left) : el.dataset.endedText || 'Event has ended';
     el.classList.toggle('ended', left <= 0);
   });
   const panel = lastPanel?.container;
@@ -98,8 +99,9 @@ function boostSignature(event, now) {
   return b ? `${b.total}|${b.endMs > now ? 1 : 0}` : '';
 }
 
+// Times are shown as the last minute before the close (e.g. 18:59), the way the game words them.
 const timeFmt = (ms) =>
-  new Date(ms).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
+  new Date(ms - 60000).toLocaleString(undefined, { weekday: 'short', day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit', timeZoneName: 'short' });
 
 function todayIso() {
   const d = new Date();
@@ -215,8 +217,14 @@ export function renderEventPanel(container, ctx) {
 
   // --- time left + Live Boosts block ---
   const plan = showBoosts ? pointsFromBoosts(bs.total, boosts, () => 0) : null;
+  // Point Rally: the ranking can end days before the event closes (exchange stays open).
+  const closeMs = eventCloseMs(event);
+  const hasRankingEnd = bs && closeMs != null && closeMs > bs.endMs;
+  const endedText = hasRankingEnd ? 'Ranking has ended' : 'Event has ended';
   const clockHtml = bs
-    ? `<div class="ev-clock"><span class="ev-clock-label">${ended ? '' : 'Ends in'}</span><span class="ev-countdown${ended ? ' ended' : ''}" data-end="${bs.endMs}">${ended ? 'Event has ended' : formatCountdown(bs.endMs - now)}</span><span class="ev-clock-at">${esc(timeFmt(bs.endMs))}</span></div>`
+    ? `<div class="ev-clock"><span class="ev-clock-label">${ended ? '' : hasRankingEnd ? 'Ranking ends in' : 'Ends in'}</span><span class="ev-countdown${ended ? ' ended' : ''}" data-end="${bs.endMs}" data-ended-text="${endedText}">${ended ? endedText : formatCountdown(bs.endMs - now)}</span><span class="ev-clock-at">until ${esc(timeFmt(bs.endMs))}${
+        hasRankingEnd ? ` · exchange open until ${esc(timeFmt(closeMs))}` : ''
+      }</span></div>`
     : '';
   const heldAtNote = s.heldAt && s.held !== '' ? ` <span class="ev-dim">(entered ${esc(new Date(Number(s.heldAt)).toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit' }))})</span>` : '';
   const boostsHtml = !bs || ended
