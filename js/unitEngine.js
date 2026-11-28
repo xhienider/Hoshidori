@@ -305,9 +305,14 @@ export function computeUnit(input, data) {
       level: specialLevel,
       effectDurationSeconds: levelData.effectDurationMs / 1000,
       supportBonusPercent: levelData.effects[0] ? Number(levelData.effects[0].value) / 10 : null,
-      activationRateUpPercent: levelData.additionalEffects?.[0]
-        ? Number(levelData.additionalEffects[0].value) / 10
-        : null,
+      // Only an Activation Rate add-on is a rider. 3★/4★ specials also carry
+      // LIFE_RECOVERY (value = LIFE points, 300/400) or JUDGEMENT_ENHANCE (no
+      // value) add-ons - before 2026-11-28 the LIFE ones were misread as
+      // +30/+40% Activation Rate.
+      activationRateUpPercent: (() => {
+        const rider = (levelData.additionalEffects || []).find((e) => e.type.endsWith('_LIVE_ACTIVE_SKILL_ACTIVATION_PROBABILITY_UP_PERMIL_UP'));
+        return rider ? Number(rider.value) / 10 : null;
+      })(),
     };
   });
 
@@ -1232,6 +1237,13 @@ export function applyBoardBonuses(result, boardBonuses) {
   result.actives.forEach((a, i) => {
     const cardId = result.memberStats[i].cardId;
     const actUp = boardBonuses.activationProbabilityPermil[cardId];
+    // Remember the unboosted chance and the summed Activation Rate UP, so a
+    // special skill window's Activation Rate add-on can join the SAME sum
+    // (simulateActiveTimeline) instead of compounding on the boosted value.
+    if (a.activationProbabilityPercent != null && a.baseActivationProbabilityPermil == null) {
+      a.baseActivationProbabilityPermil = Math.round(a.activationProbabilityPercent * 10);
+      a.activationProbabilityUpPermil = actUp || 0;
+    }
     if (actUp && a.activationProbabilityPercent != null) {
       // Board "Activation Rate UP" is a RELATIVE multiplier on the card's own
       // chance, not added percentage points - the same law the Unit Score's
@@ -1240,7 +1252,9 @@ export function applyBoardBonuses(result, boardBonuses) {
       // e.g. 45% with a full Blue board (300) -> ceil(450*1.3) = 585 -> 58.5%,
       // not 75%. Integer-numerator form avoids float noise before the ceil.
       const basePermil = Math.round(a.activationProbabilityPercent * 10);
-      a.activationProbabilityPercent = Math.ceil((basePermil * (1000 + actUp)) / 1000) / 10;
+      // Capped at 100% - a chance can't go higher (2026-11-28; no current
+      // card reaches it from board/passive alone, but stacking can).
+      a.activationProbabilityPercent = Math.min(1000, Math.ceil((basePermil * (1000 + actUp)) / 1000)) / 10;
     }
     const freqUp = boardBonuses.cooldownShortenPermil[cardId];
     if (freqUp && a.coolTimeSeconds != null) {
@@ -1900,7 +1914,7 @@ export function computeBoostedActiveSkillPercent(baseCards, scoreSupportPercent,
       // same math with a single division at the end and lands exactly on
       // 2016 - confirmed against the doc's worked example after this fix.
       magPermil: Math.ceil((c.magPermil * (1000 + E)) / 1000),
-      probPermil: Math.ceil((c.probPermil * (1000 + probUp)) / 1000),
+      probPermil: Math.min(1000, Math.ceil((c.probPermil * (1000 + probUp)) / 1000)), // capped at 100%
       cooldown: (c.cooldown * 1000) / (1000 + shorten),
       duration: c.duration,
     };
@@ -2128,9 +2142,22 @@ export function simulateActiveTimeline({
       const specialActivationUp = inSpecialWindow
         ? specialResults[specialWindowIndex]?.activationRateUpPercent || 0
         : 0;
-      const activationChance = active
-        ? Math.round((a.activationProbabilityPercent || 0) * (1 + specialActivationUp / 100) * 100) / 100
-        : null;
+      // A special's Activation Rate add-on is ADDED to the card's other
+      // Activation Rate UP (boards, connects, passives) and the sum is applied
+      // once to the base chance - the same law every other source follows:
+      //   chance = min(100%, ceil(base * (1000 + boardUp + specialUp) / 1000))
+      // (user's call 2026-11-28; it used to multiply the already-boosted chance,
+      // which compounded: 55% x 1.4 x 1.4 = 107.8%). Capped at 100%.
+      // Unverified in-game, like the add-on itself.
+      let activationChance = null;
+      if (active) {
+        if (specialActivationUp && a.baseActivationProbabilityPermil != null) {
+          const upPermil = (a.activationProbabilityUpPermil || 0) + Math.round(specialActivationUp * 10);
+          activationChance = Math.min(1000, Math.ceil((a.baseActivationProbabilityPermil * (1000 + upPermil)) / 1000)) / 10;
+        } else {
+          activationChance = Math.min(100, Math.round((a.activationProbabilityPercent || 0) * (1 + specialActivationUp / 100) * 100) / 100);
+        }
+      }
 
       // When this member's current activation window began (the start of this
       // specific cooldown cycle) - used to break ties: earlier activation wins.

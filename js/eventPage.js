@@ -17,14 +17,15 @@ import {
   formatCountdown,
   liveBoostsUntilEnd,
   pointsFromBoosts,
+  extraBoostsForTarget,
   LIVE_BOOST_RECOVERY_MINUTES,
   LIVE_BOOST_HELD_MAX,
 } from './eventCalc.js';
 
 const STORAGE_KEY = 'hoshidori_event_v1';
 // held / heldAt / nextIn: Live Boosts the player had at heldAt (ms) and the in-game timer to the
-// next one then (minutes) - account-wide. soFar: event points already earned, per event id.
-const DEFAULTS = { multi: true, boosts: 1, passport: false, highlight: false, source: 'auto', customScore: '', holomemId: null, eventId: null, held: '', heldAt: null, nextIn: '', soFar: {} };
+// next one then (minutes) - account-wide. soFar / target: event points already earned / aimed for, per event id.
+const DEFAULTS = { multi: true, boosts: 1, passport: false, highlight: false, source: 'auto', customScore: '', holomemId: null, eventId: null, held: '', heldAt: null, nextIn: '', soFar: {}, target: {} };
 
 let eventsPromise = null;
 let eventsData = null;
@@ -157,6 +158,10 @@ export function renderEventPanel(container, ctx) {
   // Upcoming events: the game data has no start time, so recoveries can't be counted yet.
   const showBoosts = bs && !isUpcoming && !ended;
   const soFar = Number(s.soFar?.[event.id]) || 0;
+  const target = Number(s.target?.[event.id]) || 0;
+  // Target columns: running events compare against "By event end" (extra boosts beyond the ones
+  // still coming); upcoming events have no boost count yet, so they show the boosts needed in total.
+  const showTarget = target > 0 && !ended && !!bs;
 
   const rerender = (patch) => {
     saveSettings({ ...s, ...patch });
@@ -186,7 +191,20 @@ export function renderEventPanel(container, ctx) {
   // live (the leftover live priced at its own boost count - its song-length bonus differs).
   const pointsFor = (extra) => (b) =>
     eventPoints({ ...common, ...extra, boosts: b, songLengthPercent: songLengthBonusPercent(ctx.song.playingSeconds || 0, b, s.highlight) }).points;
-  const endCell = (extra) => (showBoosts ? `<td class="n ev-end">${fmt(soFar + pointsFromBoosts(bs.total, boosts, pointsFor(extra)).points)}</td>` : '');
+  const available = showBoosts ? bs.total : 0;
+  const endCell = (extra) => {
+    if (!showBoosts && !showTarget) return '';
+    const pf = pointsFor(extra);
+    const byEnd = soFar + pointsFromBoosts(available, boosts, pf).points;
+    let html = showBoosts ? `<td class="n ev-end">${fmt(byEnd)}</td>` : '';
+    if (showTarget) {
+      const diff = byEnd - target;
+      const extraBoosts = extraBoostsForTarget(target, soFar, available, boosts, pf);
+      html += `<td class="n ${diff >= 0 ? 'ev-ahead' : 'ev-short'}">${diff >= 0 ? `+${fmt(diff)}` : `−${fmt(-diff)}`}</td>`;
+      html += `<td class="n ${extraBoosts ? 'ev-short' : 'ev-ahead'}">${extraBoosts == null ? '—' : extraBoosts ? `${showBoosts ? '+' : ''}${fmt(extraBoosts)}` : '✓'}</td>`;
+    }
+    return html;
+  };
   const row = (label, scoreShown, extra) => {
     const r = eventPoints({ ...common, ...extra });
     return `<tr><td>${label}</td><td class="n">${fmt(scoreShown)}</td><td class="n ev-pts">${fmt(r.points)}</td><td class="n">${fmt(r.badges)}</td><td class="n">${fmt(r.points / boosts)}</td>${endCell(extra)}</tr>`;
@@ -208,6 +226,7 @@ export function renderEventPanel(container, ctx) {
           <label class="ev-field">Live Boosts you hold now <input class="mini-input ev-held" inputmode="numeric" placeholder="0" value="${esc(s.held)}"></label>
           <label class="ev-field">Next boost in <input class="mini-input ev-nextin" inputmode="numeric" placeholder="${LIVE_BOOST_RECOVERY_MINUTES}" value="${esc(s.nextIn)}"> min</label>
           <label class="ev-field">Event points so far <input class="mini-input ev-sofar" inputmode="numeric" placeholder="0" value="${soFar ? soFar : ''}"></label>
+          <label class="ev-field">Target event points <input class="mini-input ev-target" inputmode="numeric" placeholder="e.g. 5000000" value="${target ? target : ''}"></label>
         </div>
         ${
           showBoosts
@@ -283,10 +302,14 @@ export function renderEventPanel(container, ctx) {
     ${highlightWarn}
     ${boostsHtml}
     <div class="scroll"><table class="ev-table">
-      <tr><th>${s.multi ? 'Room rank' : 'Rank'}</th><th class="n">${s.multi ? 'Room score from' : 'Your score'}</th><th class="n">Event Pts</th><th class="n">Badges</th><th class="n">Pts per boost</th>${showBoosts ? `<th class="n" title="Points so far + every remaining Live Boost spent at ${boosts} per live">By event end</th>` : ''}</tr>
+      <tr><th>${s.multi ? 'Room rank' : 'Rank'}</th><th class="n">${s.multi ? 'Room score from' : 'Your score'}</th><th class="n">Event Pts</th><th class="n">Badges</th><th class="n">Pts per boost</th>${showBoosts ? `<th class="n" title="Points so far + every remaining Live Boost spent at ${boosts} per live">By event end</th>` : ''}${
+        showTarget
+          ? `<th class="n" title="${showBoosts ? '“By event end” minus your target' : 'Points so far minus your target'} (${fmt(target)})">vs target</th><th class="n" title="${showBoosts ? `Live Boosts needed on top of the ${fmt(available)} you’ll have, at ${boosts} per live` : `Live Boosts needed in total, at ${boosts} per live`}">${showBoosts ? 'Extra boosts' : 'Boosts needed'}</th>`
+          : ''
+      }</tr>
       ${rowsHtml}
     </table></div>
-    <div class="estimate-note">${s.multi ? `Room score = the MULTI SCORE on the results screen (all 5 players plus Fever); each row uses the lowest score for that rank. ${esc(typeLabel)} divides it by ${fmt(EVENT_TYPES[eventType]?.roomDivisor ?? 60000)}. ` : ''}Your score: “Max” assumes every note Perfect+ and every skill firing on every cooldown; “Auto” scores notes the Auto way (no combo bonus) with the same skills, so real Auto runs land somewhat lower. Typing your real score from a results screen is most accurate. The formula itself matched real results screens to the exact point.${showBoosts ? ` “By event end” adds every Live Boost you can still spend at ${boosts} per live (natural recovery only, assuming you spend often enough that the bar never sits full at 10 — a full bar stops recovering) to your points so far.` : ''}</div>
+    <div class="estimate-note">${s.multi ? `Room score = the MULTI SCORE on the results screen (all 5 players plus Fever); each row uses the lowest score for that rank. ${esc(typeLabel)} divides it by ${fmt(EVENT_TYPES[eventType]?.roomDivisor ?? 60000)}. ` : ''}Your score: “Max” assumes every note Perfect+ and every skill firing on every cooldown; “Auto” scores notes the Auto way (no combo bonus) with the same skills, so real Auto runs land somewhat lower. Typing your real score from a results screen is most accurate. The formula itself matched real results screens to the exact point.${showBoosts ? ` “By event end” adds every Live Boost you can still spend at ${boosts} per live (natural recovery only, assuming you spend often enough that the bar never sits full at 10 — a full bar stops recovering) to your points so far.` : ''}${showTarget ? ` “vs target” is ${showBoosts ? '“By event end”' : 'your points so far'} minus your target of ${fmt(target)}; “${showBoosts ? 'Extra boosts' : 'Boosts needed'}” is how many ${showBoosts ? 'more Live Boosts than you’ll recover naturally' : 'Live Boosts'} it takes to reach it at ${boosts} per live${showBoosts ? ' (from items or Red Diamonds)' : ''}.` : ''}</div>
   `;
 
   container.querySelectorAll('.ev-mode').forEach((b) => (b.onclick = () => rerender({ multi: b.dataset.multi === '1' })));
@@ -305,5 +328,7 @@ export function renderEventPanel(container, ctx) {
   if (nextEl) nextEl.onchange = () => rerender({ nextIn: digits(nextEl) === '' ? '' : String(Math.min(LIVE_BOOST_RECOVERY_MINUTES, Number(digits(nextEl)))), heldAt: Date.now() });
   const soFarEl = container.querySelector('.ev-sofar');
   if (soFarEl) soFarEl.onchange = () => rerender({ soFar: { ...(s.soFar || {}), [event.id]: Number(digits(soFarEl)) || 0 } });
+  const targetEl = container.querySelector('.ev-target');
+  if (targetEl) targetEl.onchange = () => rerender({ target: { ...(s.target || {}), [event.id]: Number(digits(targetEl)) || 0 } });
   if (bs && !ended) startTicker();
 }

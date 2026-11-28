@@ -191,3 +191,29 @@ export function pointsFromBoosts(totalBoosts, boostsPerLive, pointsFor) {
   const rest = total % b;
   return { lives, rest, points: lives * pointsFor(b) + (rest ? pointsFor(rest) : 0) };
 }
+
+/**
+ * Extra Live Boosts (beyond `availableBoosts`) needed so that pointsSoFar + the points from
+ * spending all boosts reaches `target`, spending `boostsPerLive` per live (leftover live priced
+ * on its own, as pointsFromBoosts). 0 when already on track; null when it can't be reached
+ * (pointsFor returns nothing positive). Points grow with every extra boost, so binary search.
+ */
+export function extraBoostsForTarget(target, pointsSoFar, availableBoosts, boostsPerLive, pointsFor) {
+  const reach = (n) => pointsSoFar + pointsFromBoosts(n, boostsPerLive, pointsFor).points >= target;
+  const have = Math.max(0, Math.floor(availableBoosts) || 0);
+  if (reach(have)) return 0;
+  if (!(pointsFor(1) > 0)) return null;
+  let lo = have; // not enough
+  let hi = have + 1;
+  while (!reach(hi)) {
+    lo = hi;
+    hi = have + (hi - have) * 2;
+    if (hi > 1e7) return null;
+  }
+  while (hi - lo > 1) {
+    const mid = Math.floor((lo + hi) / 2);
+    if (reach(mid)) hi = mid;
+    else lo = mid;
+  }
+  return hi - have;
+}

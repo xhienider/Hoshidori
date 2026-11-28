@@ -3074,3 +3074,7 @@ header.masthead {
 /* Builder picker - "Event Holomems" filter (2026-11-28) */
 .filter-checkbox.is-disabled { opacity: 0.45; cursor: not-allowed; }
 .event-banner-badge { margin-left: 4px; padding: 1px 6px; border-radius: 4px; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; background: var(--orange); color: #fff; vertical-align: middle; }
+/* Event Points panel - target columns (2026-11-28) */
+.ev-boostplan-inputs .ev-target { width: 110px; }
+.ev-table .ev-ahead { color: var(--green-node); }
+.ev-table .ev-short { color: var(--yellow-node); }
