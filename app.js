@@ -4,7 +4,7 @@ import { openMaterialsPage } from './js/materialsPage.js';
 import { readTrackerAccount, trackerCharacterIds, trackerAreaPositions, syncAreaIntoSet } from './js/materials.js';
 import { openRankPage } from './js/rankPage.js';
 import { openFaqPage, openFaqFromHash } from './js/faqPage.js';
-import { renderEventPanel } from './js/eventPage.js';
+import { renderEventPanel, currentPanelEvent, loadEvents } from './js/eventPage.js';
 import { autoScore } from './js/eventCalc.js';
 import { openChallengePage } from './js/challengePage.js';
 import { expectedTimeline, DIFFICULTIES as CHALLENGE_DIFFICULTIES } from './js/challengeCalc.js';
@@ -362,6 +362,7 @@ const state = {
     rarities: new Set(), // rarity numbers (3,4,5); empty = no filter
     generations: new Set(), // generation strings; empty = no filter
     mainStats: new Set(), // 'performance' | 'technique' | 'sense' (highest permil); empty = no filter
+    eventHolomems: false, // only cards of the Event Points panel's event holomems (banner cards first)
   },
   mobileAccordionExpanded: new Set(['leader']), // which slot keys are open on mobile
   manualMemoryBonusPercent: 0, // "Unit Stats X%" from the Memory Stand screen - % of Member Parameter only
@@ -1910,6 +1911,16 @@ function openPicker(slotState, isLeader) {
     const f = state.pickerFilters;
     let pool = DATA.members;
     if (isLeader) pool = pool.filter((m) => m.leaderSkill);
+    const ev = f.eventHolomems ? currentPanelEvent() : null;
+    if (ev) {
+      // Event holomems' cards only: the event's banner cards first, then by holomem (event order),
+      // highest rarity first (stable sort keeps the data order within a rarity).
+      const order = new Map(ev.holomemIds.map((id, i) => [id, i]));
+      const banner = new Set(ev.bannerCards);
+      pool = pool
+        .filter((m) => order.has(m.characterId))
+        .sort((a, b) => banner.has(b.cardId) - banner.has(a.cardId) || order.get(a.characterId) - order.get(b.characterId) || rarityNumber(b.rarity) - rarityNumber(a.rarity));
+    }
     const matches = pool
       .filter((m) => !q || m.characterName?.toLowerCase().includes(q) || m.cardSubtitle?.toLowerCase().includes(q))
       .filter((m) => !f.types.size || f.types.has(m.attributeType))
@@ -1940,7 +1951,7 @@ function openPicker(slotState, isLeader) {
       const info = document.createElement('div');
       const name = document.createElement('div');
       name.className = 'picker-item-name';
-      name.innerHTML = `${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span>`;
+      name.innerHTML = `${m.characterName} <span class="rarity-badge">${rarityLabel(m.rarity)}</span>${ev && ev.bannerCards.includes(m.cardId) ? ' <span class="event-banner-badge" title="This event\u2019s banner card (Member bonus)">Event card</span>' : ''}`;
       info.appendChild(name);
       const sub = document.createElement('div');
       sub.className = 'picker-item-sub';
@@ -2093,6 +2104,38 @@ function renderFilterBar(onChange) {
 
   bar.appendChild(genGroup);
 
+  // Event: cards of the event holomems for the event picked in the Event Points panel.
+  const eventGroup = document.createElement('div');
+  eventGroup.className = 'filter-group';
+  eventGroup.innerHTML = '<span class="filter-group-label">Event</span>';
+  const eventChip = document.createElement('label');
+  eventChip.className = 'filter-checkbox';
+  const eventCb = document.createElement('input');
+  eventCb.type = 'checkbox';
+  eventCb.checked = f.eventHolomems;
+  eventCb.onchange = () => {
+    f.eventHolomems = eventCb.checked;
+    onChange();
+  };
+  eventChip.appendChild(eventCb);
+  eventChip.appendChild(document.createTextNode('Event Holomems'));
+  eventGroup.appendChild(eventChip);
+  const fillEventChip = () => {
+    const ev = currentPanelEvent();
+    eventCb.disabled = !ev;
+    eventChip.classList.toggle('is-disabled', !ev);
+    eventChip.title = ev
+      ? `${ev.event.name}${ev.status === 'upcoming' ? ` (starts ${ev.event.start})` : ''}: ${[...new Set(DATA.members.filter((m) => ev.holomemIds.includes(m.characterId)).map((m) => m.characterName))].join(', ')}. Change the event in the Event Points panel.`
+      : 'No event is running or announced right now.';
+  };
+  fillEventChip();
+  // events.json may not have loaded yet (it loads with the Event Points panel) - fill in once it has.
+  loadEvents().then(() => {
+    fillEventChip();
+    if (f.eventHolomems) onChange();
+  });
+  bar.appendChild(eventGroup);
+
   const clearBtn = document.createElement('button');
   clearBtn.type = 'button';
   clearBtn.className = 'filter-clear-btn';
@@ -2102,6 +2145,7 @@ function renderFilterBar(onChange) {
     f.rarities.clear();
     f.generations.clear();
     f.mainStats.clear();
+    f.eventHolomems = false;
     onChange();
     // Re-render the bar itself so checkboxes visually reset too.
     bar.replaceWith(renderFilterBar(onChange));

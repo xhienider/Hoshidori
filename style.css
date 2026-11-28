@@ -3070,3 +3070,7 @@ header.masthead {
 .ev-boostplan-total b { font-family: var(--font-mono); color: var(--orange); font-size: 16px; margin: 0 6px; }
 .ev-dim { color: var(--text-dim); }
 .ev-table .ev-end { color: var(--blue-pale); font-weight: 600; }
+
+/* Builder picker - "Event Holomems" filter (2026-11-28) */
+.filter-checkbox.is-disabled { opacity: 0.45; cursor: not-allowed; }
+.event-banner-badge { margin-left: 4px; padding: 1px 6px; border-radius: 4px; font-size: 10px; letter-spacing: 0.04em; text-transform: uppercase; background: var(--orange); color: #fff; vertical-align: middle; }

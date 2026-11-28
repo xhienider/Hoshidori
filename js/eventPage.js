@@ -106,6 +106,23 @@ function todayIso() {
 }
 
 /**
+ * The event the Event Points panel is showing (the player's pick, else the first running /
+ * upcoming one) - shared with the Builder's "Event Holomems" picker filter so both always
+ * agree. Returns null until data/events.json has loaded (call loadEvents() and retry) or when
+ * no event is running or announced. {event, status, holomemIds, bannerCards}; holomemIds =
+ * every event holomem (all Spotlight chapters, or every banner card holomem otherwise).
+ */
+export function currentPanelEvent() {
+  if (!eventsData) return null;
+  const choices = selectableEvents(eventsData, todayIso());
+  if (!choices.length) return null;
+  const s = readSettings();
+  const chosen = choices.find((c) => c.event.id === s.eventId) || choices[0];
+  return { ...chosen, holomemIds: chosen.event.holomems || [], bannerCards: chosen.event.bannerCards || [] };
+}
+export { loadEvents };
+
+/**
  * @param {HTMLElement} container - emptied and filled
  * @param {{unit:{card:object,bloom:number}[], song:object, maxScore:number, autoScore:number|null,
  *          characterName:(id:string)=>string}} ctx
